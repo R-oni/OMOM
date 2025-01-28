@@ -9,16 +9,44 @@
             margin: 0;
             padding: 0;
             background-color: black;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            color: #0ff;
         }
         img {
-            margin-top: 20px; /* Espaçamento superior opcional */
-            max-width: 50%; /* Ajuste o tamanho do símbolo */
+            margin-top: 20px;
+            max-width: 20%; /* Tamanho do símbolo */
             height: auto;
         }
+        #globe-container {
+            margin-top: 30px;
+            width: 80%; /* Largura do globo */
+            height: 500px; /* Altura do globo */
+        }
     </style>
+    <!-- Scripts necessários -->
+    <script src="globe-3d/src/three.min.js"></script> <!-- Biblioteca Three.js -->
+    <script src="globe-3d/src/globe.js"></script> <!-- Script do Globe 3D -->
 </head>
 <body>
+    <!-- Símbolo de Velei'wey -->
     <img src="symbol4.png" alt="Símbolo de Velei'wey">
+    
+    <!-- Container para o Globe 3D -->
+    <div id="globe-container"></div>
+
+    <script>
+        // Inicializando o Globe 3D
+        const container = document.getElementById('globe-container');
+        const globe = new GLOBE(container, {
+            width: container.offsetWidth,
+            height: container.offsetHeight
+        });
+
+        // Adicione configurações e dados ao globo aqui, se necessário
+        globe.init();
+    </script>
 </body>
 </html>
