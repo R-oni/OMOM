@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outros Mundos Outras Mentes</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .title-container {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .title-container img {
+            max-width: 80%;
+        }
+        .symbol {
+            position: absolute;
+            animation: float infinite ease-in-out;
+        }
+        .symbol a {
+            display: inline-block;
+        }
+        .symbol img {
+            width: 100px;
+        }
+        /* Keyframes para movimentos aleatórios */
+        @keyframes float1 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-60px); }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes float3 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-40px); }
+        }
+        @keyframes float4 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
+        }
+        .symbol1 { animation-name: float1; animation-duration: 3s; }
+        .symbol2 { animation-name: float2; animation-duration: 4s; }
+        .symbol3 { animation-name: float3; animation-duration: 5s; }
+        .symbol4 { animation-name: float4; animation-duration: 6s; }
+    </style>
+</head>
+<body>
+    <div class="title-container">
+        <img src="title.png" alt="Outros Mundos Outras Mentes">
+    </div>
+    <div class="symbol symbol4" style="top: 150px; left: 10%;">
+        <a href="veleiwey.html"><img src="symbol4.png" alt="Espiral - Velei'wey"></a>
+    </div>
+    <div class="symbol symbol2" style="top: 250px; left: 30%;">
+        <a href="toktok.html"><img src="symbol2.png" alt="Tok'Tok"></a>
+    </div>
+    <div class="symbol symbol3" style="top: 350px; left: 50%;">
+        <a href="calindreno.html"><img src="symbol3.png" alt="Calindreno"></a>
+    </div>
+    <div class="symbol symbol1" style="top: 450px; left: 70%;">
+        <a href="tttok.html"><img src="symbol1.png" alt="TT'Tok"></a>
+    </div>
+</body>
+</html>
