@@ -56,34 +56,16 @@
     .symbol img:hover {
       transform: scale(1.1);
     }
-
-    /* Estilização do controle de volume */
-    .volume-control {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 10px;
-      border-radius: 10px;
-    }
-
-    .volume-control input {
-      width: 100px;
-    }
   </style>
 </head>
 <body>
   <canvas id="automatonCanvas"></canvas>
 
   <div class="title-container">
-    <a href="omom.html">
-      <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
-    </a>
-  </div>
+  <a href="omom.html">
+    <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
+  </a>
+</div>
 
   <div class="symbols-container">
     <div class="symbol" id="symbol1">
@@ -111,22 +93,61 @@
         <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
       </a>
     </div>
-  </div>
-
-  <!-- Música de fundo -->
-  <audio id="backgroundMusic" autoplay loop>
-    <source src="arpeggio.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
-
-  <!-- Controle de Volume -->
-  <div class="volume-control">
-    <label for="volume">Volume:</label>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
+    <div class="symbol" id="symbol6">
+      <a href="mundos/araporu/index.html">
+        <img src="mundos/araporu/araporumenu.png" alt="araporu">
+      </a>
+    </div>
+    <div class="symbol" id="symbol7">
+      <a href="mundos/os artesaos/index.html">
+        <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+      </a>
+    </div>
+    <div class="symbol" id="symbol8">
+      <a href="mundos/sapador/index.html">
+        <img src="mundos/sapador/sapador.png" alt="sapador">
+      </a>
+    </div>
+    <div class="symbol" id="symbol9">
+      <a href="mundos/calindreno/index.html">
+        <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+      </a>
+    </div>
+    <div class="symbol" id="symbol10">
+      <a href="mundos/mundo pulsante/index.html">
+        <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+      </a>
+    </div>
+    <div class="symbol" id="symbol11">
+      <a href="mundos/dosirelala/index.html">
+        <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+      </a>
+    </div>
+    <div class="symbol" id="symbol12">
+      <a href="mundos/ttok/index.html">
+        <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+      </a>
+    </div>
+    <div class="symbol" id="symbol13">
+      <a href="mundos/ttok/index.html">
+        <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+      </a>
+    </div>
+    <div class="symbol" id="symbol14">
+      <a href="mundos/ttok/index.html">
+        <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+      </a>
+    </div>
+    <div class="symbol" id="symbol15">
+      <a href="mundos/ttok/index.html">
+        <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+      </a>
+    </div>
+    
+    
   </div>
 
   <script>
-    // Animação flutuante dos símbolos
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
 
@@ -142,7 +163,6 @@
     }
     floatSymbols();
 
-    // Configuração do Canvas
     const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -205,16 +225,6 @@
         Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
       );
       drawGrid();
-    });
-
-    // Controle de Volume
-    const backgroundMusic = document.getElementById("backgroundMusic");
-    const volumeControl = document.getElementById("volume");
-
-    backgroundMusic.volume = 0.5; // Volume inicial 50%
-
-    volumeControl.addEventListener("input", (event) => {
-      backgroundMusic.volume = event.target.value;
     });
   </script>
 </body>
