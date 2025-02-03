@@ -62,10 +62,10 @@
   <canvas id="automatonCanvas"></canvas>
 
   <div class="title-container">
-  <a href="omom.html">
-    <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
-  </a>
-</div>
+    <a href="omom.html">
+      <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
+    </a>
+  </div>
 
   <div class="symbols-container">
     <div class="symbol" id="symbol1">
@@ -143,11 +143,33 @@
         <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
       </a>
     </div>
-    
-    
   </div>
 
+  <!-- Música de fundo: arpeggio.mp3 -->
+  <audio id="bgm" loop>
+    <source src="arpeggio.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
+
   <script>
+    // Força a reprodução automática da música com volume 50%
+    document.addEventListener("DOMContentLoaded", function() {
+      const bgm = document.getElementById("bgm");
+      bgm.volume = 0.5;
+      const playPromise = bgm.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function(error) {
+          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
+          // Se o autoplay for bloqueado, inicia no primeiro clique
+          document.addEventListener("click", function handler() {
+            bgm.play();
+            document.removeEventListener("click", handler);
+          });
+        });
+      }
+    });
+
+    // Animação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
 
@@ -163,6 +185,7 @@
     }
     floatSymbols();
 
+    // Configuração do canvas de fundo
     const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
 
