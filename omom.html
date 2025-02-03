@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outros Mundos Outras Mentes</title>
+  <!-- Importando a fonte Press Start 2P -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+    }
+    /* Canvas do autômato ocupando todo o fundo */
+    #automatonCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding-top: 30px;
+    }
+    .title-container img {
+      max-width: 50%;
+    }
+    .ruliad {
+      margin-top: 40px;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 32px;
+      color: #00FFE7;
+    }
+  </style>
+</head>
+<body>
+  <!-- Canvas para o autômato -->
+  <canvas id="automatonCanvas"></canvas>
+
+  <div class="container">
+    <!-- Título com link para omom.html -->
+    <div class="title-container">
+      <a href="omom.html">
+        <img src="assets/titleblue.png" alt="Outros Mundos Outras Mentes">
+      </a>
+    </div>
+
+    <!-- Texto RULIAD -->
+    <div class="ruliad">OUTROS MUNDOS</div>
+  </div>
+
+  <script>
+    // Verifica se o canvas foi carregado
+    const canvas = document.getElementById("automatonCanvas");
+    if (!canvas) {
+      console.error("Canvas não encontrado!");
+    }
+    const ctx = canvas.getContext("2d");
+
+    let width, height;
+    const cellSize = 2;
+    let cols, currentGen = [];
+    let rowCounter = 0;
+
+    // Configuração inicial do autômato
+    function setupAutomaton() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      cols = Math.floor(width / cellSize);
+
+      // Cria a primeira geração com todos zeros, exceto o centro com 1
+      currentGen = new Array(cols).fill(0);
+      currentGen[Math.floor(cols / 2)] = 1;
+      rowCounter = 0;
+
+      // Preenche o fundo de preto
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    // Regra 30: define o próximo estado da célula baseado nos vizinhos
+    function rule30(left, center, right) {
+      const pattern = (left << 2) | (center << 1) | right;
+      return ([0, 1, 2, 4].includes(pattern)) ? 1 : 0;
+    }
+
+    // Desenha uma linha do autômato e calcula a próxima geração
+    function drawAutomaton() {
+      // Desenha a linha atual
+      for (let i = 0; i < cols; i++) {
+        if (currentGen[i] === 1) {
+          ctx.fillStyle = "white";
+          ctx.fillRect(i * cellSize, rowCounter * cellSize, cellSize, cellSize);
+        }
+      }
+      // Calcula a próxima geração
+      const nextGen = [];
+      for (let i = 0; i < cols; i++) {
+        const left = currentGen[(i - 1 + cols) % cols];
+        const center = currentGen[i];
+        const right = currentGen[(i + 1) % cols];
+        nextGen[i] = rule30(left, center, right);
+      }
+      currentGen = nextGen;
+      rowCounter++;
+
+      // Se atingirmos o final da tela, limpa e reinicia
+      if (rowCounter * cellSize >= height) {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, width, height);
+        rowCounter = 0;
+      }
+      requestAnimationFrame(drawAutomaton);
+    }
+
+    setupAutomaton();
+    drawAutomaton();
+
+    window.addEventListener("resize", setupAutomaton);
+  </script>
+</body>
+</html>

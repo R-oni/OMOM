@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Exemplo de Página com Globo 3D e Moldura de Autômato</title>
+  <style>
+    /* Zera margens e espaçamentos */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Corpo da página */
+    body {
+      background-color: #000; /* Fundo preto */
+      color: #fff;           /* Texto branco, caso precise */
+      font-family: sans-serif;
+    }
+
+    /* Container principal em coluna */
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* Seção da imagem de topo */
+    .top-section {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .top-section img {
+      max-width: 50%;
+      height: auto;
+    }
+
+    /* Seção do globo 3D */
+    .globe-section {
+      margin: 20px 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #globeCanvas {
+      width: 600px;  /* Largura desejada do canvas */
+      height: 600px; /* Altura desejada do canvas */
+      max-width: 90%;
+    }
+
+    /* Seção de baixo com a moldura de autômato */
+    .bottom-section {
+      position: relative;
+      /* Define a área total para canvas + imagem */
+      width: 700px;  
+      height: 550px;
+      margin: 60px 0;
+    }
+
+    /* Canvas do autômato */
+    #automatonCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;       
+      width: 100%;      /* Ocupa todo o container */
+      height: 100%;
+    }
+
+    /* Imagem centralizada sobre o canvas */
+    .bottom-section img {
+      position: absolute;
+      top: 50%;          /* Centraliza verticalmente */
+      left: 50%;         /* Centraliza horizontalmente */
+      transform: translate(-50%, -50%);
+      z-index: 1;        /* Fica acima do canvas */
+      width: 600px;      /* Ajuste conforme desejar */
+      height: auto;
+      border: 2px solid #fff; /* Pequena borda se quiser destacar */
+    }
+
+    /* Responsividade para telas menores */
+    @media (max-width: 768px) {
+      #globeCanvas {
+        width: 90%;
+        height: auto;
+      }
+      .bottom-section {
+        width: 90%;
+        height: auto; /* Para não cortar em telas pequenas */
+      }
+      /* Ao reduzir .bottom-section para altura dinâmica,
+         o canvas também pode ser ajustado. Aqui vamos fixar
+         a ideia de moldura, mas você pode adaptar. */
+      #automatonCanvas {
+        width: 100%;
+        /* Se quiser altura fixa, mantenha 500px, caso contrário:
+           height: auto;
+        */
+      }
+      .bottom-section img {
+        width: 70%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+
+    <!-- Imagem de topo -->
+    <div class="top-section">
+      <img src="titulohimpis.png" alt="Título himpis">
+    </div>
+
+    <!-- Globo 3D -->
+    <div class="globe-section">
+      <canvas id="globeCanvas"></canvas>
+    </div>
+
+    <!-- Moldura de autômato + imagem -->
+    <div class="bottom-section">
+      <canvas id="automatonCanvas"></canvas>
+      <img src="desenhoirmaos.png" alt="Corpo Yeroben">
+    </div>
+
+  </div>
+
+  <!-- Bibliotecas Three.js e OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Arquivo com o código do globo (Three.js) -->
+  <script src="./globo.js"></script>
+
+  <!-- Autômato Celular -->
+  <script>
+    // Setup do canvas do autômato
+    const automatonCanvas = document.getElementById("automatonCanvas");
+    const ctx = automatonCanvas.getContext("2d");
+
+    function setupCanvas() {
+      // Ajusta o tamanho do canvas para o container (500x500 via CSS)
+      automatonCanvas.width = automatonCanvas.offsetWidth;
+      automatonCanvas.height = automatonCanvas.offsetHeight;
+      ctx.imageSmoothingEnabled = false;
+    }
+    setupCanvas();
+
+    const cellSize = 5;
+    let cols = Math.floor(automatonCanvas.width / cellSize);
+    let rows = Math.floor(automatonCanvas.height / cellSize);
+
+    // Cria grid inicial aleatório
+    let grid = Array.from({ length: rows }, () =>
+      Array.from({ length: cols }, () => Math.random() > 0.85 ? 1 : 0)
+    );
+
+    function drawGrid() {
+      // Limpa o canvas
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, automatonCanvas.width, automatonCanvas.height);
+
+      // Cor das células
+      ctx.fillStyle = "#00FFE9"; 
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          if (grid[y][x] === 1) {
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+    }
+
+    function updateGrid() {
+      let newGrid = Array.from({ length: rows }, () =>
+        Array.from({ length: cols }, () => 0)
+      );
+
+      for (let y = 1; y < rows - 1; y++) {
+        for (let x = 1; x < cols - 1; x++) {
+          let sum =
+            grid[y - 1][x] + grid[y + 1][x] +
+            grid[y][x - 1] + grid[y][x + 1] +
+            grid[y - 1][x - 1] + grid[y - 1][x + 1] +
+            grid[y + 1][x - 1] + grid[y + 1][x + 1];
+
+          // Regras do Jogo da Vida
+          if (grid[y][x] === 1) {
+            newGrid[y][x] = (sum === 2 || sum === 3) ? 1 : 0;
+          } else {
+            newGrid[y][x] = (sum === 3) ? 1 : 0;
+          }
+        }
+      }
+      grid = newGrid;
+    }
+
+    function animate() {
+      updateGrid();
+      drawGrid();
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Se a janela for redimensionada, reajusta o canvas
+    window.addEventListener("resize", () => {
+      setupCanvas();
+      cols = Math.floor(automatonCanvas.width / cellSize);
+      rows = Math.floor(automatonCanvas.height / cellSize);
+      // Recria o grid ou não, conforme desejar...
+    });
+  </script>
+</body>
+</html>

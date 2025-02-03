@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Exemplo de Página com Globo 3D</title>
+  <style>
+    /* Zera margens e espaçamentos */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Corpo da página */
+    body {
+      background-color: #000; /* Fundo preto */
+      color: #fff;           /* Texto branco, caso precise */
+      font-family: sans-serif;
+    }
+
+    /* Container principal que organiza tudo em coluna */
+    .page-container {
+      display: flex;
+      flex-direction: column;  
+      align-items: center;     
+      width: 100%;
+      min-height: 100vh;       
+    }
+
+    /* Seção da imagem de topo */
+    .top-section {
+      margin: 20px 0;         
+      text-align: center;
+    }
+    .top-section img {
+      max-width: 60%;         
+      height: auto;
+    }
+
+    /* Seção do globo 3D */
+    .globe-section {
+      margin: 20px 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #globeCanvas {
+      width: 600px;  /* Largura desejada do canvas */
+      height: 600px; /* Altura desejada do canvas */
+      max-width: 90%;
+    }
+
+    /* Seção da imagem de baixo */
+    .bottom-section {
+      margin: 800px 0;
+      text-align: center;
+    }
+    .bottom-section img {
+      max-width: 80%;
+      height: auto;
+    }
+
+    /* Responsividade simples */
+    @media (max-width: 768px) {
+      #globeCanvas {
+        width: 90%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+
+    <!-- Imagem de topo -->
+    <div class="top-section">
+      <img src="titulottok.png" alt="Título ttok">
+    </div>
+
+    <!-- Globo 3D -->
+    <div class="globe-section">
+      <canvas id="globeCanvas"></canvas>
+    </div>
+
+    <!-- Imagem de baixo -->
+    <div class="bottom-section">
+      <img src="batedor.png" alt="Corpo batedor">
+      
+      
+      <img src="mergulhador.png" alt="Corpo batedor">
+    </div>
+    
+
+  </div>
+
+  <!-- Bibliotecas Three.js e OrbitControls via CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  
+  <!-- Seu arquivo com o código do globo -->
+  <script src="./globo.js"></script>
+</body>
+</html>
