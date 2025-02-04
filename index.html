@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outros Mundos Outras Mentes</title>
   <style>
-    /* Canvas ocupa toda a tela e fica como fundo */
+    /* Canvas permanece fixo e cobre toda a tela */
     #automatonCanvas {
       position: fixed;
       top: 0;
@@ -21,17 +21,31 @@
       padding: 0;
       font-family: 'Courier New', Courier, monospace;
       background-color: black;
-      overflow: hidden;
+      overflow: hidden; /* Impede a rolagem do body */
       color: white;
     }
 
     .title-container {
       text-align: center;
       margin-top: 50px;
+      position: relative;
+      z-index: 2;
     }
 
     .title-container img {
       max-width: 50%;
+    }
+
+    /* Contêiner que isola os símbolos com rolagem interna */
+    .symbols-wrapper {
+      position: absolute;
+      top: 150px;  /* Define o ponto de início (ajuste se necessário) */
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto; /* Ativa a rolagem vertical somente para os símbolos */
+      padding: 20px;
+      z-index: 2;
     }
 
     .symbols-container {
@@ -39,7 +53,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
-      margin-top: 50px;
+      /* Removemos o margin-top para evitar deslocamento extra */
     }
 
     .symbol {
@@ -67,81 +81,84 @@
     </a>
   </div>
 
-  <div class="symbols-container">
-    <div class="symbol" id="symbol1">
-      <a href="mundos/veleywei/index.html">
-        <img src="assets/veleyweimenu.png" alt="Velei'wey">
-      </a>
-    </div>
-    <div class="symbol" id="symbol2">
-      <a href="mundos/botychera/index.html">
-        <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-      </a>
-    </div>
-    <div class="symbol" id="symbol3">
-      <a href="mundos/himpis/index.html">
-        <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-      </a>
-    </div>
-    <div class="symbol" id="symbol4">
-      <a href="mundos/ttok/index.html">
-        <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-      </a>
-    </div>
-    <div class="symbol" id="symbol5">
-      <a href="mundos/denbou/index.html">
-        <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
-      </a>
-    </div>
-    <div class="symbol" id="symbol6">
-      <a href="mundos/araporu/index.html">
-        <img src="mundos/araporu/araporumenu.png" alt="araporu">
-      </a>
-    </div>
-    <div class="symbol" id="symbol7">
-      <a href="mundos/os artesaos/index.html">
-        <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
-      </a>
-    </div>
-    <div class="symbol" id="symbol8">
-      <a href="mundos/sapador/index.html">
-        <img src="mundos/sapador/sapador.png" alt="sapador">
-      </a>
-    </div>
-    <div class="symbol" id="symbol9">
-      <a href="mundos/calindreno/index.html">
-        <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
-      </a>
-    </div>
-    <div class="symbol" id="symbol10">
-      <a href="mundos/mundo pulsante/index.html">
-        <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
-      </a>
-    </div>
-    <div class="symbol" id="symbol11">
-      <a href="mundos/dosirelala/index.html">
-        <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
-      </a>
-    </div>
-    <div class="symbol" id="symbol12">
-      <a href="mundos/ttok/index.html">
-        <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
-      </a>
-    </div>
-    <div class="symbol" id="symbol13">
-      <a href="mundos/ttok/index.html">
-        <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
-      </a>
-    </div>
-    <div class="symbol" id="symbol14">
-      <a href="mundos/ttok/index.html">
-        <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
-      </a>
-    </div>
-    <div class="symbol" id="symbol15">
-      <a href="mundos/ttok/index.html">
-        <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
-      </a>
+  <!-- Contêiner exclusivo para os símbolos -->
+  <div class="symbols-wrapper">
+    <div class="symbols-container">
+      <div class="symbol" id="symbol1">
+        <a href="mundos/veleywei/index.html">
+          <img src="assets/veleyweimenu.png" alt="Velei'wey">
+        </a>
+      </div>
+      <div class="symbol" id="symbol2">
+        <a href="mundos/botychera/index.html">
+          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+        </a>
+      </div>
+      <div class="symbol" id="symbol3">
+        <a href="mundos/himpis/index.html">
+          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+        </a>
+      </div>
+      <div class="symbol" id="symbol4">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+        </a>
+      </div>
+      <div class="symbol" id="symbol5">
+        <a href="mundos/denbou/index.html">
+          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+        </a>
+      </div>
+      <div class="symbol" id="symbol6">
+        <a href="mundos/araporu/index.html">
+          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+        </a>
+      </div>
+      <div class="symbol" id="symbol7">
+        <a href="mundos/os artesaos/index.html">
+          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+        </a>
+      </div>
+      <div class="symbol" id="symbol8">
+        <a href="mundos/sapador/index.html">
+          <img src="mundos/sapador/sapador.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol" id="symbol9">
+        <a href="mundos/calindreno/index.html">
+          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol10">
+        <a href="mundos/mundo pulsante/index.html">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol11">
+        <a href="mundos/dosirelala/index.html">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol" id="symbol12">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol13">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol14">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol15">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+        </a>
+      </div>
     </div>
   </div>
 
@@ -156,12 +173,11 @@
     document.addEventListener("DOMContentLoaded", function() {
       const bgm = document.getElementById("bgm");
       bgm.volume = 0.5;
-      bgm.currentTime = 60; // Inicia a música a partir de 30 segundos
+      bgm.currentTime = 70;
       const playPromise = bgm.play();
       if (playPromise !== undefined) {
         playPromise.catch(function(error) {
           console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
-          // Se o autoplay for bloqueado, inicia no primeiro clique
           document.addEventListener("click", function handler() {
             bgm.play();
             document.removeEventListener("click", handler);
@@ -170,10 +186,9 @@
       }
     });
 
-    // Animação dos símbolos
+    // Animação dos símbolos (não interfere no fundo)
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
-
     function floatSymbols() {
       time += 0.02;
       symbols.forEach((symbol, index) => {
@@ -186,10 +201,9 @@
     }
     floatSymbols();
 
-    // Configuração do canvas de fundo
+    // Configuração do canvas de fundo (autômato)
     const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
-
     function setupCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -199,7 +213,6 @@
 
     const cellSize = 3;
     let cols, rows;
-
     function updateGridSize() {
       cols = Math.floor(canvas.width / cellSize);
       rows = Math.floor(canvas.height / cellSize);
@@ -242,6 +255,7 @@
     }
     animate();
 
+    // Reconfigura o canvas no redimensionamento (sem interferir no fundo)
     window.addEventListener("resize", () => {
       setupCanvas();
       updateGridSize();
