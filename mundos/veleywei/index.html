@@ -4,17 +4,11 @@
   <meta charset="UTF-8" />
   <title>Exemplo de Página com Globo 3D e Flipbook</title>
   <style>
-    /* Zera margens e espaçamentos */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Corpo da página */
+    /* Estilos básicos (igual ao seu) */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background-color: #000; /* Fundo preto */
-      color: #fff;           /* Texto branco */
+      background-color: #000;
+      color: #fff;
       font-family: sans-serif;
       display: flex;
       flex-direction: column;
@@ -23,28 +17,19 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
-    /* Container principal */
     .page-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      max-width: 800px; /* Centraliza e limita a largura */
+      max-width: 800px;
     }
-
-    /* Seção da imagem de topo */
-    .top-section {
+    .top-section, .bottom-section {
       text-align: center;
       margin: 20px 0;
     }
-
-    .top-section img {
-      max-width: 60%;
-      height: auto;
-    }
-
-    /* Seção do globo 3D */
+    .top-section img { max-width: 60%; height: auto; }
+    .bottom-section img { max-width: 100%; height: auto; }
     .globe-section {
       display: flex;
       justify-content: center;
@@ -52,70 +37,33 @@
       width: 100%;
       margin: 20px 0;
     }
-
     #globeCanvas {
-      width: 600px;
-      height: 600px;
-      max-width: 90%;
+      width: 600px; height: 600px; max-width: 90%;
     }
-
-    /* Imagem do corpo */
-    .bottom-section {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .bottom-section img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    /* Flipbook */
     #flipbook {
-      width: 400px;
-      height: 300px;
+      width: 400px; height: 300px;
       margin: 1000px 0;
       position: relative;
       animation: neonGlow 2s infinite alternate ease-in-out;
     }
-
-    /* Efeito de luz néon */
     @keyframes neonGlow {
-      0% {
-        box-shadow: 0 0 10px #00EEF7, 0 0 20px #00EEF7, 0 0 40px #00EEF7;
-      }
-      50% {
-        box-shadow: 0 0 15px #00EEF7, 0 0 30px #00EEF7, 0 0 60px #00EEF7;
-      }
-      100% {
-        box-shadow: 0 0 5px #00EEF7, 0 0 15px #00EEF7, 0 0 30px #00EEF7;
-      }
+      0% { box-shadow: 0 0 10px #00EEF7, 0 0 20px #00EEF7, 0 0 40px #00EEF7; }
+      50% { box-shadow: 0 0 15px #00EEF7, 0 0 30px #00EEF7, 0 0 60px #00EEF7; }
+      100% { box-shadow: 0 0 5px #00EEF7, 0 0 15px #00EEF7, 0 0 30px #00EEF7; }
     }
-
     .page img {
-      width: 100%;
-      height: auto;
-      display: block;
+      width: 100%; height: auto; display: block;
     }
-
-    /* Botão invisível para tocar o som */
     .sound-button {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 50px;
-      height: 30px;
+      width: 50px; height: 30px;
       background: rgba(255, 255, 200, 0.2);
       cursor: pointer;
     }
-
-    /* Responsividade */
     @media (max-width: 768px) {
-      #globeCanvas {
-        width: 90%;
-        height: auto;
-      }
+      #globeCanvas { width: 90%; height: auto; }
     }
   </style>
 </head>
@@ -132,12 +80,15 @@
       <canvas id="globeCanvas"></canvas>
     </div>
 
-    <!-- Imagem de baixo -->
+    <!-- Imagens de baixo -->
     <div class="bottom-section">
       <img src="corpoyeroben.png" alt="Corpo Yeroben">
     </div>
+    <div class="bottom-section">
+      <img src="dadosveleywei.png" alt="Dados Velei'wey">
+    </div>
 
-    <!-- Flipbook abaixo da imagem do corpo com efeito néon -->
+    <!-- Flipbook -->
     <div id="flipbook">
       <div class="page"><img src="pagina1.png" alt="Página 1"></div>
       <div class="page"><img src="paginanula.png" alt="Página 2"></div>
@@ -145,7 +96,7 @@
       <div class="page"><img src="paginanula.png" alt="Página 4"></div>
       <div class="page">
         <img src="pagina4.png" alt="Página 5">
-        <div class="sound-button" id="sound-trigger"></div> <!-- Área clicável -->
+        <div class="sound-button" id="sound-trigger"></div>
       </div>
       <div class="page"><img src="paginanula.png" alt="Página 6"></div>
       <div class="page"><img src="pagina5.png" alt="Página 7"></div>
@@ -158,31 +109,92 @@
 
   </div>
 
-  <!-- Bibliotecas necessárias -->
+  <!-- Bibliotecas -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
 
-  <!-- Ativação do Flipbook -->
+  <!-- Pré-carregando o som de virar página -->
+  <script>
+    let flipAudio;
+    
+    /* Defina aqui o intervalo que deseja tocar do áudio de virada de página */
+    const flipAudioStart = 1;  // segundo inicial
+    const flipAudioEnd   = 1.4;  // segundo final (pause depois de 2s, por exemplo)
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Cria a instância de áudio e pré-carrega
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+
+      // Desbloqueia o áudio após primeiro clique do usuário
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        });
+        document.removeEventListener('click', unlockAudio);
+      });
+    });
+  </script>
+
+  <!-- Inicialização do Flipbook usando evento "start" -->
   <script>
     $(document).ready(function(){
       $("#flipbook").turn({
         width: 600,
         height: 450,
-        autoCenter: true
+        autoCenter: true,
+
+        // Assim que o flip começa, tocamos o som
+        when: {
+          start: function(/*event, pageObject, corner*/){
+            if (flipAudio) {
+              flipAudio.currentTime = flipAudioStart; // Ajusta para o início desejado
+              flipAudio.play();
+
+              // Escuta para parar o áudio no fim definido
+              flipAudio.addEventListener('timeupdate', function onTimeUpdate() {
+                if (flipAudio.currentTime >= flipAudioEnd) {
+                  flipAudio.pause();
+                  // Se quiser voltar ao start ou zerar:
+                  flipAudio.currentTime = flipAudioStart;
+                  // Remove o listener para evitar conflitos na próxima página
+                  flipAudio.removeEventListener('timeupdate', onTimeUpdate);
+                }
+              });
+            }
+          }
+        }
       });
 
-      // Tocar som ao clicar na página 5
-      $("#sound-trigger").click(function(){
-        var audio = new Audio('som-pagina5.m4a');
+      // Agora para o som específico na página 5 (sound-trigger):
+      $("#sound-trigger").on("click", function(){
+        /* Defina aqui o intervalo que deseja para esse outro som */
+        const page5AudioStart = 0; 
+        const page5AudioEnd   = 1.5; 
+
+        const audio = new Audio('som-pagina5.m4a');
+        audio.currentTime = page5AudioStart;
         audio.play();
+
+        // Escuta o 'timeupdate' e interrompe no momento escolhido
+        audio.addEventListener('timeupdate', function onPage5TimeUpdate() {
+          if (audio.currentTime >= page5AudioEnd) {
+            audio.pause();
+            // Volta ao início ou defina outro tempo, se quiser
+            audio.currentTime = 0;
+            audio.removeEventListener('timeupdate', onPage5TimeUpdate);
+          }
+        });
       });
     });
   </script>
 
-  <!-- Seu arquivo do globo -->
+  <!-- Arquivo do globo (opcional) -->
   <script src="./globo.js"></script>
-
 </body>
 </html>
