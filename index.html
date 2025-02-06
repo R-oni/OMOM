@@ -1,200 +1,269 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Exemplo de Página com Globo 3D e Flipbook</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outros Mundos Outras Mentes</title>
   <style>
-    /* Estilos básicos (igual ao seu) */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* Canvas permanece fixo e cobre toda a tela */
+    #automatonCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      image-rendering: pixelated;
+    }
+
     body {
-      background-color: #000;
-      color: #fff;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: black;
+      overflow: hidden; /* Impede a rolagem do body */
+      color: white;
     }
-    .page-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 800px;
-    }
-    .top-section, .bottom-section {
+
+    .title-container {
       text-align: center;
-      margin: 2px 0;
-    }
-    .top-section img { max-width: 20%; height: auto; margin: 0px 0;}
-    .bottom-section img { max-width: 100%; height: auto; }
-    .globe-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 60%;
-      margin: -20px 0;
-    }
-    #globeCanvas {
-      width: 40vh; height: 40vh; max-width: 90%;
-    }
-    #flipbook {
-      width: 400px; height: 300px;
-      margin: 20px 0;
+      margin-top: 50px;
       position: relative;
-      animation: neonGlow 2s infinite alternate ease-in-out;
+      z-index: 2;
     }
-    @keyframes neonGlow {
-      0% { box-shadow: 0 0 10px #00EEF7, 0 0 20px #00EEF7, 0 0 40px #00EEF7; }
-      50% { box-shadow: 0 0 15px #00EEF7, 0 0 30px #00EEF7, 0 0 60px #00EEF7; }
-      100% { box-shadow: 0 0 5px #00EEF7, 0 0 15px #00EEF7, 0 0 30px #00EEF7; }
+
+    .title-container img {
+      max-width: 50%;
     }
-    .page img {
-      width: 100%; height: auto; display: block;
-    }
-    .sound-button {
+
+    /* Contêiner que isola os símbolos com rolagem interna */
+    .symbols-wrapper {
       position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px; height: 30px;
-      background: rgba(255, 255, 200, 0.2);
-      cursor: pointer;
+      top: 150px;  /* Define o ponto de início (ajuste se necessário) */
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto; /* Ativa a rolagem vertical somente para os símbolos */
+      padding: 20px;
+      z-index: 2;
     }
-    @media (max-width: 768px) {
-      #globeCanvas { width: 90%; height: auto; }
+
+    .symbols-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      /* Removemos o margin-top para evitar deslocamento extra */
+    }
+
+    .symbol {
+      position: relative;
+      transform-origin: center;
+      transition: transform 0.1s linear;
+    }
+
+    .symbol img {
+      width: 130px;
+      transition: transform 0.3s;
+    }
+
+    .symbol img:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-  <div class="page-container">
+  <canvas id="automatonCanvas"></canvas>
 
-    <!-- Imagem de topo -->
-    <div class="top-section">
-      <img src="tituloveleywei.png" alt="Título Velei'wey">
-    </div>
-
-    <!-- Globo 3D -->
-    <div class="globe-section">
-      <canvas id="globeCanvas"></canvas>
-    </div>
-
-    <!-- Imagens de baixo -->
-    <!--<div class="bottom-section">
-      <img src="corpoyeroben.png" alt="Corpo Yeroben">
-    </div>
-    <div class="bottom-section">
-      <img src="dadosveleywei.png" alt="Dados Velei'wey">
-    </div>
-
-    <!-- Flipbook -->
-    <div id="flipbook">
-      <div class="page"><img src="pagina1.png" alt="Página 1"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 2"></div>
-      <div class="page"><img src="pagina2.png" alt="Página 3"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 4"></div>
-      <div class="page">
-        <img src="pagina4.png" alt="Página 5">
-        <div class="sound-button" id="sound-trigger"></div>
-      </div>
-      <div class="page"><img src="paginanula.png" alt="Página 6"></div>
-      <div class="page"><img src="pagina5.png" alt="Página 7"></div>
-      <div class="page"><img src="pagina6.png" alt="Página 8"></div>
-      <div class="page"><img src="pagina7.png" alt="Página 9"></div>
-      <div class="page"><img src="pagina8.jpg" alt="Página 10"></div>
-      <div class="page"><img src="pagina9.png" alt="Página 11"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 12"></div>
-    </div>
-
+  <div class="title-container">
+    <a href="omom.html">
+      <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
+    </a>
   </div>
 
-  <!-- Bibliotecas -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-  <script src="turn.min.js"></script>
+  <!-- Contêiner exclusivo para os símbolos -->
+  <div class="symbols-wrapper">
+    <div class="symbols-container">
+      <div class="symbol" id="symbol1">
+        <a href="mundos/veleywei/index.html">
+          <img src="assets/veleyweimenu.png" alt="Velei'wey">
+        </a>
+      </div>
+      <div class="symbol" id="symbol2">
+        <a href="mundos/botychera/index.html">
+          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+        </a>
+      </div>
+      <div class="symbol" id="symbol3">
+        <a href="mundos/himpis/index.html">
+          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+        </a>
+      </div>
+      <div class="symbol" id="symbol4">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+        </a>
+      </div>
+      <div class="symbol" id="symbol5">
+        <a href="mundos/denbou/index.html">
+          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+        </a>
+      </div>
+      <div class="symbol" id="symbol6">
+        <a href="mundos/araporu/index.html">
+          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+        </a>
+      </div>
+      <div class="symbol" id="symbol7">
+        <a href="mundos/os artesaos/index.html">
+          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+        </a>
+      </div>
+      <div class="symbol" id="symbol8">
+        <a href="mundos/sapador/index.html">
+          <img src="mundos/sapador/sapador.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol" id="symbol9">
+        <a href="mundos/calindreno/index.html">
+          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol10">
+        <a href="mundos/mundo pulsante/index.html">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol11">
+        <a href="mundos/dosirelala/index.html">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol" id="symbol12">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol13">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol14">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol15">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+    </div>
+  </div>
 
-  <!-- Pré-carregando o som de virar página -->
+  <!-- Música de fundo: arpeggio.mp3 -->
+  <audio id="bgm" loop>
+    <source src="arpeggio.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
+
   <script>
-    let flipAudio;
-    
-    /* Defina aqui o intervalo que deseja tocar do áudio de virada de página */
-    const flipAudioStart = 1;  // segundo inicial
-    const flipAudioEnd   = 1.4;  // segundo final (pause depois de 2s, por exemplo)
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Cria a instância de áudio e pré-carrega
-      flipAudio = new Audio('sompagina.aac');
-      flipAudio.preload = 'auto';
-      flipAudio.load();
-      flipAudio.volume = 0.2;
-
-      // Desbloqueia o áudio após primeiro clique do usuário
-      document.addEventListener('click', function unlockAudio() {
-        flipAudio.play().then(() => {
-          flipAudio.pause();
-          flipAudio.currentTime = flipAudioStart;
+    // Força a reprodução automática da música com volume 50%
+    document.addEventListener("DOMContentLoaded", function() {
+      const bgm = document.getElementById("bgm");
+      bgm.volume = 0.5;
+      bgm.currentTime = 70;
+      const playPromise = bgm.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function(error) {
+          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
+          document.addEventListener("click", function handler() {
+            bgm.play();
+            document.removeEventListener("click", handler);
+          });
         });
-        document.removeEventListener('click', unlockAudio);
-      });
+      }
     });
-  </script>
 
-  <!-- Inicialização do Flipbook usando evento "start" -->
-  <script>
-    $(document).ready(function(){
-      $("#flipbook").turn({
-        width: 600,
-        height: 450,
-        autoCenter: true,
+    // Animação dos símbolos (não interfere no fundo)
+    const symbols = document.querySelectorAll('.symbol');
+    let time = 0;
+    function floatSymbols() {
+      time += 0.02;
+      symbols.forEach((symbol, index) => {
+        let amplitude = 10;
+        let speed = 0.1 + (index * 0.01);
+        let y = Math.sin(time * speed * 10) * amplitude;
+        symbol.style.transform = `translateY(${y}px)`;
+      });
+      requestAnimationFrame(floatSymbols);
+    }
+    floatSymbols();
 
-        // Assim que o flip começa, tocamos o som
-        when: {
-          start: function(/*event, pageObject, corner*/){
-            if (flipAudio) {
-              flipAudio.currentTime = flipAudioStart; // Ajusta para o início desejado
-              flipAudio.play();
+    // Configuração do canvas de fundo (autômato)
+    const canvas = document.getElementById("automatonCanvas");
+    const ctx = canvas.getContext("2d");
+    function setupCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx.imageSmoothingEnabled = false;
+    }
+    setupCanvas();
 
-              // Escuta para parar o áudio no fim definido
-              flipAudio.addEventListener('timeupdate', function onTimeUpdate() {
-                if (flipAudio.currentTime >= flipAudioEnd) {
-                  flipAudio.pause();
-                  // Se quiser voltar ao start ou zerar:
-                  flipAudio.currentTime = flipAudioStart;
-                  // Remove o listener para evitar conflitos na próxima página
-                  flipAudio.removeEventListener('timeupdate', onTimeUpdate);
-                }
-              });
-            }
+    const cellSize = 3;
+    let cols, rows;
+    function updateGridSize() {
+      cols = Math.floor(canvas.width / cellSize);
+      rows = Math.floor(canvas.height / cellSize);
+    }
+    updateGridSize();
+
+    let grid = Array.from({ length: rows }, () =>
+      Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
+    );
+
+    function drawGrid() {
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#FFFFFF";
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          if (grid[y][x] === 1) {
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
           }
         }
-      });
+      }
+    }
 
-      // Agora para o som específico na página 5 (sound-trigger):
-      $("#sound-trigger").on("click", function(){
-        /* Defina aqui o intervalo que deseja para esse outro som */
-        const page5AudioStart = 0; 
-        const page5AudioEnd   = 1.5; 
+    function updateGrid() {
+      let newGrid = grid.map(arr => [...arr]);
+      for (let y = 1; y < rows - 1; y++) {
+        for (let x = 1; x < cols - 1; x++) {
+          let sum = grid[y-1][x] + grid[y+1][x] + grid[y][x-1] + grid[y][x+1] +
+                    grid[y-1][x-1] + grid[y-1][x+1] + grid[y+1][x-1] + grid[y+1][x+1];
+          newGrid[y][x] = (grid[y][x] === 1) ? ((sum === 2 || sum === 3) ? 1 : 0) : (sum === 3 ? 1 : 0);
+        }
+      }
+      grid = newGrid;
+    }
 
-        const audio = new Audio('som-pagina5.m4a');
-        audio.currentTime = page5AudioStart;
-        audio.play();
+    function animate() {
+      updateGrid();
+      drawGrid();
+      requestAnimationFrame(animate);
+    }
+    animate();
 
-        // Escuta o 'timeupdate' e interrompe no momento escolhido
-        audio.addEventListener('timeupdate', function onPage5TimeUpdate() {
-          if (audio.currentTime >= page5AudioEnd) {
-            audio.pause();
-            // Volta ao início ou defina outro tempo, se quiser
-            audio.currentTime = 0;
-            audio.removeEventListener('timeupdate', onPage5TimeUpdate);
-          }
-        });
-      });
+    // Reconfigura o canvas no redimensionamento (sem interferir no fundo)
+    window.addEventListener("resize", () => {
+      setupCanvas();
+      updateGridSize();
+      grid = Array.from({ length: rows }, () =>
+        Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
+      );
+      drawGrid();
     });
   </script>
-
-  <!-- Arquivo do globo (opcional) -->
-  <script src="./globo.js"></script>
 </body>
-</html>
+  </html>
