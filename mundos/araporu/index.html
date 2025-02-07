@@ -2,189 +2,176 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Exemplo de Página com Globo 3D e Flipbook</title>
+  <title>Exemplo Responsivo sem Rolagem</title>
   <style>
-    /* Zera margens e espaçamentos */
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Corpo da página */
-    body {
-      background-color: #000; /* Fundo preto */
-      color: #fff;           /* Texto branco */
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #000;
+      color: #fff;
       font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow-x: hidden;
     }
-
-    /* Container principal */
-    .page-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      max-width: 800px; /* Centraliza e limita a largura */
-    }
-
-    /* Seção da imagem de topo */
+    /* Imagem do topo fixa e centralizada */
     .top-section {
-      text-align: center;
-      margin: 20px 0;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
     }
-
     .top-section img {
-      max-width: 60%;
+      max-width: 40vw;
+      max-height: 20vh;
+      width: auto;
       height: auto;
+      display: block;
     }
-
-    /* Seção do globo 3D */
-    .globe-section {
+    /* Container principal com padding para não sobrepor a imagem do topo */
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding-top: 1vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      margin: 20px 0;
     }
-
-    #globeCanvas {
-      width: 600px;
-      height: 600px;
-      max-width: 90%;
-    }
-
-    /* Imagem do corpo */
-    .bottom-section {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .bottom-section img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    /* Flipbook */
-    #flipbook {
-      width: 400px;
-      height: 300px;
-      margin: 10px 0;
+    .globe-section {
       position: relative;
-      animation: neonGlow 2s infinite alternate ease-in-out;
+      top: -5vh;
     }
-
-    /* Efeito de luz néon */
-    @keyframes neonGlow {
-      0% {
-        box-shadow: 0 0 10px #00EEF7, 0 0 20px #00EEF7, 0 0 40px #00EEF7;
-      }
-      50% {
-        box-shadow: 0 0 15px #00EEF7, 0 0 30px #00EEF7, 0 0 60px #00EEF7;
-      }
-      100% {
-        box-shadow: 0 0 5px #00EEF7, 0 0 15px #00EEF7, 0 0 30px #00EEF7;
-      }
+    #globeCanvas {
+      width: 25vmax;
+      height: 25vmax;
+      max-width: 80vw;
+      max-height: 40vh;
     }
-
+    /* Flipbook ocupa 80% da largura da tela; sua altura será definida via JS mantendo 4:3 */
+    #flipbook {
+      width: 80vw;
+    }
     .page img {
       width: 100%;
       height: auto;
       display: block;
     }
-
-    /* Botão invisível para tocar o som */
-    .sound-button {
+    .btn-overlay {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 30px;
-      background: rgba(255, 255, 200, 0.2);
+      top: 100px;
+      right: 100px;
+      border: none;
+      background: none;
       cursor: pointer;
+      padding: 0;
     }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-      #globeCanvas {
-        width: 90%;
-        height: auto;
-      }
+    .btn-overlay img {
+      width: 60px;
+      height: auto;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <div class="page-container">
+  <!-- Imagem do topo -->
+  <div class="top-section">
+    <img src="tituloaraporu.png" alt="Título araporu">
+  </div>
 
-    <!-- Imagem de topo -->
-    <div class="top-section">
-      <img src="tituloaraporu.png" alt="Título Velei'wey">
-    </div>
-
-    <!-- Globo 3D -->
+  <div class="container">
+    <!-- Globo permanece conforme estava -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
 
-    <!-- Imagem de baixo -->
-    <div class="bottom-section">
-      <img src="corpoaraporu.png" alt="Corpo Yeroben">
-      
-      <img src="rolodoborao.png" alt="Corpo Yeroben">
-    </div>
-
-    <!-- Flipbook abaixo da imagem do corpo com efeito néon -->
+    <!-- Flipbook responsivo -->
     <div id="flipbook">
-      <div class="page"><img src="pagina1.png" alt="Página 1"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 2"></div>
-      <div class="page"><img src="pagina2.png" alt="Página 3"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 4"></div>
-      <div class="page">
-        <img src="pagina4.png" alt="Página 5">
-        <div class="sound-button" id="sound-trigger"></div> <!-- Área clicável -->
-      </div>
-      <div class="page"><img src="paginanula.png" alt="Página 6"></div>
-      <div class="page"><img src="pagina5.png" alt="Página 7"></div>
-      <div class="page"><img src="pagina6.png" alt="Página 8"></div>
-      <div class="page"><img src="pagina7.png" alt="Página 9"></div>
-      <div class="page"><img src="pagina8.jpg" alt="Página 10"></div>
-      <div class="page"><img src="pagina9.png" alt="Página 11"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 12"></div>
+      <div class="page hard"><img src="pagina1.png" alt="Capa"></div>
+      <div class="page"><img src="yyy.png" alt="Página 1"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 2"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 3"></div>
+      <div class="page"><img src="pagina2.jpg" alt="Página 9"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 11"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
     </div>
-
   </div>
 
-  <!-- Bibliotecas necessárias -->
+
+
+  <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
-
-  <!-- Ativação do Flipbook -->
   <script>
+    let flipAudio;
+    const flipAudioStart = 1;
+    const flipAudioEnd = 1.4;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+
+      // Desbloqueia o áudio com o primeiro clique do usuário
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        });
+        document.removeEventListener('click', unlockAudio);
+      });
+    });
+
     $(document).ready(function(){
+      // Define dimensões do flipbook (80% da largura da tela com proporção 4:3)
+      const flipbookWidth = window.innerWidth * 0.8;
+      const flipbookHeight = flipbookWidth * 0.75;
+
       $("#flipbook").turn({
-        width: 600,
-        height: 450,
-        autoCenter: true
+        autoCenter: false,
+        display: 'double',
+        when: {
+          start: function(event, page) {
+            if (flipAudio) {
+              flipAudio.currentTime = flipAudioStart;
+              flipAudio.play();
+              flipAudio.addEventListener('timeupdate', function onTimeUpdate() {
+                if (flipAudio.currentTime >= flipAudioEnd) {
+                  flipAudio.pause();
+                  flipAudio.currentTime = flipAudioStart;
+                  flipAudio.removeEventListener('timeupdate', onTimeUpdate);
+                }
+              });
+            }
+          }
+        }
       });
 
-      // Tocar som ao clicar na página 5
-      $("#sound-trigger").click(function(){
-        var audio = new Audio('som-pagina5.m4a');
+      $("#flipbook").turn("size", flipbookWidth, flipbookHeight);
+
+      // Exemplo de trigger de som (caso o elemento #sound-trigger exista)
+      $("#sound-trigger").on("click", function(){
+        const audio = new Audio('som-pagina5.m4a');
+        audio.currentTime = 0;
         audio.play();
+        audio.addEventListener('timeupdate', function onPage5TimeUpdate() {
+          if (audio.currentTime >= 1.5) {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.removeEventListener('timeupdate', onPage5TimeUpdate);
+          }
+        });
       });
     });
   </script>
-
-  <!-- Seu arquivo do globo -->
   <script src="./globo.js"></script>
-
 </body>
 </html>
