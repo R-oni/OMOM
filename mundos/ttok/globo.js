@@ -1,86 +1,91 @@
-// Função principal para inicializar o globo
+// Função principal para inicializar os globos
 function initGlobe() {
   // Cena
   const scene = new THREE.Scene();
 
   // Câmera
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    1,        // Aspect ratio ajustado depois no resize
-    0.1,
-    1000
-  );
-  camera.position.z = 3;
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+  camera.position.z = 7;
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
-  const renderer = new THREE.WebGLRenderer({ 
-    canvas, 
-    antialias: true 
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true
   });
-  
-  // Permite sombras (se quiser projetar em um plano, por exemplo)
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   // Ajusta o tamanho inicial do renderer
   resizeRenderer();
 
-  // Controles de órbita
+  // Controles de órbita com damping para suavizar o movimento
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
 
-  // (1) Geometria com resolução maior
-  // Mais segmentos => textura mais suave
-  const geometry = new THREE.SphereGeometry(1, 64, 64);
+  // Raycaster para detectar cliques
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
 
-  // (2) Carregar textura
+  // Carregador de texturas
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('mapattok.png'); // seu arquivo
 
-  // (3) Material que reage a luz (Standard ou Phong ou Lambert)
-  const material = new THREE.MeshStandardMaterial({
-    map: texture
-  });
+  // ----- Globo Central -----
+  const centralGeometry = new THREE.SphereGeometry(1, 64, 64);
+  const centralTexture = textureLoader.load('mapatoktok.png'); // textura do globo central
+  const centralMaterial = new THREE.MeshStandardMaterial({ map: centralTexture });
+  const centralSphere = new THREE.Mesh(centralGeometry, centralMaterial);
+  centralSphere.castShadow = true;
+  centralSphere.receiveShadow = true;
+  scene.add(centralSphere);
 
-  // (4) Mesh do globo
-  const sphere = new THREE.Mesh(geometry, material);
-  sphere.castShadow = true;   // se quiser projetar sombra
-  sphere.receiveShadow = true; // se quiser receber sombra (num plano, por ex)
-  scene.add(sphere);
+  // ----- Globo Orbitante (menor) -----
+  const orbitRadius = 3;              // distância do centro
+  const orbitSphereRadius = 1 / 10;      // 3x menor que o central
+  const orbitGeometry = new THREE.SphereGeometry(orbitSphereRadius, 64, 64);
+  const orbitTexture = textureLoader.load('mapattok.png'); // textura do globo orbitante
+  const orbitMaterial = new THREE.MeshStandardMaterial({ map: orbitTexture });
+  const orbitSphere = new THREE.Mesh(orbitGeometry, orbitMaterial);
+  orbitSphere.castShadow = true;
+  orbitSphere.receiveShadow = true;
+  // Posição inicial no eixo X, a orbitRadius de distância
+  orbitSphere.position.set(orbitRadius, 0, 0);
+  scene.add(orbitSphere);
 
-  // (5) Luz ambiente (fraca) + luz direcional (para ver sombreamento)
+  // ----- Iluminação -----
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(3, 3, 5); // posição da luz
-  directionalLight.castShadow = true;     // habilita sombra
+  directionalLight.position.set(3, 3, 5);
+  directionalLight.castShadow = true;
   scene.add(directionalLight);
 
-  // Se quiser ver sombra projetada num "chão", crie um plano abaixo do globo:
-  /*
-  const planeGeometry = new THREE.PlaneGeometry(10, 10);
-  const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane.rotation.x = -Math.PI / 2;
-  plane.position.y = -1.5;
-  plane.receiveShadow = true;
-  scene.add(plane);
-  */
+  // ----- Variáveis para animação -----
+  let orbitAngle = 0;
+  const orbitSpeed = -0.5; // velocidade angular (radianos por segundo)
+  const clock = new THREE.Clock();
 
   // Função de animação
   function animate() {
     requestAnimationFrame(animate);
+    const delta = clock.getDelta();
 
-    // Rotação contínua do globo
-    sphere.rotation.y += 0.003;  // Ajuste a velocidade se quiser
+    // Rotação lenta do globo central (opcional)
+    centralSphere.rotation.y += 0.003;
 
+    // Atualiza a posição do globo orbitante (movimento circular no plano XZ)
+    orbitAngle += orbitSpeed * delta;
+    orbitSphere.position.x = centralSphere.position.x + orbitRadius * Math.cos(orbitAngle);
+    orbitSphere.position.z = centralSphere.position.z + orbitRadius * Math.sin(orbitAngle);
+
+    controls.update();
     renderer.render(scene, camera);
   }
   animate();
 
-  // Redimensionar conforme a janela muda
-  window.addEventListener('resize', resizeRenderer);
+  // Função para ajustar o tamanho do renderer e a câmera
   function resizeRenderer() {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
@@ -88,9 +93,36 @@ function initGlobe() {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
   }
+  window.addEventListener('resize', resizeRenderer);
+
+  // ----- Clique para definir qual objeto permanece visível -----
+  window.addEventListener('click', (event) => {
+    // Converte a posição do clique para coordenadas normalizadas (-1 a 1)
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+
+    // Verifica se o clique atingiu algum dos globos
+    const intersects = raycaster.intersectObjects([centralSphere, orbitSphere]);
+    if (intersects.length > 0) {
+      const clickedObject = intersects[0].object;
+      if (clickedObject === centralSphere) {
+        // Se clicar no central, mantém-o e oculta o orbitante
+        centralSphere.visible = true;
+        orbitSphere.visible = false;
+        controls.target.copy(centralSphere.position);
+      } else if (clickedObject === orbitSphere) {
+        // Se clicar no orbitante, mantém-o e oculta o central
+        orbitSphere.visible = true;
+        centralSphere.visible = false;
+        controls.target.copy(orbitSphere.position);
+      }
+    }
+  });
 }
 
-// Inicia o globo quando a página carrega
+// Inicia os globos quando a página carrega
 window.onload = () => {
   initGlobe();
 };
