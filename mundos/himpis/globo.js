@@ -48,6 +48,18 @@ function initGlobe() {
   sphere.receiveShadow = true; // se quiser receber sombra (num plano, por ex)
   scene.add(sphere);
 
+  // Adicionando a camada de nuvem
+  const cloudGeometry = new THREE.SphereGeometry(1.015, 64, 64); // raio ligeiramente maior
+  const cloudTexture = textureLoader.load('nuvemhimpis.png'); // textura com transparência
+  const cloudMaterial = new THREE.MeshPhongMaterial({
+    map: cloudTexture,
+    transparent: true,   // permite transparência
+    opacity: 1,        // ajuste de opacidade conforme desejado
+    depthWrite: false    // evita problemas de renderização de transparência
+  });
+  const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
+  scene.add(cloudMesh);
+
   // (5) Luz ambiente (fraca) + luz direcional (para ver sombreamento)
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
@@ -74,6 +86,9 @@ function initGlobe() {
 
     // Rotação contínua do globo
     sphere.rotation.y += 0.003;  // Ajuste a velocidade se quiser
+
+    // Rotação da camada de nuvem (velocidade diferente para efeito realista)
+    cloudMesh.rotation.y += 0.0039;
 
     renderer.render(scene, camera);
   }
