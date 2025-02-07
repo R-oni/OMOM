@@ -2,94 +2,54 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Exemplo de Página com Globo 3D e Flipbook</title>
+  <title>Exemplo Responsivo sem Rolagem</title>
   <style>
-    /* Zera margens e espaçamentos */
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Corpo da página */
-    body {
-      background-color: #000; /* Fundo preto */
-      color: #fff;           /* Texto branco */
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      color: #fff;
       font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow-x: hidden;
     }
 
-    /* Container principal */
     .page-container {
       display: flex;
       flex-direction: column;
+      justify-content: space-evenly;
       align-items: center;
       width: 100%;
-      max-width: 800px; /* Centraliza e limita a largura */
-    }
-
-    /* Seção da imagem de topo */
-    .top-section {
-      text-align: center;
-      margin: 20px 0;
+      height: 100%;
     }
 
     .top-section img {
-      max-width: 70%;
+      width: 15vmax;
+      max-width: 80vw;
       height: auto;
     }
 
-    /* Seção do globo 3D */
     .globe-section {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
-      margin: 20px 0;
     }
 
     #globeCanvas {
-      width: 600px;
-      height: 600px;
-      max-width: 90%;
+      width: 25vmax;
+      height: 25vmax;
+      max-width: 80vw;
+      max-height: 40vh;
     }
 
-    /* Imagem do corpo */
-    .bottom-section {
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .bottom-section img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    /* Flipbook */
     #flipbook {
-      width: 400px;
-      height: 300px;
-      margin: 10px 0;
       position: relative;
-      animation: neonGlow 2s infinite alternate ease-in-out;
     }
 
-    /* Efeito de luz néon */
-    @keyframes neonGlow {
-      0% {
-        box-shadow: 0 0 10px #00EEF7, 0 0 20px #00EEF7, 0 0 40px #00EEF7;
-      }
-      50% {
-        box-shadow: 0 0 15px #00EEF7, 0 0 30px #00EEF7, 0 0 60px #00EEF7;
-      }
-      100% {
-        box-shadow: 0 0 5px #00EEF7, 0 0 15px #00EEF7, 0 0 30px #00EEF7;
-      }
+    .page {
+      /* Caso necessário, pode-se adicionar position: relative; aqui, mas
+         optamos por colocar essa regra apenas na página que terá o elemento flutuante */
     }
 
     .page img {
@@ -98,7 +58,6 @@
       display: block;
     }
 
-    /* Botão invisível para tocar o som */
     .sound-button {
       position: absolute;
       top: 50%;
@@ -110,79 +69,161 @@
       cursor: pointer;
     }
 
-    /* Responsividade */
-    @media (max-width: 768px) {
-      #globeCanvas {
-        width: 90%;
-        height: auto;
-      }
+    #overlayContainer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
     }
+
+    #overlayImage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    .btn-overlay {
+      position: absolute;
+      top: 100px;
+      right: 100px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .btn-overlay img {
+      width: 60px;
+      height: auto;
+      display: block;
+    }
+
+
   </style>
 </head>
 <body>
   <div class="page-container">
-
-    <!-- Imagem de topo -->
     <div class="top-section">
-      <img src="titulodenbou.png" alt="Título Velei'wey">
+      <img src="titulodenbou.png" alt="Título denden">
     </div>
 
-    <!-- Globo 3D -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
 
-    <!-- Imagem de baixo -->
-    <div class="bottom-section">
-      <img src="desenhodenbou.png" alt="Corpo Yeroben">
-    </div>
-
-    <!-- Flipbook abaixo da imagem do corpo com efeito néon -->
     <div id="flipbook">
-      <div class="page"><img src="pagina1.png" alt="Página 1"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 2"></div>
-      <div class="page"><img src="pagina2.png" alt="Página 3"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 4"></div>
-      <div class="page">
-        <img src="pagina4.png" alt="Página 5">
-        <div class="sound-button" id="sound-trigger"></div> <!-- Área clicável -->
-      </div>
-      <div class="page"><img src="paginanula.png" alt="Página 6"></div>
-      <div class="page"><img src="pagina5.png" alt="Página 7"></div>
-      <div class="page"><img src="pagina6.png" alt="Página 8"></div>
-      <div class="page"><img src="pagina7.png" alt="Página 9"></div>
-      <div class="page"><img src="pagina8.jpg" alt="Página 10"></div>
-      <div class="page"><img src="pagina9.png" alt="Página 11"></div>
-      <div class="page"><img src="paginanula.png" alt="Página 12"></div>
+      <!-- Primeira página marcada como "hard" -->
+      <div class="page hard"><img src="pagina1.png" alt="Capa"></div>
+      <div class="page"><img src="yyy.png" alt="Página 1"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 2"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 3"></div>
+      <div class="page"><img src="pagina2.jpg" alt="Página 9"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 11"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
     </div>
-
   </div>
 
-  <!-- Bibliotecas necessárias -->
+  <div id="overlayContainer">
+    <img id="overlayImage" src="" alt="Imagem Overlay">
+  </div>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
 
-  <!-- Ativação do Flipbook -->
   <script>
+    let flipAudio;
+    const flipAudioStart = 1;
+    const flipAudioEnd = 1.4;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        });
+        document.removeEventListener('click', unlockAudio);
+      });
+    });
+
     $(document).ready(function(){
       $("#flipbook").turn({
-        width: 600,
-        height: 450,
-        autoCenter: true
+        autoCenter: false,
+        display: 'double',
+        when: {
+          start: function(event, page) {
+            if (flipAudio) {
+              flipAudio.currentTime = flipAudioStart;
+              flipAudio.play();
+              flipAudio.addEventListener('timeupdate', function onTimeUpdate() {
+                if (flipAudio.currentTime >= flipAudioEnd) {
+                  flipAudio.pause();
+                  flipAudio.currentTime = flipAudioStart;
+                  flipAudio.removeEventListener('timeupdate', onTimeUpdate);
+                }
+              });
+            }
+
+            // Muda o tamanho após virar a primeira página
+            if (page === 2) {
+              $("#flipbook").turn("size", 550, 400);
+            }
+          }
+        }
       });
 
-      // Tocar som ao clicar na página 5
-      $("#sound-trigger").click(function(){
-        var audio = new Audio('som-pagina5.m4a');
+      $("#flipbook").turn("size", 600, 450);
+
+      $("#sound-trigger").on("click", function(){
+        const audio = new Audio('som-pagina5.m4a');
+        audio.currentTime = 0;
         audio.play();
+        audio.addEventListener('timeupdate', function onPage5TimeUpdate() {
+          if (audio.currentTime >= 1.5) {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.removeEventListener('timeupdate', onPage5TimeUpdate);
+          }
+        });
       });
+
+      const btnOverlay = document.getElementById("btnOverlay");
+      const overlayContainer = document.getElementById("overlayContainer");
+      const overlayImage = document.getElementById("overlayImage");
+
+      if (btnOverlay && overlayContainer && overlayImage) {
+        btnOverlay.addEventListener("click", () => {
+          overlayImage.src = "corpoyeroben.png";
+          overlayContainer.style.display = "block";
+        });
+
+        overlayContainer.addEventListener("click", (evt) => {
+          if (evt.target === overlayContainer) {
+            overlayContainer.style.display = "none";
+          }
+        });
+      }
+
+   
     });
   </script>
 
-  <!-- Seu arquivo do globo -->
   <script src="./globo.js"></script>
-
 </body>
 </html>
