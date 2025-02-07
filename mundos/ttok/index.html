@@ -105,25 +105,7 @@
       display: block;
     }
 
-    /* --- Adições para a imagem flutuante --- */
-    .floating-container {
-      position: relative; /* Permite posicionar o elemento filho de forma absoluta */
-    }
-    #spiraqel {
-      position: absolute;
-      /* Ajuste os valores abaixo para definir a posição xy em relação ao flipbook */
-      right: 70px;
-      top:  170px;
-      width: 55px; /* Tamanho da imagem flutuante */
-      cursor: pointer;
-      animation: pulse 2s infinite ease-in-out;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-    /* --- Fim das adições --- */
+  
   </style>
 </head>
 <body>
@@ -147,10 +129,6 @@
       <div class="page hard"><img src="pagina1.png" alt="Capa"></div>
       <div class="page"><img src="yyy.png" alt="Página 1"></div>
       <div class="page"><img src="pagina3.png" alt="Página 2"></div>
-      <div class="page"><img src="pagina2.png" alt="Página 3"></div>
-        <img src="pagina8.png" alt="Página 8">
-        <img id="spiraqel" src="spiraqel.png" alt="Spiraqel">
-      </div>
       <div class="page"><img src="pagina3.jpg" alt="Página 9"></div>
       <div class="page"><img src="pagina2.png" alt="Página 11"></div>
       <div class="page"><img src="pagina3.png" alt="Página 12"></div>
@@ -246,13 +224,7 @@
           }
         });
       }
-
-      // --- Adição do evento de clique na imagem flutuante ---
-      $("#spiraqel").on("click", function(){
-        $("#overlayImage").attr("src", "corpoyeroben.png");
-        $("#overlayContainer").show();
-      });
-      // --- Fim da adição ---
+      
     });
   </script>
 
