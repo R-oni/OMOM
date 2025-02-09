@@ -78,7 +78,8 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      /* Inicialmente, sem zoom adicional; o zoom será aplicado via JavaScript */
+      transform: translate(-50%, -50%) scale(1);
       max-width: 90vw;
       max-height: 90vh;
     }
@@ -94,6 +95,7 @@
       font-size: 16px;
       cursor: pointer;
       padding: 10px;
+      z-index: 10000;
     }
     /* --- Estilo do botão Veleywei (imagem) --- */
     /* Alterado para usar "cliqueyeroben.png" e centralizado */
@@ -105,6 +107,14 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      /* Aplicando animação CSS para fade in / fade out */
+      animation: fadeInOut 2s infinite;
+    }
+    /* Keyframes para a animação de fade in/out */
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
     }
     /* Outras classes que já estavam definidas */
     .btn-overlay {
@@ -222,22 +232,30 @@
         resizeFlipbook();
       });
       
-      // Animação de crescer e diminuir a largura do botão
-      function animateButton() {
-        $("#veleyweiBtn").animate({ width: "60px" }, 1000)
-                         .animate({ width: "50px" }, 1000, animateButton);
-      }
-      animateButton();
-      
-      // Delegação do clique no botão
+      // Delegação do clique no botão: exibe o overlay com corpoyeroben.png via fadeIn
       $(document).on("click", "#veleyweiBtn", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
+        // Reinicia o zoom da imagem
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+        overlayScale = 1;
       });
       
       // Botão Sair no overlay
       $("#btnSair").on("click", function(){
         $("#overlayContainer").fadeOut(500);
+      });
+      
+      // Função de zoom para a imagem do overlay
+      var overlayScale = 1;
+      $("#overlayImage").on("wheel", function(e) {
+        e.preventDefault();
+        if(e.originalEvent.deltaY < 0) {
+          overlayScale += 0.1;
+        } else {
+          overlayScale = Math.max(0.1, overlayScale - 0.1);
+        }
+        $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
       });
       
       // Implementa a funcionalidade de "drag" e redimensionamento (wheel) para o botão,
