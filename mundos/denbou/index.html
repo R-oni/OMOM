@@ -110,6 +110,18 @@
       /* Aplicando animação CSS para fade in / fade out */
       animation: fadeInOut 2s infinite;
     }
+
+    #veleyweiBtn2 {
+      position: absolute;
+      cursor: pointer;
+      width: 450px; /* tamanho inicial; pode ser alterado via roda do mouse */
+      z-index: 10;
+      left: 50%;
+      top: 30%;
+      transform: translate(-50%, -50%);
+      /* Aplicando animação CSS para fade in / fade out */
+      animation: fadeInOut 2s infinite;
+    }
     /* Keyframes para a animação de fade in/out */
     @keyframes fadeInOut {
       0% { opacity: 1; }
@@ -178,12 +190,12 @@
       <div class="page">
         <img src="pagina8.png" alt="Página 9">
         <!-- Botão alterado para usar "cliqueyeroben.png" -->
-        <img id="veleyweiBtn" src="clique2.png" alt="Botão Cliquey Eroben">
+        <img id="veleyweiBtn2" src="clique2.png" alt="Botão Cliquey Eroben">
       </div>
       <div class="page">
         <img src="pagina9.png" alt="Página 9">
         <!-- Botão alterado para usar "cliqueyeroben.png" -->
-        <img id="veleyweiBtn" src="clique3.png" alt="Botão Cliquey Eroben">
+        <img id="veleyweiBtn3" src="clique3.png" alt="Botão Cliquey Eroben">
       </div>
       <div class="page"><img src="pagina10.png" alt="Página 12"></div>
       <div class="page"><img src="pagina11.png" alt="Página 13"></div>
@@ -243,6 +255,24 @@
       // Delegação do clique no botão: exibe o overlay com corpoyeroben.png via fadeIn
       $(document).on("click", "#veleyweiBtn", function(){
         $("#overlayImage").attr("src", "desenhodenbou.png");
+        $("#overlayContainer").fadeIn(500);
+        // Reinicia o zoom da imagem
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+        overlayScale = 1;
+      });
+
+      // Delegação do clique no botão: exibe o overlay com corpoyeroben.png via fadeIn
+      $(document).on("click", "#veleyweiBtn2", function(){
+        $("#overlayImage").attr("src", "artilharia.png");
+        $("#overlayContainer").fadeIn(500);
+        // Reinicia o zoom da imagem
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+        overlayScale = 1;
+      });
+
+      // Delegação do clique no botão: exibe o overlay com corpoyeroben.png via fadeIn
+      $(document).on("click", "#veleyweiBtn3", function(){
+        $("#overlayImage").attr("src", "kuitakionor.png");
         $("#overlayContainer").fadeIn(500);
         // Reinicia o zoom da imagem
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
