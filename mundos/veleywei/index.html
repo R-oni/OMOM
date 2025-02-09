@@ -222,11 +222,10 @@
         resizeFlipbook();
       });
       
-      // Animação de fade in/fade out usando fadeTo para alterar a opacidade sem mudar o display
+      // Animação de crescer e diminuir a largura do botão
       function animateButton() {
-        $("#veleyweiBtn").fadeTo(1000, 0.0, function() {
-          $(this).fadeTo(1000, 1.0, animateButton);
-        });
+        $("#veleyweiBtn").animate({ width: "60px" }, 1000)
+                         .animate({ width: "50px" }, 1000, animateButton);
       }
       animateButton();
       
