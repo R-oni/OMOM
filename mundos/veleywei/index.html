@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Exemplo Responsivo sem Rolagem</title>
+  <!-- Importando a fonte Press Start 2P -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
@@ -14,7 +16,6 @@
       color: #fff;
       font-family: sans-serif;
     }
-
     .page-container {
       display: flex;
       flex-direction: column;
@@ -23,36 +24,33 @@
       width: 100%;
       height: 100%;
     }
-
     .top-section img {
       width: 15vmax;
       max-width: 80vw;
       height: auto;
     }
-
     .globe-section {
       display: flex;
       justify-content: center;
       align-items: center;
     }
-
     #globeCanvas {
       width: 25vmax;
       height: 25vmax;
       max-width: 80vw;
       max-height: 40vh;
     }
-
     #flipbook {
       position: relative;
     }
-
+    .page {
+      position: relative; /* para posicionar elementos filhos de forma absoluta */
+    }
     .page img {
       width: 100%;
       height: auto;
       display: block;
     }
-
     .sound-button {
       position: absolute;
       top: 50%;
@@ -63,7 +61,6 @@
       background: rgba(255, 255, 200, 0.2);
       cursor: pointer;
     }
-
     #overlayContainer {
       display: none;
       position: fixed;
@@ -74,7 +71,6 @@
       background: rgba(0, 0, 0, 0.8);
       z-index: 9999;
     }
-
     #overlayImage {
       position: absolute;
       top: 50%;
@@ -83,7 +79,28 @@
       max-width: 90vw;
       max-height: 90vh;
     }
-
+    /* Botão Sair dentro do overlay */
+    #btnSair {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #00EEF7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 10px;
+    }
+    /* --- Botão para ajustar na página com pagina8.png --- */
+    #veleyweiBtn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 50px;
+      cursor: pointer;
+    }
+    /* --- Outras classes existentes --- */
     .btn-overlay {
       position: absolute;
       top: 100px;
@@ -93,21 +110,16 @@
       cursor: pointer;
       padding: 0;
     }
-
     .btn-overlay img {
       width: 60px;
       height: auto;
       display: block;
     }
-
-    /* --- Adições para a imagem flutuante --- */
-    .floating-container {
-      position: relative; /* Permite posicionar o elemento filho de forma absoluta */
-    }
+    /* --- Adição para a imagem flutuante (já existente) --- */
     #spiraqel {
       position: absolute;
       right: 70px;
-      top:  170px;
+      top: 170px;
       width: 55px;
       cursor: pointer;
       animation: pulse 2s infinite ease-in-out;
@@ -117,7 +129,6 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* --- Fim das adições --- */
   </style>
 </head>
 <body>
@@ -131,20 +142,24 @@
     </div>
 
     <div id="flipbook">
-      <!-- Primeira página marcada como "hard" -->
+      <!-- Primeira página (hard) -->
       <div class="page hard"><img src="capa.png" alt="Capa"></div>
       <div class="page"><img src="capa2.png" alt="Página 1"></div>
       <div class="page"><img src="contracapa.png" alt="Página 2"></div>
       <div class="page"><img src="pagina1.png" alt="Página 3"></div>
-      <!-- Alterado de .jpg para .png -->
       <div class="page"><img src="pagina2.png" alt="Página 4"></div>
       <div class="page"><img src="pagina3.png" alt="Página 5"></div>
       <div class="page"><img src="pagina4.png" alt="Página 6"></div>
       <div class="page"><img src="pagina5.png" alt="Página 7"></div>
       <div class="page"><img src="pagina6.png" alt="Página 8"></div>
       <div class="page"><img src="pagina7.png" alt="Página 9"></div>
-      <div class="page"><img src="pagina8.png" alt="Página 10"></div>
-      <!-- Alterado de .jpg para .png -->
+      <!-- Página modificada: inclui a imagem e o botão para exibir overlay -->
+      <div class="page">
+        <div class="page-content" style="position: relative;">
+          <img src="pagina8.png" alt="Página 10">
+          <img id="veleyweiBtn" src="botaoveleywei1.png" alt="Botão Veleywei">
+        </div>
+      </div>
       <div class="page"><img src="pagina9.png" alt="Página 11"></div>
       <div class="page"><img src="pagina10.png" alt="Página 12"></div>
       <div class="page"><img src="pagina11.png" alt="Página 13"></div>
@@ -154,8 +169,10 @@
     </div>
   </div>
 
+  <!-- Overlay com a imagem e botão Sair -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
+    <button id="btnSair">Sair</button>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -200,19 +217,23 @@
                 }
               });
             }
-
-            // Muda o tamanho após virar a primeira página
-            if (page === 2) {
-              $("#flipbook").turn("size", 550, 400);
-            }
+            // Trecho de ajuste de tamanho na virada removido
           }
         }
       });
 
-      // Tamanho inicial do flipbook
-      $("#flipbook").turn("size", 600, 450);
+      // Ajusta o flipbook para 90% da largura da tela mantendo a proporção
+      function resizeFlipbook() {
+        var newWidth = $(window).width() * 0.9;
+        var newHeight = newWidth * (450/600); // proporção baseada no tamanho original 600×450
+        $("#flipbook").turn("size", newWidth, newHeight);
+      }
+      resizeFlipbook();
+      $(window).resize(function(){
+        resizeFlipbook();
+      });
 
-      // Exemplo de som específico em uma página
+      // Exemplo de som específico em uma página (se houver o elemento #sound-trigger)
       $("#sound-trigger").on("click", function(){
         const audio = new Audio('som-pagina5.m4a');
         audio.currentTime = 0;
@@ -226,28 +247,67 @@
         });
       });
 
-      // Overlay
-      const btnOverlay = document.getElementById("btnOverlay");
-      const overlayContainer = document.getElementById("overlayContainer");
-      const overlayImage = document.getElementById("overlayImage");
-
-      if (btnOverlay && overlayContainer && overlayImage) {
-        btnOverlay.addEventListener("click", () => {
-          overlayImage.src = "corpoyeroben.png";
-          overlayContainer.style.display = "block";
-        });
-
-        overlayContainer.addEventListener("click", (evt) => {
-          if (evt.target === overlayContainer) {
-            overlayContainer.style.display = "none";
-          }
-        });
-      }
-
-      // Clique na imagem flutuante
-      $("#spiraqel").on("click", function(){
+      // Ao clicar no botão da página (veleyweiBtn), exibe o overlay com a imagem
+      $("#veleyweiBtn").on("click", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
         $("#overlayContainer").show();
+      });
+
+      // Botão Sair no overlay
+      $("#btnSair").on("click", function(){
+        $("#overlayContainer").hide();
+      });
+
+      // Implementa funcionalidade de "drag" e redimensionamento (wheel) para o botão
+      (function() {
+        var dragItem = document.getElementById("veleyweiBtn");
+        var active = false;
+        var initialX, initialY, xOffset = 0, yOffset = 0;
+
+        dragItem.addEventListener("mousedown", dragStart);
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("mousemove", drag);
+
+        function dragStart(e) {
+          initialX = e.clientX - xOffset;
+          initialY = e.clientY - yOffset;
+          if (e.target === dragItem) {
+            active = true;
+          }
+        }
+        function drag(e) {
+          if (active) {
+            e.preventDefault();
+            xOffset = e.clientX - initialX;
+            yOffset = e.clientY - initialY;
+            setTranslate(xOffset, yOffset, dragItem);
+          }
+        }
+        function dragEnd(e) {
+          active = false;
+        }
+        function setTranslate(xPos, yPos, el) {
+          el.style.left = xPos + "px";
+          el.style.top = yPos + "px";
+        }
+
+        // Roda do mouse para aumentar/diminuir o tamanho do botão
+        dragItem.addEventListener("wheel", function(e) {
+          e.preventDefault();
+          var currentWidth = dragItem.offsetWidth;
+          if (e.deltaY < 0) { // aumenta
+            dragItem.style.width = (currentWidth + 5) + "px";
+          } else { // diminui (limitando a um mínimo de 20px)
+            dragItem.style.width = Math.max(20, currentWidth - 5) + "px";
+          }
+        });
+      })();
+
+      // Fecha o overlay se clicar fora da imagem e do botão Sair (opcional)
+      $("#overlayContainer").on("click", function(e){
+        if(e.target.id === "overlayContainer"){
+          $(this).hide();
+        }
       });
     });
   </script>
