@@ -96,11 +96,15 @@
       padding: 10px;
     }
     /* --- Estilo do botão Veleywei (imagem) --- */
+    /* Alterado para usar "cliqueyeroben.png" e centralizado */
     #veleyweiBtn {
       position: absolute;
       cursor: pointer;
       width: 50px; /* tamanho inicial; pode ser alterado via roda do mouse */
       z-index: 10;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
     /* Outras classes que já estavam definidas */
     .btn-overlay {
@@ -159,9 +163,8 @@
       <!-- Página com pagina8.png e o botão para exibir overlay -->
       <div class="page">
         <img src="pagina8.png" alt="Página 10">
-        <!-- O botão agora é posicionado diretamente dentro do flipbook, 
-             com coordenadas relativas ao flipbook definidas via código -->
-        <img id="veleyweiBtn" src="botaoveleywei1.png" alt="Botão Veleywei">
+        <!-- Botão alterado para usar "cliqueyeroben.png" -->
+        <img id="veleyweiBtn" src="cliqueyeroben.png" alt="Botão Cliquey Eroben">
       </div>
       <div class="page"><img src="pagina9.png" alt="Página 11"></div>
       <div class="page"><img src="pagina10.png" alt="Página 12"></div>
@@ -220,27 +223,27 @@
         resizeFlipbook();
       });
       
-      // Define a posição inicial do botão em relação ao flipbook (opção via código)
-      var btnInitialX = 80; // ajuste em pixels
-      var btnInitialY = 90; // ajuste em pixels
-      $("#veleyweiBtn").css({ left: btnInitialX + "px", top: btnInitialY + "px" });
+      // Loop de fade in/fade out para o botão cliqueyeroben
+      function animateButton() {
+        $("#veleyweiBtn").fadeOut(1000).fadeIn(1000, animateButton);
+      }
+      animateButton();
       
-      // Delegação do clique no botão (mesmo se o elemento for carregado dinamicamente)
+      // Delegação do clique no botão
       $(document).on("click", "#veleyweiBtn", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
-        $("#overlayContainer").show();
+        $("#overlayContainer").fadeIn(500);
       });
       
       // Botão Sair no overlay
       $("#btnSair").on("click", function(){
-        $("#overlayContainer").hide();
+        $("#overlayContainer").fadeOut(500);
       });
       
       // Implementa a funcionalidade de "drag" e redimensionamento (wheel) para o botão,
       // considerando sua posição relativa ao flipbook.
       (function() {
         var dragItem = document.getElementById("veleyweiBtn");
-        // Usa o flipbook como container para o cálculo das posições
         var container = document.getElementById("flipbook");
         var active = false;
         var initialX, initialY, startX, startY;
@@ -254,7 +257,6 @@
           var containerRect = container.getBoundingClientRect();
           startX = e.clientX - containerRect.left;
           startY = e.clientY - containerRect.top;
-          // Pega os valores atuais em pixels (ou 0 se não definidos)
           initialX = parseInt(dragItem.style.left, 10) || 0;
           initialY = parseInt(dragItem.style.top, 10) || 0;
         }
@@ -273,7 +275,6 @@
           active = false;
         }
         
-        // Roda do mouse para ajustar o tamanho do botão
         dragItem.addEventListener("wheel", function(e) {
           e.preventDefault();
           var currentWidth = dragItem.offsetWidth;
@@ -285,10 +286,9 @@
         });
       })();
       
-      // Fecha o overlay se clicar fora da imagem e do botão Sair (opcional)
       $("#overlayContainer").on("click", function(e){
         if(e.target.id === "overlayContainer"){
-          $(this).hide();
+          $(this).fadeOut(500);
         }
       });
     });
