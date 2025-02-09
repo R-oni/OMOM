@@ -208,8 +208,7 @@
     $(document).ready(function(){
       $("#flipbook").turn({
         autoCenter: false,
-        display: 'double',
-        // Removido o ajuste de tamanho na virada da página
+        display: 'double'
       });
       
       // Redimensiona o flipbook para 90% da largura da tela mantendo a proporção (450/600)
@@ -223,9 +222,11 @@
         resizeFlipbook();
       });
       
-      // Loop de fade in/fade out para o botão cliqueyeroben
+      // Animação de fade in/fade out usando fadeTo para alterar a opacidade sem mudar o display
       function animateButton() {
-        $("#veleyweiBtn").fadeOut(1000).fadeIn(1000, animateButton);
+        $("#veleyweiBtn").fadeTo(1000, 0.0, function() {
+          $(this).fadeTo(1000, 1.0, animateButton);
+        });
       }
       animateButton();
       
