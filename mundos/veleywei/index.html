@@ -47,11 +47,6 @@
       position: relative;
     }
 
-    .page {
-      /* Caso necessário, pode-se adicionar position: relative; aqui, mas
-         optamos por colocar essa regra apenas na página que terá o elemento flutuante */
-    }
-
     .page img {
       width: 100%;
       height: auto;
@@ -111,10 +106,9 @@
     }
     #spiraqel {
       position: absolute;
-      /* Ajuste os valores abaixo para definir a posição xy em relação ao flipbook */
       right: 70px;
       top:  170px;
-      width: 55px; /* Tamanho da imagem flutuante */
+      width: 55px;
       cursor: pointer;
       animation: pulse 2s infinite ease-in-out;
     }
@@ -136,26 +130,25 @@
       <canvas id="globeCanvas"></canvas>
     </div>
 
-    
     <div id="flipbook">
       <!-- Primeira página marcada como "hard" -->
       <div class="page hard"><img src="capa.png" alt="Capa"></div>
       <div class="page"><img src="capa2.png" alt="Página 1"></div>
       <div class="page"><img src="contracapa.png" alt="Página 2"></div>
       <div class="page"><img src="pagina1.png" alt="Página 3"></div>
-      <div class="page"><img src="pagina2.jpg" alt="Página 9"></div>
-      <div class="page"><img src="pagina3.png" alt="Página 11"></div>
-      <div class="page"><img src="pagina4.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina5.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina6.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina7.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina8.png" alt="Página 3"></div>
-      <div class="page"><img src="pagina9.jpg" alt="Página 9"></div>
-      <div class="page"><img src="pagina10.png" alt="Página 11"></div>
-      <div class="page"><img src="pagina11.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina12.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina13.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina14.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina2.jpg" alt="Página 4"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 5"></div>
+      <div class="page"><img src="pagina4.png" alt="Página 6"></div>
+      <div class="page"><img src="pagina5.png" alt="Página 7"></div>
+      <div class="page"><img src="pagina6.png" alt="Página 8"></div>
+      <div class="page"><img src="pagina7.png" alt="Página 9"></div>
+      <div class="page"><img src="pagina8.png" alt="Página 10"></div>
+      <div class="page"><img src="pagina9.jpg" alt="Página 11"></div>
+      <div class="page"><img src="pagina10.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina11.png" alt="Página 13"></div>
+      <div class="page"><img src="pagina12.png" alt="Página 14"></div>
+      <div class="page"><img src="pagina13.png" alt="Página 15"></div>
+      <div class="page"><img src="pagina14.png" alt="Página 16"></div>
     </div>
   </div>
 
@@ -214,8 +207,10 @@
         }
       });
 
+      // Tamanho inicial do flipbook
       $("#flipbook").turn("size", 600, 450);
 
+      // Exemplo de som específico em uma página
       $("#sound-trigger").on("click", function(){
         const audio = new Audio('som-pagina5.m4a');
         audio.currentTime = 0;
@@ -229,6 +224,7 @@
         });
       });
 
+      // Overlay
       const btnOverlay = document.getElementById("btnOverlay");
       const overlayContainer = document.getElementById("overlayContainer");
       const overlayImage = document.getElementById("overlayImage");
@@ -246,12 +242,11 @@
         });
       }
 
-      // --- Adição do evento de clique na imagem flutuante ---
+      // Clique na imagem flutuante
       $("#spiraqel").on("click", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
         $("#overlayContainer").show();
       });
-      // --- Fim da adição ---
     });
   </script>
 
