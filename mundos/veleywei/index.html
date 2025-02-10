@@ -86,19 +86,18 @@
     /* Botão Sair no overlay - posicionado no topo e com fonte maior */
     #btnSair {
       position: absolute;
-      top: 20px;        /* Alterado: posicionado no topo */
+      top: 20px;
       right: 20px;
       background: none;
       border: none;
       color: #00EEF7;
       font-family: 'Press Start 2P', cursive;
-      font-size: 32px;  /* Fonte aumentada */
+      font-size: 32px;
       cursor: pointer;
-      padding: 20px;    /* Padding aumentado */
+      padding: 20px;
       z-index: 10000;
     }
-    /* --- Estilo do botão Veleywei (imagem) --- */
-    /* Alterado para usar "cliqueyeroben.png" e centralizado */
+    /* --- Estilo do botão Veleywei (imagem) com efeito emissive sem transparência --- */
     #veleyweiBtn {
       position: absolute;
       cursor: pointer;
@@ -107,14 +106,12 @@
       left: 40%;
       top: 50%;
       transform: translate(-50%, -50%);
-      /* Aplicando animação CSS para fade in / fade out */
-      animation: fadeInOut 2s infinite;
+      animation: emissiveGlow 2s infinite;
     }
-    /* Keyframes para a animação de fade in/out */
-    @keyframes fadeInOut {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
+    @keyframes emissiveGlow {
+      0% { filter: drop-shadow(0 0 5px #00EEF7); }
+      50% { filter: drop-shadow(0 0 20px #00EEF7); }
+      100% { filter: drop-shadow(0 0 5px #00EEF7); }
     }
     /* Outras classes que já estavam definidas */
     .btn-overlay {
@@ -171,7 +168,7 @@
       <!-- Página com pagina8.png e o botão para exibir overlay -->
       <div class="page">
         <img src="pagina8.png" alt="Página 10">
-        <!-- Botão alterado para usar "cliqueyeroben.png" -->
+        <!-- Botão alterado para usar "cliqueyeroben.png" com efeito emissive -->
         <img id="veleyweiBtn" src="cliqueyeroben.png" alt="Botão Cliquey Eroben">
       </div>
       <div class="page"><img src="pagina9.png" alt="Página 11"></div>
