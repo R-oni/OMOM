@@ -108,11 +108,29 @@
       transform: translate(-50%, -50%);
       animation: emissiveGlow 2s infinite;
     }
-    @keyframes emissiveGlow {
-      0% { filter: drop-shadow(0 0 5px #00EEF7); }
-      50% { filter: drop-shadow(0 0 20px #00EEF7); }
-      100% { filter: drop-shadow(0 0 5px #00EEF7); }
+    @@keyframes emissiveGlow {
+      0% { filter: drop-shadow(0 0 5px #FFAA00); }
+      50% { filter: drop-shadow(0 0 20px #FFAA00); }
+      100% { filter: drop-shadow(0 0 5px #FFE3CC); }
     }
+
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+/* Aplicando duas animações ao botão ao mesmo tempo */
+#veleyweiBtn {
+  position: absolute;
+  cursor: pointer;
+  width: 160px; /* tamanho inicial; pode ser alterado via roda do mouse */
+  z-index: 10;
+  left: 40%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: fadeInOut 2s infinite, emissiveGlow 2s infinite;
+}
     /* Outras classes que já estavam definidas */
     .btn-overlay {
       position: absolute;
