@@ -46,6 +46,8 @@
       overflow-y: auto; /* Ativa a rolagem vertical somente para os símbolos */
       padding: 20px;
       z-index: 2;
+      /* Para efeito 3D dos ícones */
+      perspective: 800px;
     }
 
     .symbols-container {
@@ -186,20 +188,41 @@
       }
     });
 
-    // Animação dos símbolos (não interfere no fundo)
-    const symbols = document.querySelectorAll('.symbol');
-    let time = 0;
-    function floatSymbols() {
-      time += 0.02;
-      symbols.forEach((symbol, index) => {
-        let amplitude = 10;
-        let speed = 0.1 + (index * 0.01);
-        let y = Math.sin(time * speed * 10) * amplitude;
-        symbol.style.transform = `translateY(${y}px)`;
+    /* 
+      Efeito de roleta no scroll dos ícones:
+      Conforme o usuário faz scroll na área (.symbols-wrapper),
+      os ícones que se aproximam do topo rotacionam (no eixo X) e vão desaparecendo,
+      simulando o efeito de uma máquina caça-níquel.
+    */
+    const symbolsWrapper = document.querySelector('.symbols-wrapper');
+    function updateSymbolsEffect() {
+      const wrapperRect = symbolsWrapper.getBoundingClientRect();
+      const symbols = document.querySelectorAll('.symbol');
+      const threshold = 100; // distância (em px) a partir do topo para iniciar o efeito
+
+      symbols.forEach(symbol => {
+        const symbolRect = symbol.getBoundingClientRect();
+        const distanceFromTop = symbolRect.top - wrapperRect.top;
+        if (distanceFromTop < threshold) {
+          // Fator varia de 0 (quando o símbolo está a 100px do topo) a 1 (quando toca o topo)
+          const factor = (threshold - distanceFromTop) / threshold;
+          // Rotaciona até -90° conforme se aproxima do topo
+          const rotation = -90 * factor;
+          // Opacidade decai de 1 para 0
+          const opacity = 1 - factor;
+          symbol.style.transform = `rotateX(${rotation}deg)`;
+          symbol.style.opacity = opacity;
+        } else {
+          // Sem efeito quando longe do topo
+          symbol.style.transform = '';
+          symbol.style.opacity = 1;
+        }
       });
-      requestAnimationFrame(floatSymbols);
     }
-    floatSymbols();
+    // Atualiza o efeito sempre que houver scroll na área dos símbolos
+    symbolsWrapper.addEventListener('scroll', updateSymbolsEffect);
+    // Atualiza imediatamente após o carregamento
+    updateSymbolsEffect();
 
     // Configuração do canvas de fundo (autômato)
     const canvas = document.getElementById("automatonCanvas");
@@ -266,4 +289,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
