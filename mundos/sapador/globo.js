@@ -59,11 +59,12 @@ function initGlobe() {
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
-  // (5) Luz ambiente + direcional
+  // (5) Luz ambiente + direcional com tonalidade laranja avermelhada
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  // Modificado: Fonte de luz com tom levemente laranja avermelhado (0xffa07a)
+  const directionalLight = new THREE.DirectionalLight(0xffa07a, 1);
   directionalLight.position.set(3, 3, 5);
   directionalLight.castShadow = true;
   scene.add(directionalLight);
@@ -108,7 +109,7 @@ function initGlobe() {
     sphere.rotation.y += 0.003;  
     cloudMesh.rotation.y += 0.0039;
 
-    // Orbitas (rotacionando pivôs)
+    // Órbitas (rotacionando pivôs)
     pivot1.rotation.y += 0.03;
     pivot2.rotation.y += 0.015;
     pivot3.rotation.y += 0.01;
