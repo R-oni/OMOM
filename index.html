@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
   <title>Outros Mundos Outras Mentes</title>
   <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -14,7 +13,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      /* Removido o fundo preto para que o canvas de autômatos fique visível */
+      /* Alterado para transparência para exibir os autômatos */
       background-color: transparent;
       display: flex;
       align-items: center;
@@ -27,13 +26,9 @@
       color: #00FFE7;
       font-size: 20px;
       text-align: center;
-      /* Se desejar um leve fundo para destacar o texto, pode usar:
-         background-color: rgba(0, 0, 0, 0.5);
-         padding: 10px;
-      */
     }
 
-    /* Canvas dos autômatos permanece fixo e cobre toda a tela */
+    /* Canvas permanece fixo e cobre toda a tela */
     #automatonCanvas {
       position: fixed;
       top: 0;
@@ -81,6 +76,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
+      /* Removemos o margin-top para evitar deslocamento extra */
     }
 
     .symbol {
@@ -100,7 +96,7 @@
   </style>
 </head>
 <body>
-  <!-- Tela de Loading (transparente para exibir os autômatos do fundo) -->
+  <!-- Tela de Loading -->
   <div id="loading-screen">
     <div id="loading-text">CARREGANDO...</div>
   </div>
@@ -304,4 +300,4 @@
     });
   </script>
 </body>
-</html>
+        </html>
