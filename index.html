@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outros Mundos Outras Mentes</title>
+  <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Tela de loading */
+    /* Estilos da tela de loading */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -19,7 +20,7 @@
       justify-content: center;
       z-index: 9999;
     }
-
+    
     #loading-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
@@ -61,11 +62,11 @@
     /* Contêiner que isola os símbolos com rolagem interna */
     .symbols-wrapper {
       position: absolute;
-      top: 150px;
+      top: 150px;  /* Define o ponto de início (ajuste se necessário) */
       left: 0;
       right: 0;
       bottom: 0;
-      overflow-y: auto;
+      overflow-y: auto; /* Ativa a rolagem vertical somente para os símbolos */
       padding: 20px;
       z-index: 2;
     }
@@ -75,6 +76,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
+      /* Removemos o margin-top para evitar deslocamento extra */
     }
 
     .symbol {
@@ -94,7 +96,7 @@
   </style>
 </head>
 <body>
-  <!-- Tela de loading -->
+  <!-- Tela de Loading -->
   <div id="loading-screen">
     <div id="loading-text">CARREGANDO...</div>
   </div>
@@ -125,22 +127,83 @@
           <img src="mundos/himpis/himpismenu.png" alt="Himpis">
         </a>
       </div>
+      <div class="symbol" id="symbol4">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+        </a>
+      </div>
+      <div class="symbol" id="symbol5">
+        <a href="mundos/denbou/index.html">
+          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+        </a>
+      </div>
+      <div class="symbol" id="symbol6">
+        <a href="mundos/araporu/index.html">
+          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+        </a>
+      </div>
+      <div class="symbol" id="symbol7">
+        <a href="mundos/os artesaos/index.html">
+          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+        </a>
+      </div>
+      <div class="symbol" id="symbol8">
+        <a href="mundos/sapador/index.html">
+          <img src="mundos/sapador/sapador.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol" id="symbol9">
+        <a href="mundos/calindreno/index.html">
+          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol10">
+        <a href="mundos/mundo pulsante/index.html">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol11">
+        <a href="mundos/dosirelala/index.html">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol" id="symbol12">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol13">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol14">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol" id="symbol15">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- Música de fundo -->
+  <!-- Música de fundo: arpeggio.mp3 -->
   <audio id="bgm" loop>
     <source src="arpeggio.mp3" type="audio/mpeg">
     Seu navegador não suporta o elemento de áudio.
   </audio>
 
   <script>
-    // Exibir a tela de loading até a página carregar completamente
+    // Remove a tela de loading quando toda a página for carregada
     window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
+      const loadingScreen = document.getElementById("loading-screen");
+      loadingScreen.style.display = "none";
     });
 
-    // Música de fundo com autoplay bloqueado até interação do usuário
+    // Força a reprodução automática da música com volume 50%
     document.addEventListener("DOMContentLoaded", function() {
       const bgm = document.getElementById("bgm");
       bgm.volume = 0.5;
@@ -226,7 +289,7 @@
     }
     animate();
 
-    // Reconfigura o canvas no redimensionamento
+    // Reconfigura o canvas no redimensionamento (sem interferir no fundo)
     window.addEventListener("resize", () => {
       setupCanvas();
       updateGridSize();
