@@ -14,7 +14,8 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: black;
+      /* Removido o fundo preto para que o canvas de autômatos fique visível */
+      background-color: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -26,9 +27,13 @@
       color: #00FFE7;
       font-size: 20px;
       text-align: center;
+      /* Se desejar um leve fundo para destacar o texto, pode usar:
+         background-color: rgba(0, 0, 0, 0.5);
+         padding: 10px;
+      */
     }
 
-    /* Canvas permanece fixo e cobre toda a tela */
+    /* Canvas dos autômatos permanece fixo e cobre toda a tela */
     #automatonCanvas {
       position: fixed;
       top: 0;
@@ -76,7 +81,6 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
-      /* Removemos o margin-top para evitar deslocamento extra */
     }
 
     .symbol {
@@ -96,7 +100,7 @@
   </style>
 </head>
 <body>
-  <!-- Tela de Loading -->
+  <!-- Tela de Loading (transparente para exibir os autômatos do fundo) -->
   <div id="loading-screen">
     <div id="loading-text">CARREGANDO...</div>
   </div>
