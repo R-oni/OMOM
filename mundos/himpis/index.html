@@ -134,9 +134,10 @@
     #veleyweiBtn {
       position: absolute;
       cursor: pointer;
-      width: 160px; /* tamanho inicial; pode ser alterado via roda do mouse */
+      width: 100vh; 
+      height: 100vh/* tamanho inicial; pode ser alterado via roda do mouse */
       z-index: 10;
-      left: 40%;
+      left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
       animation: fadeInOut 2s infinite, emissiveGlow 2s infinite;
@@ -268,6 +269,13 @@
       
       // Delegação do clique no botão: exibe o overlay com corpoyeroben.png via fadeIn
       $(document).on("click", "#veleyweiBtn", function(){
+        $("#overlayImage").attr("src", "desenhomenino.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      // Delegação do clique no botão: exibe o overlay com corpoyeroben.png via fadeIn
+      $(document).on("click", "#veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "desenhoirmaos.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
