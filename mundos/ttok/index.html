@@ -49,7 +49,7 @@
       height: auto;
       display: block;
     }
-    /* Botão de troca de foco */
+    /* Estilos para os botões */
     .focus-button {
       position: absolute;
       top: 10px;
@@ -59,6 +59,14 @@
       color: #fff;
       border: 1px solid #fff;
       cursor: pointer;
+      z-index: 10;
+      margin: 5px;
+    }
+    /* Container para os botões de foco */
+    .button-container {
+      position: absolute;
+      top: 10px;
+      right: 10px;
       z-index: 10;
     }
   </style>
@@ -72,6 +80,11 @@
     <!-- Seção do Canvas -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
+      <!-- Container dos botões de foco -->
+      <div class="button-container">
+        <button id="focusOrbitButton" class="focus-button" onclick="focusOrbit()">Focar Globo Menor</button>
+        <button id="focusCentralButton" class="focus-button" onclick="focusCentral()">Focar Globo Maior</button>
+      </div>
     </div>
 
     <!-- Flipbook -->
@@ -80,10 +93,9 @@
       <div class="page hard">
         <img src="pagina1.png" alt="Capa">
       </div>
-      <!-- Página 2: yyy.png com o botão para ativar o tracking -->
+      <!-- Página 2 -->
       <div class="page">
         <img src="yyy.png" alt="Página 1">
-        <button id="focusButton" class="focus-button" onclick="focusOrbit()">Trocar Foco</button>
       </div>
       <!-- Outras páginas -->
       <div class="page"><img src="pagina3.png" alt="Página 2"></div>
@@ -120,12 +132,18 @@
   <!-- Carrega o globo.js -->
   <script src="./globo.js"></script>
 
-  <!-- Função global para ativar o tracking (seguimento do globo menor) -->
+  <!-- Funções globais para ativar os modos de tracking -->
   <script>
     function focusOrbit() {
       if (window.myGlobe) {
-        window.myGlobe.trackingOrbit = true;
+        window.myGlobe.trackingMode = "orbit";
         console.log("Tracking do globo orbitante ativado");
+      }
+    }
+    function focusCentral() {
+      if (window.myGlobe) {
+        window.myGlobe.trackingMode = "central";
+        console.log("Tracking do globo central ativado");
       }
     }
   </script>
