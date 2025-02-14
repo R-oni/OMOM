@@ -255,8 +255,8 @@
       </div>
     </div>
 
-    <!-- Adicionado o atributo autoplay para tentar iniciar o áudio sem clique -->
-    <audio id="bgm" loop autoplay>
+    <!-- Áudio sem autoplay direto -->
+    <audio id="bgm" loop>
       <source src="decyphering.mp3" type="audio/mpeg" />
       Seu navegador não suporta o elemento de áudio.
     </audio>
@@ -275,95 +275,89 @@
       let flipAudio;
       const flipAudioStart = 1;
       const flipAudioEnd = 1.4;
-
+      
       document.addEventListener("DOMContentLoaded", () => {
         flipAudio = new Audio("sompagina.aac");
         flipAudio.preload = "auto";
         flipAudio.load();
         flipAudio.volume = 0.2;
-        // Tenta reproduzir o áudio para "desbloquear" o som
-        flipAudio
-          .play()
-          .then(() => {
-            flipAudio.pause();
-            flipAudio.currentTime = flipAudioStart;
-          })
-          .catch((error) => {
-            console.log("Erro ao reproduzir flipAudio:", error);
-          });
+        // Tenta reproduzir o áudio para desbloquear o som
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        }).catch((error) => {
+          console.log("Erro ao reproduzir flipAudio:", error);
+        });
       });
-
-      $(document).ready(function () {
+      
+      $(document).ready(function(){
         $("#flipbook").turn({
           autoCenter: false,
-          display: "double",
+          display: "double"
         });
-
+        
         // Redimensiona o flipbook para 90% da largura da tela mantendo a proporção (450/600)
         function resizeFlipbook() {
           var newWidth = $(window).width() * 0.9;
-          var newHeight = newWidth * (450 / 600);
+          var newHeight = newWidth * (450/600);
           $("#flipbook").turn("size", newWidth, newHeight);
         }
         resizeFlipbook();
-        $(window).resize(function () {
+        $(window).resize(function(){
           resizeFlipbook();
         });
-
+        
         // Delegação do clique para exibir o overlay com imagens diferentes
-        $(document).on("click", "#veleyweiBtn", function () {
+        $(document).on("click", "#veleyweiBtn", function(){
           $("#overlayImage").attr("src", "desenhodenbou.png");
           $("#overlayContainer").fadeIn(500);
           // Reinicia o zoom da imagem
           $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
           overlayScale = 1;
         });
-
-        $(document).on("click", "#veleyweiBtn2", function () {
+        
+        $(document).on("click", "#veleyweiBtn2", function(){
           $("#overlayImage").attr("src", "artilharia.png");
           $("#overlayContainer").fadeIn(500);
           $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
           overlayScale = 1;
         });
-
-        $(document).on("click", "#veleyweiBtn3", function () {
+        
+        $(document).on("click", "#veleyweiBtn3", function(){
           $("#overlayImage").attr("src", "kuitakionor.png");
           $("#overlayContainer").fadeIn(500);
           $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
           overlayScale = 1;
         });
-
+        
         // Botão Sair no overlay
-        $("#btnSair").on("click", function () {
+        $("#btnSair").on("click", function(){
           $("#overlayContainer").fadeOut(500);
         });
-
+        
         // Função de zoom para a imagem do overlay
         var overlayScale = 1;
-        $("#overlayImage").on("wheel", function (e) {
+        $("#overlayImage").on("wheel", function(e) {
           e.preventDefault();
-          if (e.originalEvent.deltaY < 0) {
+          if(e.originalEvent.deltaY < 0) {
             overlayScale += 0.1;
           } else {
             overlayScale = Math.max(0.1, overlayScale - 0.1);
           }
-          $(this).css(
-            "transform",
-            "translate(-50%, -50%) scale(" + overlayScale + ")"
-          );
+          $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
         });
-
+        
         // Implementa o "drag" e redimensionamento (wheel) para o botão veleyweiBtn
-        (function () {
+        (function() {
           var dragItem = document.getElementById("veleyweiBtn");
           var container = document.getElementById("flipbook");
           var active = false;
           var initialX, initialY, startX, startY;
-
+          
           dragItem.addEventListener("mousedown", dragStart);
           document.addEventListener("mouseup", dragEnd);
           document.addEventListener("mousemove", drag);
-
+          
           function dragStart(e) {
             active = true;
             var containerRect = container.getBoundingClientRect();
@@ -380,44 +374,47 @@
             var y = e.clientY - containerRect.top;
             var dx = x - startX;
             var dy = y - startY;
-            dragItem.style.left = initialX + dx + "px";
-            dragItem.style.top = initialY + dy + "px";
+            dragItem.style.left = (initialX + dx) + "px";
+            dragItem.style.top  = (initialY + dy) + "px";
           }
           function dragEnd(e) {
             active = false;
           }
-
-          dragItem.addEventListener("wheel", function (e) {
+          
+          dragItem.addEventListener("wheel", function(e) {
             e.preventDefault();
             var currentWidth = dragItem.offsetWidth;
-            if (e.deltaY < 0) {
-              dragItem.style.width = currentWidth + 5 + "px";
-            } else {
+            if (e.deltaY < 0) { // aumenta
+              dragItem.style.width = (currentWidth + 5) + "px";
+            } else { // diminui, com mínimo de 20px
               dragItem.style.width = Math.max(20, currentWidth - 5) + "px";
             }
           });
         })();
-
-        $("#overlayContainer").on("click", function (e) {
-          if (e.target.id === "overlayContainer") {
+        
+        $("#overlayContainer").on("click", function(e){
+          if(e.target.id === "overlayContainer"){
             $(this).fadeOut(500);
           }
         });
       });
-
-      // Tenta reproduzir automaticamente o áudio bgm (decyphering.mp3)
-      document.addEventListener("DOMContentLoaded", function () {
+      
+      // Acionamento do áudio bgm após o primeiro clique do usuário
+      document.addEventListener("DOMContentLoaded", function() {
         const bgm = document.getElementById("bgm");
         bgm.volume = 0.5;
         bgm.currentTime = 70;
-        bgm
-          .play()
-          .then(() => {
-            console.log("Áudio bgm reproduzindo automaticamente.");
-          })
-          .catch((error) => {
-            console.log("Erro ao reproduzir bgm automaticamente:", error);
+        
+        function playBgm() {
+          bgm.play().then(() => {
+            console.log("Áudio bgm reproduzido após o primeiro clique.");
+          }).catch((error) => {
+            console.log("Erro ao reproduzir bgm:", error);
           });
+          document.removeEventListener("click", playBgm);
+        }
+        
+        document.addEventListener("click", playBgm);
       });
     </script>
     <script src="./globo.js"></script>
