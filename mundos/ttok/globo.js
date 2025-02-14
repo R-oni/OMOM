@@ -1,5 +1,5 @@
 function initGlobe() {
-  // Obtém o canvas e define suas dimensões
+  // Obtém o canvas e suas dimensões
   var canvas = document.getElementById('globeCanvas');
   if (!canvas) {
     console.error("Canvas 'globeCanvas' não encontrado!");
@@ -15,13 +15,13 @@ function initGlobe() {
   var camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
   camera.position.set(0, 0, 7);
 
-  // Cria o renderizador e define o tamanho
+  // Cria o renderizador
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setSize(width, height);
 
-  // Configura o OrbitControls (usando o canvas como elemento de evento)
+  // Configura o OrbitControls
   var controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
@@ -63,12 +63,23 @@ function initGlobe() {
   var orbitSpeed = -0.5; // radianos por segundo
   var clock = new THREE.Clock();
 
-  // Função de animação
+  // Flag para o modo de foco (tracking) – inicia desativado
+  var trackingOrbit = false;
+
+  // Expondo objetos e o flag para controle externo
+  window.myGlobe = {
+    camera: camera,
+    controls: controls,
+    centralSphere: centralSphere,
+    orbitSphere: orbitSphere,
+    trackingOrbit: trackingOrbit
+  };
+
   function animate() {
     requestAnimationFrame(animate);
     var delta = clock.getDelta();
 
-    // Rotação lenta do globo central
+    // Rotação lenta do globo central (opcional)
     centralSphere.rotation.y += 0.003;
 
     // Atualiza a posição do globo orbitante (movimento circular no plano XZ)
@@ -76,12 +87,22 @@ function initGlobe() {
     orbitSphere.position.x = centralSphere.position.x + orbitRadius * Math.cos(orbitAngle);
     orbitSphere.position.z = centralSphere.position.z + orbitRadius * Math.sin(orbitAngle);
 
+    // Se o modo de tracking estiver ativado, atualiza continuamente:
+    if (window.myGlobe.trackingOrbit) {
+      // Define um offset para a câmera (ajuste conforme necessário)
+      var offset = new THREE.Vector3(0, 0, 2);
+      var desiredPosition = orbitSphere.position.clone().add(offset);
+      // Suaviza a transição com lerp (0.1 é a taxa – ajuste se necessário)
+      camera.position.lerp(desiredPosition, 0.1);
+      controls.target.copy(orbitSphere.position);
+    }
+
     controls.update();
     renderer.render(scene, camera);
   }
   animate();
 
-  // Ajusta o tamanho do renderer e da câmera ao redimensionar a janela
+  // Ajusta o renderer e a câmera ao redimensionar a janela
   window.addEventListener('resize', function () {
     var w = canvas.clientWidth;
     var h = canvas.clientHeight;
@@ -89,14 +110,6 @@ function initGlobe() {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   });
-
-  // Expondo objetos para controle externo (como o botão de foco)
-  window.myGlobe = {
-    camera: camera,
-    controls: controls,
-    centralSphere: centralSphere,
-    orbitSphere: orbitSphere,
-  };
 }
 
 window.addEventListener('load', initGlobe);
