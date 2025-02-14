@@ -80,33 +80,19 @@
       <div class="page hard">
         <img src="pagina1.png" alt="Capa">
       </div>
-      <!-- Página 2: yyy.png com o botão para trocar o foco -->
+      <!-- Página 2: yyy.png com o botão para ativar o tracking -->
       <div class="page">
         <img src="yyy.png" alt="Página 1">
         <button id="focusButton" class="focus-button" onclick="focusOrbit()">Trocar Foco</button>
       </div>
       <!-- Outras páginas -->
-      <div class="page">
-        <img src="pagina3.png" alt="Página 2">
-      </div>
-      <div class="page">
-        <img src="pagina3.jpg" alt="Página 9">
-      </div>
-      <div class="page">
-        <img src="pagina2.png" alt="Página 11">
-      </div>
-      <div class="page">
-        <img src="pagina3.png" alt="Página 12">
-      </div>
-      <div class="page">
-        <img src="pagina2.png" alt="Página 12">
-      </div>
-      <div class="page">
-        <img src="pagina3.png" alt="Página 12">
-      </div>
-      <div class="page">
-        <img src="pagina2.png" alt="Página 12">
-      </div>
+      <div class="page"><img src="pagina3.png" alt="Página 2"></div>
+      <div class="page"><img src="pagina3.jpg" alt="Página 9"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 11"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
+      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
     </div>
   </div>
 
@@ -134,14 +120,12 @@
   <!-- Carrega o globo.js -->
   <script src="./globo.js"></script>
 
-  <!-- Função global para ativar o tracking -->
+  <!-- Função global para ativar o tracking (seguimento do globo menor) -->
   <script>
     function focusOrbit() {
       if (window.myGlobe) {
         window.myGlobe.trackingOrbit = true;
-        console.log("Modo de foco ativado");
-      } else {
-        console.log("Objetos do globo não estão prontos.");
+        console.log("Tracking do globo orbitante ativado");
       }
     }
   </script>
