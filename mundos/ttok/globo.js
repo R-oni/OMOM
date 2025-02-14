@@ -88,13 +88,13 @@ function initGlobe() {
     // Atualiza a câmera de acordo com o modo de tracking
     if (window.myGlobe.trackingMode === "orbit") {
       // Para o globo orbitante, usamos um offset menor para mais zoom (por exemplo, 1 unidade)
-      const offset = new THREE.Vector3(0, 0, 0.5);
+      const offset = new THREE.Vector3(0, 0, 0.6);
       const desiredPos = orbitSphere.position.clone().add(offset);
       camera.position.lerp(desiredPos, 0.1);
       controls.target.copy(orbitSphere.position);
     } else if (window.myGlobe.trackingMode === "central") {
       // Para o globo central, usamos um offset maior (por exemplo, 3 unidades)
-      const offset = new THREE.Vector3(0, 0, 1.5);
+      const offset = new THREE.Vector3(0, 0, 2);
       const desiredPos = centralSphere.position.clone().add(offset);
       camera.position.lerp(desiredPos, 0.1);
       controls.target.copy(centralSphere.position);
