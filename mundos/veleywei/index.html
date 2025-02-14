@@ -141,6 +141,17 @@
       top: 0%;
       animation: fadeInOut 2s infinite, emissiveGlow 2s infinite;
     }
+
+    #veleyweiBtn2 {
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%/* tamanho inicial; pode ser alterado via roda do mouse */
+      z-index: 10;
+      left: 0%;
+      top: 0%;
+      animation: fadeInOut 2s infinite, emissiveGlow 2s infinite;
+    }
     @keyframes emissiveGlow {
       0% { filter: drop-shadow(0 0 5px #FFAA00); }
       50% { filter: drop-shadow(0 0 20px #FFAA00); }
@@ -212,12 +223,17 @@
         <img src="imagens/cap1/pagina8.webp" alt="Página 10">
         <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
       </div>
-      <div class="page"><img src="pagina9.png" alt="Página 11"></div>
-      <div class="page"><img src="pagina10.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina11.png" alt="Página 13"></div>
-      <div class="page"><img src="pagina12.png" alt="Página 14"></div>
-      <div class="page"><img src="pagina13.png" alt="Página 15"></div>
-      <div class="page"><img src="pagina14.png" alt="Página 16"></div>
+      <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
+      <div class="page">
+        <img src="imagens/cap1/pagina11.webp" alt="Página 10">
+        <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+      </div>
+      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
+      
     </div>
   </div>
   <!-- Overlay que exibirá corpoyeroben.png e o botão Sair -->
@@ -274,6 +290,13 @@
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+
+      $(document).on("click", "#veleyweiBtn2", function(){
+        $("#overlayImage").attr("src", "corpoyeroben.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
       
       // Botão Sair no overlay
       $("#btnSair").on("click", function(){
