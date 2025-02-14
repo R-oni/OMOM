@@ -276,6 +276,23 @@
         overlayScale = 1;
       });
 
+          // Força a reprodução automática da música com volume 50%
+    document.addEventListener("DOMContentLoaded", function() {
+      const bgm = document.getElementById("bgm");
+      bgm.volume = 0.5;
+      bgm.currentTime = 70;
+      const playPromise = bgm.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function(error) {
+          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
+          document.addEventListener("click", function handler() {
+            bgm.play();
+            document.removeEventListener("click", handler);
+          });
+        });
+      }
+    });
+
       // Delegação do clique no botão: exibe o overlay com corpoyeroben.png via fadeIn
       $(document).on("click", "#veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "artilharia.png");
