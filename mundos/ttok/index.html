@@ -59,7 +59,7 @@
       color: #fff;
       border: 1px solid #fff;
       cursor: pointer;
-      z-index: 10; /* Garante que o botão fique visível */
+      z-index: 10;
     }
   </style>
 </head>
@@ -77,20 +77,36 @@
     <!-- Flipbook -->
     <div id="flipbook">
       <!-- Página 1 -->
-      <div class="page hard"><img src="pagina1.png" alt="Capa"></div>
+      <div class="page hard">
+        <img src="pagina1.png" alt="Capa">
+      </div>
       <!-- Página 2: yyy.png com o botão para trocar o foco -->
       <div class="page">
         <img src="yyy.png" alt="Página 1">
         <button id="focusButton" class="focus-button" onclick="focusOrbit()">Trocar Foco</button>
       </div>
       <!-- Outras páginas -->
-      <div class="page"><img src="pagina3.png" alt="Página 2"></div>
-      <div class="page"><img src="pagina3.jpg" alt="Página 9"></div>
-      <div class="page"><img src="pagina2.png" alt="Página 11"></div>
-      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina3.png" alt="Página 12"></div>
-      <div class="page"><img src="pagina2.png" alt="Página 12"></div>
+      <div class="page">
+        <img src="pagina3.png" alt="Página 2">
+      </div>
+      <div class="page">
+        <img src="pagina3.jpg" alt="Página 9">
+      </div>
+      <div class="page">
+        <img src="pagina2.png" alt="Página 11">
+      </div>
+      <div class="page">
+        <img src="pagina3.png" alt="Página 12">
+      </div>
+      <div class="page">
+        <img src="pagina2.png" alt="Página 12">
+      </div>
+      <div class="page">
+        <img src="pagina3.png" alt="Página 12">
+      </div>
+      <div class="page">
+        <img src="pagina2.png" alt="Página 12">
+      </div>
     </div>
   </div>
 
@@ -98,23 +114,35 @@
     <img id="overlayImage" src="" alt="Imagem Overlay">
   </div>
 
-  <!-- Scripts necessários -->
+  <!-- Scripts Necessários -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
+
+  <!-- Inicializa o flipbook -->
+  <script>
+    $(document).ready(function(){
+      $("#flipbook").turn({
+        autoCenter: false,
+        display: 'double'
+      });
+      $("#flipbook").turn("size", 600, 450);
+    });
+  </script>
+
   <!-- Carrega o globo.js -->
   <script src="./globo.js"></script>
+
   <!-- Função global para trocar o foco para o globo orbitante -->
   <script>
     function focusOrbit() {
       if (window.myGlobe && window.myGlobe.controls && window.myGlobe.orbitSphere && window.myGlobe.camera) {
         console.log("Focando no globo orbitante");
-        // Define o alvo dos controles para a posição atual do globo orbitante
+        // Atualiza o alvo dos controles para a posição atual do globo orbitante
         window.myGlobe.controls.target.copy(window.myGlobe.orbitSphere.position);
-        // Reposiciona a câmera para ficar próxima do globo orbitante
-        // Ajuste o offset (aqui usamos 2 unidades no eixo Z) conforme o efeito desejado
-        const newPos = window.myGlobe.orbitSphere.position.clone().add(new THREE.Vector3(0, 0, 2));
+        // Reposiciona a câmera para ficar próxima (ajuste o offset conforme necessário)
+        var newPos = window.myGlobe.orbitSphere.position.clone().add(new THREE.Vector3(0, 0, 2));
         window.myGlobe.camera.position.copy(newPos);
         window.myGlobe.controls.update();
       } else {
