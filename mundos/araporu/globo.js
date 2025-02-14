@@ -69,7 +69,7 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // (NOVO) Criando 3 globos menores orbitando
+  // Criando 3 globos menores orbitando
   // =========================================
 
   // Criamos pivôs (ou "groups") onde cada globo menor fica preso.
@@ -79,7 +79,7 @@ function initGlobe() {
   const pivot3 = new THREE.Object3D();
   scene.add(pivot1, pivot2, pivot3);
 
-  // Geometria das luas (10x menor => raio=0.1)
+  // Geometria das luas (10x menor => raio=0.01)
   const miniGeo = new THREE.SphereGeometry(0.01, 32, 32);
 
   // Primeiro globo menor
@@ -100,6 +100,27 @@ function initGlobe() {
   miniSphere3.position.x = 2.5; 
   pivot3.add(miniSphere3);
 
+  // =========================================
+  // Novo: Criando um anel de pequenas esferas
+  // orbitando o globo principal (anel)
+  // =========================================
+  const ringGroup = new THREE.Group();
+  const numRingSpheres = 30;
+  const ringRadius = 1.5; // distância do centro do globo
+  const ringSphereGeo = new THREE.SphereGeometry(0.02, 16, 16);
+  const ringSphereMat = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  for (let i = 0; i < numRingSpheres; i++) {
+    const angle = (i / numRingSpheres) * Math.PI * 2;
+    const ringSphere = new THREE.Mesh(ringSphereGeo, ringSphereMat);
+    ringSphere.position.set(
+      ringRadius * Math.cos(angle),
+      0,
+      ringRadius * Math.sin(angle)
+    );
+    ringGroup.add(ringSphere);
+  }
+  scene.add(ringGroup);
+
   // (6) Função de animação
   function animate() {
     requestAnimationFrame(animate);
@@ -112,6 +133,9 @@ function initGlobe() {
     pivot1.rotation.y += 0.03;
     pivot2.rotation.y += 0.015;
     pivot3.rotation.y += 0.01;
+
+    // Rotaciona o anel para criar o efeito de órbita
+    ringGroup.rotation.y += 0.01;
 
     renderer.render(scene, camera);
   }
