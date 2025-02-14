@@ -48,8 +48,7 @@
     }
 
     .page {
-      /* Caso necessário, pode-se adicionar position: relative; aqui, mas
-         optamos por colocar essa regra apenas na página que terá o elemento flutuante */
+      position: relative;
     }
 
     .page img {
@@ -58,54 +57,17 @@
       display: block;
     }
 
-    .sound-button {
+    /* Botão de troca de foco */
+    .focus-button {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 30px;
-      background: rgba(255, 255, 200, 0.2);
+      top: 10px;
+      right: 10px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid #fff;
       cursor: pointer;
     }
-
-    #overlayContainer {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 9999;
-    }
-
-    #overlayImage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 90vw;
-      max-height: 90vh;
-    }
-
-    .btn-overlay {
-      position: absolute;
-      top: 100px;
-      right: 100px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .btn-overlay img {
-      width: 60px;
-      height: auto;
-      display: block;
-    }
-
-  
   </style>
 </head>
 <body>
@@ -114,20 +76,20 @@
       <img src="titulottok.png" alt="Título Velei'wey">
     </div>
 
-    <!-- Primeiro Globo 3D -->
+    <!-- Único canvas para os globos (a cena deve conter ambos os objetos) -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
 
-    <!-- Segundo Globo 3D: Globo2 -->
-    <div class="globe2-section">
-      <canvas id="globo2Canvas"></canvas>
-    </div>
-
     <div id="flipbook">
-      <!-- Primeira página marcada como "hard" -->
+      <!-- Página 1 -->
       <div class="page hard"><img src="pagina1.png" alt="Capa"></div>
-      <div class="page"><img src="yyy.png" alt="Página 1"></div>
+      <!-- Página 2: yyy.png com o botão que troca o foco -->
+      <div class="page">
+        <img src="yyy.png" alt="Página 1">
+        <button id="focusButton" class="focus-button">Trocar Foco</button>
+      </div>
+      <!-- Outras páginas -->
       <div class="page"><img src="pagina3.png" alt="Página 2"></div>
       <div class="page"><img src="pagina3.jpg" alt="Página 9"></div>
       <div class="page"><img src="pagina2.png" alt="Página 11"></div>
@@ -184,8 +146,7 @@
                 }
               });
             }
-
-            // Muda o tamanho após virar a primeira página
+            // Redimensiona após virar a primeira página
             if (page === 2) {
               $("#flipbook").turn("size", 550, 400);
             }
@@ -195,6 +156,7 @@
 
       $("#flipbook").turn("size", 600, 450);
 
+      // Configura triggers de som (se houver)
       $("#sound-trigger").on("click", function(){
         const audio = new Audio('som-pagina5.m4a');
         audio.currentTime = 0;
@@ -225,13 +187,33 @@
         });
       }
       
+      // --- Código para trocar o foco da câmera ---
+      const focusButton = document.getElementById('focusButton');
+      if (focusButton) {
+        focusButton.addEventListener('click', () => {
+          /* 
+             Supondo que:
+             - 'controls' é o OrbitControls configurado na cena (veja o conceito: OrbitControls é um componente que permite a interação com a câmera).
+             - O globo grande está no centro (0, 0, 0) e o globo pequeno, por exemplo, está em (5, 0, 0).
+             
+             Se você tiver a referência do objeto do globo pequeno (por exemplo, smallGlobe),
+             pode usar: controls.target.copy(smallGlobe.position);
+             
+             Aqui usaremos valores fixos como exemplo.
+          */
+          if (typeof controls !== 'undefined') {
+            // Altera o target para a posição do globo pequeno (exemplo: 5,0,0)
+            controls.target.set(5, 0, 0); // (definição: a posição que você deseja focar)
+            controls.update();
+          }
+        });
+      }
     });
   </script>
 
-  <!-- Arquivo JavaScript do primeiro globo -->
+  <!-- Arquivo JavaScript do globo (integre aqui o código do globo pequeno também) -->
   <script src="./globo.js"></script>
-  <!-- Arquivo JavaScript do Globo2 -->
-  <script src="./globo2.js"></script>
+  <!-- Removemos o globo2.js, integrando seu conteúdo em globo.js -->
   
 </body>
 </html>
