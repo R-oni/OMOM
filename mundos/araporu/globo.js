@@ -9,7 +9,7 @@ function initGlobe() {
     0.1,
     1000
   );
-  camera.position.z = 3; // Zoom inicial
+  camera.position.z = 4; // Zoom inicial
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
@@ -50,6 +50,10 @@ function initGlobe() {
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
+  // Inclinação para melhorar a visualização do anel
+  sphere.rotation.x = Math.PI / 6; // ~30° de inclinação
+  cloudMesh.rotation.x = Math.PI / 6; // Acompanha a inclinação
+
   // (4) Luz ambiente + direcional
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
@@ -80,6 +84,10 @@ function initGlobe() {
     sphereMesh.position.set(x, 0, z); // No plano XZ
     ringGroup.add(sphereMesh);
   }
+
+  // Inclina o anel para seguir o mesmo eixo do globo
+  ringGroup.rotation.x = Math.PI / 6;
+
   scene.add(ringGroup);
 
   // (5) Função de animação
