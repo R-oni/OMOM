@@ -40,7 +40,7 @@ function initGlobe() {
 
   // --- Globo Orbitante (menor) ---
   const orbitRadius = 3;          // distância do centro
-  const orbitSphereRadius = 0.1;    // aproximadamente 1/10 do diâmetro do central
+  const orbitSphereRadius = 0.1;    // cerca de 1/10 do diâmetro do central
   const orbitGeometry = new THREE.SphereGeometry(orbitSphereRadius, 64, 64);
   const orbitTexture = textureLoader.load('mapattok.png');
   const orbitMaterial = new THREE.MeshStandardMaterial({ map: orbitTexture });
@@ -63,20 +63,21 @@ function initGlobe() {
   const orbitSpeed = -0.5; // radianos por segundo
   const clock = new THREE.Clock();
 
-  // Expondo objetos para controle externo – define trackingOrbit inicialmente como false
+  // Variável para definir o modo de tracking:
+  // "none" = nenhum tracking, "orbit" = seguir globo orbitante, "central" = seguir globo central
   window.myGlobe = {
     camera: camera,
     controls: controls,
     centralSphere: centralSphere,
     orbitSphere: orbitSphere,
-    trackingOrbit: false
+    trackingMode: "none" // modo inicial
   };
 
   function animate() {
     requestAnimationFrame(animate);
     const delta = clock.getDelta();
 
-    // Rotaciona lentamente o globo central
+    // Rotação lenta do globo central
     centralSphere.rotation.y += 0.003;
 
     // Movimento circular do globo orbitante (no plano XZ)
@@ -84,15 +85,19 @@ function initGlobe() {
     orbitSphere.position.x = centralSphere.position.x + orbitRadius * Math.cos(orbitAngle);
     orbitSphere.position.z = centralSphere.position.z + orbitRadius * Math.sin(orbitAngle);
 
-    // Se o modo de tracking estiver ativo, atualiza continuamente a câmera e o alvo
-    if (window.myGlobe.trackingOrbit) {
-      // Offset desejado para posicionar a câmera em relação ao globo menor
-      const offset = new THREE.Vector3(0, 0, 2);
+    // Atualiza a câmera de acordo com o modo de tracking
+    if (window.myGlobe.trackingMode === "orbit") {
+      // Para o globo orbitante, usamos um offset menor para mais zoom (por exemplo, 1 unidade)
+      const offset = new THREE.Vector3(0, 0, 1);
       const desiredPos = orbitSphere.position.clone().add(offset);
-      // Suaviza a transição com lerp (ajuste 0.1 conforme necessário)
       camera.position.lerp(desiredPos, 0.1);
-      // Atualiza o alvo dos controles para sempre apontar para o globo orbitante
       controls.target.copy(orbitSphere.position);
+    } else if (window.myGlobe.trackingMode === "central") {
+      // Para o globo central, usamos um offset maior (por exemplo, 3 unidades)
+      const offset = new THREE.Vector3(0, 0, 3);
+      const desiredPos = centralSphere.position.clone().add(offset);
+      camera.position.lerp(desiredPos, 0.1);
+      controls.target.copy(centralSphere.position);
     }
 
     controls.update();
