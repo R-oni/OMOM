@@ -134,17 +134,12 @@
   <!-- Carrega o globo.js -->
   <script src="./globo.js"></script>
 
-  <!-- Função global para trocar o foco para o globo orbitante -->
+  <!-- Função global para ativar o tracking -->
   <script>
     function focusOrbit() {
-      if (window.myGlobe && window.myGlobe.controls && window.myGlobe.orbitSphere && window.myGlobe.camera) {
-        console.log("Focando no globo orbitante");
-        // Atualiza o alvo dos controles para a posição atual do globo orbitante
-        window.myGlobe.controls.target.copy(window.myGlobe.orbitSphere.position);
-        // Reposiciona a câmera para ficar próxima (ajuste o offset conforme necessário)
-        var newPos = window.myGlobe.orbitSphere.position.clone().add(new THREE.Vector3(0, 0, 2));
-        window.myGlobe.camera.position.copy(newPos);
-        window.myGlobe.controls.update();
+      if (window.myGlobe) {
+        window.myGlobe.trackingOrbit = true;
+        console.log("Modo de foco ativado");
       } else {
         console.log("Objetos do globo não estão prontos.");
       }
