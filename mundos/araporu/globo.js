@@ -1,4 +1,3 @@
-// Função principal para inicializar o globo
 function initGlobe() {
   // Cena
   const scene = new THREE.Scene();
@@ -6,11 +5,11 @@ function initGlobe() {
   // Câmera
   const camera = new THREE.PerspectiveCamera(
     60,
-    1,        // Aspect ratio será ajustado no resize
+    1,        // Aspect ratio ajustado depois no resize
     0.1,
     1000
   );
-  camera.position.z = 3; // Zoom inicial (ajuste conforme necessário)
+  camera.position.z = 3; // Zoom inicial
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
@@ -35,25 +34,26 @@ function initGlobe() {
 
   // (3) Mesh do globo principal
   const sphere = new THREE.Mesh(geometry, material);
-  sphere.castShadow = true;
-  sphere.receiveShadow = true;
+  sphere.castShadow = true;  
+  sphere.receiveShadow = true; 
   scene.add(sphere);
 
   // Adicionando a camada de nuvem
-  const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64);
-  const cloudTexture = textureLoader.load('nuvemaraporu.png');
+  const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
+  const cloudTexture = textureLoader.load('nuvemaraporu.png'); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
-    transparent: true,
-    opacity: 1,
-    depthWrite: false
+    transparent: true,  
+    opacity: 1,        
+    depthWrite: false  
   });
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
-  // (4) Luz ambiente e direcional
+  // (4) Luz ambiente + direcional
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
+
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(3, 3, 5);
   directionalLight.castShadow = true;
@@ -62,22 +62,23 @@ function initGlobe() {
   // =========================================
   // Criando um anel de pequenas esferas orbitando o globo
   // =========================================
-
   const ringGroup = new THREE.Group();
-  const numRingSpheres = 40;         // Número de esferas no anel
-  const ringRadius = 1.2;            // Distância do centro do globo (ajuste para posicionar o anel)
-  const ringSphereGeo = new THREE.SphereGeometry(0.05, 16, 16); // Tamanho das esferas do anel
+  const numRingSpheres = 150;   // Número de esferas no anel
+  const rInner = 1.1;           // Raio interno do anel
+  const rOuter = 1.5;           // Raio externo do anel
+  const ringSphereGeo = new THREE.SphereGeometry(0.02, 16, 16); // Esferas menores
   const ringSphereMat = new THREE.MeshStandardMaterial({ color: 0x808080 }); // Cinza médio
 
   for (let i = 0; i < numRingSpheres; i++) {
-    const angle = (i / numRingSpheres) * Math.PI * 2;
-    const ringSphere = new THREE.Mesh(ringSphereGeo, ringSphereMat);
-    ringSphere.position.set(
-      ringRadius * Math.cos(angle),
-      0,  // O anel fica no plano XZ
-      ringRadius * Math.sin(angle)
-    );
-    ringGroup.add(ringSphere);
+    // Distribuição aleatória no ângulo (0 a 2π)
+    const angle = Math.random() * Math.PI * 2;
+    // Distribuição uniforme na área do anel
+    const radius = Math.sqrt(Math.random() * (rOuter * rOuter - rInner * rInner) + rInner * rInner);
+    const x = radius * Math.cos(angle);
+    const z = radius * Math.sin(angle);
+    const sphereMesh = new THREE.Mesh(ringSphereGeo, ringSphereMat);
+    sphereMesh.position.set(x, 0, z); // No plano XZ
+    ringGroup.add(sphereMesh);
   }
   scene.add(ringGroup);
 
@@ -86,18 +87,18 @@ function initGlobe() {
     requestAnimationFrame(animate);
 
     // Rotação lenta do globo principal e das nuvens
-    sphere.rotation.y += 0.003;
+    sphere.rotation.y += 0.003;  
     cloudMesh.rotation.y += 0.0039;
 
     // Rotaciona o anel para criar o efeito de órbita
-    ringGroup.rotation.y += 0.01;
+    ringGroup.rotation.y += 0.005;
 
     controls.update();
     renderer.render(scene, camera);
   }
   animate();
 
-  // Redimensionar conforme a janela muda
+  // Redimensiona conforme a janela muda
   window.addEventListener('resize', resizeRenderer);
   function resizeRenderer() {
     const width = canvas.clientWidth;
