@@ -226,7 +226,7 @@
     function floatSymbols() {
       time += 0.02;
       symbols.forEach((symbol, index) => {
-        let amplitude = 10;
+        let amplitude = 6;
         let speed = 0.1 + (index * 0.01);
         let y = Math.sin(time * speed * 10) * amplitude;
         symbol.style.transform = `translateY(${y}px)`;
