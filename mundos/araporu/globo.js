@@ -63,10 +63,10 @@ function initGlobe() {
   // Criando um anel de pequenas esferas orbitando o globo
   // =========================================
   const ringGroup = new THREE.Group();
-  const numRingSpheres = 150;   // Número de esferas no anel
-  const rInner = 1.1;           // Raio interno do anel
-  const rOuter = 1.5;           // Raio externo do anel
-  const ringSphereGeo = new THREE.SphereGeometry(0.02, 16, 16); // Esferas menores
+  const numRingSpheres = 250;   // Número de esferas no anel
+  const rInner = 1.7;           // Raio interno do anel
+  const rOuter = 2.0;           // Raio externo do anel
+  const ringSphereGeo = new THREE.SphereGeometry(0.005, 16, 16); // Esferas menores
   const ringSphereMat = new THREE.MeshStandardMaterial({ color: 0x808080 }); // Cinza médio
 
   for (let i = 0; i < numRingSpheres; i++) {
