@@ -59,6 +59,7 @@
       color: #fff;
       border: 1px solid #fff;
       cursor: pointer;
+      z-index: 10; /* Garante que o botão fique visível */
     }
   </style>
 </head>
@@ -68,19 +69,19 @@
       <img src="titulottok.png" alt="Título Velei'wey">
     </div>
 
-    <!-- Único canvas para os globos -->
+    <!-- Seção do Canvas -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
 
+    <!-- Flipbook -->
     <div id="flipbook">
       <!-- Página 1 -->
       <div class="page hard"><img src="pagina1.png" alt="Capa"></div>
       <!-- Página 2: yyy.png com o botão para trocar o foco -->
       <div class="page">
         <img src="yyy.png" alt="Página 1">
-        <!-- Usamos o atributo onclick para chamar a função global -->
-        <button onclick="focusOrbit()" id="focusButton" class="focus-button">Trocar Foco</button>
+        <button id="focusButton" class="focus-button" onclick="focusOrbit()">Trocar Foco</button>
       </div>
       <!-- Outras páginas -->
       <div class="page"><img src="pagina3.png" alt="Página 2"></div>
@@ -102,25 +103,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
-
   <!-- Carrega o globo.js -->
   <script src="./globo.js"></script>
-
   <!-- Função global para trocar o foco para o globo orbitante -->
   <script>
     function focusOrbit() {
-      if (window.controls && window.orbitSphere && window.camera) {
+      if (window.myGlobe && window.myGlobe.controls && window.myGlobe.orbitSphere && window.myGlobe.camera) {
         console.log("Focando no globo orbitante");
-        // Clona a posição atual do globo orbitante
-        const targetPos = window.orbitSphere.position.clone();
-        // Atualiza o alvo dos controles para o globo orbitante
-        window.controls.target.copy(targetPos);
+        // Define o alvo dos controles para a posição atual do globo orbitante
+        window.myGlobe.controls.target.copy(window.myGlobe.orbitSphere.position);
         // Reposiciona a câmera para ficar próxima do globo orbitante
-        // (o offset pode ser ajustado conforme desejado)
-        window.camera.position.copy(targetPos.clone().add(new THREE.Vector3(0, 0, 2)));
-        window.controls.update();
+        // Ajuste o offset (aqui usamos 2 unidades no eixo Z) conforme o efeito desejado
+        const newPos = window.myGlobe.orbitSphere.position.clone().add(new THREE.Vector3(0, 0, 2));
+        window.myGlobe.camera.position.copy(newPos);
+        window.myGlobe.controls.update();
       } else {
-        console.log("Objetos globais ainda não estão prontos");
+        console.log("Objetos do globo não estão prontos.");
       }
     }
   </script>
