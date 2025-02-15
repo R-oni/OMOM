@@ -1,3 +1,4 @@
+
 // Função principal para inicializar o globo
 function initGlobe() {
   // Cena
@@ -34,7 +35,7 @@ function initGlobe() {
 
   // (2) Carregar textura
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('imagens/mapaveleywei.png'); // seu arquivo
+  const texture = textureLoader.load('imagens/mapaveleywei.webp'); // seu arquivo
 
   // (3) Material que reage a luz
   const material = new THREE.MeshStandardMaterial({
@@ -49,7 +50,7 @@ function initGlobe() {
 
   // Adicionando a camada de nuvem
   const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
-  const cloudTexture = textureLoader.load('imagens/nuvemveleywei.png'); 
+  const cloudTexture = textureLoader.load('imagens/nuvemveleywei.webp'); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,  
@@ -76,59 +77,3 @@ function initGlobe() {
   // Isso facilita girar cada pivô em vez de girar o globo em si.
   const pivot1 = new THREE.Object3D();
   const pivot2 = new THREE.Object3D();
-  const pivot3 = new THREE.Object3D();
-  scene.add(pivot1, pivot2, pivot3);
-
-  // Geometria das luas (10x menor => raio=0.1)
-  const miniGeo = new THREE.SphereGeometry(0.01, 32, 32);
-
-  // Primeiro globo menor
-  const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x808080 });
-  const miniSphere1 = new THREE.Mesh(miniGeo, miniMat1);
-  miniSphere1.position.x = 1.5; // Distância do "centro"
-  pivot1.add(miniSphere1);
-
-  // Segundo globo menor
-  const miniMat2 = new THREE.MeshStandardMaterial({ color: 0x808080 });
-  const miniSphere2 = new THREE.Mesh(miniGeo, miniMat2);
-  miniSphere2.position.x = 2.0; 
-  pivot2.add(miniSphere2);
-
-  // Terceiro globo menor
-  const miniMat3 = new THREE.MeshStandardMaterial({ color: 0x555555 });
-  const miniSphere3 = new THREE.Mesh(miniGeo, miniMat3);
-  miniSphere3.position.x = 2.5; 
-  pivot3.add(miniSphere3);
-
-  // (6) Função de animação
-  function animate() {
-    requestAnimationFrame(animate);
-
-    // Rotação contínua do globo principal e das nuvens
-    sphere.rotation.y += 0.003;  
-    cloudMesh.rotation.y += 0.0039;
-
-    // Orbitas (rotacionando pivôs)
-    pivot1.rotation.y += 0.03;
-    pivot2.rotation.y += 0.015;
-    pivot3.rotation.y += 0.01;
-
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  // Redimensionar conforme a janela muda
-  window.addEventListener('resize', resizeRenderer);
-  function resizeRenderer() {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  }
-}
-
-// Inicia o globo quando a página carrega
-window.onload = () => {
-  initGlobe();
-};
