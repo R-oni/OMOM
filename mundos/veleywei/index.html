@@ -314,6 +314,43 @@
           $(this).fadeOut(500);
         }
       });
+      
+      // Implementação do arraste para virar a página
+      let isDragging = false;
+      let startX = 0;
+      
+      $("#flipbook").on("mousedown touchstart", function(e) {
+        let posX = e.pageX;
+        if (e.originalEvent.touches && e.originalEvent.touches.length) {
+          posX = e.originalEvent.touches[0].pageX;
+        }
+        startX = posX;
+        isDragging = true;
+      });
+      
+      $("#flipbook").on("mouseup touchend", function(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        let endX = e.pageX;
+        if (e.originalEvent.changedTouches && e.originalEvent.changedTouches.length) {
+          endX = e.originalEvent.changedTouches[0].pageX;
+        }
+        
+        let diff = endX - startX;
+        // Se o arraste horizontal for maior que 50px, executa a virada
+        if (Math.abs(diff) > 50) {
+          let container = $("#flipbook");
+          let containerOffset = container.offset().left;
+          let containerWidth = container.width();
+          let startRelative = startX - containerOffset;
+          
+          if (startRelative < containerWidth / 2) {
+            container.turn("previous");
+          } else {
+            container.turn("next");
+          }
+        }
+      });
     });
   </script>
   <script src="./globo.js"></script>
@@ -378,4 +415,4 @@
     })();
   </script>
 </body>
-        </html>
+</html>
