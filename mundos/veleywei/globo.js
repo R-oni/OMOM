@@ -34,7 +34,7 @@ function initGlobe() {
 
   // (2) Carregar textura
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('imagens/mapaveleywei.webp'); // seu arquivo
+  const texture = textureLoader.load('imagens/mapaveleywei.png'); // seu arquivo
 
   // (3) Material que reage a luz
   const material = new THREE.MeshStandardMaterial({
@@ -49,7 +49,7 @@ function initGlobe() {
 
   // Adicionando a camada de nuvem
   const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
-  const cloudTexture = textureLoader.load('imagens/nuvemveleywei.webp'); 
+  const cloudTexture = textureLoader.load('imagens/nuvemveleywei.png'); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,  
