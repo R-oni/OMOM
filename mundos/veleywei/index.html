@@ -166,7 +166,7 @@
         /* Definindo as áreas:
            "symbol" para o título (superior esquerda),
            "book" para o flipbook (inferior esquerda),
-           "planet" para o globo (coluna direita, abrangendo ambas as linhas) */
+           "planet" para o globo (coluna direita, abrange ambas as linhas) */
         grid-template-areas:
           "symbol planet"
           "book   planet";
@@ -197,6 +197,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        pointer-events: auto;
       }
       .globe-section {
         grid-area: planet;
@@ -205,11 +206,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        grid-row: 1 / span 2; /* Garante que o globo ocupe as duas linhas */
+        /* Garante que a área do globo ocupe ambas as linhas */
       }
       #globeCanvas {
         width: 100%;
         height: 100%;
+        background-color: #444; /* Background temporário para visualização */
       }
     }
   </style>
@@ -221,7 +223,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- Ordem no HTML: a posição no grid é definida via CSS (grid-areas) -->
+  <!-- A ordem no HTML não importa no grid; as áreas são definidas via CSS -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -274,7 +276,7 @@
     // Função para ajustar o tamanho do flipbook conforme a orientação
     function resizeFlipbook() {
       if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
-        // Na célula "book" da esquerda (70% da altura), o flipbook preenche 100% dessa área
+        // Na célula "book" da esquerda (70% da altura), o flipbook preenche 100% dessa área:
         var flipbookWidth = window.innerWidth * 0.5;
         var flipbookHeight = window.innerHeight * 0.70;
         $("#flipbook").turn("size", flipbookWidth, flipbookHeight);
@@ -289,7 +291,12 @@
     $(document).ready(function(){
       $("#flipbook").turn({
         autoCenter: true,
-        display: 'double'
+        display: 'double',
+        when: {
+          turning: function(e, page, view) {
+            console.log("Turning to page " + page);
+          }
+        }
       });
       
       resizeFlipbook();
@@ -322,6 +329,7 @@
       });
     });
   </script>
+  <!-- Certifique-se de que o arquivo globo.js esteja corretamente configurado -->
   <script src="./globo.js"></script>
   <script>
     (function() {
