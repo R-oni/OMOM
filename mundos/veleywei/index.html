@@ -45,7 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-    /* Layout Mobile (configuração original) */
+    /* Layout Mobile – mantém o design original */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -157,16 +157,16 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout PC/Horizontal - Divisão em 2 colunas: esquerda dividida em 2 linhas e direita com 100% da altura */
+    /* Layout PC/Horizontal – Grid com 2 colunas: esquerda subdividida e direita única */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
         grid-template-columns: 50% 50%;
         grid-template-rows: 50% 50%;
-        /* Define três áreas:
-             - "symbol": célula superior esquerda
-             - "book": célula inferior esquerda
-             - "planet": coluna da direita (span 2 linhas) */
+        /* Definindo as áreas:
+             - "symbol" (superior esquerda) para o título
+             - "book" (inferior esquerda) para o flipbook
+             - "planet" (coluna direita, abrangendo ambas as linhas) para o globo */
         grid-template-areas:
           "symbol planet"
           "book   planet";
@@ -185,6 +185,12 @@
         justify-content: center;
         align-items: center;
       }
+      /* Força o título a preencher sua célula */
+      .top-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
       #flipbook {
         grid-area: book;
         width: 100%;
@@ -201,12 +207,7 @@
         justify-content: center;
         align-items: center;
       }
-      /* Faz com que os elementos internos preencham totalmente as células */
-      .top-section img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
+      /* O canvas do globo preenche sua célula */
       #globeCanvas {
         width: 100%;
         height: 100%;
@@ -221,16 +222,15 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
+  <!-- Para Mobile, a ordem permanece: título, globo e flipbook empilhados -->
+  <!-- Para PC, as grid-areas reposicionam os elementos conforme definido -->
   <div class="page-container">
-    <!-- Título (símbolo) -->
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
     </div>
-    <!-- Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
-    <!-- Flipbook -->
     <div id="flipbook">
       <!-- Exemplo de páginas do flipbook -->
       <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
@@ -276,12 +276,12 @@
     // Função para ajustar o tamanho do flipbook conforme a orientação
     function resizeFlipbook() {
       if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
-        // Em PC: a célula da esquerda tem 50% da largura e 50% da altura
+        // Em PC: a célula esquerda tem 50% da largura e 50% da altura
         var flipbookWidth = window.innerWidth * 0.5;
         var flipbookHeight = window.innerHeight * 0.5;
         $("#flipbook").turn("size", flipbookWidth, flipbookHeight);
       } else {
-        // Em mobile: usa tamanho relativo conforme o layout original
+        // Em mobile: tamanho relativo conforme o layout original
         var newWidth = $(window).width() * 0.9;
         var newHeight = newWidth * (450 / 600);
         $("#flipbook").turn("size", newWidth, newHeight);
