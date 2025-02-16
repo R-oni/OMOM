@@ -96,7 +96,6 @@
 
     .symbol.brither img {
       filter: brightness(180%);
-
     }
     /* Efeito de locked para símbolos */
     .symbol.locked img {
@@ -279,6 +278,34 @@
       }
     }
 
+    // Injeta atividade em um dos cantos para manter o autômato dinâmico
+    function injectActivity() {
+      const injectionSize = 10; // tamanho da área de injeção em células
+      const corner = Math.floor(Math.random() * 4); // 0: superior-esquerdo, 1: superior-direito, 2: inferior-esquerdo, 3: inferior-direito
+      let startRow, startCol;
+      if (corner === 0) {
+        startRow = 0;
+        startCol = 0;
+      } else if (corner === 1) {
+        startRow = 0;
+        startCol = cols - injectionSize;
+      } else if (corner === 2) {
+        startRow = rows - injectionSize;
+        startCol = 0;
+      } else {
+        startRow = rows - injectionSize;
+        startCol = cols - injectionSize;
+      }
+      for (let i = startRow; i < startRow + injectionSize && i < rows; i++) {
+        for (let j = startCol; j < startCol + injectionSize && j < cols; j++) {
+          if (Math.random() < 0.3) { // 30% de chance para cada célula ser ativada
+            grid[i][j] = 1;
+          }
+        }
+      }
+    }
+
+    // Atualiza o grid com as regras do autômato (Conway's Game of Life)
     function updateGrid() {
       let newGrid = grid.map(arr => [...arr]);
       for (let y = 1; y < rows - 1; y++) {
@@ -291,8 +318,14 @@
       grid = newGrid;
     }
 
+    let frameCount = 0;
     function animate() {
+      frameCount++;
       updateGrid();
+      // A cada 100 frames, injeta uma "faísca" em um dos cantos
+      if (frameCount % 100 === 0) {
+        injectActivity();
+      }
       drawGrid();
       requestAnimationFrame(animate);
     }
@@ -309,4 +342,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
