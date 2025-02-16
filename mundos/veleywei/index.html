@@ -1,226 +1,164 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Exemplo Responsivo sem Rolagem</title>
-  <!-- Importando a fonte Press Start 2P -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outros Mundos Outras Mentes</title>
+  <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ===== ESTILOS GLOBAIS (Mobile/Vertical) ===== */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000;
-      color: #fff;
-      font-family: sans-serif;
-    }
-    /* Loading Screen */
+    /* ===== ESTILOS PARA MOBILE (Vertical) – INALTERADOS ===== */
     #loading-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #000;
-      z-index: 10000;
+      background-color: black;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      z-index: 9999;
     }
-    #warpCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+    
     #loading-text {
-      position: relative;
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
       font-size: 20px;
-      z-index: 10001;
+      text-align: center;
     }
-    /* Layout Mobile – permanece inalterado */
-    .page-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
-    .top-section img {
-      width: 15vmax;
-      max-width: 80vw;
-      height: auto;
-    }
-    .globe-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    /* Configuração original do globo */
-    #globeCanvas {
-      width: 40vmax;
-      height: 40vmax;
-      max-width: 80vw;
-      max-height: 50vh;
-    }
-    #flipbook {
-      position: relative;
-      margin: auto;
-      cursor: grab;
-    }
-    .page img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .sound-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 30px;
-      background: rgba(255, 255, 200, 0.2);
-      cursor: pointer;
-    }
-    /* Overlay */
-    #overlayContainer {
-      display: none;
+    
+    #automatonCanvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.8);
-      z-index: 9999;
-    }
-    #overlayImage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1);
-      max-width: 90vw;
-      max-height: 90vh;
-    }
-    #btnSair {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: #00EEF7;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 32px;
-      cursor: pointer;
-      padding: 20px;
-      z-index: 10000;
-    }
-    /* Botão Veleywei */
-    #veleyweiBtn,
-    #veleyweiBtn2 {
-      position: absolute;
-      cursor: pointer;
-      width: 100%;
-      height: 97%;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      animation: fadeInOut 2s infinite;
-    }
-    @keyframes fadeInOut {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    .btn-overlay {
-      position: absolute;
-      top: 100px;
-      right: 100px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      padding: 0;
-    }
-    .btn-overlay img {
-      width: 60px;
-      height: auto;
-      display: block;
-    }
-    #spiraqel {
-      position: absolute;
-      right: 70px;
-      top: 170px;
-      width: 55px;
-      cursor: pointer;
-      animation: pulse 2s infinite ease-in-out;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
+      z-index: -1;
+      image-rendering: pixelated;
     }
     
-    /* ===== LAYOUT PC/HORIZONTAL – Células sem cortes ou margens ===== */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: black;
+      overflow: hidden;
+      color: white;
+    }
+    
+    .title-container {
+      text-align: center;
+      margin-top: 50px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .title-container img {
+      max-width: 50%;
+    }
+    
+    .symbols-wrapper {
+      position: absolute;
+      top: 150px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      padding: 20px;
+      z-index: 2;
+    }
+    
+    .symbols-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .symbol {
+      position: relative;
+      transform-origin: center;
+      transition: transform 0.1s linear;
+    }
+    
+    .symbol img {
+      width: 25vw;
+      transition: transform 0.3s;
+    }
+    
+    .symbol img:hover {
+      transform: scale(1.1);
+    }
+    
+    .symbol.brither img {
+      filter: brightness(180%);
+    }
+    
+    .symbol.locked img {
+      filter: brightness(50%);
+    }
+    
+    /* ===== ESTILOS GLOBAIS PARA FUNDO E ÁUDIO – INALTERADOS ===== */
+    
+    /* ===== LAYOUT MOBILE: Usado quando a tela não for horizontal ===== */
+    .mobile-container {
+      display: block;
+    }
+    
+    /* ===== LAYOUT PC/HORIZONTAL – DISPOSIÇÃO LIVRE COM POSICIONAMENTO ABSOLUTO ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
-      .page-container {
-        display: grid;
-        /* Defina as colunas e linhas em pixels ou porcentagens conforme sua necessidade */
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 30% 70%;
-        grid-template-areas:
-          "title globe"
-          "flipbook globe";
+      /* Esconde a versão mobile */
+      .mobile-container {
+        display: none;
+      }
+      /* Exibe o container exclusivo para PC */
+      .pc-container {
+        display: block;
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+      /* Título – posicionado na parte superior esquerda */
+      .pc-title {
+        position: absolute;
+        top: 20px;       /* ajuste manual */
+        left: 20px;      /* ajuste manual */
+        width: 400px;    /* ajuste manual */
+        height: 150px;   /* ajuste manual */
+        z-index: 2;
+      }
+      .pc-title img {
         width: 100%;
         height: 100%;
-        gap: 0;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      /* Área do Título */
-      .top-section {
-        grid-area: title;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .top-section img {
-        width: 40%;
-        height: auto;
-        /* Ajuste "object-fit" conforme necessário para evitar corte: use "contain" para que o conteúdo se ajuste dentro da célula */
         object-fit: contain;
       }
-      /* Área do Flipbook */
-      #flipbook {
-        grid-area: flipbook;
+      /* Flipbook – posicionado na parte inferior esquerda */
+      .pc-flipbook {
+        position: absolute;
+        bottom: 20px;    /* ajuste manual */
+        left: 20px;      /* ajuste manual */
+        width: 300px;    /* ajuste manual */
+        height: 150px;   /* ajuste manual */
+        z-index: 2;
+        background: #222;  /* apenas para visualização */
         display: flex;
         justify-content: center;
         align-items: center;
-        /* Removemos dimensões fixas do flipbook aqui para que a célula possa usá-las 100% */
-        width: 500px;
-        height: 400px;
+        cursor: grab;
       }
-      /* Se precisar, defina o conteúdo interno do flipbook (por exemplo, as páginas) para ocupar 100% do espaço */
-      #flipbook .page {
-        width: 100%;
-        height: 100%;
+      /* Globo – posicionado à direita, centralizado verticalmente */
+      .pc-globe {
+        position: absolute;
+        top: 50%;
+        right: 20px;     /* ajuste manual */
+        width: 500px;    /* ajuste manual */
+        height: 500px;   /* ajuste manual */
+        transform: translateY(-50%);
+        z-index: 2;
       }
-      /* Área do Globo */
-      .globe-section {
-        grid-area: globe;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      #globeCanvas {
+      .pc-globe canvas {
         width: 100%;
         height: 100%;
         object-fit: contain;
@@ -229,54 +167,122 @@
   </style>
 </head>
 <body>
-  <!-- Loading Screen -->
+  <!-- Tela de Loading -->
   <div id="loading-screen">
-    <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
   
-  <!-- Conteúdo: Layout mobile permanece inalterado; para PC, as áreas são definidas pelo grid -->
-  <div class="page-container">
-    <div class="top-section">
-      <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+  <!-- Canvas de fundo -->
+  <canvas id="automatonCanvas"></canvas>
+  
+  <!-- Layout Mobile: Título e Símbolos (permanece inalterado) -->
+  <div class="mobile-container">
+    <div class="title-container">
+      <a href="omom.html">
+        <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
+      </a>
     </div>
-    <div class="globe-section">
-      <canvas id="globeCanvas"></canvas>
-    </div>
-    <div id="flipbook">
-      <!-- Páginas do flipbook -->
-      <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-      <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-      <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-      <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-      <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-      <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-      <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
-      <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-      <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-      <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
-      <div class="page">
-        <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-        <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+    <div class="symbols-wrapper">
+      <div class="symbols-container">
+        <div class="symbol brither" id="symbol1">
+          <a href="mundos/veleywei/index.html">
+            <img src="assets/veleyweimenu.png" alt="Velei'wey">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol2">
+          <a href="mundos/botychera/index.html">
+            <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol3">
+          <a href="mundos/himpis/index.html">
+            <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol4">
+          <a href="mundos/ttok/index.html">
+            <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol5">
+          <a href="mundos/denbou/index.html">
+            <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol6">
+          <a href="mundos/araporu/index.html">
+            <img src="mundos/araporu/araporumenu.png" alt="araporu">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol7">
+          <a href="mundos/os artesaos/index.html">
+            <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol8">
+          <a href="mundos/sapador/index.html">
+            <img src="mundos/sapador/sapador.png" alt="sapador">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol9">
+          <a href="mundos/calindreno/index.html">
+            <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol10">
+          <a href="mundos/mundo pulsante/index.html">
+            <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol" id="symbol11">
+          <a href="mundos/dosirelala/index.html">
+            <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol12">
+          <a href="mundos/ttok/index.html">
+            <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol13">
+          <a href="mundos/ttok/index.html">
+            <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol14">
+          <a href="mundos/ttok/index.html">
+            <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol15">
+          <a href="mundos/ttok/index.html">
+            <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+          </a>
+        </div>
       </div>
-      <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 12"></div>
-      <div class="page">
-        <img src="imagens/cap1/pagina11.webp" alt="Página 13">
-        <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-      </div>
-      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
-      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
-      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
-      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
     </div>
   </div>
   
-  <!-- Overlay -->
-  <div id="overlayContainer">
-    <img id="overlayImage" src="" alt="Imagem Overlay">
-    <button id="btnSair">Sair</button>
+  <!-- Layout PC: Exibe o container com posicionamento absoluto -->
+  <div class="pc-container" style="display:none;">
+    <div class="pc-title">
+      <a href="omom.html">
+        <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
+      </a>
+    </div>
+    <div class="pc-flipbook">
+      Conteúdo do Flipbook
+    </div>
+    <div class="pc-globe">
+      <canvas id="globeCanvas"></canvas>
+    </div>
   </div>
+  
+  <!-- Música de fundo: arpeggio.mp3 -->
+  <audio id="bgm" loop>
+    <source src="arpeggio.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
   
   <!-- Scripts -->
   <!-- jQuery -->
@@ -284,12 +290,13 @@
   <!-- jQuery UI e Touch Punch para permitir arrastar com o mouse -->
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-  <!-- Three.js e OrbitControls (backup) -->
+  <!-- Three.js e OrbitControls (mantidos do backup) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-  <!-- turn.js -->
+  <!-- turn.js (para flipbook, se necessário) -->
   <script src="turn.min.js"></script>
   <script>
+    // Configuração do áudio
     let flipAudio;
     const flipAudioStart = 1;
     const flipAudioEnd = 1.4;
@@ -310,23 +317,24 @@
     });
     
     $(document).ready(function(){
+      // Inicializa o flipbook se necessário
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
       });
       
-      // Altera o cursor para "grabbing" durante o arrasto
+      // Alteração do cursor para arrastar no flipbook
       $("#flipbook").on("mousedown", function(){
-          $(this).css("cursor", "grabbing");
+        $(this).css("cursor", "grabbing");
       }).on("mouseup mouseleave", function(){
-          $(this).css("cursor", "grab");
+        $(this).css("cursor", "grab");
       });
       
+      // Redimensiona o flipbook para PC/horizontal via JavaScript
       function resizeFlipbook() {
         if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
-          // Para horizontal, definindo dimensões pelo JavaScript (mas agora, a célula do grid controla 100% do espaço)
-          let newWidth = window.innerWidth * 0.45;  // ajuste conforme necessário
-          let newHeight = window.innerHeight * 0.35;  // ajuste conforme necessário
+          let newWidth = window.innerWidth * 0.25;
+          let newHeight = window.innerHeight * 0.35;
           $("#flipbook").turn("size", newWidth, newHeight);
         } else {
           var newWidth = $(window).width() * 0.9;
@@ -339,6 +347,7 @@
         resizeFlipbook();
       });
       
+      // Exibe o overlay quando clicado
       $(document).on("click", "#veleyweiBtn, #veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
@@ -362,6 +371,12 @@
           $(this).fadeOut(500);
         }
       });
+      
+      // Se estiver em tela horizontal, exibe o layout PC e oculta o mobile
+      if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
+        $(".pc-container").css("display", "block");
+        $(".mobile-container").css("display", "none");
+      }
     });
   </script>
   <!-- Chamada do globo.js – mantendo o backup original -->
@@ -392,7 +407,7 @@
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "#FFFFFF";
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
