@@ -99,7 +99,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.8);
       z-index: 9999;
     }
     #overlayImage {
@@ -168,10 +168,11 @@
       100% { transform: scale(1); }
     }
     
-    /* ===== LAYOUT PC/HORIZONTAL – Modificável em pixels ===== */
+    /* ===== LAYOUT PC/HORIZONTAL – Células sem cortes ou margens ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
+        /* Defina as colunas e linhas em pixels ou porcentagens conforme sua necessidade */
         grid-template-columns: 50% 50%;
         grid-template-rows: 30% 70%;
         grid-template-areas:
@@ -179,13 +180,12 @@
           "flipbook globe";
         width: 100vw;
         height: 100vh;
-        gap: 0px;
-        padding: 0px;
+        gap: 0;
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
-        justify-content: center;
-        align-items: center;
       }
-      /* Título – célula "title" */
+      /* Área do Título */
       .top-section {
         grid-area: title;
         display: flex;
@@ -193,22 +193,27 @@
         align-items: center;
       }
       .top-section img {
-        /* Dimensões em pixels para o título */
-        width: 300px;
-        height: 200px;
+        width: 100%;
+        height: 100%;
+        /* Ajuste "object-fit" conforme necessário para evitar corte: use "contain" para que o conteúdo se ajuste dentro da célula */
         object-fit: contain;
       }
-      /* Flipbook – célula "flipbook" */
+      /* Área do Flipbook */
       #flipbook {
         grid-area: flipbook;
         display: flex;
         justify-content: center;
         align-items: center;
-        /* Dimensões em pixels para o flipbook (menor para evitar corte) */
-        pointer-events: auto;
-        cursor: grab;
+        /* Removemos dimensões fixas do flipbook aqui para que a célula possa usá-las 100% */
+        width: 100%;
+        height: 100%;
       }
-      /* Globo – célula "globe" (mantém a configuração original) */
+      /* Se precisar, defina o conteúdo interno do flipbook (por exemplo, as páginas) para ocupar 100% do espaço */
+      #flipbook .page {
+        width: 100%;
+        height: 100%;
+      }
+      /* Área do Globo */
       .globe-section {
         grid-area: globe;
         display: flex;
@@ -216,9 +221,8 @@
         align-items: center;
       }
       #globeCanvas {
-        /* Dimensões em pixels para o globo – você pode ajustar conforme necessário */
-        width: 800px;
-        height: 800px;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
       }
     }
@@ -231,7 +235,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
   
-  <!-- Conteúdo: Layout mobile inalterado; para PC, as áreas são definidas pela media query -->
+  <!-- Conteúdo: Layout mobile permanece inalterado; para PC, as áreas são definidas pelo grid -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -320,9 +324,9 @@
       
       function resizeFlipbook() {
         if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
-          // Para horizontal, usamos as dimensões fixas definidas na media query (20vw x 15vh convertidos)
-          let newWidth = window.innerWidth * 0.45;  // 20vw
-          let newHeight = window.innerHeight * 0.40;  // 15vh
+          // Para horizontal, definindo dimensões pelo JavaScript (mas agora, a célula do grid controla 100% do espaço)
+          let newWidth = window.innerWidth * 0.25;  // ajuste conforme necessário
+          let newHeight = window.innerHeight * 0.35;  // ajuste conforme necessário
           $("#flipbook").turn("size", newWidth, newHeight);
         } else {
           var newWidth = $(window).width() * 0.9;
