@@ -6,7 +6,7 @@
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Estilos globais */
+    /* Estilos globais para mobile (layout original) */
     html, body {
       margin: 0;
       padding: 0;
@@ -17,7 +17,7 @@
       color: #fff;
       font-family: sans-serif;
     }
-    /* Loading Screen com efeito de dobra espacial */
+    /* Loading Screen */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -45,7 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-    /* Layout padrão para mobile/vertical */
+    /* Layout mobile padrão */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -121,7 +121,7 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botão Veleywei */
+    /* Botões Veleywei */
     #veleyweiBtn,
     #veleyweiBtn2 {
       position: absolute;
@@ -165,7 +165,7 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Novo layout para telas horizontais/PC */
+    /* Layout específico para PC (min-width: 1024px e landscape) */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
@@ -316,17 +316,15 @@
     });
   </script>
   <script src="./globo.js"></script>
-  
   <script>
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
-
       let stars = [];
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
-
+      
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -345,7 +343,7 @@
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
-
+        
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
