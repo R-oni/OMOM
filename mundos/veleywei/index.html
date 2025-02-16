@@ -282,7 +282,7 @@
     function resizeFlipbook() {
       if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
         // Em modo horizontal, utiliza dimensões fixas (ajuste conforme necessário)
-        $("#flipbook").turn("size", 100, 80);
+        $("#flipbook").turn("size", 25vh, 20vh);
       } else {
         // Em dispositivos móveis, usa valores relativos
         var newWidth = $(window).width() * 0.9;
