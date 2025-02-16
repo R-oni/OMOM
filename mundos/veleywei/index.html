@@ -35,6 +35,7 @@
       position: absolute;
       top: 0;
       left: 0;
+      /* Para mobile, o canvas de loading ocupa 100% da tela */
       width: 100%;
       height: 100%;
     }
@@ -55,6 +56,7 @@
       height: 100%;
     }
     .top-section img {
+      /* Valores relativos para mobile */
       width: 15vmax;
       max-width: 80vw;
       height: auto;
@@ -64,6 +66,7 @@
       justify-content: center;
       align-items: center;
     }
+    /* Canvas do planeta com valores relativos para mobile */
     #globeCanvas {
       width: 40vmax;
       height: 40vmax;
@@ -78,16 +81,6 @@
       width: 100%;
       height: auto;
       display: block;
-    }
-    .sound-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 30px;
-      background: rgba(255, 255, 200, 0.2);
-      cursor: pointer;
     }
     /* Overlay */
     #overlayContainer {
@@ -165,16 +158,18 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout para telas horizontais/PC – Configuração manual */
+
+    /* Media query para telas horizontais/PC
+       Aqui os elementos terão resolução fixa em pixels */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
-        grid-template-columns: 1fr 1fr; /* Duas colunas */
+        grid-template-columns: 600px 600px; /* Colunas fixas em pixels */
         grid-template-rows: auto auto;
         grid-template-areas:
           "symbol planet"
           "book planet";
-        gap: 20px;
+        gap: 40px;
         width: 100vw;
         height: 100vh;
         padding: 20px;
@@ -185,11 +180,17 @@
         justify-content: center;
         align-items: center;
       }
+      .top-section img {
+        width: 300px;  /* Tamanho fixo para o símbolo */
+        height: auto;
+      }
       #flipbook {
         grid-area: book;
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 500px;  /* Tamanho fixo para o flipbook (livro) */
+        height: 400px;
       }
       .globe-section {
         grid-area: planet;
@@ -197,6 +198,21 @@
         justify-content: center;
         align-items: center;
       }
+      /* Canvas do planeta com resolução fixa em pixels para horizontal */
+      #globeCanvas {
+        width: 450px;
+        height: 450px;
+      }
+      /* Se desejar que o canvas de loading também tenha um tamanho fixo em horizontal, 
+         defina-o aqui (por exemplo, centralizado com resolução específica) */
+      /* 
+      #warpCanvas {
+        width: 1024px; 
+        height: 768px;
+        position: relative;
+        margin: auto;
+      }
+      */
     }
   </style>
 </head>
