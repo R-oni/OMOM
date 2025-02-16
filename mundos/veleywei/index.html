@@ -17,7 +17,7 @@
       color: #fff;
       font-family: sans-serif;
     }
-    /* Loading Screen */
+    /* Loading Screen com efeito de dobra espacial */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -79,8 +79,92 @@
       height: auto;
       display: block;
     }
-    /* (Outros estilos permanecem inalterados...) */
-
+    .sound-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 30px;
+      background: rgba(255, 255, 200, 0.2);
+      cursor: pointer;
+    }
+    /* Overlay */
+    #overlayContainer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+    }
+    #overlayImage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+    #btnSair {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #00EEF7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 32px;
+      cursor: pointer;
+      padding: 20px;
+      z-index: 10000;
+    }
+    /* Botão Veleywei */
+    #veleyweiBtn,
+    #veleyweiBtn2 {
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 2s infinite;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .btn-overlay {
+      position: absolute;
+      top: 100px;
+      right: 100px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .btn-overlay img {
+      width: 60px;
+      height: auto;
+      display: block;
+    }
+    #spiraqel {
+      position: absolute;
+      right: 70px;
+      top: 170px;
+      width: 55px;
+      cursor: pointer;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
     /* Novo layout para telas horizontais/PC */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -95,21 +179,18 @@
         gap: 20px;
         padding: 20px;
       }
-      /* O título ficará no canto superior esquerdo */
       .top-section {
         grid-area: title;
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
       }
-      /* O flipbook ficará abaixo do título, na mesma coluna */
       #flipbook {
         grid-area: flipbook;
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
       }
-      /* O globo ocupará a coluna da direita, em ambas as linhas */
       .globe-section {
         grid-area: globe;
         display: flex;
@@ -126,7 +207,6 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- Reorganizando os elementos para a versão horizontal -->
   <div class="page-container">
     <div class="top-section">
       <img src="tituloveleywei.webp" alt="Título Velei'wey">
@@ -136,7 +216,26 @@
       <div class="page hard"><img src="capa.png" alt="Capa"></div>
       <div class="page"><img src="capa2.png" alt="Página 1"></div>
       <div class="page"><img src="contracapa.webp" alt="Página 2"></div>
-      <!-- Outras páginas... -->
+      <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
+      <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
+      <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
+      <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
+      <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
+      <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
+      <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+      <div class="page">
+        <img src="imagens/cap1/pagina8.webp" alt="Página 10">
+        <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+      </div>
+      <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
+      <div class="page">
+        <img src="imagens/cap1/pagina11.webp" alt="Página 10">
+        <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+      </div>
+      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
       <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
     </div>
     <div class="globe-section">
@@ -144,13 +243,138 @@
     </div>
   </div>
 
-  <!-- Overlay e Scripts permanecem inalterados -->
+  <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
     <button id="btnSair">Sair</button>
   </div>
 
-  <!-- Scripts (jQuery, Three.js, etc.) -->
-  <!-- ... -->
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <script src="turn.min.js"></script>
+  <script>
+    let flipAudio;
+    const flipAudioStart = 1;
+    const flipAudioEnd = 1.4;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+      
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        });
+        document.removeEventListener('click', unlockAudio);
+      });
+    });
+    
+    $(document).ready(function(){
+      $("#flipbook").turn({
+        autoCenter: false,
+        display: 'double'
+      });
+      
+      function resizeFlipbook() {
+        var newWidth = $(window).width() * 0.9;
+        var newHeight = newWidth * (450/600);
+        $("#flipbook").turn("size", newWidth, newHeight);
+      }
+      resizeFlipbook();
+      $(window).resize(function(){
+        resizeFlipbook();
+      });
+      
+      $(document).on("click", "#veleyweiBtn, #veleyweiBtn2", function(){
+        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      $("#btnSair").on("click", function(){
+        $("#overlayContainer").fadeOut(500);
+      });
+      
+      var overlayScale = 1;
+      $("#overlayImage").on("wheel", function(e) {
+        e.preventDefault();
+        overlayScale += (e.originalEvent.deltaY < 0) ? 0.1 : -0.1;
+        overlayScale = Math.max(0.1, overlayScale);
+        $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
+      });
+        
+      $("#overlayContainer").on("click", function(e){
+        if(e.target.id === "overlayContainer"){
+          $(this).fadeOut(500);
+        }
+      });
+    });
+  </script>
+  <script src="./globo.js"></script>
+  
+  <script>
+    (function() {
+      const canvas = document.getElementById("warpCanvas");
+      const ctx = canvas.getContext("2d");
+
+      let stars = [];
+      const numStars = 300;
+      const speed = 2;
+      let animationFrameId;
+
+      function setupCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width - canvas.width / 2,
+            y: Math.random() * canvas.height - canvas.height / 2,
+            z: Math.random() * canvas.width
+          });
+        }
+      }
+      function updateStars() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+
+        stars.forEach(star => {
+          star.z -= speed;
+          if (star.z <= 0) {
+            star.x = Math.random() * canvas.width - canvas.width / 2;
+            star.y = Math.random() * canvas.height - canvas.height / 2;
+            star.z = canvas.width;
+          }
+          let perspective = 300 / star.z;
+          let sx = star.x * perspective + canvas.width / 2;
+          let sy = star.y * perspective + canvas.height / 2;
+          let size = Math.max(2 * perspective, 0.5);
+          ctx.beginPath();
+          ctx.arc(sx, sy, size, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+        animationFrameId = requestAnimationFrame(updateStars);
+      }
+      setupCanvas();
+      createStars();
+      updateStars();
+      window.addEventListener("resize", function() {
+        setupCanvas();
+        createStars();
+      });
+      window.addEventListener("load", function() {
+        document.getElementById("loading-screen").style.display = "none";
+        cancelAnimationFrame(animationFrameId);
+      });
+    })();
+  </script>
 </body>
 </html>
