@@ -170,33 +170,44 @@
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto 1fr;
-        grid-template-areas: 
-          "title globe"
-          "flipbook globe";
+        grid-template-columns: 600px 600px;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "symbol planet"
+          "book planet";
+        gap: 40px;
         width: 100vw;
         height: 100vh;
-        gap: 20px;
         padding: 20px;
       }
       .top-section {
-        grid-area: title;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
-      #flipbook {
-        grid-area: flipbook;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
-      .globe-section {
-        grid-area: globe;
+        grid-area: symbol;
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+      .top-section img {
+        width: 300px;
+        height: auto;
+      }
+      #flipbook {
+        grid-area: book;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Valores iniciais; serão sobrescritos pelo resizeFlipbook() */
+        width: 20vw;
+        height: 20vw;
+      }
+      .globe-section {
+        grid-area: planet;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #globeCanvas {
+        width: 450px;
+        height: 450px;
       }
     }
   </style>
