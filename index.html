@@ -93,6 +93,11 @@
     .symbol img:hover {
       transform: scale(1.1);
     }
+    
+    /* Efeito de locked para símbolos */
+    .symbol.locked img {
+      filter: brightness(50%);
+    }
   </style>
 </head>
 <body>
@@ -167,7 +172,7 @@
           <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
         </a>
       </div>
-      <div class="symbol" id="symbol12">
+      <div class="symbol locked" id="symbol12">
         <a href="mundos/ttok/index.html">
           <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
         </a>
