@@ -47,17 +47,19 @@
       color: white;
     }
     
+    /* Container mobile – mantém seu layout original */
+    .mobile-container {
+      display: block;
+    }
     .title-container {
       text-align: center;
       margin-top: 50px;
       position: relative;
       z-index: 2;
     }
-    
     .title-container img {
       max-width: 50%;
     }
-    
     .symbols-wrapper {
       position: absolute;
       top: 150px;
@@ -68,51 +70,37 @@
       padding: 20px;
       z-index: 2;
     }
-    
     .symbols-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
     }
-    
     .symbol {
       position: relative;
       transform-origin: center;
       transition: transform 0.1s linear;
     }
-    
     .symbol img {
       width: 25vw;
       transition: transform 0.3s;
     }
-    
     .symbol img:hover {
       transform: scale(1.1);
     }
-    
     .symbol.brither img {
       filter: brightness(180%);
     }
-    
     .symbol.locked img {
       filter: brightness(50%);
     }
     
-    /* ===== ESTILOS GLOBAIS PARA FUNDO E ÁUDIO – INALTERADOS ===== */
-    
-    /* ===== LAYOUT MOBILE: Usado quando a tela não for horizontal ===== */
-    .mobile-container {
-      display: block;
-    }
-    
-    /* ===== LAYOUT PC/HORIZONTAL – DISPOSIÇÃO LIVRE COM POSICIONAMENTO ABSOLUTO ===== */
+    /* ===== LAYOUT PC/HORIZONTAL – Disposição Livre com Posicionamento Absoluto ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
-      /* Esconde a versão mobile */
+      /* Oculta o container mobile e exibe o container exclusivo para PC */
       .mobile-container {
         display: none;
       }
-      /* Exibe o container exclusivo para PC */
       .pc-container {
         display: block;
         position: relative;
@@ -120,7 +108,7 @@
         height: 100vh;
         overflow: hidden;
       }
-      /* Título – posicionado na parte superior esquerda */
+      /* Título: posicionado na parte superior esquerda */
       .pc-title {
         position: absolute;
         top: 20px;       /* ajuste manual */
@@ -134,7 +122,7 @@
         height: 100%;
         object-fit: contain;
       }
-      /* Flipbook – posicionado na parte inferior esquerda */
+      /* Flipbook: posicionado na parte inferior esquerda */
       .pc-flipbook {
         position: absolute;
         bottom: 20px;    /* ajuste manual */
@@ -142,13 +130,13 @@
         width: 300px;    /* ajuste manual */
         height: 150px;   /* ajuste manual */
         z-index: 2;
-        background: #222;  /* apenas para visualização */
+        background: #222;  /* para visualização */
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: grab;
       }
-      /* Globo – posicionado à direita, centralizado verticalmente */
+      /* Globo: posicionado à direita, centralizado verticalmente */
       .pc-globe {
         position: absolute;
         top: 50%;
@@ -175,7 +163,7 @@
   <!-- Canvas de fundo -->
   <canvas id="automatonCanvas"></canvas>
   
-  <!-- Layout Mobile: Título e Símbolos (permanece inalterado) -->
+  <!-- Layout Mobile (Vertical) -->
   <div class="mobile-container">
     <div class="title-container">
       <a href="omom.html">
@@ -263,8 +251,8 @@
     </div>
   </div>
   
-  <!-- Layout PC: Exibe o container com posicionamento absoluto -->
-  <div class="pc-container" style="display:none;">
+  <!-- Layout PC (Horizontal) – Posicionamento Absoluto -->
+  <div class="pc-container">
     <div class="pc-title">
       <a href="omom.html">
         <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
@@ -287,13 +275,13 @@
   <!-- Scripts -->
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- jQuery UI e Touch Punch para permitir arrastar com o mouse -->
+  <!-- jQuery UI e Touch Punch -->
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-  <!-- Three.js e OrbitControls (mantidos do backup) -->
+  <!-- Three.js e OrbitControls -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-  <!-- turn.js (para flipbook, se necessário) -->
+  <!-- turn.js -->
   <script src="turn.min.js"></script>
   <script>
     // Configuração do áudio
@@ -317,20 +305,19 @@
     });
     
     $(document).ready(function(){
-      // Inicializa o flipbook se necessário
+      // Inicializa o flipbook (para mobile, se necessário)
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
       });
       
-      // Alteração do cursor para arrastar no flipbook
+      // Altera o cursor para "grabbing" durante o arrasto
       $("#flipbook").on("mousedown", function(){
-        $(this).css("cursor", "grabbing");
+          $(this).css("cursor", "grabbing");
       }).on("mouseup mouseleave", function(){
-        $(this).css("cursor", "grab");
+          $(this).css("cursor", "grab");
       });
       
-      // Redimensiona o flipbook para PC/horizontal via JavaScript
       function resizeFlipbook() {
         if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
           let newWidth = window.innerWidth * 0.25;
@@ -347,7 +334,6 @@
         resizeFlipbook();
       });
       
-      // Exibe o overlay quando clicado
       $(document).on("click", "#veleyweiBtn, #veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
