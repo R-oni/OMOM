@@ -323,8 +323,8 @@
       function resizeFlipbook() {
         if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
           // Para horizontal, usamos as dimensões fixas definidas na media query (20vw x 15vh convertidos)
-          let newWidth = window.innerWidth * 0.20;  // 20vw
-          let newHeight = window.innerHeight * 0.15;  // 15vh
+          let newWidth = window.innerWidth * 0.25;  // 20vw
+          let newHeight = window.innerHeight * 0.30;  // 15vh
           $("#flipbook").turn("size", newWidth, newHeight);
         } else {
           var newWidth = $(window).width() * 0.9;
