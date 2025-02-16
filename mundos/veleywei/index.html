@@ -170,49 +170,48 @@
     /* Layout PC/Horizontal – para telas horizontais */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 30% 70%;
-        grid-template-areas:
-          "title globe"
-          "flipbook globe";
+        position: relative;
         width: 100vw;
         height: 100vh;
-        gap: 0;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+        /* Grid removido – use posicionamento absoluto para os elementos */
       }
       .top-section {
-        grid-area: title;
+        position: absolute;
+        top: 20px; /* ajuste manual */
+        left: 20px; /* ajuste manual */
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* O título ficará na célula superior esquerda (30% da altura) */
       .top-section img {
-        width: 100%;
-        height: 100%;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
         object-fit: contain;
       }
       #flipbook {
-        grid-area: flipbook;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         display: flex;
         justify-content: center;
         align-items: center;
-        /* O flipbook será fixado em 20vw de largura e 15vh de altura */
         width: 10vw;
         height: 8vh;
         pointer-events: auto;
         cursor: grab;
       }
       .globe-section {
-        grid-area: globe;
+        position: absolute;
+        top: 50%;
+        right: 20px; /* ajuste manual */
+        transform: translateY(-50%);
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* Mantém a configuração original do globo */
       #globeCanvas {
         width: 40vmax;
         height: 40vmax;
@@ -229,7 +228,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- A ordem dos elementos no HTML não importa, pois as áreas são definidas via CSS Grid -->
+  <!-- A ordem dos elementos no HTML não importa, pois as áreas são definidas via CSS -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
