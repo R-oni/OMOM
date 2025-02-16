@@ -157,16 +157,16 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout PC/Horizontal – Grid com 2 colunas: esquerda subdividida e direita única */
+    /* Layout PC/Horizontal – Grid com 2 colunas: esquerda subdividida e direita única para o globo */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
         grid-template-columns: 50% 50%;
-        grid-template-rows: 50% 50%;
+        grid-template-rows: 30% 70%;
         /* Definindo as áreas:
-             - "symbol" (superior esquerda) para o título
-             - "book" (inferior esquerda) para o flipbook
-             - "planet" (coluna direita, abrangendo ambas as linhas) para o globo */
+           "symbol" para o título (superior esquerda),
+           "book" para o flipbook (inferior esquerda),
+           "planet" para o globo (coluna direita, abrangendo ambas as linhas) */
         grid-template-areas:
           "symbol planet"
           "book   planet";
@@ -185,29 +185,28 @@
         justify-content: center;
         align-items: center;
       }
-      /* Força o título a preencher sua célula */
       .top-section img {
-        width: 30%;
-        height: 30%;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
       }
       #flipbook {
         grid-area: book;
-        width:70%;
-        height: 70%;
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
       }
       .globe-section {
         grid-area: planet;
-        width: 50%;
-        height: 50%;
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
+        grid-row: 1 / span 2; /* Garante que o globo ocupe as duas linhas */
       }
-      /* O canvas do globo preenche sua célula */
       #globeCanvas {
         width: 100%;
         height: 100%;
@@ -222,14 +221,10 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- Para Mobile, a ordem permanece: título, globo e flipbook empilhados -->
-  <!-- Para PC, as grid-areas reposicionam os elementos conforme definido -->
+  <!-- Ordem no HTML: a posição no grid é definida via CSS (grid-areas) -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
-    </div>
-    <div class="globe-section">
-      <canvas id="globeCanvas"></canvas>
     </div>
     <div id="flipbook">
       <!-- Exemplo de páginas do flipbook -->
@@ -258,6 +253,9 @@
       <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
       <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
     </div>
+    <div class="globe-section">
+      <canvas id="globeCanvas"></canvas>
+    </div>
   </div>
 
   <!-- Overlay -->
@@ -276,12 +274,12 @@
     // Função para ajustar o tamanho do flipbook conforme a orientação
     function resizeFlipbook() {
       if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
-        // Em PC: a célula esquerda tem 50% da largura e 50% da altura
+        // Na célula "book" da esquerda (70% da altura), o flipbook preenche 100% dessa área
         var flipbookWidth = window.innerWidth * 0.5;
-        var flipbookHeight = window.innerHeight * 0.5;
+        var flipbookHeight = window.innerHeight * 0.70;
         $("#flipbook").turn("size", flipbookWidth, flipbookHeight);
       } else {
-        // Em mobile: tamanho relativo conforme o layout original
+        // Em mobile: usa tamanho relativo conforme o layout original
         var newWidth = $(window).width() * 0.9;
         var newHeight = newWidth * (450 / 600);
         $("#flipbook").turn("size", newWidth, newHeight);
