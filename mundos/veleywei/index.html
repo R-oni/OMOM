@@ -2,11 +2,12 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Exemplo Responsivo sem Rolagem</title>
-  <!-- Importando a fonte Press Start 2P -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outros Mundos Outras Mentes</title>
+  <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ===== ESTILOS GLOBAIS (Mobile/Vertical) – INALTERADOS ===== */
+    /* ===== ESTILOS GLOBAIS PARA MOBILE (Vertical) – INALTERADOS ===== */
     html, body {
       margin: 0;
       padding: 0;
@@ -168,13 +169,13 @@
       100% { transform: scale(1); }
     }
     
-    /* ===== LAYOUT PC/HORIZONTAL – Posicionamento Absoluto (Sem Grid) ===== */
+    /* ===== LAYOUT PC/HORIZONTAL – POSICIONAMENTO ABSOLUTO PARA AJUSTE MANUAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       /* Oculta o layout mobile */
       .page-container {
         display: none;
       }
-      /* Exibe o layout exclusivo para PC com posicionamento absoluto */
+      /* Exibe o layout exclusivo para PC */
       .pc-container {
         display: block;
         position: relative;
@@ -204,7 +205,7 @@
         width: 300px;    /* Ajuste manual */
         height: 150px;   /* Ajuste manual */
         z-index: 2;
-        background: #222;  /* Para visualização */
+        background: #222;  /* Apenas para visualização */
         display: flex;
         justify-content: center;
         align-items: center;
@@ -229,7 +230,7 @@
   </style>
 </head>
 <body>
-  <!-- Tela de Loading -->
+  <!-- Loading Screen -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
@@ -238,15 +239,15 @@
   <!-- Layout Mobile (Vertical) – Mantido inalterado -->
   <div class="page-container mobile-container">
     <div class="top-section">
-      <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+      <img src="tituloveleywei.png" alt="Título Velei'wey">
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
     <div id="flipbook">
-      <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-      <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-      <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
+      <div class="page hard"><img src="capa.webp" alt="Capa"></div>
+      <div class="page"><img src="capa2.webp" alt="Página 1"></div>
+      <div class="page"><img src="contracapa.webp" alt="Página 2"></div>
       <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
       <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
       <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
@@ -383,7 +384,6 @@
       }
     });
   </script>
-  <!-- Chamada do globo.js – mantendo o backup original -->
   <script src="./globo.js"></script>
   <script>
     (function() {
