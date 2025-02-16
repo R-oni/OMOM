@@ -123,11 +123,12 @@
       padding: 20px;
       z-index: 10000;
     }
+    /* Botão Veleywei */
     #veleyweiBtn,
     #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
-      width: 100%; 
+      width: 100%;
       height: 97%;
       z-index: 10;
       left: 0;
@@ -171,21 +172,20 @@
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
-        /* Defina os tamanhos das colunas e linhas em pixels: */
-        grid-template-columns: 1fr 1fr; /* 400px para a coluna esquerda, 500px para a direita */
-        grid-template-rows: 200px 300px;    /* 200px para o título (superior) e 300px para o flipbook (inferior) */
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30% 70%;
         grid-template-areas:
           "title globe"
           "flipbook globe";
         width: 100vw;
         height: 100vh;
-        gap: 5px;
-        padding: 5px;
+        gap: 10px;
+        padding: 10px;
         box-sizing: border-box;
         justify-content: center;
         align-items: center;
       }
-      /* Título (célula "title") */
+      /* Título – célula "title" */
       .top-section {
         grid-area: title;
         display: flex;
@@ -193,24 +193,24 @@
         align-items: center;
       }
       .top-section img {
-        /* Dimensões modificáveis em pixels para o título */
-        width: 100px;
-        height: auto;
+        /* Dimensões em pixels para o título */
+        width: 200px;
+        height: 100px;
         object-fit: contain;
       }
-      /* Flipbook (célula "flipbook") */
+      /* Flipbook – célula "flipbook" */
       #flipbook {
         grid-area: flipbook;
         display: flex;
         justify-content: center;
         align-items: center;
-        /* Dimensões do flipbook em pixels – modifique conforme necessário */
-        width: 100px;
-        height: 80px;
+        /* Dimensões em pixels para o flipbook (menor para evitar corte) */
+        width: 150px;
+        height: 100px;
         pointer-events: auto;
         cursor: grab;
       }
-      /* Globo (célula "globe") – mantemos a configuração original do globo */
+      /* Globo – célula "globe" (mantém a configuração original) */
       .globe-section {
         grid-area: globe;
         display: flex;
@@ -218,9 +218,9 @@
         align-items: center;
       }
       #globeCanvas {
-        /* Dimensões modificáveis em pixels para o globo */
-        width: 200px;
-        height: 200px;
+        /* Dimensões em pixels para o globo – você pode ajustar conforme necessário */
+        width: 300px;
+        height: 300px;
         object-fit: contain;
       }
     }
@@ -233,8 +233,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
   
-  <!-- Conteúdo: o layout mobile permanece conforme o backup; 
-       para PC, as áreas serão definidas pelo grid da media query -->
+  <!-- Conteúdo: Layout mobile inalterado; para PC, as áreas são definidas pela media query -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -322,9 +321,16 @@
       });
       
       function resizeFlipbook() {
-        var newWidth = $(window).width() * 0.9;
-        var newHeight = newWidth * (450/600);
-        $("#flipbook").turn("size", newWidth, newHeight);
+        if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
+          // Para horizontal, usamos as dimensões fixas definidas na media query (20vw x 15vh convertidos)
+          let newWidth = window.innerWidth * 0.20;  // 20vw
+          let newHeight = window.innerHeight * 0.15;  // 15vh
+          $("#flipbook").turn("size", newWidth, newHeight);
+        } else {
+          var newWidth = $(window).width() * 0.9;
+          var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
+        }
       }
       resizeFlipbook();
       $(window).resize(function(){
