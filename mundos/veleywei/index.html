@@ -170,54 +170,35 @@
     /* Layout PC/Horizontal – para telas horizontais */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        /* Grid removido – use posicionamento absoluto para os elementos */
-      }
-      .top-section {
-        position: absolute;
-        top: 20px; /* ajuste manual */
-        left: 20px; /* ajuste manual */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .top-section img {
-        width: auto;
-        height: auto;
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-      }
-      #flipbook {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 10vw;
-        height: 8vh;
-        pointer-events: auto;
-        cursor: grab;
-      }
-      .globe-section {
-        position: absolute;
-        top: 50%;
-        right: 20px; /* ajuste manual */
-        transform: translateY(-50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      #globeCanvas {
-        width: 40vmax;
-        height: 40vmax;
-        max-width: 80vw;
-        max-height: 50vh;
-      }
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Título (top-section) */
+.top-section {
+  position: absolute;
+  top: 20px;    /* Ajuste aqui pra ficar no topo da tela */
+  left: 20px;   /* Ajuste aqui pra ficar à esquerda */
+  /* Remova ou mude o "transform" se quiser */
+}
+
+/* Flipbook (#flipbook) */
+#flipbook {
+  position: absolute;
+  bottom: 20px; /* Ajuste aqui para ficar na parte inferior */
+  left: 20px;   /* Ajuste aqui para ficar à esquerda */
+  transform: none; /* Se quiser remover o centro, retire o translate */
+}
+
+/* Globo (.globe-section) */
+.globe-section {
+  position: absolute;
+  top: 50%;    /* Altera para 20px se quiser no topo, ou mantenha 50% pra central vertical */
+  right: 20px; /* Ajuste aqui pra ficar à direita */
+  transform: translateY(-50%); /* Ajuste ou remova se quiser outra posição vertical */
+}
+
     }
   </style>
 </head>
