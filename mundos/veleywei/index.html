@@ -167,8 +167,8 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout PC/Horizontal – divisão em 2 colunas: 
-       Coluna esquerda (50% da largura) subdividida em 2 linhas: 30% para título e 70% para flipbook; 
+    /* Layout PC/Horizontal – divisão em 2 colunas:
+       Coluna esquerda (50% da largura) subdividida em 2 linhas: 30% para título e 70% para flipbook;
        Coluna direita (50% da largura) para o globo */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -191,10 +191,10 @@
         justify-content: center;
         align-items: center;
       }
-      /* O título preencherá sua célula */
+      /* O título ocupará 50% do espaço interno da célula */
       .top-section img {
-        width: 100%;
-        height: 100%;
+        width: 50%;
+        height: 50%;
         object-fit: contain;
       }
       #flipbook {
@@ -204,18 +204,22 @@
         align-items: center;
         pointer-events: auto;
       }
+      /* O flipbook ocupará 40% do espaço interno da célula */
+      #flipbook {
+        width: 40%;
+        height: 40%;
+      }
       .globe-section {
         grid-area: planet;
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* Não alteramos o globo – ele usa a configuração original */
+      /* O globo (canvas) ocupará 50% do espaço interno da célula */
       #globeCanvas {
-        width: 40vmax;
-        height: 40vmax;
-        max-width: 80vw;
-        max-height: 50vh;
+        width: 50%;
+        height: 50%;
+        object-fit: contain;
       }
     }
   </style>
