@@ -325,8 +325,8 @@
       function resizeFlipbook() {
         if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
           // Para horizontal, definindo dimensões pelo JavaScript (mas agora, a célula do grid controla 100% do espaço)
-          let newWidth = window.innerWidth * 0.55;  // ajuste conforme necessário
-          let newHeight = window.innerHeight * 0.45;  // ajuste conforme necessário
+          let newWidth = window.innerWidth * 0.50;  // ajuste conforme necessário
+          let newHeight = window.innerHeight * 0.40;  // ajuste conforme necessário
           $("#flipbook").turn("size", newWidth, newHeight);
         } else {
           var newWidth = $(window).width() * 0.9;
