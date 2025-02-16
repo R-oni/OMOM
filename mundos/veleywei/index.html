@@ -274,6 +274,19 @@
         document.removeEventListener('click', unlockAudio);
       });
     });
+
+    // Função para ajustar o tamanho do flipbook
+    function resizeFlipbook() {
+      if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
+        // Em modo horizontal, utiliza dimensões fixas (ajuste conforme necessário)
+        $("#flipbook").turn("size", 100, 80);
+      } else {
+        // Em dispositivos móveis, usa valores relativos
+        var newWidth = $(window).width() * 0.9;
+        var newHeight = newWidth * (450/600);
+        $("#flipbook").turn("size", newWidth, newHeight);
+      }
+    }
     
     $(document).ready(function(){
       $("#flipbook").turn({
