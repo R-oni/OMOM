@@ -170,35 +170,60 @@
     /* Layout PC/Horizontal – para telas horizontais */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-}
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+      }
 
-/* Título (top-section) */
-.top-section {
-  position: absolute;
-  top: 20px;    /* Ajuste aqui pra ficar no topo da tela */
-  left: 20px;   /* Ajuste aqui pra ficar à esquerda */
-  /* Remova ou mude o "transform" se quiser */
-}
+      /* Título na esquerda superior */
+      .top-section {
+        position: absolute;
+        top: 20px;   /* Ajuste manual de posição (vertical) */
+        left: 20px;  /* Ajuste manual de posição (horizontal) */
+        width: 300px;  /* Ajuste manual de tamanho do container do título */
+        height: auto;  /* Ajuste manual */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* Deixe a imagem do título responsiva dentro do container */
+      .top-section img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
 
-/* Flipbook (#flipbook) */
-#flipbook {
-  position: absolute;
-  bottom: 20px; /* Ajuste aqui para ficar na parte inferior */
-  left: 20px;   /* Ajuste aqui para ficar à esquerda */
-  transform: none; /* Se quiser remover o centro, retire o translate */
-}
+      /* Flipbook na esquerda (abaixo, parte inferior) */
+      #flipbook {
+        position: absolute;
+        bottom: 20px;  /* Ajuste manual de posição (vertical) */
+        left: 20px;    /* Ajuste manual de posição (horizontal) */
+        width: 600px;  /* Ajuste manual de tamanho do flipbook */
+        height: 400px; /* Ajuste manual de tamanho do flipbook */
+        cursor: grab;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-/* Globo (.globe-section) */
-.globe-section {
-  position: absolute;
-  top: 50%;    /* Altera para 20px se quiser no topo, ou mantenha 50% pra central vertical */
-  right: 20px; /* Ajuste aqui pra ficar à direita */
-  transform: translateY(-50%); /* Ajuste ou remova se quiser outra posição vertical */
-}
-
+      /* Globo na direita */
+      .globe-section {
+        position: absolute;
+        top: 50%;      /* Ajuste manual de posição (vertical). Use 20px se quiser no topo, etc. */
+        right: 20px;   /* Ajuste manual de posição (horizontal) */
+        transform: translateY(-50%); /* Se quiser centralizar verticalmente o globo */
+        width: 400px;  /* Ajuste manual de tamanho do container do globo */
+        height: 400px; /* Ajuste manual de tamanho do container do globo */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #globeCanvas {
+        width: 100%; /* O canvas ocupará o container da .globe-section */
+        height: 100%;
+        max-width: none;  /* Remove limites de tamanho */
+        max-height: none; /* Remove limites de tamanho */
+      }
     }
   </style>
 </head>
@@ -296,6 +321,8 @@
           $(this).css("cursor", "grab");
       });
       
+      // Ajuste de tamanho do flipbook (para mobile).
+      // Em telas grandes (landscape), você pode desativar ou ajustar.
       function resizeFlipbook() {
         var newWidth = $(window).width() * 0.9;
         var newHeight = newWidth * (450/600);
@@ -306,6 +333,7 @@
         resizeFlipbook();
       });
       
+      // Clique no botão Veleywei
       $(document).on("click", "#veleyweiBtn, #veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
