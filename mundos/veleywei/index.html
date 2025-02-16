@@ -6,7 +6,7 @@
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ===== ESTILOS GLOBAIS (para mobile/vertical) ===== */
+    /* ===== ESTILOS GLOBAIS (Mobile/Vertical) ===== */
     html, body {
       margin: 0;
       padding: 0;
@@ -91,6 +91,7 @@
       background: rgba(255, 255, 200, 0.2);
       cursor: pointer;
     }
+    /* Overlay */
     #overlayContainer {
       display: none;
       position: fixed;
@@ -98,7 +99,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
       z-index: 9999;
     }
     #overlayImage {
@@ -126,7 +127,7 @@
     #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
-      width: 100%;
+      width: 100%; 
       height: 97%;
       z-index: 10;
       left: 0;
@@ -166,22 +167,25 @@
       100% { transform: scale(1); }
     }
     
-    /* ===== LAYOUT PC/HORIZONTAL (novo) ===== */
+    /* ===== LAYOUT PC/HORIZONTAL – Modificável em pixels ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 30% 70%;
+        /* Defina os tamanhos das colunas e linhas em pixels: */
+        grid-template-columns: 1fr 1fr; /* 400px para a coluna esquerda, 500px para a direita */
+        grid-template-rows: 200px 300px;    /* 200px para o título (superior) e 300px para o flipbook (inferior) */
         grid-template-areas:
           "title globe"
           "flipbook globe";
         width: 100vw;
         height: 100vh;
-        gap: 0;
-        padding: 0;
+        gap: 5px;
+        padding: 5px;
         box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
       }
-      /* Área do título – célula superior esquerda (30% da altura) */
+      /* Título (célula "title") */
       .top-section {
         grid-area: title;
         display: flex;
@@ -189,36 +193,35 @@
         align-items: center;
       }
       .top-section img {
-        /* A imagem do título ocupará 50% da largura e altura da célula */
-        width: 50%;
-        height: 50%;
+        /* Dimensões modificáveis em pixels para o título */
+        width: 100px;
+        height: auto;
         object-fit: contain;
       }
-      /* Área do flipbook – célula inferior esquerda (70% da altura) */
+      /* Flipbook (célula "flipbook") */
       #flipbook {
         grid-area: flipbook;
         display: flex;
         justify-content: center;
         align-items: center;
-        /* Fixamos as dimensões do flipbook conforme solicitado */
-        width: 20vw;
-        height: 15vh;
+        /* Dimensões do flipbook em pixels – modifique conforme necessário */
+        width: 100px;
+        height: 80px;
         pointer-events: auto;
         cursor: grab;
       }
-      /* Área do globo – coluna direita (50% da largura) */
+      /* Globo (célula "globe") – mantemos a configuração original do globo */
       .globe-section {
         grid-area: globe;
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* O canvas do globo permanece com sua configuração original */
       #globeCanvas {
-        width: 40vmax;
-        height: 40vmax;
-        max-width: 80vw;
-        max-height: 50vh;
+        /* Dimensões modificáveis em pixels para o globo */
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
       }
     }
   </style>
@@ -229,8 +232,9 @@
     <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
-
-  <!-- Conteúdo (ordem para mobile, mas o grid de PC define as áreas) -->
+  
+  <!-- Conteúdo: o layout mobile permanece conforme o backup; 
+       para PC, as áreas serão definidas pelo grid da media query -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -266,13 +270,13 @@
       <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
     </div>
   </div>
-
+  
   <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
     <button id="btnSair">Sair</button>
   </div>
-
+  
   <!-- Scripts -->
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -310,7 +314,7 @@
         display: 'double'
       });
       
-      // Alteração de cursor para arrasto com mouse
+      // Altera o cursor para "grabbing" durante o arrasto
       $("#flipbook").on("mousedown", function(){
           $(this).css("cursor", "grabbing");
       }).on("mouseup mouseleave", function(){
@@ -318,7 +322,6 @@
       });
       
       function resizeFlipbook() {
-        // Para mobile, usa o cálculo antigo
         var newWidth = $(window).width() * 0.9;
         var newHeight = newWidth * (450/600);
         $("#flipbook").turn("size", newWidth, newHeight);
@@ -353,7 +356,7 @@
       });
     });
   </script>
-  <!-- Mantém a chamada do globo.js conforme o backup -->
+  <!-- Chamada do globo.js – mantendo o backup original -->
   <script src="./globo.js"></script>
   <script>
     (function() {
