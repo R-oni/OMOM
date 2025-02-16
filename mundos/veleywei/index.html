@@ -6,7 +6,7 @@
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Estilos globais */
+    /* ===== ESTILOS GLOBAIS (para mobile/vertical) ===== */
     html, body {
       margin: 0;
       padding: 0;
@@ -45,7 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-    /* Layout padrão para mobile/vertical */
+    /* Layout Mobile – permanece inalterado */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -91,7 +91,6 @@
       background: rgba(255, 255, 200, 0.2);
       cursor: pointer;
     }
-    /* Overlay */
     #overlayContainer {
       display: none;
       position: fixed;
@@ -99,7 +98,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.8);
       z-index: 9999;
     }
     #overlayImage {
@@ -123,12 +122,11 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botão Veleywei */
     #veleyweiBtn,
     #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
-      width: 100%; 
+      width: 100%;
       height: 97%;
       z-index: 10;
       left: 0;
@@ -167,7 +165,8 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout PC/Horizontal – para telas horizontais */
+    
+    /* ===== LAYOUT PC/HORIZONTAL (novo) ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
@@ -179,40 +178,42 @@
         width: 100vw;
         height: 100vh;
         gap: 0;
-        margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
+      /* Área do título – célula superior esquerda (30% da altura) */
       .top-section {
         grid-area: title;
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* O título ficará na célula superior esquerda (30% da altura) */
       .top-section img {
-        width: 100%;
-        height: 100%;
+        /* A imagem do título ocupará 50% da largura e altura da célula */
+        width: 50%;
+        height: 50%;
         object-fit: contain;
       }
+      /* Área do flipbook – célula inferior esquerda (70% da altura) */
       #flipbook {
         grid-area: flipbook;
         display: flex;
         justify-content: center;
         align-items: center;
-        /* O flipbook será fixado em 20vw de largura e 15vh de altura */
-        width: 10vw;
-        height: 8vh;
+        /* Fixamos as dimensões do flipbook conforme solicitado */
+        width: 20vw;
+        height: 15vh;
         pointer-events: auto;
         cursor: grab;
       }
+      /* Área do globo – coluna direita (50% da largura) */
       .globe-section {
         grid-area: globe;
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* Mantém a configuração original do globo */
+      /* O canvas do globo permanece com sua configuração original */
       #globeCanvas {
         width: 40vmax;
         height: 40vmax;
@@ -229,7 +230,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- A ordem dos elementos no HTML não importa, pois as áreas são definidas via CSS Grid -->
+  <!-- Conteúdo (ordem para mobile, mas o grid de PC define as áreas) -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -254,15 +255,15 @@
         <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
       </div>
       <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 12"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina11.webp" alt="Página 10">
+        <img src="imagens/cap1/pagina11.webp" alt="Página 13">
         <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
+      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
+      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
+      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
     </div>
   </div>
 
@@ -278,7 +279,7 @@
   <!-- jQuery UI e Touch Punch para permitir arrastar com o mouse -->
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-  <!-- Three.js e OrbitControls (mantidos do backup) -->
+  <!-- Three.js e OrbitControls (backup) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <!-- turn.js -->
@@ -309,7 +310,7 @@
         display: 'double'
       });
       
-      // Ativa o arrasto com mouse (cursor muda de grab para grabbing)
+      // Alteração de cursor para arrasto com mouse
       $("#flipbook").on("mousedown", function(){
           $(this).css("cursor", "grabbing");
       }).on("mouseup mouseleave", function(){
@@ -317,6 +318,7 @@
       });
       
       function resizeFlipbook() {
+        // Para mobile, usa o cálculo antigo
         var newWidth = $(window).width() * 0.9;
         var newHeight = newWidth * (450/600);
         $("#flipbook").turn("size", newWidth, newHeight);
@@ -343,7 +345,7 @@
         overlayScale = Math.max(0.1, overlayScale);
         $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
       });
-        
+      
       $("#overlayContainer").on("click", function(e){
         if(e.target.id === "overlayContainer"){
           $(this).fadeOut(500);
@@ -357,12 +359,11 @@
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
-
       let stars = [];
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
-
+      
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -381,7 +382,6 @@
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
-
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
