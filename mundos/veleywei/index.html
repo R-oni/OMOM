@@ -17,7 +17,7 @@
       color: #fff;
       font-family: sans-serif;
     }
-    /* Loading Screen com efeito de dobra espacial */
+    /* Loading Screen */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -64,6 +64,7 @@
       justify-content: center;
       align-items: center;
     }
+    /* Configuração original do globo */
     #globeCanvas {
       width: 40vmax;
       height: 40vmax;
@@ -73,6 +74,7 @@
     #flipbook {
       position: relative;
       margin: auto;
+      cursor: grab;
     }
     .page img {
       width: 100%;
@@ -165,38 +167,57 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-
-    /* Novo layout para telas horizontais/PC */
+    /* Layout PC/Horizontal – para telas horizontais */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto 1fr;
-        grid-template-areas: 
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30% 70%;
+        grid-template-areas:
           "title globe"
           "flipbook globe";
         width: 100vw;
         height: 100vh;
-        gap: 20px;
-        padding: 20px;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
       .top-section {
         grid-area: title;
         display: flex;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
+      }
+      /* O título ficará na célula superior esquerda (30% da altura) */
+      .top-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
       #flipbook {
         grid-area: flipbook;
         display: flex;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
+        /* O flipbook será fixado em 20vw de largura e 15vh de altura */
+        width: 20vw;
+        height: 15vh;
+        pointer-events: auto;
+        cursor: grab;
       }
       .globe-section {
         grid-area: globe;
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+      /* Mantém a configuração original do globo */
+      #globeCanvas {
+        width: 40vmax;
+        height: 40vmax;
+        max-width: 80vw;
+        max-height: 50vh;
       }
     }
   </style>
@@ -208,6 +229,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
+  <!-- A ordem dos elementos no HTML não importa, pois as áreas são definidas via CSS Grid -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -251,9 +273,15 @@
   </div>
 
   <!-- Scripts -->
+  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery UI e Touch Punch para permitir arrastar com o mouse -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <!-- Three.js e OrbitControls (mantidos do backup) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <!-- turn.js -->
   <script src="turn.min.js"></script>
   <script>
     let flipAudio;
@@ -279,6 +307,13 @@
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
+      });
+      
+      // Ativa o arrasto com mouse (cursor muda de grab para grabbing)
+      $("#flipbook").on("mousedown", function(){
+          $(this).css("cursor", "grabbing");
+      }).on("mouseup mouseleave", function(){
+          $(this).css("cursor", "grab");
       });
       
       function resizeFlipbook() {
@@ -316,8 +351,8 @@
       });
     });
   </script>
+  <!-- Mantém a chamada do globo.js conforme o backup -->
   <script src="./globo.js"></script>
-  
   <script>
     (function() {
       const canvas = document.getElementById("warpCanvas");
