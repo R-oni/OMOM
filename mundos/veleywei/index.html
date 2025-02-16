@@ -66,6 +66,7 @@
       justify-content: center;
       align-items: center;
     }
+    /* Configuração original do globo */
     #globeCanvas {
       width: 40vmax;
       height: 40vmax;
@@ -75,6 +76,7 @@
     #flipbook {
       position: relative;
       margin: auto;
+      cursor: grab;
     }
     .page img {
       width: 100%;
@@ -157,16 +159,14 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout PC/Horizontal – Grid com 2 colunas: esquerda subdividida e direita única para o globo */
+    /* Layout PC/Horizontal – Grid com 2 colunas: 
+       Esquerda dividida em 2 linhas (30% para título e 70% para flipbook) 
+       e direita (única área para o globo) */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
         grid-template-columns: 50% 50%;
         grid-template-rows: 30% 70%;
-        /* Definindo as áreas:
-           "symbol" para o título (superior esquerda),
-           "book" para o flipbook (inferior esquerda),
-           "planet" para o globo (coluna direita, abrange ambas as linhas) */
         grid-template-areas:
           "symbol planet"
           "book   planet";
@@ -206,12 +206,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        /* Garante que a área do globo ocupe ambas as linhas */
       }
+      /* Para o globo, mantemos a configuração original do canvas */
       #globeCanvas {
-        width: 100%;
-        height: 100%;
-        background-color: #444; /* Background temporário para visualização */
+        width: 40vmax;
+        height: 40vmax;
+        max-width: 80vw;
+        max-height: 50vh;
       }
     }
   </style>
@@ -223,7 +224,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- A ordem no HTML não importa no grid; as áreas são definidas via CSS -->
+  <!-- A ordem no HTML não importa para o grid (as áreas são definidas via CSS) -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -276,7 +277,7 @@
     // Função para ajustar o tamanho do flipbook conforme a orientação
     function resizeFlipbook() {
       if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
-        // Na célula "book" da esquerda (70% da altura), o flipbook preenche 100% dessa área:
+        // Na célula "book" da esquerda (70% da altura)
         var flipbookWidth = window.innerWidth * 0.5;
         var flipbookHeight = window.innerHeight * 0.70;
         $("#flipbook").turn("size", flipbookWidth, flipbookHeight);
@@ -292,11 +293,19 @@
       $("#flipbook").turn({
         autoCenter: true,
         display: 'double',
+        acceleration: true,
         when: {
           turning: function(e, page, view) {
             console.log("Turning to page " + page);
           }
         }
+      });
+      
+      // Permite o arrasto com mouse: altera o cursor para "grabbing" durante o mouse down
+      $("#flipbook").on("mousedown", function(){
+          $(this).css("cursor", "grabbing");
+      }).on("mouseup mouseleave", function(){
+          $(this).css("cursor", "grab");
       });
       
       resizeFlipbook();
@@ -329,7 +338,7 @@
       });
     });
   </script>
-  <!-- Certifique-se de que o arquivo globo.js esteja corretamente configurado -->
+  <!-- Mantenho a chamada do globo.js com a configuração original -->
   <script src="./globo.js"></script>
   <script>
     (function() {
