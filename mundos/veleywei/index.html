@@ -171,6 +171,7 @@
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         position: relative;
+        display: block; /* Remove o comportamento flex que centraliza os filhos */
         width: 100vw;
         height: 100vh;
       }
@@ -193,15 +194,15 @@
       /* Flipbook na esquerda inferior */
       #flipbook {
         position: absolute;
-        bottom: 20px;     /* Ajuste manual de posição vertical */
-        left: 10px;       /* Ajuste manual de posição horizontal */
-        width: 30vw;     /* Tamanho definido para o flipbook */
-        height: 20vh;    /* Tamanho definido para o flipbook */
+        bottom: 20px;     /* Posiciona na parte inferior */
+        left: 20px;       /* Posiciona à esquerda */
+        width: 300px;     /* Tamanho fixo do flipbook */
+        height: 200px;    /* Tamanho fixo do flipbook */
         cursor: grab;
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden; /* Garante que não apareçam partes indesejadas */
+        overflow: hidden;
       }
       /* Globo na direita */
       .globe-section {
@@ -209,8 +210,8 @@
         top: 50%;         /* Ajuste manual de posição vertical */
         right: 20px;      /* Ajuste manual de posição horizontal */
         transform: translateY(-50%);
-        width: 600px;     /* Tamanho do container do globo */
-        height: 600px;
+        width: 400px;     /* Tamanho do container do globo */
+        height: 400px;
         display: flex;
         justify-content: center;
         align-items: center;
