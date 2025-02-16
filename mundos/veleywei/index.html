@@ -162,7 +162,7 @@
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
-        grid-template-columns: 600px 600px;
+        grid-template-columns: 1fr 1fr;
         grid-template-rows: auto auto;
         grid-template-areas:
           "symbol planet"
@@ -179,7 +179,7 @@
         align-items: center;
       }
       .top-section img {
-        width: 300px;
+        width: 20vw;
         height: auto;
       }
       #flipbook {
@@ -188,8 +188,8 @@
         justify-content: center;
         align-items: center;
         /* Valores iniciais; serão sobrescritos pelo resizeFlipbook() */
-        width: 100px;
-        height: 80px;
+        width: 20vw;
+        height: 80vh;
       }
       .globe-section {
         grid-area: planet;
@@ -198,8 +198,8 @@
         align-items: center;
       }
       #globeCanvas {
-        width: 450px;
-        height: 450px;
+        width: 25vw;
+        height: 25vh;
       }
     }
   </style>
