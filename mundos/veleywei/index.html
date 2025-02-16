@@ -174,55 +174,52 @@
         width: 100vw;
         height: 100vh;
       }
-
       /* Título na esquerda superior */
       .top-section {
         position: absolute;
-        top: 20px;   /* Ajuste manual de posição (vertical) */
-        left: 20px;  /* Ajuste manual de posição (horizontal) */
-        width: 300px;  /* Ajuste manual de tamanho do container do título */
-        height: auto;  /* Ajuste manual */
+        top: 20px;        /* Ajuste manual de posição vertical */
+        left: 20px;       /* Ajuste manual de posição horizontal */
+        width: 300px;     /* Tamanho do título */
+        height: auto;
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* Deixe a imagem do título responsiva dentro do container */
       .top-section img {
         width: 100%;
         height: auto;
         object-fit: contain;
       }
-
-      /* Flipbook na esquerda (abaixo, parte inferior) */
+      /* Flipbook na esquerda inferior */
       #flipbook {
         position: absolute;
-        bottom: 20px;  /* Ajuste manual de posição (vertical) */
-        left: 20px;    /* Ajuste manual de posição (horizontal) */
-        width: 300vw;  /* Ajuste manual de tamanho do flipbook */
-        height: 20vh; /* Ajuste manual de tamanho do flipbook */
+        bottom: 20px;     /* Ajuste manual de posição vertical */
+        left: 20px;       /* Ajuste manual de posição horizontal */
+        width: 30vw;     /* Tamanho definido para o flipbook */
+        height: 20vh;    /* Tamanho definido para o flipbook */
         cursor: grab;
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow: hidden; /* Garante que não apareçam partes indesejadas */
       }
-
       /* Globo na direita */
       .globe-section {
         position: absolute;
-        top: 50%;      /* Ajuste manual de posição (vertical). Use 20px se quiser no topo, etc. */
-        right: 20px;   /* Ajuste manual de posição (horizontal) */
-        transform: translateY(-50%); /* Se quiser centralizar verticalmente o globo */
-        width: 400px;  /* Ajuste manual de tamanho do container do globo */
-        height: 400px; /* Ajuste manual de tamanho do container do globo */
+        top: 50%;         /* Ajuste manual de posição vertical */
+        right: 20px;      /* Ajuste manual de posição horizontal */
+        transform: translateY(-50%);
+        width: 400px;     /* Tamanho do container do globo */
+        height: 400px;
         display: flex;
         justify-content: center;
         align-items: center;
       }
       #globeCanvas {
-        width: 100%; /* O canvas ocupará o container da .globe-section */
+        width: 100%;
         height: 100%;
-        max-width: none;  /* Remove limites de tamanho */
-        max-height: none; /* Remove limites de tamanho */
+        max-width: none;
+        max-height: none;
       }
     }
   </style>
@@ -234,7 +231,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- A ordem dos elementos no HTML não importa, pois as áreas são definidas via CSS -->
+  <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -278,15 +275,11 @@
   </div>
 
   <!-- Scripts -->
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- jQuery UI e Touch Punch para permitir arrastar com o mouse -->
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-  <!-- Three.js e OrbitControls (mantidos do backup) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-  <!-- turn.js -->
   <script src="turn.min.js"></script>
   <script>
     let flipAudio;
@@ -314,26 +307,19 @@
         display: 'double'
       });
       
-      // Ativa o arrasto com mouse (cursor muda de grab para grabbing)
-      $("#flipbook").on("mousedown", function(){
-          $(this).css("cursor", "grabbing");
-      }).on("mouseup mouseleave", function(){
-          $(this).css("cursor", "grab");
-      });
-      
-      // Ajuste de tamanho do flipbook (para mobile).
-      // Em telas grandes (landscape), você pode desativar ou ajustar.
+      // Redimensionamento automático apenas para telas pequenas (mobile)
       function resizeFlipbook() {
-        var newWidth = $(window).width() * 0.9;
-        var newHeight = newWidth * (450/600);
-        $("#flipbook").turn("size", newWidth, newHeight);
+        if ($(window).width() < 1024) {
+          var newWidth = $(window).width() * 0.9;
+          var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
+        }
       }
       resizeFlipbook();
       $(window).resize(function(){
         resizeFlipbook();
       });
       
-      // Clique no botão Veleywei
       $(document).on("click", "#veleyweiBtn, #veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
@@ -359,7 +345,6 @@
       });
     });
   </script>
-  <!-- Mantém a chamada do globo.js conforme o backup -->
   <script src="./globo.js"></script>
   <script>
     (function() {
