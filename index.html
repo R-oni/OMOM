@@ -2,12 +2,22 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outros Mundos Outras Mentes</title>
-  <!-- Link para a fonte "Press Start 2P" -->
+  <title>Exemplo Responsivo sem Rolagem</title>
+  <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Estilos da tela de loading */
+    /* ===== ESTILOS GLOBAIS (Mobile/Vertical) ===== */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    /* Loading Screen */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -15,331 +25,406 @@
       width: 100vw;
       height: 100vh;
       background-color: black;
+      z-index: 10000;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      z-index: 9999;
+      align-items: center;
     }
-    
+    #warpCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
     #loading-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
       font-size: 20px;
-      text-align: center;
+      z-index: 10001;
     }
-
-    /* Canvas permanece fixo e cobre toda a tela */
-    #automatonCanvas {
+    /* Layout Mobile – permanece inalterado */
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .top-section img {
+      width: 15vmax;
+      max-width: 80vw;
+      height: auto;
+    }
+    .globe-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    /* Configuração original do globo */
+    #globeCanvas {
+      width: 40vmax;
+      height: 40vmax;
+      max-width: 80vw;
+      max-height: 50vh;
+    }
+    #flipbook {
+      position: relative;
+      margin: auto;
+      cursor: grab;
+    }
+    .page img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .sound-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 30px;
+      background: rgba(255, 255, 200, 0.2);
+      cursor: pointer;
+    }
+    /* Overlay */
+    #overlayContainer {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: -1;
-      image-rendering: pixelated;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
     }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: black;
-      overflow: hidden; /* Impede a rolagem do body */
-      color: white;
-    }
-
-    .title-container {
-      text-align: center;
-      margin-top: 50px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .title-container img {
-      max-width: 50%;
-    }
-
-    /* Contêiner que isola os símbolos com rolagem interna */
-    .symbols-wrapper {
+    #overlayImage {
       position: absolute;
-      top: 150px;  /* Define o ponto de início (ajuste se necessário) */
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-y: auto; /* Ativa a rolagem vertical somente para os símbolos */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+    #btnSair {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #00EEF7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 32px;
+      cursor: pointer;
       padding: 20px;
-      z-index: 2;
+      z-index: 10000;
+    }
+    /* Botão Veleywei */
+    #veleyweiBtn,
+    #veleyweiBtn2 {
+      position: absolute;
+      cursor: pointer;
+      width: 100%;
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 2s infinite;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .btn-overlay {
+      position: absolute;
+      top: 100px;
+      right: 100px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .btn-overlay img {
+      width: 60px;
+      height: auto;
+      display: block;
+    }
+    #spiraqel {
+      position: absolute;
+      right: 70px;
+      top: 170px;
+      width: 55px;
+      cursor: pointer;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
 
-    .symbols-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      /* Removemos o margin-top para evitar deslocamento extra */
-    }
-
-    .symbol {
-      position: relative;
-      transform-origin: center;
-      transition: transform 0.1s linear;
-    }
-
-    .symbol img {
-      width: 25vw;
-      transition: transform 0.3s;
-    }
-
-    .symbol img:hover {
-      transform: scale(1.1);
-    }
-
-    .symbol.brither img {
-      filter: brightness(180%);
-    }
-    /* Efeito de locked para símbolos */
-    .symbol.locked img {
-      filter: brightness(50%);
+    /* ===== LAYOUT PC/HORIZONTAL – Ajustes Personalizados =====
+       Esta seção é exclusiva para telas horizontais (PC).
+       Aqui você pode ajustar, manualmente, margens, gaps, e dimensões dos itens (título, flipbook e globo)
+       para um controle total do layout.
+    ============================================================ */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      .page-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30% 70%;
+        grid-template-areas:
+          "title globe"
+          "flipbook globe";
+        width: 100vw;
+        height: 100vh;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      /* Área do Título (célula "title") */
+      .top-section {
+        grid-area: title;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: visible;
+      }
+      .top-section img {
+        /* Ajuste aqui a largura, altura e margens do título */
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      /* Área do Flipbook (célula "flipbook") */
+      #flipbook {
+        grid-area: flipbook;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: visible;
+        pointer-events: auto;
+        cursor: grab;
+      }
+      #flipbook .page {
+        width: 100%;
+        height: 100%;
+      }
+      /* Área do Globo (célula "globe") */
+      .globe-section {
+        grid-area: globe;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: visible;
+      }
+      #globeCanvas {
+        /* Ajuste aqui as dimensões do globo, sem cortes */
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Tela de Loading -->
+  <!-- Loading Screen -->
   <div id="loading-screen">
+    <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
-
-  <canvas id="automatonCanvas"></canvas>
-
-  <div class="title-container">
-    <a href="omom.html">
-      <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
-    </a>
-  </div>
-
-  <!-- Contêiner exclusivo para os símbolos -->
-  <div class="symbols-wrapper">
-    <div class="symbols-container">
-      <div class="symbol brither" id="symbol1">
-        <a href="mundos/veleywei/index.html">
-          <img src="assets/veleyweimenu.png" alt="Velei'wey">
-        </a>
+  
+  <!-- Conteúdo: o layout mobile permanece inalterado; para PC, a media query acima define os ajustes personalizados -->
+  <div class="page-container">
+    <div class="top-section">
+      <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+    </div>
+    <div class="globe-section">
+      <canvas id="globeCanvas"></canvas>
+    </div>
+    <div id="flipbook">
+      <!-- Páginas do flipbook -->
+      <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
+      <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
+      <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
+      <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
+      <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
+      <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
+      <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
+      <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
+      <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
+      <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+      <div class="page">
+        <img src="imagens/cap1/pagina8.webp" alt="Página 10">
+        <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
       </div>
-      <div class="symbol brither" id="symbol2">
-        <a href="mundos/botychera/index.html">
-          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-        </a>
+      <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 12"></div>
+      <div class="page">
+        <img src="imagens/cap1/pagina11.webp" alt="Página 13">
+        <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
       </div>
-      <div class="symbol brither" id="symbol3">
-        <a href="mundos/himpis/index.html">
-          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol4">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol5">
-        <a href="mundos/denbou/index.html">
-          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol6">
-        <a href="mundos/araporu/index.html">
-          <img src="mundos/araporu/araporumenu.png" alt="araporu">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol7">
-        <a href="mundos/os artesaos/index.html">
-          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol8">
-        <a href="mundos/sapador/index.html">
-          <img src="mundos/sapador/sapador.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol9">
-        <a href="mundos/calindreno/index.html">
-          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol10">
-        <a href="mundos/mundo pulsante/index.html">
-          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol" id="symbol11">
-        <a href="mundos/dosirelala/index.html">
-          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol12">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol13">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol14">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol15">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
-        </a>
-      </div>
+      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
+      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
+      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
+      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
     </div>
   </div>
-
-  <!-- Música de fundo: arpeggio.mp3 -->
-  <audio id="bgm" loop>
-    <source src="arpeggio.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
-
+  
+  <!-- Overlay -->
+  <div id="overlayContainer">
+    <img id="overlayImage" src="" alt="Imagem Overlay">
+    <button id="btnSair">Sair</button>
+  </div>
+  
+  <!-- Scripts -->
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery UI e Touch Punch para permitir arrastar com o mouse -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <!-- Three.js e OrbitControls (backup) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <!-- turn.js -->
+  <script src="turn.min.js"></script>
   <script>
-    // Remove a tela de loading quando toda a página for carregada
-    window.addEventListener("load", function() {
-      const loadingScreen = document.getElementById("loading-screen");
-      loadingScreen.style.display = "none";
-    });
-
-    // Força a reprodução automática da música com volume 50%
-    document.addEventListener("DOMContentLoaded", function() {
-      const bgm = document.getElementById("bgm");
-      bgm.volume = 0.5;
-      bgm.currentTime = 70;
-      const playPromise = bgm.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function(error) {
-          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
-          document.addEventListener("click", function handler() {
-            bgm.play();
-            document.removeEventListener("click", handler);
-          });
+    let flipAudio;
+    const flipAudioStart = 1;
+    const flipAudioEnd = 1.4;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+      
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
         });
-      }
-    });
-
-    // Animação dos símbolos (não interfere no fundo)
-    const symbols = document.querySelectorAll('.symbol');
-    let time = 0;
-    function floatSymbols() {
-      time += 0.02;
-      symbols.forEach((symbol, index) => {
-        let amplitude = 6;
-        let speed = 0.1 + (index * 0.01);
-        let y = Math.sin(time * speed * 10) * amplitude;
-        symbol.style.transform = `translateY(${y}px)`;
+        document.removeEventListener('click', unlockAudio);
       });
-      requestAnimationFrame(floatSymbols);
-    }
-    floatSymbols();
-
-    // Configuração do canvas de fundo (autômato)
-    const canvas = document.getElementById("automatonCanvas");
-    const ctx = canvas.getContext("2d");
-    function setupCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      ctx.imageSmoothingEnabled = false;
-    }
-    setupCanvas();
-
-    const cellSize = 3;
-    let cols, rows;
-    function updateGridSize() {
-      cols = Math.floor(canvas.width / cellSize);
-      rows = Math.floor(canvas.height / cellSize);
-    }
-    updateGridSize();
-
-    let grid = Array.from({ length: rows }, () =>
-      Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
-    );
-
-    function drawGrid() {
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#FFFFFF";
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
-          if (grid[y][x] === 1) {
-            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-          }
+    });
+    
+    $(document).ready(function(){
+      $("#flipbook").turn({
+        autoCenter: false,
+        display: 'double'
+      });
+      
+      // Altera o cursor para "grabbing" durante o arrasto
+      $("#flipbook").on("mousedown", function(){
+          $(this).css("cursor", "grabbing");
+      }).on("mouseup mouseleave", function(){
+          $(this).css("cursor", "grab");
+      });
+      
+      function resizeFlipbook() {
+        if(window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches){
+          let newWidth = window.innerWidth * 0.25;
+          let newHeight = window.innerHeight * 0.35;
+          $("#flipbook").turn("size", newWidth, newHeight);
+        } else {
+          var newWidth = $(window).width() * 0.9;
+          var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
         }
       }
-    }
-
-    // Injeta atividade em um dos cantos para manter o autômato dinâmico
-    function injectActivity() {
-      const injectionSize = 10; // tamanho da área de injeção em células
-      const corner = Math.floor(Math.random() * 4); // 0: superior-esquerdo, 1: superior-direito, 2: inferior-esquerdo, 3: inferior-direito
-      let startRow, startCol;
-      if (corner === 0) {
-        startRow = 0;
-        startCol = 0;
-      } else if (corner === 1) {
-        startRow = 0;
-        startCol = cols - injectionSize;
-      } else if (corner === 2) {
-        startRow = rows - injectionSize;
-        startCol = 0;
-      } else {
-        startRow = rows - injectionSize;
-        startCol = cols - injectionSize;
-      }
-      for (let i = startRow; i < startRow + injectionSize && i < rows; i++) {
-        for (let j = startCol; j < startCol + injectionSize && j < cols; j++) {
-          if (Math.random() < 0.3) { // 30% de chance para cada célula ser ativada
-            grid[i][j] = 1;
-          }
+      resizeFlipbook();
+      $(window).resize(function(){
+        resizeFlipbook();
+      });
+      
+      $(document).on("click", "#veleyweiBtn, #veleyweiBtn2", function(){
+        $("#overlayImage").attr("src", "corpoyeroben.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      $("#btnSair").on("click", function(){
+        $("#overlayContainer").fadeOut(500);
+      });
+      
+      var overlayScale = 1;
+      $("#overlayImage").on("wheel", function(e) {
+        e.preventDefault();
+        overlayScale += (e.originalEvent.deltaY < 0) ? 0.1 : -0.1;
+        overlayScale = Math.max(0.1, overlayScale);
+        $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
+      });
+      
+      $("#overlayContainer").on("click", function(e){
+        if(e.target.id === "overlayContainer"){
+          $(this).fadeOut(500);
         }
-      }
-    }
-
-    // Atualiza o grid com as regras do autômato (Conway's Game of Life)
-    function updateGrid() {
-      let newGrid = grid.map(arr => [...arr]);
-      for (let y = 1; y < rows - 1; y++) {
-        for (let x = 1; x < cols - 1; x++) {
-          let sum = grid[y-1][x] + grid[y+1][x] + grid[y][x-1] + grid[y][x+1] +
-                    grid[y-1][x-1] + grid[y-1][x+1] + grid[y+1][x-1] + grid[y+1][x+1];
-          newGrid[y][x] = (grid[y][x] === 1) ? ((sum === 2 || sum === 3) ? 1 : 0) : (sum === 3 ? 1 : 0);
-        }
-      }
-      grid = newGrid;
-    }
-
-    let frameCount = 0;
-    function animate() {
-      frameCount++;
-      updateGrid();
-      // A cada 100 frames, injeta uma "faísca" em um dos cantos
-      if (frameCount % 100 === 0) {
-        injectActivity();
-      }
-      drawGrid();
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    // Reconfigura o canvas no redimensionamento (sem interferir no fundo)
-    window.addEventListener("resize", () => {
-      setupCanvas();
-      updateGridSize();
-      grid = Array.from({ length: rows }, () =>
-        Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
-      );
-      drawGrid();
+      });
     });
   </script>
+  <!-- Chamada do globo.js – mantendo o backup original -->
+  <script src="./globo.js"></script>
+  <script>
+    (function() {
+      const canvas = document.getElementById("warpCanvas");
+      const ctx = canvas.getContext("2d");
+      let stars = [];
+      const numStars = 300;
+      const speed = 2;
+      let animationFrameId;
+      
+      function setupCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width - canvas.width / 2,
+            y: Math.random() * canvas.height - canvas.height / 2,
+            z: Math.random() * canvas.width
+          });
+        }
+      }
+      function updateStars() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        stars.forEach(star => {
+          star.z -= speed;
+          if (star.z <= 0) {
+            star.x = Math.random() * canvas.width - canvas.width / 2;
+            star.y = Math.random() * canvas.height - canvas.height / 2;
+            star.z = canvas.width;
+          }
+          let perspective = 300 / star.z;
+          let sx = star.x * perspective + canvas.width / 2;
+          let sy = star.y * perspective + canvas.height / 2;
+          let size = Math.max(2 * perspective, 0.5);
+          ctx.beginPath();
+          ctx.arc(sx, sy, size, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+        animationFrameId = requestAnimationFrame(updateStars);
+      }
+      setupCanvas();
+      createStars();
+      updateStars();
+      window.addEventListener("resize", function() {
+        setupCanvas();
+        createStars();
+      });
+      window.addEventListener("load", function() {
+        document.getElementById("loading-screen").style.display = "none";
+        cancelAnimationFrame(animationFrameId);
+      });
+    })();
+  </script>
 </body>
-  </html>
+</html>
