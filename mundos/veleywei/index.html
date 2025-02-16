@@ -190,15 +190,6 @@
         width: 300px;
         height: auto;
       }
-      #flipbook {
-        grid-area: book;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        /* Valores iniciais; serão sobrescritos pelo resizeFlipbook() */
-        width: 20vw;
-        height: 20vw;
-      }
       .globe-section {
         grid-area: planet;
         display: flex;
@@ -290,7 +281,7 @@
     function resizeFlipbook() {
       if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
         // Em modo horizontal, utiliza dimensões fixas (ajuste conforme necessário)
-        $("#flipbook").turn("size", 20vw, 20vh);
+        $("#flipbook").turn("size", 25vw, 28vh);
       } else {
         // Em dispositivos móveis, usa valores relativos
         var newWidth = $(window).width() * 0.9;
