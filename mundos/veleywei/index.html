@@ -164,7 +164,7 @@
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
-        grid-template-columns: 600px 600px; /* Colunas fixas em pixels */
+        grid-template-columns: 50vw 50vw; /* Colunas fixas em pixels */
         grid-template-rows: auto auto;
         grid-template-areas:
           "symbol planet"
@@ -181,13 +181,13 @@
         align-items: center;
       }
       .top-section img {
-        width: 80px;  /* Tamanho fixo para o símbolo */
+        width: 20vw;  /* Tamanho fixo para o símbolo */
         height: auto;
       }
       #flipbook {
         grid-area: book;
-        width: 100px !important;  /* Tamanho fixo para o livro em horizontal */
-        height: 80px !important;
+        width: 10vw !important;  /* Tamanho fixo para o livro em horizontal */
+        height: 8vh !important;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -200,8 +200,8 @@
       }
       /* Canvas do planeta com resolução fixa em pixels para horizontal */
       #globeCanvas {
-        width: 60px;
-        height: 60px;
+        width: 30vw;
+        height: 60vh;
       }
       /* Se desejar que o canvas de loading também tenha um tamanho fixo em horizontal, 
          defina-o aqui (por exemplo, centralizado com resolução específica) */
