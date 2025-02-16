@@ -71,6 +71,7 @@
       max-width: 80vw;
       max-height: 50vh;
     }
+    /* Flipbook para mobile (sem contêiner extra) */
     #flipbook {
       position: relative;
       margin: auto;
@@ -171,16 +172,16 @@
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         position: relative;
-        display: block; /* Remove o comportamento flex que centraliza os filhos */
+        display: block; /* Evita que o flex centralize os filhos */
         width: 100vw;
         height: 100vh;
       }
       /* Título na esquerda superior */
       .top-section {
         position: absolute;
-        top: 20px;        /* Ajuste manual de posição vertical */
-        left: 20px;       /* Ajuste manual de posição horizontal */
-        width: 300px;     /* Tamanho do título */
+        top: 20px;
+        left: 20px;
+        width: 300px;
         height: auto;
         display: flex;
         justify-content: center;
@@ -191,27 +192,30 @@
         height: auto;
         object-fit: contain;
       }
-      /* Flipbook na esquerda inferior */
-      #flipbook {
+      /* Contêiner para o flipbook, posicionado em bottom/left */
+      #flipbook-wrapper {
         position: absolute;
-        bottom: 5px;     /* Posiciona na parte inferior */
-        left: 4px;       /* Posiciona à esquerda */
-        width: 30vw;     /* Tamanho fixo do flipbook */
-        height: 20vh;    /* Tamanho fixo do flipbook */
-        cursor: grab;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        bottom: 40px;
+        left: 40px;
+        width: 300px;
+        height: 200px;
+        border: 2px dashed red; /* Indicador visual para área do flipbook */
+      }
+      /* O flipbook preenche seu contêiner */
+      #flipbook {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        position: relative;
         overflow: hidden;
-        border: 2px dashed red; /* Indicador visual da área total */
       }
       /* Globo na direita */
       .globe-section {
         position: absolute;
-        top: 50%;         /* Ajuste manual de posição vertical */
-        right: 20px;      /* Ajuste manual de posição horizontal */
+        top: 50%;
+        right: 20px;
         transform: translateY(-50%);
-        width: 600px;     /* Tamanho do container do globo */
+        width: 600px;
         height: 600px;
         display: flex;
         justify-content: center;
@@ -241,32 +245,35 @@
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
-    <div id="flipbook">
-      <!-- Páginas do flipbook -->
-      <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-      <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-      <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-      <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-      <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-      <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-      <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
-      <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-      <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-      <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
-      <div class="page">
-        <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-        <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+    <!-- Novo contêiner para o flipbook -->
+    <div id="flipbook-wrapper">
+      <div id="flipbook">
+        <!-- Páginas do flipbook -->
+        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
+        <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
+        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
+        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
+        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
+        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
+          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina11.webp" alt="Página 10">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
       </div>
-      <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
-      <div class="page">
-        <img src="imagens/cap1/pagina11.webp" alt="Página 10">
-        <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-      </div>
-      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
     </div>
   </div>
 
@@ -339,7 +346,7 @@
         overlayScale = Math.max(0.1, overlayScale);
         $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
       });
-        
+      
       $("#overlayContainer").on("click", function(e){
         if(e.target.id === "overlayContainer"){
           $(this).fadeOut(500);
