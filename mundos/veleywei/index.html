@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Layout Responsivo - Mobile & PC</title>
+  <meta charset="UTF-8" />
+  <title>Exemplo Responsivo sem Rolagem</title>
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Estilos Globais */
+    /* Estilos globais */
     html, body {
       margin: 0;
       padding: 0;
@@ -17,7 +17,7 @@
       color: #fff;
       font-family: sans-serif;
     }
-    /* Loading Screen */
+    /* Loading Screen com efeito de dobra espacial */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -45,7 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-    /* Layout Mobile – mantém o design original */
+    /* Layout padrão para mobile/vertical */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -53,8 +53,6 @@
       align-items: center;
       width: 100%;
       height: 100%;
-      padding: 10px;
-      box-sizing: border-box;
     }
     .top-section img {
       width: 15vmax;
@@ -82,6 +80,16 @@
       width: 100%;
       height: auto;
       display: block;
+    }
+    .sound-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 30px;
+      background: rgba(255, 255, 200, 0.2);
+      cursor: pointer;
     }
     /* Overlay */
     #overlayContainer {
@@ -159,9 +167,9 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout PC/Horizontal – Grid com 2 colunas: 
-       Esquerda dividida em 2 linhas (30% para título e 70% para flipbook) 
-       e direita (única área para o globo) */
+    /* Layout PC/Horizontal – divisão em 2 colunas: 
+       Coluna esquerda (50% da largura) subdividida em 2 linhas: 30% para título e 70% para flipbook; 
+       Coluna direita (50% da largura) para o globo */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
@@ -179,12 +187,11 @@
       }
       .top-section {
         grid-area: symbol;
-        width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
       }
+      /* O título preencherá sua célula */
       .top-section img {
         width: 100%;
         height: 100%;
@@ -192,8 +199,6 @@
       }
       #flipbook {
         grid-area: book;
-        width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -201,13 +206,11 @@
       }
       .globe-section {
         grid-area: planet;
-        width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      /* Para o globo, mantemos a configuração original do canvas */
+      /* Não alteramos o globo – ele usa a configuração original */
       #globeCanvas {
         width: 40vmax;
         height: 40vmax;
@@ -224,16 +227,19 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- A ordem no HTML não importa para o grid (as áreas são definidas via CSS) -->
+  <!-- A ordem no HTML não importa, pois as áreas são definidas via CSS Grid -->
   <div class="page-container">
     <div class="top-section">
-      <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+      <img src="tituloveleywei.png" alt="Título Velei'wey">
+    </div>
+    <div class="globe-section">
+      <canvas id="globeCanvas"></canvas>
     </div>
     <div id="flipbook">
-      <!-- Exemplo de páginas do flipbook -->
-      <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-      <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-      <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
+      <!-- Páginas do flipbook -->
+      <div class="page hard"><img src="capa.webp" alt="Capa"></div>
+      <div class="page"><img src="capa2.webp" alt="Página 1"></div>
+      <div class="page"><img src="contracapa.webp" alt="Página 2"></div>
       <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
       <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
       <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
@@ -246,18 +252,15 @@
         <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
       </div>
       <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 12"></div>
+      <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina11.webp" alt="Página 13">
+        <img src="imagens/cap1/pagina11.webp" alt="Página 10">
         <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
-      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
-      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
-      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
-    </div>
-    <div class="globe-section">
-      <canvas id="globeCanvas"></canvas>
+      <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
+      <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
     </div>
   </div>
 
@@ -268,46 +271,54 @@
   </div>
 
   <!-- Scripts -->
-  <!-- jQuery, jQuery UI e Touch Punch para permitir drag/click no PC -->
+  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery UI e Touch Punch para permitir arrastar com o mouse -->
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <!-- Three.js e OrbitControls (mantidos do backup) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <!-- turn.js -->
   <script src="turn.min.js"></script>
   <script>
-    // Função para ajustar o tamanho do flipbook conforme a orientação
-    function resizeFlipbook() {
-      if (window.matchMedia("(min-width: 1024px) and (orientation: landscape)").matches) {
-        // Na célula "book" da esquerda (70% da altura)
-        var flipbookWidth = window.innerWidth * 0.5;
-        var flipbookHeight = window.innerHeight * 0.70;
-        $("#flipbook").turn("size", flipbookWidth, flipbookHeight);
-      } else {
-        // Em mobile: usa tamanho relativo conforme o layout original
-        var newWidth = $(window).width() * 0.9;
-        var newHeight = newWidth * (450 / 600);
-        $("#flipbook").turn("size", newWidth, newHeight);
-      }
-    }
+    let flipAudio;
+    const flipAudioStart = 1;
+    const flipAudioEnd = 1.4;
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+      
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        });
+        document.removeEventListener('click', unlockAudio);
+      });
+    });
     
     $(document).ready(function(){
       $("#flipbook").turn({
-        autoCenter: true,
-        display: 'double',
-        acceleration: true,
-        when: {
-          turning: function(e, page, view) {
-            console.log("Turning to page " + page);
-          }
-        }
+        autoCenter: false,
+        display: 'double'
       });
       
-      // Permite o arrasto com mouse: altera o cursor para "grabbing" durante o mouse down
+      // Ativa o arrasto com mouse, alterando o cursor
       $("#flipbook").on("mousedown", function(){
           $(this).css("cursor", "grabbing");
       }).on("mouseup mouseleave", function(){
           $(this).css("cursor", "grab");
       });
       
+      function resizeFlipbook() {
+        var newWidth = $(window).width() * 0.9;
+        var newHeight = newWidth * (450/600);
+        $("#flipbook").turn("size", newWidth, newHeight);
+      }
       resizeFlipbook();
       $(window).resize(function(){
         resizeFlipbook();
@@ -330,7 +341,7 @@
         overlayScale = Math.max(0.1, overlayScale);
         $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
       });
-      
+        
       $("#overlayContainer").on("click", function(e){
         if(e.target.id === "overlayContainer"){
           $(this).fadeOut(500);
@@ -338,16 +349,18 @@
       });
     });
   </script>
-  <!-- Mantenho a chamada do globo.js com a configuração original -->
+  <!-- Mantenho a chamada do globo.js conforme o backup -->
   <script src="./globo.js"></script>
   <script>
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
+
       let stars = [];
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
+
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -366,6 +379,7 @@
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
+
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
