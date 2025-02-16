@@ -93,10 +93,14 @@
     .symbol img:hover {
       transform: scale(1.1);
     }
-    
+
+    .symbol.brither img {
+      filter: brightness(150%);
+
+    }
     /* Efeito de locked para símbolos */
     .symbol.locked img {
-      filter: brightness(40%);
+      filter: brightness(50%);
     }
   </style>
 </head>
@@ -122,7 +126,7 @@
           <img src="assets/veleyweimenu.png" alt="Velei'wey">
         </a>
       </div>
-      <div class="symbol" id="symbol2">
+      <div class="symbol brither" id="symbol2">
         <a href="mundos/botychera/index.html">
           <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
         </a>
