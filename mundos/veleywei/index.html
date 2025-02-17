@@ -168,8 +168,8 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout PC/Horizontal – para telas horizontais */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
+    /* Layout Horizontal – para qualquer dispositivo em paisagem */
+    @media screen and (orientation: landscape) {
       .page-container {
         position: relative;
         display: block; /* Evita que o flex centralize os filhos */
