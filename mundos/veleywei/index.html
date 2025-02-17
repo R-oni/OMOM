@@ -201,13 +201,13 @@
         height: 30vh;
         border: 2px dashed red; /* Indicador visual para área do flipbook */
       }
-      /* O flipbook preenche seu contêiner */
+      /* O flipbook preenche seu contêiner sem cortar o conteúdo */
       #flipbook {
-        width: 80%;
-        height: 80%;
+        width: 100%;
+        height: 100%;
         margin: 0;
         position: relative;
-        overflow: hidden;
+        overflow: visible; /* Permite que o conteúdo seja exibido completamente */
       }
       /* Globo na direita */
       .globe-section {
@@ -245,7 +245,7 @@
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
     </div>
-    <!-- Novo contêiner para o flipbook -->
+    <!-- Contêiner para o flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
