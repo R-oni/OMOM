@@ -34,7 +34,7 @@ function initGlobe() {
 
   // (2) Carregar textura
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('mapabotychera.png');
+  const texture = textureLoader.load('./mapabotychera.png');
   // (3) Material que reage à luz
   const material = new THREE.MeshStandardMaterial({
     map: texture
