@@ -125,7 +125,18 @@
       z-index: 10000;
     }
     /* Botão Veleywei */
-    #veleyweiBtn,
+    
+    #veleyweiBtn {
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 1s infinite;
+    }
+
     #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
@@ -261,7 +272,8 @@
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquebotychera1.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquebotychera2.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
         <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
@@ -329,8 +341,14 @@
         resizeFlipbook();
       });
       
-      $(document).on("click", "#veleyweiBtn, #veleyweiBtn2", function(){
-        $("#overlayImage").attr("src", "corpoyeroben.png");
+      $(document).on("click", "#veleyweiBtn", function(){
+        $("#overlayImage").attr("src", "imagens/cap1/desenhobotychera1.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn2", function(){
+        $("#overlayImage").attr("src", "imagens/cap1/desenhobotychera2.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
