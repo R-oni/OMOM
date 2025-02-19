@@ -10,7 +10,7 @@ function initGlobe() {
     0.1,
     1000
   );
-  camera.position.z = 2.8;
+  camera.position.z = 3;
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
