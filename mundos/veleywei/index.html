@@ -126,6 +126,7 @@
     }
     /* Botão Veleywei */
     #veleyweiBtn,
+    #veleyweiBtn3,
     #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
@@ -264,7 +265,10 @@
           <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
+        </div>
         <div class="page">
           <img src="imagens/cap1/pagina11.webp" alt="Página 10">
           <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
@@ -337,6 +341,12 @@
 
       $(document).on("click", "#veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn3", function(){
+        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
