@@ -74,6 +74,12 @@
       position: relative;
       margin: auto;
     }
+    /* Torna cada página do flipbook um container relativo,
+       para que os botões posicionados absolutamente fiquem
+       referenciados a essa área. */
+    #flipbook .page {
+      position: relative;
+    }
     .page img {
       width: 100%;
       height: auto;
@@ -121,32 +127,29 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botões Veleywei com posicionamento relativo à página (viewport) */
+    /* Botões denbou com posicionamento relativo à página do flipbook.
+       Você pode ajustar os valores de left/top para reposicionar conforme necessário. */
     #veleyweiBtn {
-      position: fixed;
-      left: 50%;
-      top: 55%;
+      position: absolute;
+      left: 50%;   /* Edite este valor para alterar a posição X */
+      top: 60%;    /* Edite este valor para alterar a posição Y */
       transform: translate(-50%, -50%);
-      width: 15vw;
-      height: auto;
+      /* Defina um tamanho se necessário, por exemplo: width: 20%; */
       animation: fadeInOut 2s infinite;
       z-index: 10;
     }
     #veleyweiBtn2 {
-      position: fixed;
-      left: 5%;
-      top: 5%;
-      width: 15vw;
-      height: auto;
+      position: absolute;
+      left: 10%;   /* Edite este valor para alterar a posição X */
+      top: 10%;    /* Edite este valor para alterar a posição Y */
+      transform: translate(0, 0);
       animation: fadeInOut 1s infinite;
       z-index: 10;
     }
     #veleyweiBtn3 {
-      position: fixed;
-      right: 5%;
-      top: 5%;
-      width: 15vw;
-      height: auto;
+      position: absolute;
+      right: 10%;  /* Edite este valor para alterar a posição X */
+      top: 10%;    /* Edite este valor para alterar a posição Y */
       animation: fadeInOut 0.4s infinite;
       z-index: 10;
     }
@@ -245,25 +248,10 @@
       <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 8"></div>
       <div class="page">
         <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-        
-        <!-- Botão 1 com image map (clicável um pouco abaixo do centro) -->
-        <img id="veleyweiBtn" src="imagens/cap1/cliquedenbou1.webp" alt="Botão Cliquey Eroben" usemap="#veleyweiMap1">
-        <map name="veleyweiMap1">
-          <!-- Coordenadas fictícias: ajuste conforme a forma desenhada -->
-          <area shape="poly" coords="50,30,100,10,150,40,120,80,60,90,30,60" href="#" id="veleyweiArea1" alt="Área Botão 1">
-        </map>
-        
-        <!-- Botão 2 com image map (canto superior esquerdo) -->
-        <img id="veleyweiBtn2" src="imagens/cap1/cliquedenbou2.webp" alt="Botão Cliquey Eroben" usemap="#veleyweiMap2">
-        <map name="veleyweiMap2">
-          <area shape="poly" coords="40,20,90,15,130,50,100,90,50,100,20,70" href="#" id="veleyweiArea2" alt="Área Botão 2">
-        </map>
-        
-        <!-- Botão 3 com image map (canto superior direito) -->
-        <img id="veleyweiBtn3" src="imagens/cap1/cliquedenbou3.webp" alt="Botão Cliquey Eroben" usemap="#veleyweiMap3">
-        <map name="veleyweiMap3">
-          <area shape="poly" coords="60,25,110,20,140,55,110,95,70,105,30,80" href="#" id="veleyweiArea3" alt="Área Botão 3">
-        </map>
+        <!-- Botões denbou posicionados relativamente à página -->
+        <img id="veleyweiBtn" src="imagens/cap1/cliquedenbou1.webp" alt="Botão Cliquey Eroben">
+        <img id="veleyweiBtn2" src="imagens/cap1/cliquedenbou2.webp" alt="Botão Cliquey Eroben">
+        <img id="veleyweiBtn3" src="imagens/cap1/cliquedenbou3.webp" alt="Botão Cliquey Eroben">
       </div>
     </div>
   </div>
@@ -315,23 +303,20 @@
         resizeFlipbook();
       });
       
-      // Listeners para as áreas clicáveis definidas nos image maps
-      $(document).on("click", "#veleyweiArea1", function(e){
-        e.preventDefault();
+      // Listeners para os botões
+      $("#veleyweiBtn").on("click", function(){
         $("#overlayImage").attr("src", "desenhoenbou.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      $(document).on("click", "#veleyweiArea2", function(e){
-        e.preventDefault();
+      $("#veleyweiBtn2").on("click", function(){
         $("#overlayImage").attr("src", "imagens/cap1/artilharia.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      $(document).on("click", "#veleyweiArea3", function(e){
-        e.preventDefault();
+      $("#veleyweiBtn3").on("click", function(){
         $("#overlayImage").attr("src", "imagens/cap1/kuitakionor.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
@@ -418,4 +403,4 @@
     })();
   </script>
 </body>
-            </html>
+</html>
