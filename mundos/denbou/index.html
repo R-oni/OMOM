@@ -74,12 +74,6 @@
       position: relative;
       margin: auto;
     }
-    /* Torna cada página do flipbook um container relativo,
-       para que os botões posicionados absolutamente fiquem
-       referenciados a essa área. */
-    #flipbook .page {
-      position: relative;
-    }
     .page img {
       width: 100%;
       height: auto;
@@ -127,31 +121,38 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botões denbou com posicionamento relativo à página do flipbook.
-       Você pode ajustar os valores de left/top para reposicionar conforme necessário. */
+    /* Botão Veleywei */
+    
     #veleyweiBtn {
       position: absolute;
-      left: 50%;   /* Edite este valor para alterar a posição X */
-      top: 60%;    /* Edite este valor para alterar a posição Y */
-      transform: translate(-50%, -50%);
-      /* Defina um tamanho se necessário, por exemplo: width: 20%; */
-      animation: fadeInOut 2s infinite;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
       z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 2s infinite;
     }
     #veleyweiBtn2 {
       position: absolute;
-      left: 10%;   /* Edite este valor para alterar a posição X */
-      top: 10%;    /* Edite este valor para alterar a posição Y */
-      transform: translate(0, 0);
-      animation: fadeInOut 1s infinite;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
       z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 1s infinite;
     }
+
     #veleyweiBtn3 {
       position: absolute;
-      right: 10%;  /* Edite este valor para alterar a posição X */
-      top: 10%;    /* Edite este valor para alterar a posição Y */
-      animation: fadeInOut 0.4s infinite;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
       z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 0.4s infinite;
     }
     @keyframes fadeInOut {
       0% { opacity: 1; }
@@ -185,6 +186,7 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
+
     /* Novo layout para telas horizontais/PC */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -248,11 +250,10 @@
       <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 8"></div>
       <div class="page">
         <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-        <!-- Botões denbou posicionados relativamente à página -->
         <img id="veleyweiBtn" src="imagens/cap1/cliquedenbou1.webp" alt="Botão Cliquey Eroben">
-        <img id="veleyweiBtn2" src="imagens/cap1/cliquedenbou2.webp" alt="Botão Cliquey Eroben">
-        <img id="veleyweiBtn3" src="imagens/cap1/cliquedenbou3.webp" alt="Botão Cliquey Eroben">
       </div>
+        
+      
     </div>
   </div>
 
@@ -303,24 +304,23 @@
         resizeFlipbook();
       });
       
-      // Listeners para os botões
-      $("#veleyweiBtn").on("click", function(){
+      $(document).on("click", "#veleyweiBtn", function(){
         $("#overlayImage").attr("src", "desenhoenbou.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      
-      $("#veleyweiBtn2").on("click", function(){
+
+      $(document).on("click", "#veleyweiBtn2", function(){
         $("#overlayImage").attr("src", "imagens/cap1/artilharia.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      
-      $("#veleyweiBtn3").on("click", function(){
+
+      $(document).on("click", "#veleyweiBtn3", function(){
         $("#overlayImage").attr("src", "imagens/cap1/kuitakionor.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
+      });        
       
       $("#btnSair").on("click", function(){
         $("#overlayContainer").fadeOut(500);
