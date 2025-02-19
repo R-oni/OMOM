@@ -267,7 +267,7 @@
         <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
         <div class="page">
           <img src="imagens/cap1/pagina11.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
         <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
@@ -334,6 +334,13 @@
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+
+      $(document).on("click", "#veleyweiBtn", function(){
+        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
       
       $("#btnSair").on("click", function(){
         $("#overlayContainer").fadeOut(500);
