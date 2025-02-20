@@ -17,8 +17,7 @@
       color: #fff;
       font-family: sans-serif;
     }
-
-    /* Loading Screen com efeito de dobra espacial */
+    /* Loading Screen */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -32,7 +31,6 @@
       justify-content: center;
       align-items: center;
     }
-    /* O canvas do efeito cobre toda a tela */
     #warpCanvas {
       position: absolute;
       top: 0;
@@ -40,7 +38,6 @@
       width: 100%;
       height: 100%;
     }
-    /* Texto centralizado usando a fonte Press Start 2P */
     #loading-text {
       position: relative;
       font-family: 'Press Start 2P', cursive;
@@ -48,8 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-
-    /* Demais estilos do layout */
+    /* Layout padrão para mobile/vertical */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -67,28 +63,37 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
+    /* Configuração original do globo */
     #globeCanvas {
-      width: 25vmax;
-      height: 25vmax;
+      width: 40vmax;
+      height: 40vmax;
       max-width: 80vw;
-      max-height: 40vh;
+      max-height: 50vh;
     }
-    /* O flipbook ocupa 90% da largura da tela; sua altura mantém a proporção original (450/600) */
+    /* Loading overlay para o globo */
+    #globeLoading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 100;
+      pointer-events: none;
+    }
+    /* Flipbook para mobile (sem contêiner extra) */
     #flipbook {
       position: relative;
       margin: auto;
-    }
-    .page {
-      /* Cada página será posicionada pelo turn.js */
-      position: relative; /* Adicionado para que elementos absolutos fiquem relativos à página */
+      cursor: grab;
     }
     .page img {
       width: 100%;
       height: auto;
       display: block;
-      margin: 0;
-      padding: 0;
     }
     .sound-button {
       position: absolute;
@@ -100,7 +105,7 @@
       background: rgba(255, 255, 200, 0.2);
       cursor: pointer;
     }
-    /* Overlay que exibirá a corpoyeroben.png */
+    /* Overlay */
     #overlayContainer {
       display: none;
       position: fixed;
@@ -119,7 +124,6 @@
       max-width: 90vw;
       max-height: 90vh;
     }
-    /* Botão Sair no overlay */
     #btnSair {
       position: absolute;
       top: 20px;
@@ -133,31 +137,18 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Estilo do botão Veleywei com efeito emissive */
-    #veleyweiBtn {
+    /* Botão Veleywei */
+    #veleyweiBtn,
+    #veleyweiBtn3,
+    #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
-      width: 100%;
+      width: 100%; 
       height: 97%;
       z-index: 10;
       left: 0;
       top: 0;
-      animation: fadeInOut 2s infinite, emissiveGlow 2s infinite;
-    }
-    #veleyweiBtn2 {
-      position: absolute;
-      cursor: pointer;
-      width: 160px; /* tamanho inicial; pode ser alterado via roda do mouse */
-      z-index: 10;
-      left: 40%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      animation: fadeInOut 2s infinite, emissiveGlow 2s infinite;
-    }
-    @keyframes emissiveGlow {
-      0% { filter: drop-shadow(0 0 5px #FFAA00); }
-      50% { filter: drop-shadow(0 0 20px #FFAA00); }
-      100% { filter: drop-shadow(0 0 5px #FFE3CC); }
+      animation: fadeInOut 2s infinite;
     }
     @keyframes fadeInOut {
       0% { opacity: 1; }
@@ -178,66 +169,134 @@
       height: auto;
       display: block;
     }
+    #spiraqel {
+      position: absolute;
+      right: 70px;
+      top: 170px;
+      width: 55px;
+      cursor: pointer;
+      animation: pulse 2s infinite ease-in-out;
+    }
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-
-    /* Layout Horizontal – para dispositivos em paisagem */
+    /* Layout Horizontal – para qualquer dispositivo em paisagem */
     @media screen and (orientation: landscape) {
       .page-container {
         position: relative;
-        display: block;
+        display: block; /* Evita que o flex centralize os filhos */
         width: 100vw;
         height: 100vh;
       }
-      #flipbook {
+      /* Título na esquerda superior */
+      .top-section {
         position: absolute;
-        bottom: 10vh;
+        top: 20px;
+        left: 15vw;
+        width: 18vw;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .top-section img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+      /* Contêiner para o flipbook, posicionado em bottom/left */
+      #flipbook-wrapper {
+        position: absolute;
+        bottom: 10vh; /* ajuste de margem inferior para evitar corte */
         left: 5vw;
         width: 40vw;
-        height: calc(40vw * 0.75); /* Mantém a proporção original (450/600 ≈ 0.75) */
+        height: calc(40vw * 0.75); /* mantém a proporção das páginas (450/600 = 0.75) */
         overflow: visible;
+      }
+      /* O flipbook preenche seu contêiner sem cortar o conteúdo */
+      #flipbook {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        position: relative;
+        overflow: visible;
+      }
+      /* Globo na direita */
+      .globe-section {
+        position: absolute;
+        top: 40%;
+        right: 10vw;
+        transform: translateY(-50%);
+        width: 400px;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #globeCanvas {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Loading Screen com efeito de dobra espacial -->
+  <!-- Loading Screen -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
+  <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
       <img src="titulosapador.png" alt="Título Velei'wey">
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
+      <!-- Loading overlay para o globo -->
+      <div id="globeLoading">CARREGANDO...</div>
     </div>
-    <!-- O flipbook: o turn.js gerencia as páginas -->
-    <div id="flipbook">
-      <!-- Página 1 (hard) -->
-       <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-      <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-      <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-      <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-      <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-      <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-      <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
-      <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-      <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 7"></div>
-      <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 7"></div>
-      <div class="page">
-        <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-        <img id="veleyweiBtn" src="imagens/cap1/cliquepagina8.webp" alt="Botão Cliquey Eroben">
+    <!-- Contêiner para o flipbook -->
+    <div id="flipbook-wrapper">
+      <div id="flipbook">
+        <!-- Páginas do flipbook -->
+        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
+        <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
+        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
+        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
+        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
+        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
+          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
+          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page">
+          <img src="imagens/cap1/pagina11.webp" alt="Página 10">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
       </div>
-    
     </div>
   </div>
-  <!-- Overlay que exibirá corpoyeroben.png e o botão Sair -->
+
+  <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
     <button id="btnSair">Sair</button>
@@ -245,6 +304,8 @@
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
@@ -274,92 +335,48 @@
         display: 'double'
       });
       
-      // Redimensiona o flipbook para 90% da largura da tela mantendo a proporção (450/600)
+      // Redimensionamento automático apenas para telas pequenas (mobile)
       function resizeFlipbook() {
-        var newWidth = $(window).width() * 0.9;
-        var newHeight = newWidth * (450/600);
-        $("#flipbook").turn("size", newWidth, newHeight);
+        if ($(window).width() < 1024) {
+          var newWidth = $(window).width() * 0.9;
+          var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
+        }
       }
       resizeFlipbook();
       $(window).resize(function(){
         resizeFlipbook();
       });
       
-      // Delegação do clique no botão: exibe o overlay com desenhoirmaos.png via fadeIn
       $(document).on("click", "#veleyweiBtn", function(){
-        $("#overlayImage").attr("src", "desenhoirmaos.png");
+        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
 
-      // Delegação do clique no botão: exibe o overlay com desenhoirmaos.png via fadeIn
       $(document).on("click", "#veleyweiBtn2", function(){
-        $("#overlayImage").attr("src", "desenhoirmaos.png");
+        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn3", function(){
+        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      // Botão Sair no overlay
       $("#btnSair").on("click", function(){
         $("#overlayContainer").fadeOut(500);
       });
       
-      // Função de zoom para a imagem do overlay
       var overlayScale = 1;
       $("#overlayImage").on("wheel", function(e) {
         e.preventDefault();
-        if(e.originalEvent.deltaY < 0) {
-          overlayScale += 0.1;
-        } else {
-          overlayScale = Math.max(0.1, overlayScale - 0.1);
-        }
+        overlayScale += (e.originalEvent.deltaY < 0) ? 0.1 : -0.1;
+        overlayScale = Math.max(0.1, overlayScale);
         $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
       });
-      
-      // Implementa a funcionalidade de drag e redimensionamento para o botão
-      (function() {
-        var dragItem = document.getElementById("veleyweiBtn");
-        var container = document.getElementById("flipbook");
-        var active = false;
-        var initialX, initialY, startX, startY;
-        
-        dragItem.addEventListener("mousedown", dragStart);
-        document.addEventListener("mouseup", dragEnd);
-        document.addEventListener("mousemove", drag);
-        
-        function dragStart(e) {
-          active = true;
-          var containerRect = container.getBoundingClientRect();
-          startX = e.clientX - containerRect.left;
-          startY = e.clientY - containerRect.top;
-          initialX = parseInt(dragItem.style.left, 10) || 0;
-          initialY = parseInt(dragItem.style.top, 10) || 0;
-        }
-        function drag(e) {
-          if (!active) return;
-          e.preventDefault();
-          var containerRect = container.getBoundingClientRect();
-          var x = e.clientX - containerRect.left;
-          var y = e.clientY - containerRect.top;
-          var dx = x - startX;
-          var dy = y - startY;
-          dragItem.style.left = (initialX + dx) + "px";
-          dragItem.style.top  = (initialY + dy) + "px";
-        }
-        function dragEnd(e) {
-          active = false;
-        }
-        
-        dragItem.addEventListener("wheel", function(e) {
-          e.preventDefault();
-          var currentWidth = dragItem.offsetWidth;
-          if (e.deltaY < 0) {
-            dragItem.style.width = (currentWidth + 5) + "px";
-          } else {
-            dragItem.style.width = Math.max(20, currentWidth - 5) + "px";
-          }
-        });
-      })();
       
       $("#overlayContainer").on("click", function(e){
         if(e.target.id === "overlayContainer"){
@@ -369,8 +386,6 @@
     });
   </script>
   <script src="./globo.js"></script>
-  
-  <!-- Script do efeito de dobra espacial para o loading -->
   <script>
     (function() {
       const canvas = document.getElementById("warpCanvas");
@@ -379,13 +394,12 @@
       let stars = [];
       const numStars = 300;
       const speed = 2;
-      let animationFrameId;  // Armazena o ID do requestAnimationFrame
+      let animationFrameId;
 
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
-
       function createStars() {
         stars = [];
         for (let i = 0; i < numStars; i++) {
@@ -396,14 +410,12 @@
           });
         }
       }
-
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
 
-        for (let i = 0; i < numStars; i++) {
-          let star = stars[i];
+        stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
             star.x = Math.random() * canvas.width - canvas.width / 2;
@@ -417,26 +429,29 @@
           ctx.beginPath();
           ctx.arc(sx, sy, size, 0, 2 * Math.PI);
           ctx.fill();
-        }
+        });
         animationFrameId = requestAnimationFrame(updateStars);
       }
-
       setupCanvas();
       createStars();
       updateStars();
-
       window.addEventListener("resize", function() {
         setupCanvas();
         createStars();
       });
-
-      // Quando a página estiver totalmente carregada, esconde a tela de loading e cancela a animação
       window.addEventListener("load", function() {
-        const loadingScreen = document.getElementById("loading-screen");
-        loadingScreen.style.display = "none";
+        document.getElementById("loading-screen").style.display = "none";
         cancelAnimationFrame(animationFrameId);
       });
     })();
   </script>
+
+  <script>
+  // Aguarda o evento "globoCarregado" e então remove o loading
+  document.addEventListener("globoCarregado", function() {
+    document.getElementById("globeLoading").style.display = "none";
+  });
+  </script>
+  
 </body>
 </html>
