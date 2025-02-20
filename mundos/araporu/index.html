@@ -70,17 +70,6 @@
       max-width: 80vw;
       max-height: 50vh;
     }
-    #globeLoading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 20px;
-      z-index: 100;
-      pointer-events: none;
-    }
     #flipbook {
       position: relative;
       margin: auto;
@@ -225,7 +214,6 @@
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
-      <div id="loading-text">CARREGANDO...</div>
     </div>
     <div id="flipbook">
       <!-- Páginas do flipbook -->
@@ -391,11 +379,10 @@
   </script>
 
   <script>
-  // Aguarda o evento "globoCarregado" e então remove o loading
   document.addEventListener("globoCarregado", function() {
     document.getElementById("globeLoading").style.display = "none";
   });
   </script>
   
 </body>
-</html>
+      </html>
