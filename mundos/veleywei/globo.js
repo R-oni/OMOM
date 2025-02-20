@@ -32,23 +32,26 @@ function initGlobe() {
   // Geometria com resolução maior
   const geometry = new THREE.SphereGeometry(1, 64, 64);
 
-  // Carregar textura com evento de callback
+  // Carregamento das texturas
   const textureLoader = new THREE.TextureLoader();
-  
-  // Evento para sinalizar o carregamento completo
-  const eventoGloboCarregado = new Event("globoCarregado");
+  let texturesLoaded = 0;
+  function checkLoaded() {
+    texturesLoaded++;
+    if (texturesLoaded === 2) {
+      // Dispara o evento quando ambas as texturas forem carregadas
+      document.dispatchEvent(new Event("globoCarregado"));
+    }
+  }
 
-  const texture = textureLoader.load('./imagens/mapaveleywei.webp', function() {
-    // Disparar o evento quando a textura principal carregar
-    document.dispatchEvent(eventoGloboCarregado);
-  });
+  // (2) Carregar textura principal do globo
+  const texture = textureLoader.load('./imagens/mapaveleywei.webp', checkLoaded);
 
-  // Material que reage à luz
+  // (3) Material que reage à luz
   const material = new THREE.MeshStandardMaterial({
     map: texture
   });
 
-  // Mesh do globo principal
+  // (4) Mesh do globo principal
   const sphere = new THREE.Mesh(geometry, material);
   sphere.castShadow = true;  
   sphere.receiveShadow = true; 
@@ -56,7 +59,7 @@ function initGlobe() {
 
   // Adicionando a camada de nuvem
   const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
-  const cloudTexture = textureLoader.load('./imagens/nuvemveleywei.webp'); 
+  const cloudTexture = textureLoader.load('./imagens/nuvemveleywei.webp', checkLoaded); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,
@@ -66,7 +69,7 @@ function initGlobe() {
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
-  // Luz ambiente + direcional
+  // (5) Luz ambiente + direcional
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
 
@@ -101,7 +104,7 @@ function initGlobe() {
   miniSphere3.position.x = 2.5;
   pivot3.add(miniSphere3);
 
-  // Função de animação
+  // (6) Função de animação
   function animate() {
     requestAnimationFrame(animate);
 
