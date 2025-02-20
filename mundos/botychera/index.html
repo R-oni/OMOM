@@ -432,5 +432,13 @@
       });
     })();
   </script>
+
+  <script>
+  // Aguarda o evento "globoCarregado" e então remove o loading
+  document.addEventListener("globoCarregado", function() {
+    document.getElementById("globeLoading").style.display = "none";
+  });
+  </script>
+  
 </body>
 </html>
