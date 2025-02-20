@@ -47,7 +47,7 @@ function initGlobe() {
   }
 
   // (2) Carregar textura principal do globo
-  const texture = textureLoader.load('mapabotychera.png', checkLoaded);
+  const texture = textureLoader.load('./mapabotychera.png', checkLoaded);
 
   // (3) Material que reage à luz
   const material = new THREE.MeshStandardMaterial({
