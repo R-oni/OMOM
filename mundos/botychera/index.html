@@ -209,10 +209,11 @@
       /* Contêiner para o flipbook, posicionado em bottom/left */
       #flipbook-wrapper {
         position: absolute;
-        bottom: 20vh;
+        bottom: 10vh; /* ajuste de margem inferior para evitar corte */
         left: 5vw;
         width: 40vw;
-        height: 50vh;
+        height: calc(40vw * 0.75); /* mantém a proporção das páginas (450/600 = 0.75) */
+        overflow: visible;
       }
       /* O flipbook preenche seu contêiner sem cortar o conteúdo */
       #flipbook {
