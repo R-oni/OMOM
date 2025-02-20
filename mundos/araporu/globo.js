@@ -13,6 +13,8 @@ function initGlobe() {
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
+  // Oculta o canvas até o carregamento completo
+  canvas.style.visibility = "hidden";
   const renderer = new THREE.WebGLRenderer({ 
     canvas, 
     antialias: true 
@@ -29,7 +31,16 @@ function initGlobe() {
 
   // (2) Carregar textura do planeta
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('mapaaraporu.png'); // seu arquivo
+  let texturesLoaded = 0;
+  function checkLoaded() {
+    texturesLoaded++;
+    if (texturesLoaded === 2) {
+      // Quando ambas as texturas estiverem carregadas:
+      canvas.style.visibility = "visible"; // Mostra o globo
+      document.dispatchEvent(new Event("globoCarregado"));
+    }
+  }
+  const texture = textureLoader.load('mapaaraporu.png', checkLoaded); // seu arquivo
   const material = new THREE.MeshStandardMaterial({ map: texture });
 
   // (3) Mesh do globo principal
@@ -40,7 +51,7 @@ function initGlobe() {
 
   // Adicionando a camada de nuvem
   const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
-  const cloudTexture = textureLoader.load('nuvemaraporu.png'); 
+  const cloudTexture = textureLoader.load('nuvemaraporu.png', checkLoaded); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,  
