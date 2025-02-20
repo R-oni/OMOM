@@ -223,6 +223,7 @@
         position: relative;
         overflow: visible;
       }
+      /* Globo na direita */
       .globe-section {
        position: absolute;
        top: 50%;
@@ -235,7 +236,6 @@
        align-items: center;
       }
 
-      }
       #globeCanvas {
         width: 100%;
         height: 100%;
@@ -255,7 +255,7 @@
   <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
-      <img src="titulohimpis.png" alt="Título Velei'wey">
+      <img src="titulohimpis" alt="Título Velei'wey">
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
@@ -278,7 +278,7 @@
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquehimpis.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
         <div class="page">
@@ -350,7 +350,7 @@
       });
       
       $(document).on("click", "#veleyweiBtn", function(){
-        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayImage").attr("src", "desenhoirmaos.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
