@@ -17,7 +17,7 @@
       color: #fff;
       font-family: sans-serif;
     }
-    /* Loading Screen com efeito de dobra espacial */
+    /* Loading Screen */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -55,7 +55,7 @@
       height: 100%;
     }
     .top-section img {
-      width: 20vmax;
+      width: 15vmax;
       max-width: 80vw;
       height: auto;
     }
@@ -63,13 +63,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
+    /* Configuração original do globo */
     #globeCanvas {
       width: 40vmax;
       height: 40vmax;
       max-width: 80vw;
       max-height: 50vh;
     }
+    /* Loading overlay para o globo */
     #globeLoading {
       position: absolute;
       top: 50%;
@@ -81,9 +84,11 @@
       z-index: 100;
       pointer-events: none;
     }
+    /* Flipbook para mobile (sem contêiner extra) */
     #flipbook {
       position: relative;
       margin: auto;
+      cursor: grab;
     }
     .page img {
       width: 100%;
@@ -133,17 +138,8 @@
       z-index: 10000;
     }
     /* Botão Veleywei */
-    
-    #veleyweiBtn {
-      position: absolute;
-      cursor: pointer;
-      width: 100%; 
-      height: 97%;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      animation: fadeInOut 2s infinite;
-    }
+    #veleyweiBtn,
+    #veleyweiBtn3,
     #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
@@ -152,18 +148,7 @@
       z-index: 10;
       left: 0;
       top: 0;
-      animation: fadeInOut 1s infinite;
-    }
-
-    #veleyweiBtn3 {
-      position: absolute;
-      cursor: pointer;
-      width: 100%; 
-      height: 97%;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      animation: fadeInOut 0.4s infinite;
+      animation: fadeInOut 2s infinite;
     }
     @keyframes fadeInOut {
       0% { opacity: 1; }
@@ -197,38 +182,64 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-
-    /* Novo layout para telas horizontais/PC */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
+    /* Layout Horizontal – para qualquer dispositivo em paisagem */
+    @media screen and (orientation: landscape) {
       .page-container {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto 1fr;
-        grid-template-areas: 
-          "title globe"
-          "flipbook globe";
+        position: relative;
+        display: block; /* Evita que o flex centralize os filhos */
         width: 100vw;
         height: 100vh;
-        gap: 20px;
-        padding: 20px;
       }
+      /* Título na esquerda superior */
       .top-section {
-        grid-area: title;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
-      #flipbook {
-        grid-area: flipbook;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
-      .globe-section {
-        grid-area: globe;
+        position: absolute;
+        top: 20px;
+        left: 15vw;
+        width: 18vw;
+        height: auto;
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+      .top-section img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+      /* Contêiner para o flipbook, posicionado em bottom/left */
+      #flipbook-wrapper {
+        position: absolute;
+        bottom: 10vh; /* ajuste de margem inferior para evitar corte */
+        left: 5vw;
+        width: 40vw;
+        height: calc(40vw * 0.75); /* mantém a proporção das páginas (450/600 = 0.75) */
+        overflow: visible;
+      }
+      /* O flipbook preenche seu contêiner sem cortar o conteúdo */
+      #flipbook {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        position: relative;
+        overflow: visible;
+      }
+      /* Globo na direita */
+      .globe-section {
+        position: absolute;
+        top: 40%;
+        right: 10vw;
+        transform: translateY(-50%);
+        width: 400px;
+        height: 400px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #globeCanvas {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
       }
     }
   </style>
@@ -240,32 +251,48 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
+  <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
       <img src="titulodenbou.png" alt="Título Velei'wey">
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
+      <!-- Loading overlay para o globo -->
       <div id="globeLoading">CARREGANDO...</div>
     </div>
-    <div id="flipbook">
-      <!-- Páginas do flipbook -->
-      <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-      <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-      <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-      <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-      <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-      <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-      <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
-      <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-      <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-      <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 8"></div>
-      <div class="page">
-        <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-        <img id="veleyweiBtn" src="imagens/cap1/cliquedenbou1.webp" alt="Botão Cliquey Eroben">
+    <!-- Contêiner para o flipbook -->
+    <div id="flipbook-wrapper">
+      <div id="flipbook">
+        <!-- Páginas do flipbook -->
+        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
+        <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
+        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
+        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
+        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
+        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
+          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
+          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page">
+          <img src="imagens/cap1/pagina11.webp" alt="Página 10">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
       </div>
-        
-      
     </div>
   </div>
 
@@ -277,6 +304,8 @@
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
@@ -306,10 +335,13 @@
         display: 'double'
       });
       
+      // Redimensionamento automático apenas para telas pequenas (mobile)
       function resizeFlipbook() {
-        var newWidth = $(window).width() * 0.9;
-        var newHeight = newWidth * (450/600);
-        $("#flipbook").turn("size", newWidth, newHeight);
+        if ($(window).width() < 1024) {
+          var newWidth = $(window).width() * 0.9;
+          var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
+        }
       }
       resizeFlipbook();
       $(window).resize(function(){
@@ -317,22 +349,22 @@
       });
       
       $(document).on("click", "#veleyweiBtn", function(){
-        $("#overlayImage").attr("src", "desenhodenbou.png");
+        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
 
       $(document).on("click", "#veleyweiBtn2", function(){
-        $("#overlayImage").attr("src", "imagens/cap1/artilharia.webp");
+        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
 
       $(document).on("click", "#veleyweiBtn3", function(){
-        $("#overlayImage").attr("src", "imagens/cap1/kuitakionor.webp");
+        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });        
+      });
       
       $("#btnSair").on("click", function(){
         $("#overlayContainer").fadeOut(500);
@@ -345,7 +377,7 @@
         overlayScale = Math.max(0.1, overlayScale);
         $(this).css("transform", "translate(-50%, -50%) scale(" + overlayScale + ")");
       });
-        
+      
       $("#overlayContainer").on("click", function(e){
         if(e.target.id === "overlayContainer"){
           $(this).fadeOut(500);
@@ -354,7 +386,6 @@
     });
   </script>
   <script src="./globo.js"></script>
-  
   <script>
     (function() {
       const canvas = document.getElementById("warpCanvas");
@@ -416,6 +447,7 @@
   </script>
 
   <script>
+  // Aguarda o evento "globoCarregado" e então remove o loading
   document.addEventListener("globoCarregado", function() {
     document.getElementById("globeLoading").style.display = "none";
   });
