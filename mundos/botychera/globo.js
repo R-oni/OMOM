@@ -14,6 +14,8 @@ function initGlobe() {
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
+  // Oculta o canvas até o carregamento completo
+  canvas.style.visibility = "hidden";
   const renderer = new THREE.WebGLRenderer({ 
     canvas, 
     antialias: true 
@@ -29,12 +31,24 @@ function initGlobe() {
   // Controles de órbita
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  // (1) Geometria com resolução maior
+  // Geometria com resolução maior
   const geometry = new THREE.SphereGeometry(1, 64, 64);
 
-  // (2) Carregar textura
+  // Carregamento das texturas
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('./mapabotychera.png');
+  let texturesLoaded = 0;
+  function checkLoaded() {
+    texturesLoaded++;
+    if (texturesLoaded === 2) {
+      // Quando ambas as texturas estiverem carregadas:
+      canvas.style.visibility = "visible"; // Mostra o globo
+      document.dispatchEvent(new Event("globoCarregado"));
+    }
+  }
+
+  // (2) Carregar textura principal do globo
+  const texture = textureLoader.load('./mapabotychera.png', checkLoaded);
+
   // (3) Material que reage à luz
   const material = new THREE.MeshStandardMaterial({
     map: texture
@@ -48,7 +62,7 @@ function initGlobe() {
 
   // Adicionando a camada de nuvem
   const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
-  const cloudTexture = textureLoader.load('./imagens/nuvemveleywei.webp'); 
+  const cloudTexture = textureLoader.load('./imagens/nuvemveleywei.webp', checkLoaded); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,
