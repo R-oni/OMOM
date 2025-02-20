@@ -141,6 +141,24 @@
       cursor: pointer;
       z-index: 10;
     }
+    
+    /* Layout Horizontal – para qualquer dispositivo em paisagem */
+    @media screen and (orientation: landscape) {
+      .page-container {
+        position: relative;
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+      #flipbook {
+        position: absolute;
+        bottom: 10vh;
+        left: 5vw;
+        width: 40vw;
+        height: calc(40vw * 0.75);
+        overflow: visible;
+      }
+    }
   </style>
 </head>
 <body>
@@ -271,8 +289,6 @@
         resizeFlipbook();
       });
       
-      // Delegação do clique para os botões dentro do flipbook pode ser feita diretamente (eles aparecem somente nas páginas que os contêm)
-      
       // Botão Sair do overlay
       $("#btnSair").on("click", function(){
         $("#overlayContainer").fadeOut(500);
@@ -388,4 +404,4 @@
     })();
   </script>
 </body>
-    </html>
+</html>
