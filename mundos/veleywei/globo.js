@@ -29,19 +29,26 @@ function initGlobe() {
   // Controles de órbita
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  // (1) Geometria com resolução maior
+  // Geometria com resolução maior
   const geometry = new THREE.SphereGeometry(1, 64, 64);
 
-  // (2) Carregar textura
+  // Carregar textura com evento de callback
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('./imagens/mapaveleywei.webp');
+  
+  // Evento para sinalizar o carregamento completo
+  const eventoGloboCarregado = new Event("globoCarregado");
 
-  // (3) Material que reage à luz
+  const texture = textureLoader.load('./imagens/mapaveleywei.webp', function() {
+    // Disparar o evento quando a textura principal carregar
+    document.dispatchEvent(eventoGloboCarregado);
+  });
+
+  // Material que reage à luz
   const material = new THREE.MeshStandardMaterial({
     map: texture
   });
 
-  // (4) Mesh do globo principal
+  // Mesh do globo principal
   const sphere = new THREE.Mesh(geometry, material);
   sphere.castShadow = true;  
   sphere.receiveShadow = true; 
@@ -59,7 +66,7 @@ function initGlobe() {
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
-  // (5) Luz ambiente + direcional
+  // Luz ambiente + direcional
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
 
@@ -94,7 +101,7 @@ function initGlobe() {
   miniSphere3.position.x = 2.5;
   pivot3.add(miniSphere3);
 
-  // (6) Função de animação
+  // Função de animação
   function animate() {
     requestAnimationFrame(animate);
 
