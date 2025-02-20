@@ -14,6 +14,8 @@ function initGlobe() {
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
+  // Oculta o canvas até o carregamento completo
+  canvas.style.visibility = "hidden";
   const renderer = new THREE.WebGLRenderer({ 
     canvas, 
     antialias: true 
@@ -38,7 +40,8 @@ function initGlobe() {
   function checkLoaded() {
     texturesLoaded++;
     if (texturesLoaded === 2) {
-      // Dispara o evento quando ambas as texturas forem carregadas
+      // Quando ambas as texturas estiverem carregadas:
+      canvas.style.visibility = "visible"; // Mostra o globo
       document.dispatchEvent(new Event("globoCarregado"));
     }
   }
