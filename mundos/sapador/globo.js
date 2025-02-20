@@ -11,7 +11,7 @@ function initGlobe() {
     0.1,
     1000
   );
-  camera.position.z = 1.8;  // Câmera mais próxima
+  camera.position.z = 3;  // Câmera mais próxima
 
   // Renderizador (agora com fundo transparente)
   const canvas = document.getElementById('globeCanvas');
