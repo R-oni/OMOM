@@ -63,6 +63,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
     /* Configuração original do globo */
     #globeCanvas {
@@ -70,6 +71,18 @@
       height: 40vmax;
       max-width: 80vw;
       max-height: 50vh;
+    }
+    /* Loading overlay para o globo */
+    #globeLoading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 100;
+      pointer-events: none;
     }
     /* Flipbook para mobile (sem contêiner extra) */
     #flipbook {
@@ -200,7 +213,6 @@
         left: 5vw;
         width: 40vw;
         height: 50vh;
-        /* Indicador visual para área do flipbook */
       }
       /* O flipbook preenche seu contêiner sem cortar o conteúdo */
       #flipbook {
@@ -208,7 +220,7 @@
         height: 100%;
         margin: 0;
         position: relative;
-        overflow: visible; /* Permite que o conteúdo seja exibido completamente */
+        overflow: visible;
       }
       /* Globo na direita */
       .globe-section {
@@ -245,6 +257,8 @@
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
+      <!-- Loading overlay para o globo -->
+      <div id="globeLoading">CARREGANDO...</div>
     </div>
     <!-- Contêiner para o flipbook -->
     <div id="flipbook-wrapper">
@@ -350,7 +364,6 @@
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-
       
       $("#btnSair").on("click", function(){
         $("#overlayContainer").fadeOut(500);
