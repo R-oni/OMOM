@@ -15,6 +15,7 @@ function initGlobe() {
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
+  canvas.style.visibility = "hidden"; // Oculta o globo até carregar
   const renderer = new THREE.WebGLRenderer({ 
     canvas, 
     antialias: true 
@@ -34,8 +35,17 @@ function initGlobe() {
   const geometry = new THREE.SphereGeometry(1, 64, 64);
 
   // (2) Carregar textura
+  let texturesLoaded = 0;
+  function checkLoaded() {
+  texturesLoaded++;
+  if (texturesLoaded === 2) {
+    // Agora que tudo carregou, mostrar o globo e remover o loading
+    canvas.style.visibility = "visible";
+    document.dispatchEvent(new Event("globoCarregado"));
+  }
+}
   const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load('mapabaikapei.png'); // seu arquivo
+  const texture = textureLoader.load('mapabaikapei.png', checkLoaded); // seu arquivo
 
   // (3) Material que reage a luz
   const material = new THREE.MeshStandardMaterial({
@@ -50,7 +60,7 @@ function initGlobe() {
 
   // Adicionando a camada de nuvem
   const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
-  const cloudTexture = textureLoader.load('nuvembaikapei.png'); 
+  const cloudTexture = textureLoader.load('nuvembaikapei.png', checkLoaded); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,  
