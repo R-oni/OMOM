@@ -81,31 +81,7 @@ function initGlobe() {
   directionalLight.castShadow = true;
   scene.add(directionalLight);
 
-  // =========================================
-  // Criando 3 globos menores orbitando
-  // =========================================
-
-  const pivot1 = new THREE.Object3D();
-  const pivot2 = new THREE.Object3D();
-  const pivot3 = new THREE.Object3D();
-  scene.add(pivot1, pivot2, pivot3);
-
-  const miniGeo = new THREE.SphereGeometry(0.01, 32, 32);
-
-  const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x808080 });
-  const miniSphere1 = new THREE.Mesh(miniGeo, miniMat1);
-  miniSphere1.position.x = 1.5;
-  pivot1.add(miniSphere1);
-
-  const miniMat2 = new THREE.MeshStandardMaterial({ color: 0x808080 });
-  const miniSphere2 = new THREE.Mesh(miniGeo, miniMat2);
-  miniSphere2.position.x = 2.0;
-  pivot2.add(miniSphere2);
-
-  const miniMat3 = new THREE.MeshStandardMaterial({ color: 0x555555 });
-  const miniSphere3 = new THREE.Mesh(miniGeo, miniMat3);
-  miniSphere3.position.x = 2.5;
-  pivot3.add(miniSphere3);
+  
 
   // (6) Função de animação
   function animate() {
@@ -115,10 +91,7 @@ function initGlobe() {
     sphere.rotation.y += 0.003;
     cloudMesh.rotation.y += 0.0039;
 
-    // Rotação dos pivôs (orbitas)
-    pivot1.rotation.y += 0.03;
-    pivot2.rotation.y += 0.015;
-    pivot3.rotation.y += 0.01;
+  
 
     renderer.render(scene, camera);
   }
