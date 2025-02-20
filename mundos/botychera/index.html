@@ -55,7 +55,7 @@
       height: 100%;
     }
     .top-section img {
-      width: 25vmax;
+      width: 15vmax;
       max-width: 80vw;
       height: auto;
     }
@@ -63,6 +63,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
     /* Configuração original do globo */
     #globeCanvas {
@@ -70,6 +71,18 @@
       height: 40vmax;
       max-width: 80vw;
       max-height: 50vh;
+    }
+    /* Loading overlay para o globo */
+    #globeLoading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 100;
+      pointer-events: none;
     }
     /* Flipbook para mobile (sem contêiner extra) */
     #flipbook {
@@ -125,18 +138,8 @@
       z-index: 10000;
     }
     /* Botão Veleywei */
-    
-    #veleyweiBtn {
-      position: absolute;
-      cursor: pointer;
-      width: 100%; 
-      height: 97%;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      animation: fadeInOut 1s infinite;
-    }
-
+    #veleyweiBtn,
+    #veleyweiBtn3,
     #veleyweiBtn2 {
       position: absolute;
       cursor: pointer;
@@ -192,7 +195,7 @@
         position: absolute;
         top: 20px;
         left: 15vw;
-        width: 270px;
+        width: 18vw;
         height: auto;
         display: flex;
         justify-content: center;
@@ -210,7 +213,6 @@
         left: 5vw;
         width: 40vw;
         height: 50vh;
-         /* Indicador visual para área do flipbook */
       }
       /* O flipbook preenche seu contêiner sem cortar o conteúdo */
       #flipbook {
@@ -218,7 +220,7 @@
         height: 100%;
         margin: 0;
         position: relative;
-        overflow: visible; /* Permite que o conteúdo seja exibido completamente */
+        overflow: visible;
       }
       /* Globo na direita */
       .globe-section {
@@ -255,6 +257,8 @@
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
+      <!-- Loading overlay para o globo -->
+      <div id="globeLoading">CARREGANDO...</div>
     </div>
     <!-- Contêiner para o flipbook -->
     <div id="flipbook-wrapper">
@@ -272,14 +276,16 @@
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliquebotychera1.webp" alt="Botão Cliquey Eroben">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquebotychera2.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 11"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
+          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
+        </div>
         <div class="page">
           <img src="imagens/cap1/pagina11.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
         <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
@@ -342,13 +348,19 @@
       });
       
       $(document).on("click", "#veleyweiBtn", function(){
-        $("#overlayImage").attr("src", "imagens/cap1/desenhobotychera1.webp");
+        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
 
       $(document).on("click", "#veleyweiBtn2", function(){
-        $("#overlayImage").attr("src", "imagens/cap1/desenhobotychera2.webp");
+        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn3", function(){
+        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
