@@ -92,17 +92,17 @@ function initGlobe() {
 
   const miniGeo = new THREE.SphereGeometry(0.01, 32, 32);
 
-  const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  const miniMat1 = new THREE.MeshStandardMaterial({ color: 0xE0E0E0 });
   const miniSphere1 = new THREE.Mesh(miniGeo, miniMat1);
-  miniSphere1.position.x = 1.5;
+  miniSphere1.position.x = 1.3;
   pivot1.add(miniSphere1);
 
-  const miniMat2 = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  const miniMat2 = new THREE.MeshStandardMaterial({ color: 0xC0C0C0 });
   const miniSphere2 = new THREE.Mesh(miniGeo, miniMat2);
   miniSphere2.position.x = 2.0;
   pivot2.add(miniSphere2);
 
-  const miniMat3 = new THREE.MeshStandardMaterial({ color: 0x555555 });
+  const miniMat3 = new THREE.MeshStandardMaterial({ color: 0xA0A0A0 });
   const miniSphere3 = new THREE.Mesh(miniGeo, miniMat3);
   miniSphere3.position.x = 2.5;
   pivot3.add(miniSphere3);
