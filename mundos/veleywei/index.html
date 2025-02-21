@@ -2,8 +2,12 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
+  <!-- Adicionado meta viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Exemplo Responsivo sem Rolagem</title>
-  <!-- Importando a fonte Press Start 2P -->
+  <!-- Importando a fonte Press Start 2P com preconnect para melhorar o carregamento -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     /* Estilos globais */
@@ -186,7 +190,7 @@
     @media screen and (orientation: landscape) {
       .page-container {
         position: relative;
-        display: block; /* Evita que o flex centralize os filhos */
+        display: block;
         width: 100vw;
         height: 100vh;
       }
@@ -209,13 +213,12 @@
       /* Contêiner para o flipbook, posicionado em bottom/left */
       #flipbook-wrapper {
         position: absolute;
-        bottom: 10vh; /* ajuste de margem inferior para evitar corte */
+        bottom: 10vh;
         left: 5vw;
         width: 40vw;
-        height: calc(40vw * 0.75); /* mantém a proporção das páginas (450/600 = 0.75) */
+        height: calc(40vw * 0.75);
         overflow: visible;
       }
-      /* O flipbook preenche seu contêiner sem cortar o conteúdo */
       #flipbook {
         width: 100%;
         height: 100%;
@@ -235,7 +238,6 @@
        justify-content: center;
        align-items: center;
       }
-
       #globeCanvas {
         width: 100%;
         height: 100%;
@@ -255,7 +257,8 @@
   <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
-      <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+      <!-- Adicionado width e height para reduzir mudanças de layout -->
+      <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey" width="600" height="200">
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
@@ -265,41 +268,43 @@
     <!-- Contêiner para o flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
-        <!-- Páginas do flipbook -->
-        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-        <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
-        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+        <!-- Páginas do flipbook com width/height explícitos e loading="lazy" para adiar imagens fora da tela -->
+        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9" width="600" height="450" loading="lazy"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 10" width="600" height="450" loading="lazy">
+          <!-- Adicionado width, height e loading="lazy" para o botão -->
+          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben" width="100" height="100" loading="lazy">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11" width="600" height="450" loading="lazy"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
-          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10" width="600" height="450" loading="lazy">
+          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben" width="100" height="100" loading="lazy">
         </div>
         <div class="page">
-          <img src="imagens/cap1/pagina11.webp" alt="Página 10">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina11.webp" alt="Página 10" width="600" height="450" loading="lazy">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben" width="100" height="100" loading="lazy">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11" width="600" height="450" loading="lazy"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11" width="600" height="450" loading="lazy"></div>
       </div>
     </div>
   </div>
 
   <!-- Overlay -->
+  <!-- Adicionado width e height para o overlay -->
   <div id="overlayContainer">
-    <img id="overlayImage" src="" alt="Imagem Overlay">
+    <img id="overlayImage" src="" alt="Imagem Overlay" width="600" height="450">
     <button id="btnSair">Sair</button>
   </div>
 
@@ -448,10 +453,10 @@
   </script>
 
   <script>
-  // Aguarda o evento "globoCarregado" e então remove o loading
-  document.addEventListener("globoCarregado", function() {
-    document.getElementById("globeLoading").style.display = "none";
-  });
+    // Remove o loading do globo quando o evento "globoCarregado" for disparado
+    document.addEventListener("globoCarregado", function() {
+      document.getElementById("globeLoading").style.display = "none";
+    });
   </script>
   
 </body>
