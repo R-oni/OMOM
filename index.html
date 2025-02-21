@@ -4,8 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outros Mundos Outras Mentes</title>
+  
+  <!-- Preconnect para otimizar o carregamento da fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  
   <style>
     /* ===== ESTILOS PARA MOBILE (Vertical) – Mantidos inalterados ===== */
     #loading-screen {
@@ -54,6 +60,8 @@
       z-index: 2;
     }
     
+    /* Garantir que o <picture> e a <img> respeitem os tamanhos definidos */
+    .title-container picture,
     .title-container img {
       max-width: 50%;
     }
@@ -82,6 +90,7 @@
       transition: transform 0.1s linear;
     }
     
+    .symbol picture,
     .symbol img {
       width: 25vw;
       transition: transform 0.3s;
@@ -100,21 +109,13 @@
     }
     
     /* ===== ESTILOS GLOBAIS PARA O FUNDO E ÁUDIO ===== */
-    /* (mantidos conforme seu código original) */
+    /* (Mantidos conforme o código original) */
     
-    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL =====
-         Aqui você pode ajustar manualmente margens, tamanhos e espaçamentos dos elementos.
-         Esses estilos serão aplicados apenas em telas com largura mínima de 1024px
-         e em orientação landscape.
-    =================================================================== */
+    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
-      /* Container principal */
       .page-container {
-        /* Exemplo usando grid para dispor as áreas: título na parte superior da esquerda e símbolos na área abaixo, e o título ocupa a coluna esquerda ou pode ser ajustado conforme desejado */
         display: grid;
         grid-template-columns: 50% 50%;
-        /* Aqui você pode definir as linhas em pixels ou porcentagens.
-           Exemplo: 30% para a área do título e 70% para os símbolos ou outro arranjo. */
         grid-template-rows: 30% 70%;
         grid-template-areas:
           "title symbols"
@@ -127,36 +128,32 @@
         box-sizing: border-box;
       }
       
-      /* Área do Título */
       .title-container {
         grid-area: title;
-        /* Aqui você pode ajustar manualmente margens e tamanhos */
-        margin: 60px;  /* Exemplo: margem de 20px */
+        margin: 60px;
         display: flex;
         justify-content: center;
         align-items: center;
       }
+      .title-container picture,
       .title-container img {
-        /* Defina larguras e alturas em pixels conforme desejar */
         width: 900px;
-        height: auto;
+        height: auto; /* Ajuste conforme a proporção original da imagem */
       }
       
-      /* Área dos Símbolos */
       .symbols-wrapper {
         grid-area: symbols;
-        /* Ajuste o padding ou margem conforme necessário */
         padding: 30px;
         overflow-y: auto;
       }
       
       .symbols-container {
-        gap: 30px; /* Exemplo: gap de 30px entre os símbolos */
+        gap: 30px;
         justify-content: center;
       }
       
+      .symbol picture,
       .symbol img {
-        /* Alterar o tamanho dos símbolos em pixels */
         width: 180px;
         height: auto;
       }
@@ -173,86 +170,135 @@
 
   <div class="title-container">
     <a href="omom.html">
-      <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
+      <picture>
+        <!-- Usando formato WebP com fallback para PNG -->
+        <source srcset="assets/title.webp" type="image/webp">
+        <img src="assets/title.png" alt="Outros Mundos Outras Mentes" width="900" height="200">
+      </picture>
     </a>
   </div>
 
   <div class="symbols-wrapper">
     <div class="symbols-container">
+      <!-- Cada símbolo utiliza <picture> para oferecer WebP e fallback, com dimensões e lazy loading -->
       <div class="symbol brither" id="symbol1">
         <a href="mundos/veleywei/index.html">
-          <img src="assets/veleyweimenu.png" alt="Velei'wey">
+          <picture>
+            <source srcset="assets/veleyweimenu.webp" type="image/webp">
+            <img src="assets/veleyweimenu.png" alt="Velei'wey" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol2">
         <a href="mundos/botychera/index.html">
-          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+          <picture>
+            <source srcset="mundos/botychera/botycheramenu.webp" type="image/webp">
+            <img src="mundos/botychera/botycheramenu.png" alt="Botychera" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol3">
         <a href="mundos/himpis/index.html">
-          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+          <picture>
+            <source srcset="mundos/himpis/himpismenu.webp" type="image/webp">
+            <img src="mundos/himpis/himpismenu.png" alt="Himpis" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol4">
         <a href="mundos/ttok/index.html">
-          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+          <picture>
+            <source srcset="mundos/ttok/ttokmenu.webp" type="image/webp">
+            <img src="mundos/ttok/ttokmenu.png" alt="T'Tok" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol5">
         <a href="mundos/denbou/index.html">
-          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+          <picture>
+            <source srcset="mundos/denbou/denboumenu.webp" type="image/webp">
+            <img src="mundos/denbou/denboumenu.png" alt="dendenboubou" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol6">
         <a href="mundos/araporu/index.html">
-          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+          <picture>
+            <source srcset="mundos/araporu/araporumenu.webp" type="image/webp">
+            <img src="mundos/araporu/araporumenu.png" alt="araporu" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol7">
         <a href="mundos/os artesaos/index.html">
-          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+          <picture>
+            <source srcset="mundos/os artesaos/artesaosmenu.webp" type="image/webp">
+            <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol8">
         <a href="mundos/sapador/index.html">
-          <img src="mundos/sapador/sapador.png" alt="sapador">
+          <picture>
+            <source srcset="mundos/sapador/sapador.webp" type="image/webp">
+            <img src="mundos/sapador/sapador.png" alt="sapador" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol brither" id="symbol11">
         <a href="mundos/dosirelala/index.html">
-          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+          <picture>
+            <source srcset="mundos/dosirelala/dosirelalamenu.webp" type="image/webp">
+            <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol locked" id="symbol9">
         <a href="mundos/calindreno/index.html">
-          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+          <picture>
+            <source srcset="mundos/calindreno/calindreno.webp" type="image/webp">
+            <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol locked" id="symbol10">
         <a href="mundos/mundo pulsante/index.html">
-          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+          <picture>
+            <source srcset="mundos/mundo pulsante/jocelyn.webp" type="image/webp">
+            <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
-      
       <div class="symbol locked" id="symbol12">
         <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+          <picture>
+            <source srcset="mundos/mundo 1/mundo1.webp" type="image/webp">
+            <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol locked" id="symbol13">
         <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+          <picture>
+            <source srcset="mundos/mundo 2/mundo2.webp" type="image/webp">
+            <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol locked" id="symbol14">
         <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+          <picture>
+            <source srcset="mundos/mundo 3/mundo3menu.webp" type="image/webp">
+            <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
       <div class="symbol locked" id="symbol15">
         <a href="mundos/ttok/index.html">
-          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+          <picture>
+            <source srcset="mundos/mundo 4/mundo4menu.webp" type="image/webp">
+            <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno" width="250" height="250" loading="lazy">
+          </picture>
         </a>
       </div>
     </div>
