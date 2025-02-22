@@ -139,7 +139,7 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botões do flipbook */
+    /* Botões de interação do flipbook */
     #veleyweiBtn,
     #veleyweiBtn3,
     #veleyweiBtn2 {
@@ -257,8 +257,10 @@
   </style>
 </head>
 <body>
-  <!-- Não usamos <audio> element; usaremos Web Audio API -->
-  
+  <!-- Elementos de áudio (ocultos) -->
+  <audio id="bg-music" src="byfire.mp3" preload="auto" loop style="display:none"></audio>
+  <audio id="page-sound" src="sompagina.aac" preload="auto" style="display:none"></audio>
+
   <!-- Loading Screen -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
@@ -323,81 +325,36 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
-  
-  <!-- Web Audio API: Carregamento e inicialização dos áudios -->
   <script>
-    let audioContext;
-    let bgMusicBuffer;
-    let pageTurnBuffer;
-    let bgMusicSource = null;
-
-    // Função para carregar um buffer de áudio
-    async function loadAudioBuffer(url) {
-      const response = await fetch(url);
-      const arrayBuffer = await response.arrayBuffer();
-      return await audioContext.decodeAudioData(arrayBuffer);
-    }
-
-    // Inicializa o AudioContext e carrega os buffers
-    async function initAudioBuffers() {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      try {
-        bgMusicBuffer = await loadAudioBuffer('byfire.mp3');
-        pageTurnBuffer = await loadAudioBuffer('sompagina.aac');
-      } catch (err) {
-        console.error("Erro ao carregar áudios:", err);
-      }
-    }
-    initAudioBuffers();
-
-    // Inicia a música de fundo com loop e 50% de volume
-    function startBackgroundMusic() {
-      if (bgMusicBuffer) {
-        bgMusicSource = audioContext.createBufferSource();
-        bgMusicSource.buffer = bgMusicBuffer;
-        bgMusicSource.loop = true;
-        const gainNode = audioContext.createGain();
-        gainNode.gain.value = 0.5; // 50%
-        bgMusicSource.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        bgMusicSource.start(0);
-      }
-    }
-
-    // Reproduz o som de virar página (100% volume) sem delay
-    function playPageTurnSound() {
-      if (pageTurnBuffer) {
-        const source = audioContext.createBufferSource();
-        source.buffer = pageTurnBuffer;
-        source.connect(audioContext.destination);
-        source.start(0);
-      }
-    }
-
-    // Força a ativação do áudio no primeiro clique do usuário
-    document.addEventListener('click', async function unlockAudio() {
-      if (audioContext && audioContext.state === 'suspended') {
-        await audioContext.resume();
-      }
-      if (!bgMusicSource) {
-        startBackgroundMusic();
-      }
-      // Tocar rapidamente o som de virar página para "aquecer" o buffer
-      playPageTurnSound();
+    // Força a ativação do áudio no primeiro clique do usuário.
+    // Isso inicia a música de fundo e "destrava" os sons.
+    document.addEventListener('click', function unlockAudio() {
+      var bgMusic = document.getElementById('bg-music');
+      bgMusic.play().catch(function(err){
+        console.log("Erro ao reproduzir bg-music: " + err);
+      });
+      // Toca uma vez o som de virar página para destravar possíveis bloqueios.
+      var pageSound = document.getElementById('page-sound');
+      pageSound.currentTime = 0;
+      pageSound.play().catch(function(err){
+        console.log("Erro ao reproduzir page-sound: " + err);
+      });
       document.removeEventListener('click', unlockAudio);
     }, { once: true });
   </script>
-  
-  <!-- Configuração do flipbook -->
   <script>
     $(document).ready(function(){
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
       });
-      // Ao virar a página, dispara o som
+      // Ao virar a página, dispara o som clonando o elemento para minimizar delay
       $("#flipbook").bind("turned", function(event, page, view){
-        playPageTurnSound();
+        var orig = document.getElementById('page-sound');
+        var clone = orig.cloneNode();
+        clone.play().catch(function(err){
+          console.log("Erro ao reproduzir som da página: " + err);
+        });
       });
       function resizeFlipbook() {
         if ($(window).width() < 1024) {
@@ -447,8 +404,6 @@
       });
     });
   </script>
-  
-  <!-- Scripts de animação do canvas -->
   <script src="./globo.js"></script>
   <script>
     (function(){
