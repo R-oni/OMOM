@@ -105,6 +105,17 @@
       position: relative;
       margin: auto;
       cursor: grab;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    .page {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
     .page img {
       width: 100%;
