@@ -339,7 +339,7 @@
       // Configuração do background music usando AudioContext para forçar reprodução
       var audioContext = new (window.AudioContext || window.webkitAudioContext)();
       var bgMusic = document.getElementById('background-music');
-      bgMusic.volume = 0.5; // 50%
+      bgMusic.volume = 0.9; // 50%
       var track = audioContext.createMediaElementSource(bgMusic);
       track.connect(audioContext.destination);
       
