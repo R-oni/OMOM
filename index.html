@@ -63,7 +63,6 @@
       line-height: 1.2;
       font-size: 32px;
       text-decoration: none;
-      
     }
     
     .symbols-wrapper {
@@ -258,9 +257,9 @@
     </div>
   </div>
 
-  <!-- Música de fundo: arpeggio.mp3 -->
-  <audio id="bgm" loop>
-    <source src="arpeggio.mp3" type="audio/mpeg">
+  <!-- Música de fundo: memories.mp3 -->
+  <audio id="bgm" loop style="display:none;">
+    <source src="memories.mp3" type="audio/mpeg">
     Seu navegador não suporta o elemento de áudio.
   </audio>
 
@@ -270,11 +269,12 @@
       document.getElementById("loading-screen").style.display = "none";
     });
 
-    // Força a reprodução automática da música com volume 50%
+    // Tenta iniciar a música de fundo "memories.mp3" assim que possível.
+    // Se o autoplay for bloqueado, aguarda o primeiro clique do usuário.
     document.addEventListener("DOMContentLoaded", function() {
       const bgm = document.getElementById("bgm");
       bgm.volume = 0.5;
-      bgm.currentTime = 70;
+      // Tenta tocar a música imediatamente
       const playPromise = bgm.play();
       if (playPromise !== undefined) {
         playPromise.catch(function(error) {
@@ -286,7 +286,7 @@
         });
       }
     });
-
+    
     // Animação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
@@ -398,4 +398,4 @@
     });
   </script>
 </body>
-          </html>
+      </html>
