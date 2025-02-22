@@ -342,7 +342,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
   <script>
-    // Variáveis para definir os tempos de início e fim do trecho do áudio de virar página (em segundos)
+    // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
     const flipAudioStart = 1;
     const flipAudioEnd = 1.4;
     
@@ -416,6 +416,28 @@
           $(this).fadeOut(500);
         }
       });
+      
+      // Corrige o problema de propagação dos cliques dos botões veleywei
+      $(document).on("click", "#veleyweiBtn", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      $(document).on("click", "#veleyweiBtn2", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      $(document).on("click", "#veleyweiBtn3", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
     });
   </script>
   <script src="./globo.js"></script>
@@ -486,4 +508,4 @@
     });
   </script>
 </body>
-      </html>
+          </html>
