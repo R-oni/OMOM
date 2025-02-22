@@ -100,7 +100,7 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Flipbook para mobile (sem contêiner extra) */
+    /* Flipbook – mantendo o comportamento original no PC */
     #flipbook {
       position: relative;
       margin: auto;
@@ -288,8 +288,8 @@
   </style>
 </head>
 <body>
-  <!-- Música de fundo (autoplay com loop) -->
-  <audio id="background-music" src="byfire.mp3" autoplay loop></audio>
+  <!-- Música de fundo (sem autoplay para forçar o clique) -->
+  <audio id="background-music" src="musica.mp3" loop></audio>
 
   <!-- Loading Screen -->
   <div id="loading-screen">
@@ -368,31 +368,47 @@
     const flipAudioEnd = 1.4;
     
     document.addEventListener('DOMContentLoaded', () => {
+      // Cria e configura o áudio para virar página
       flipAudio = new Audio('sompagina.aac');
       flipAudio.preload = 'auto';
       flipAudio.load();
       flipAudio.volume = 0.2;
       
+      // Listener único para destravar áudio e iniciar música de fundo no primeiro clique
       document.addEventListener('click', function unlockAudio() {
+        // Tenta reproduzir a música de fundo (forçando o autoplay)
+        const bgMusic = document.getElementById('background-music');
+        bgMusic.volume = 0.5;
+        bgMusic.play().catch(err => console.log("Erro ao reproduzir música de fundo: " + err));
+        
+        // Destrava o som de virar página
         flipAudio.play().then(() => {
           flipAudio.pause();
           flipAudio.currentTime = flipAudioStart;
-        });
+        }).catch(err => console.log("Erro ao destravar flipAudio: " + err));
+        
         document.removeEventListener('click', unlockAudio);
-      });
-      
-      // Configuração da música de fundo
-      var bgMusic = document.getElementById('background-music');
-      bgMusic.volume = 0.5;
-      bgMusic.play().catch(function(err) {
-        console.log("Auto-play bloqueado: " + err);
       });
     });
     
     $(document).ready(function(){
+      // Inicializa o flipbook
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
+      });
+      
+      // Vincula o som de virar página ao evento "turned"
+      $("#flipbook").bind("turned", function(event, page, view){
+        if(flipAudio) {
+          flipAudio.currentTime = flipAudioStart;
+          flipAudio.play().then(() => {
+            setTimeout(function(){
+              flipAudio.pause();
+              flipAudio.currentTime = flipAudioStart;
+            }, (flipAudioEnd - flipAudioStart) * 1000);
+          }).catch(err => console.log("Erro ao reproduzir flipAudio no virar da página: " + err));
+        }
       });
       
       // Redimensionamento do flipbook conforme dispositivo
