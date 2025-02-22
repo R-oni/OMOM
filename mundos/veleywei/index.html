@@ -66,7 +66,6 @@
       z-index: 2;
       margin-bottom: 50px;
     }
-    /* Novo estilo para o título em texto */
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
@@ -81,14 +80,12 @@
       align-items: center;
       position: relative;
     }
-    /* Configuração original do globo */
     #globeCanvas {
       width: 40vmax;
       height: 40vmax;
       max-width: 80vw;
       max-height: 50vh;
     }
-    /* Loading overlay para o globo */
     #globeLoading {
       position: absolute;
       top: 50%;
@@ -100,7 +97,7 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Flipbook para mobile (sem contêiner extra) */
+    /* Flipbook (mantém o layout original) */
     #flipbook {
       position: relative;
       margin: auto;
@@ -110,16 +107,6 @@
       width: 100%;
       height: auto;
       display: block;
-    }
-    .sound-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 30px;
-      background: rgba(255, 255, 200, 0.2);
-      cursor: pointer;
     }
     /* Overlay */
     #overlayContainer {
@@ -153,7 +140,7 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botão Veleywei */
+    /* Botões do flipbook */
     #veleyweiBtn,
     #veleyweiBtn3,
     #veleyweiBtn2 {
@@ -198,21 +185,19 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout Horizontal – para qualquer dispositivo em paisagem */
+    /* Layout Horizontal – versão PC */
     @media screen and (orientation: landscape) {
       .page-container {
         position: relative;
-        display: block; /* Evita que o flex centralize os filhos */
+        display: block;
         width: 100vw;
         height: 100vh;
       }
-      /* Título na esquerda superior */
       .top-section {
         position: absolute;
         top: 20px;
         left: 15vw;
         width: 18vw;
-        height: auto;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -222,16 +207,14 @@
         height: auto;
         object-fit: contain;
       }
-      /* Contêiner para o flipbook, posicionado em bottom/left */
       #flipbook-wrapper {
         position: absolute;
-        bottom: 5vh; /* ajuste de margem inferior para evitar corte */
+        bottom: 10vh;
         left: 5vw;
         width: 40vw;
-        height: calc(40vw * 0.75); /* mantém a proporção das páginas (450/600 = 0.75) */
+        height: calc(40vw * 0.75);
         overflow: visible;
       }
-      /* O flipbook preenche seu contêiner sem cortar o conteúdo */
       #flipbook {
         width: 100%;
         height: 100%;
@@ -239,17 +222,16 @@
         position: relative;
         overflow: visible;
       }
-      /* Globo na direita */
       .globe-section {
-       position: absolute;
-       top: 50%;
-       right: 10vw;
-       transform: translateY(-50%);
-       width: 700px;
-       height: 700px;
-       display: flex;
-       justify-content: center;
-       align-items: center;
+        position: absolute;
+        top: 50%;
+        right: 10vw;
+        transform: translateY(-50%);
+        width: 700px;
+        height: 700px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       #globeCanvas {
         width: 100%;
@@ -261,32 +243,27 @@
   </style>
 </head>
 <body>
-  <!-- Elementos de áudio para a música de fundo e som de virar página -->
+  <!-- Elemento de música de fundo (inicia com clique) -->
   <audio id="bgMusic" src="byfire.mp3" preload="auto" loop style="display: none;"></audio>
-  <audio id="ptSound" src="sompagina.aac" preload="auto" style="display: none;"></audio>
-
+  
   <!-- Loading Screen -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
-
+  
   <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
     </div>
-
     <div class="title-container">
       <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
     </div>
-    
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
-      <!-- Loading overlay para o globo -->
       <div id="globeLoading">CARREGANDO...</div>
     </div>
-    <!-- Contêiner para o flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
@@ -320,13 +297,13 @@
       </div>
     </div>
   </div>
-
+  
   <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
     <button id="btnSair">Sair</button>
   </div>
-
+  
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -334,28 +311,60 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
+  
+  <!-- Web Audio API: Pré-carrega o som de virar página -->
+  <script>
+    let audioCtx;
+    let pageTurnBuffer = null;
+    
+    // Cria o AudioContext e carrega o arquivo de som
+    window.addEventListener('load', function() {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      fetch('sompagina.aac')
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+        .then(decodedData => {
+          pageTurnBuffer = decodedData;
+          console.log("Som de virar página carregado");
+        })
+        .catch(err => console.error("Erro ao carregar som de virar página:", err));
+    });
+    
+    // Função para tocar o som de virar página imediatamente
+    function playPageTurnSound() {
+      if (!pageTurnBuffer || !audioCtx) return;
+      const source = audioCtx.createBufferSource();
+      source.buffer = pageTurnBuffer;
+      source.connect(audioCtx.destination);
+      source.start(0);
+    }
+    
+    // Inicia a música de fundo com qualquer clique na tela
+    document.addEventListener('click', function() {
+      // Resume o AudioContext, se necessário
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const bg = document.getElementById('bgMusic');
+      if (bg.paused) {
+        bg.volume = 0.5;
+        bg.currentTime = 0;
+        bg.play().catch(err => console.error("Erro ao tocar bgMusic:", err));
+      }
+    }, { once: true });
+  </script>
+  
+  <!-- Configuração do flipbook -->
   <script>
     $(document).ready(function(){
-      // Inicializa o flipbook com o código original
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
       });
       
-      // Quando o usuário interagir com o flipbook pela 1ª vez, inicie a música de fundo.
-      $("#flipbook").one("click touchstart", function(){
-        var bg = document.getElementById("bgMusic");
-        bg.currentTime = 0;
-        bg.volume = 0.5;
-        bg.play().catch(function(err){ console.log("Erro ao tocar bgMusic:", err); });
-      });
-      
-      // Ao virar a página, clone o áudio do som de virar página e toque imediatamente.
+      // Ao virar a página, dispara imediatamente o som de virar página
       $("#flipbook").bind("turned", function(event, page, view){
-        var orig = document.getElementById("ptSound");
-        var clone = orig.cloneNode(true);
-        clone.currentTime = 0;
-        clone.play().catch(function(err){ console.log("Erro ao tocar ptSound:", err); });
+        playPageTurnSound();
       });
       
       // Redimensionamento para telas pequenas
@@ -371,7 +380,7 @@
         resizeFlipbook();
       });
       
-      // Código para o overlay permanece o mesmo:
+      // Código para o overlay permanece inalterado
       $(document).on("click", "#veleyweiBtn", function(){
         $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
@@ -407,17 +416,17 @@
       });
     });
   </script>
+  
+  <!-- Scripts de animação do canvas -->
   <script src="./globo.js"></script>
   <script>
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
-
       let stars = [];
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
-
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -436,7 +445,6 @@
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
-
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
@@ -468,7 +476,6 @@
     })();
   </script>
   <script>
-    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
     });
