@@ -59,6 +59,22 @@
       max-width: 80vw;
       height: auto;
     }
+    .title-container {
+      text-align: center;
+      margin-top: 1px;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 50px;
+    }
+    /* Novo estilo para o título em texto */
+    .title-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      text-align: center;
+      line-height: 1.2;
+      font-size: 14px;
+      text-decoration: none;
+    }
     .globe-section {
       display: flex;
       justify-content: center;
@@ -89,6 +105,17 @@
       position: relative;
       margin: auto;
       cursor: grab;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    .page {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
     .page img {
       width: 100%;
@@ -190,21 +217,37 @@
         width: 100vw;
         height: 100vh;
       }
-      /* Título na esquerda superior */
+      /* Container principal agrupando imagem e título */
       .top-section {
         position: absolute;
         top: 20px;
         left: 15vw;
-        width: 15vw;
-        height: auto;
+        width: 18vw;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        gap: 10px;
       }
+      /* Mantemos o estilo da imagem */
       .top-section img {
         width: 100%;
         height: auto;
         object-fit: contain;
+      }
+      /* Adaptamos o container do texto */
+      .title-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* Novo estilo para o título em texto */
+      .title-text {
+        font-family: 'Press Start 2P', cursive;
+        color: #00FFE7;
+        text-align: center;
+        line-height: 1.2;
+        font-size: 14px;
+        text-decoration: none;
       }
       /* Contêiner para o flipbook, posicionado em bottom/left */
       #flipbook-wrapper {
@@ -225,17 +268,16 @@
       }
       /* Globo na direita */
       .globe-section {
-       position: absolute;
-       top: 50%;
-       right: 10vw;
-       transform: translateY(-50%);
-       width: 700px;
-       height: 700px;
-       display: flex;
-       justify-content: center;
-       align-items: center;
+        position: absolute;
+        top: 50%;
+        right: 10vw;
+        transform: translateY(-50%);
+        width: 700px;
+        height: 700px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-
       #globeCanvas {
         width: 100%;
         height: 100%;
@@ -246,6 +288,9 @@
   </style>
 </head>
 <body>
+  <!-- Música de fundo (autoplay com loop) -->
+  <audio id="background-music" src="yourlunarway.mp3" autoplay loop></audio>
+
   <!-- Loading Screen -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
@@ -257,6 +302,13 @@
     <div class="top-section">
       <img src="tituloaraporu.png" alt="Título Velei'wey">
     </div>
+
+    <div class="title-container">
+      <a href="omom.html" class="title-text">
+        ARAPORU
+      </a>
+    </div>
+    
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <!-- Loading overlay para o globo -->
@@ -275,15 +327,24 @@
         <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
         <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
         <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-       <div class="page">
-          <img src="imagens/cap1/pagina7.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliquerolodoborao.webp" alt="Botão Cliquey Eroben">
-        </div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquearaporu.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
         </div>
-        
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
+          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page">
+          <img src="imagens/cap1/pagina11.webp" alt="Página 10">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
       </div>
     </div>
   </div>
@@ -319,6 +380,13 @@
         });
         document.removeEventListener('click', unlockAudio);
       });
+      
+      // Configuração da música de fundo
+      var bgMusic = document.getElementById('background-music');
+      bgMusic.volume = 0.5;
+      bgMusic.play().catch(function(err) {
+        console.log("Auto-play bloqueado: " + err);
+      });
     });
     
     $(document).ready(function(){
@@ -327,11 +395,15 @@
         display: 'double'
       });
       
-      // Redimensionamento automático apenas para telas pequenas (mobile)
+      // Redimensionamento do flipbook conforme dispositivo
       function resizeFlipbook() {
         if ($(window).width() < 1024) {
           var newWidth = $(window).width() * 0.9;
           var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
+        } else {
+          var newWidth = $("#flipbook-wrapper").width();
+          var newHeight = $("#flipbook-wrapper").height();
           $("#flipbook").turn("size", newWidth, newHeight);
         }
       }
@@ -341,13 +413,13 @@
       });
       
       $(document).on("click", "#veleyweiBtn", function(){
-        $("#overlayImage").attr("src", "rolodoborao.png");
+        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
 
       $(document).on("click", "#veleyweiBtn2", function(){
-        $("#overlayImage").attr("src", "corpoaraporu.png");
+        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
@@ -439,11 +511,37 @@
   </script>
 
   <script>
-  // Aguarda o evento "globoCarregado" e então remove o loading
-  document.addEventListener("globoCarregado", function() {
-    document.getElementById("globeLoading").style.display = "none";
-  });
+    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
+    document.addEventListener("globoCarregado", function() {
+      document.getElementById("globeLoading").style.display = "none";
+    });
   </script>
-  
+
+  <!-- Script para reposicionar o título abaixo da imagem na versão horizontal -->
+  <script>
+    function repositionTitle() {
+      if(window.innerWidth > window.innerHeight) { // Horizontal
+        const topSection = document.querySelector('.top-section');
+        const titleContainer = document.querySelector('.title-container');
+        const img = topSection.querySelector('img');
+        if(img) {
+          const imgHeight = img.getBoundingClientRect().height;
+          titleContainer.style.position = 'absolute';
+          titleContainer.style.top = (20 + imgHeight + 10) + 'px';
+          titleContainer.style.left = topSection.style.left || '15vw';
+          titleContainer.style.width = topSection.style.width || '18vw';
+        }
+      } else {
+        // Vertical: reseta os estilos
+        const titleContainer = document.querySelector('.title-container');
+        titleContainer.style.position = '';
+        titleContainer.style.top = '';
+        titleContainer.style.left = '';
+        titleContainer.style.width = '';
+      }
+    }
+    window.addEventListener('resize', repositionTitle);
+    window.addEventListener('load', repositionTitle);
+  </script>
 </body>
 </html>
