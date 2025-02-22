@@ -139,7 +139,7 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botões de interação do flipbook */
+    /* Botões do flipbook */
     #veleyweiBtn,
     #veleyweiBtn3,
     #veleyweiBtn2 {
@@ -257,9 +257,8 @@
   </style>
 </head>
 <body>
-  <!-- Música de fundo (arquivo byfire.mp3) -->
-  <audio id="background-music" src="byfire.mp3" loop></audio>
-
+  <!-- Não usamos <audio> element; usaremos Web Audio API -->
+  
   <!-- Loading Screen -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
@@ -324,63 +323,82 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
+  
+  <!-- Web Audio API: Carregamento e inicialização dos áudios -->
   <script>
-    let flipAudio;
-    const flipAudioStart = 1;
-    const flipAudioEnd = 1.4;
-    
-    document.addEventListener('DOMContentLoaded', function(){
-      // Configuração do áudio para virar página (som 100%)
-      flipAudio = new Audio('sompagina.aac');
-      flipAudio.preload = 'auto';
-      flipAudio.load();
-      flipAudio.volume = 1.0; // 100%
-      
-      // Configuração do background music usando AudioContext para forçar reprodução
-      var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      var bgMusic = document.getElementById('background-music');
-      bgMusic.volume = 0.9; // 50%
-      var track = audioContext.createMediaElementSource(bgMusic);
-      track.connect(audioContext.destination);
-      
-      function unlockAudio() {
-        if (audioContext.state === 'suspended') {
-          audioContext.resume().then(function(){
-            bgMusic.play().catch(err => console.log("Erro ao reproduzir música de fundo: " + err));
-          });
-        } else {
-          bgMusic.play().catch(err => console.log("Erro ao reproduzir música de fundo: " + err));
-        }
-        // Destrava o som do flipbook
-        flipAudio.play().then(() => {
-          flipAudio.pause();
-          flipAudio.currentTime = flipAudioStart;
-        }).catch(err => console.log("Erro ao destravar flipAudio: " + err));
-        document.removeEventListener('click', unlockAudio);
+    let audioContext;
+    let bgMusicBuffer;
+    let pageTurnBuffer;
+    let bgMusicSource = null;
+
+    // Função para carregar um buffer de áudio
+    async function loadAudioBuffer(url) {
+      const response = await fetch(url);
+      const arrayBuffer = await response.arrayBuffer();
+      return await audioContext.decodeAudioData(arrayBuffer);
+    }
+
+    // Inicializa o AudioContext e carrega os buffers
+    async function initAudioBuffers() {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      try {
+        bgMusicBuffer = await loadAudioBuffer('byfire.mp3');
+        pageTurnBuffer = await loadAudioBuffer('sompagina.aac');
+      } catch (err) {
+        console.error("Erro ao carregar áudios:", err);
       }
-      document.addEventListener('click', unlockAudio, {once: true});
-    });
-    
+    }
+    initAudioBuffers();
+
+    // Inicia a música de fundo com loop e 50% de volume
+    function startBackgroundMusic() {
+      if (bgMusicBuffer) {
+        bgMusicSource = audioContext.createBufferSource();
+        bgMusicSource.buffer = bgMusicBuffer;
+        bgMusicSource.loop = true;
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = 0.5; // 50%
+        bgMusicSource.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        bgMusicSource.start(0);
+      }
+    }
+
+    // Reproduz o som de virar página (100% volume) sem delay
+    function playPageTurnSound() {
+      if (pageTurnBuffer) {
+        const source = audioContext.createBufferSource();
+        source.buffer = pageTurnBuffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+      }
+    }
+
+    // Força a ativação do áudio no primeiro clique do usuário
+    document.addEventListener('click', async function unlockAudio() {
+      if (audioContext && audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+      if (!bgMusicSource) {
+        startBackgroundMusic();
+      }
+      // Tocar rapidamente o som de virar página para "aquecer" o buffer
+      playPageTurnSound();
+      document.removeEventListener('click', unlockAudio);
+    }, { once: true });
+  </script>
+  
+  <!-- Configuração do flipbook -->
+  <script>
     $(document).ready(function(){
-      // Inicializa o flipbook com o código original
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
       });
-      
-      // Som do flipbook disparado ao virar a página
+      // Ao virar a página, dispara o som
       $("#flipbook").bind("turned", function(event, page, view){
-        if(flipAudio) {
-          flipAudio.currentTime = flipAudioStart;
-          flipAudio.play().then(() => {
-            setTimeout(function(){
-              flipAudio.pause();
-              flipAudio.currentTime = flipAudioStart;
-            }, (flipAudioEnd - flipAudioStart) * 1000);
-          }).catch(err => console.log("Erro ao reproduzir flipAudio no virar da página: " + err));
-        }
+        playPageTurnSound();
       });
-      
       function resizeFlipbook() {
         if ($(window).width() < 1024) {
           var newWidth = $(window).width() * 0.9;
@@ -429,6 +447,8 @@
       });
     });
   </script>
+  
+  <!-- Scripts de animação do canvas -->
   <script src="./globo.js"></script>
   <script>
     (function(){
@@ -444,10 +464,10 @@
       }
       function createStars(){
         stars = [];
-        for(let i=0; i<numStars; i++){
+        for(let i = 0; i < numStars; i++){
           stars.push({
-            x: Math.random() * canvas.width - canvas.width/2,
-            y: Math.random() * canvas.height - canvas.height/2,
+            x: Math.random() * canvas.width - canvas.width / 2,
+            y: Math.random() * canvas.height - canvas.height / 2,
             z: Math.random() * canvas.width
           });
         }
@@ -459,13 +479,13 @@
         stars.forEach(star => {
           star.z -= speed;
           if(star.z <= 0){
-            star.x = Math.random() * canvas.width - canvas.width/2;
-            star.y = Math.random() * canvas.height - canvas.height/2;
+            star.x = Math.random() * canvas.width - canvas.width / 2;
+            star.y = Math.random() * canvas.height - canvas.height / 2;
             star.z = canvas.width;
           }
           let perspective = 300 / star.z;
-          let sx = star.x * perspective + canvas.width/2;
-          let sy = star.y * perspective + canvas.height/2;
+          let sx = star.x * perspective + canvas.width / 2;
+          let sy = star.y * perspective + canvas.height / 2;
           let size = Math.max(2 * perspective, 0.5);
           ctx.beginPath();
           ctx.arc(sx, sy, size, 0, 2 * Math.PI);
