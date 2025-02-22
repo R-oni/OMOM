@@ -54,8 +54,14 @@
       z-index: 2;
     }
     
-    .title-container img {
-      max-width: 50%;
+    /* Novo estilo para o título em texto */
+    .title-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      text-align: center;
+      line-height: 1.2;
+      font-size: 24px;
+      text-decoration: none;
     }
     
     .symbols-wrapper {
@@ -103,18 +109,14 @@
     /* (mantidos conforme seu código original) */
     
     /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL =====
-         Aqui você pode ajustar manualmente margens, tamanhos e espaçamentos dos elementos.
          Esses estilos serão aplicados apenas em telas com largura mínima de 1024px
          e em orientação landscape.
     =================================================================== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       /* Container principal */
       .page-container {
-        /* Exemplo usando grid para dispor as áreas: título na parte superior da esquerda e símbolos na área abaixo, e o título ocupa a coluna esquerda ou pode ser ajustado conforme desejado */
         display: grid;
         grid-template-columns: 50% 50%;
-        /* Aqui você pode definir as linhas em pixels ou porcentagens.
-           Exemplo: 30% para a área do título e 70% para os símbolos ou outro arranjo. */
         grid-template-rows: 30% 70%;
         grid-template-areas:
           "title symbols"
@@ -130,33 +132,28 @@
       /* Área do Título */
       .title-container {
         grid-area: title;
-        /* Aqui você pode ajustar manualmente margens e tamanhos */
-        margin: 60px;  /* Exemplo: margem de 20px */
+        margin: 60px;
         display: flex;
         justify-content: center;
         align-items: center;
       }
-      .title-container img {
-        /* Defina larguras e alturas em pixels conforme desejar */
-        width: 900px;
-        height: auto;
+      .title-container .title-text {
+        font-size: 36px;
       }
       
       /* Área dos Símbolos */
       .symbols-wrapper {
         grid-area: symbols;
-        /* Ajuste o padding ou margem conforme necessário */
         padding: 30px;
         overflow-y: auto;
       }
       
       .symbols-container {
-        gap: 30px; /* Exemplo: gap de 30px entre os símbolos */
+        gap: 30px;
         justify-content: center;
       }
       
       .symbol img {
-        /* Alterar o tamanho dos símbolos em pixels */
         width: 180px;
         height: auto;
       }
@@ -172,8 +169,9 @@
   <canvas id="automatonCanvas"></canvas>
 
   <div class="title-container">
-    <a href="omom.html">
-      <img src="assets/title.png" alt="Outros Mundos Outras Mentes">
+    <a href="omom.html" class="title-text">
+      OUTROS MUNDOS<br>
+      OUTRAS MENTES
     </a>
   </div>
 
@@ -398,4 +396,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
