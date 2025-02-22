@@ -209,32 +209,32 @@
         width: 100vw;
         height: 100vh;
       }
-      /* Título na esquerda superior */
+      /* Container principal agrupando imagem e título */
       .top-section {
-        position: absolute;
-        top: 20px;
-        left: 15vw;
-        width: 18vw;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+       position: absolute;
+       top: 20px;
+       left: 15vw;
+       width: 18vw;
+       display: flex;
+       flex-direction: column; /* Empilha elementos verticalmente */
+       gap: 10px; /* Espaço entre imagem e texto */
       }
+ 
+     /* Mantemos o estilo da imagem */
       .top-section img {
-        width: 100%;
-        height: auto;
-        object-fit: contain;
+       width: 100%;
+       height: auto;
+       object-fit: contain;
       }
 
+     /* Adaptamos o container do texto */
       .title-container {
-        position: absolute;
-        left: 15vw;
-        width: 18vw;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+       width: 100%;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+    /* Remove position:absolute e posicionamento fixo */
+     }
     
     /* Novo estilo para o título em texto */
     .title-text {
