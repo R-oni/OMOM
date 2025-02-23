@@ -47,6 +47,11 @@
       color: white;
     }
     
+    /* Conteúdo da Home (original index) */
+    #home-content {
+      /* Agrupa o conteúdo original da página inicial */
+    }
+    
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
@@ -141,6 +146,12 @@
       cursor: pointer;
     }
     
+    /* ===== CONTAINER PARA O CONTEÚDO DINÂMICO (SPA) ===== */
+    #spa-content {
+      position: relative;
+      z-index: 2;
+    }
+    
     /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -189,6 +200,12 @@
   </style>
 </head>
 <body>
+  <!-- Música de fundo: memories.mp3 -->
+  <audio id="bgm" loop style="display: none;">
+    <source src="memories.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
+  
   <!-- Modal de escolha de música -->
   <div id="musicModal">
     <div id="musicModalContent">
@@ -203,100 +220,106 @@
     <canvas id="automatonCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
-
-  <div class="title-container">
-    <a href="omom.html" class="title-text">
-      <span class="line">OUTROS MUNDOS</span><br>
-      <span class="line">OUTRAS MENTES</span>
-    </a>
-  </div>
-
-  <div class="symbols-wrapper">
-    <div class="symbols-container">
-      <div class="symbol brither" id="symbol1">
-        <a href="mundos/veleywei/index.html">
-          <img src="assets/veleyweimenu.png" alt="Velei'wey">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol2">
-        <a href="mundos/botychera/index.html">
-          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol3">
-        <a href="mundos/himpis/index.html">
-          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol4">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol5">
-        <a href="mundos/denbou/index.html">
-          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol6">
-        <a href="mundos/araporu/index.html">
-          <img src="mundos/araporu/araporumenu.png" alt="araporu">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol7">
-        <a href="mundos/os artesaos/index.html">
-          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol8">
-        <a href="mundos/sapador/index.html">
-          <img src="mundos/sapador/sapador.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol11">
-        <a href="mundos/dosirelala/index.html">
-          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol9">
-        <a href="mundos/calindreno/index.html">
-          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol10">
-        <a href="mundos/mundo pulsante/index.html">
-          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol12">
-        <a href="mundos/mundo 1/index.html">
-          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol13">
-        <a href="mundos/mundo 2/index.html">
-          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol14">
-        <a href="mundos/mundo 3/index.html">
-          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol15">
-        <a href="mundos/mundo 4/index.html">
-          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
-        </a>
+  
+  <!-- Conteúdo da Home -->
+  <div id="home-content">
+    <div class="title-container">
+      <a href="#" class="title-text" onclick="loadHome()"> 
+        <span class="line">OUTROS MUNDOS</span><br>
+        <span class="line">OUTRAS MENTES</span>
+      </a>
+    </div>
+  
+    <div class="symbols-wrapper">
+      <div class="symbols-container">
+        <div class="symbol brither" id="symbol1">
+          <!-- Note que agora, ao clicar, chamamos loadPage com o nome da pasta (veleywei) -->
+          <a href="mundos/veleywei/index.html" onclick="loadPage('mundos/veleywei/index.html'); return false;">
+            <img src="assets/veleyweimenu.png" alt="Velei'wey">
+          </a>
+        </div>
+        <!-- Os demais símbolos permanecem inalterados -->
+        <div class="symbol brither" id="symbol2">
+          <a href="mundos/botychera/index.html" onclick="loadPage('mundos/botychera/index.html'); return false;">
+            <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol3">
+          <a href="mundos/himpis/index.html" onclick="loadPage('mundos/himpis/index.html'); return false;">
+            <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol4">
+          <a href="mundos/ttok/index.html" onclick="loadPage('mundos/ttok/index.html'); return false;">
+            <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol5">
+          <a href="mundos/denbou/index.html" onclick="loadPage('mundos/denbou/index.html'); return false;">
+            <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol6">
+          <a href="mundos/araporu/index.html" onclick="loadPage('mundos/araporu/index.html'); return false;">
+            <img src="mundos/araporu/araporumenu.png" alt="araporu">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol7">
+          <a href="mundos/os artesaos/index.html" onclick="loadPage('mundos/os artesaos/index.html'); return false;">
+            <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol8">
+          <a href="mundos/sapador/index.html" onclick="loadPage('mundos/sapador/index.html'); return false;">
+            <img src="mundos/sapador/sapador.png" alt="sapador">
+          </a>
+        </div>
+        <div class="symbol brither" id="symbol11">
+          <a href="mundos/dosirelala/index.html" onclick="loadPage('mundos/dosirelala/index.html'); return false;">
+            <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol9">
+          <a href="mundos/calindreno/index.html" onclick="loadPage('mundos/calindreno/index.html'); return false;">
+            <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol10">
+          <a href="mundos/mundo pulsante/index.html" onclick="loadPage('mundos/mundo pulsante/index.html'); return false;">
+            <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol12">
+          <a href="mundos/mundo 1/index.html" onclick="loadPage('mundos/mundo 1/index.html'); return false;">
+            <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol13">
+          <a href="mundos/mundo 2/index.html" onclick="loadPage('mundos/mundo 2/index.html'); return false;">
+            <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol14">
+          <a href="mundos/mundo 3/index.html" onclick="loadPage('mundos/mundo 3/index.html'); return false;">
+            <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+          </a>
+        </div>
+        <div class="symbol locked" id="symbol15">
+          <a href="mundos/mundo 4/index.html" onclick="loadPage('mundos/mundo 4/index.html'); return false;">
+            <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+          </a>
+        </div>
       </div>
     </div>
   </div>
-
+  
+  <!-- Container SPA para carregar páginas dinâmicas -->
+  <div id="spa-content"></div>
+  
   <!-- Música de fundo: memories.mp3 -->
-  <audio id="bgm" loop style="display:none;">
-    <source src="memories.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
-
+  <!-- (Já incluída acima com id="bgm") -->
+  
+  <!-- Scripts -->
   <script>
     // Função para fazer fade out no áudio (2 segundos)
     function fadeOutAudio(audio, duration, callback) {
@@ -337,22 +360,11 @@
       document.addEventListener("touchstart", initMusic, {once: true});
       document.addEventListener("click", initMusic, {once: true});
       
-      // Intercepta cliques em links que levam a mundos (ex: "mundos/...")
-      document.querySelectorAll('a[href^="mundos/"]').forEach(function(link) {
-        link.addEventListener("click", function(e) {
-          e.preventDefault();
-          if (localStorage.getItem("musicChoice") === "true") {
-            fadeOutAudio(document.getElementById("bgm"), 2000, function() {
-              window.location.href = link.href;
-            });
-          } else {
-            window.location.href = link.href;
-          }
-        });
-      });
+      // Intercepta cliques em links que levam a mundos
+      // (Já configurado nos onclick de cada link acima)
     });
     
-    // Eventos dos botões do modal (usando click e touchstart)
+    // Eventos dos botões do modal (click e touchstart)
     document.getElementById("musicYes").addEventListener("click", function() {
       localStorage.setItem("musicChoice", "true");
       document.getElementById("musicModal").style.display = "none";
@@ -366,115 +378,202 @@
       document.getElementById("musicModal").style.display = "none";
     });
     
-    const symbols = document.querySelectorAll('.symbol');
-    let time = 0;
-    function floatSymbols() {
-      time += 0.02;
-      symbols.forEach((symbol, index) => {
-        let amplitude = 6;
-        let speed = 0.1 + (index * 0.01);
-        let y = Math.sin(time * speed * 10) * amplitude;
-        symbol.style.transform = `translateY(${y}px)`;
+    // SPA: Função para carregar páginas dinamicamente
+    function loadPage(url) {
+      fetch(url)
+        .then(response => response.text())
+        .then(html => {
+          // Usa DOMParser para extrair o conteúdo do body do arquivo carregado
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          // Insere o conteúdo do body no container SPA
+          document.getElementById("spa-content").innerHTML = doc.body.innerHTML;
+          // Oculta o conteúdo da Home
+          document.getElementById("home-content").style.display = "none";
+          history.pushState(null, "", "#" + url);
+        })
+        .catch(error => console.error("Erro ao carregar página:", error));
+    }
+    
+    // Função para voltar à Home
+    function loadHome() {
+      document.getElementById("spa-content").innerHTML = "";
+      document.getElementById("home-content").style.display = "block";
+      history.pushState(null, "", "#home");
+    }
+  </script>
+  
+  <!-- Scripts existentes (flipbook, canvas, etc.) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <script src="turn.min.js"></script>
+  <script>
+    // Variáveis para o áudio de virar página
+    const flipAudioStart = 1;
+    const flipAudioEnd = 1.4;
+    
+    let flipAudio;
+    document.addEventListener('DOMContentLoaded', () => {
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+      
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        }).catch(err => console.error(err));
+        document.removeEventListener('click', unlockAudio);
       });
-      requestAnimationFrame(floatSymbols);
-    }
-    floatSymbols();
-
-    const canvas = document.getElementById("automatonCanvas");
-    const ctx = canvas.getContext("2d");
-    function setupCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      ctx.imageSmoothingEnabled = false;
-    }
-    setupCanvas();
-
-    const cellSize = 3;
-    let cols, rows;
-    function updateGridSize() {
-      cols = Math.floor(canvas.width / cellSize);
-      rows = Math.floor(canvas.height / cellSize);
-    }
-    updateGridSize();
-
-    let grid = Array.from({ length: rows }, () =>
-      Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
-    );
-
-    function drawGrid() {
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#FFFFFF";
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
-          if (grid[y][x] === 1) {
-            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-          }
-        }
-      }
-    }
-
-    function injectActivity() {
-      const injectionSize = 10;
-      const corner = Math.floor(Math.random() * 4);
-      let startRow, startCol;
-      if (corner === 0) {
-        startRow = 0;
-        startCol = 0;
-      } else if (corner === 1) {
-        startRow = 0;
-        startCol = cols - injectionSize;
-      } else if (corner === 2) {
-        startRow = rows - injectionSize;
-        startCol = 0;
-      } else {
-        startRow = rows - injectionSize;
-        startCol = cols - injectionSize;
-      }
-      for (let i = startRow; i < startRow + injectionSize && i < rows; i++) {
-        for (let j = startCol; j < startCol + injectionSize && j < cols; j++) {
-          if (Math.random() < 0.3) {
-            grid[i][j] = 1;
-          }
-        }
-      }
-    }
-
-    function updateGrid() {
-      let newGrid = grid.map(arr => [...arr]);
-      for (let y = 1; y < rows - 1; y++) {
-        for (let x = 1; x < cols - 1; x++) {
-          let sum = grid[y-1][x] + grid[y+1][x] + grid[y][x-1] + grid[y][x+1] +
-                    grid[y-1][x-1] + grid[y-1][x+1] + grid[y+1][x-1] + grid[y+1][x+1];
-          newGrid[y][x] = (grid[y][x] === 1) ? ((sum === 2 || sum === 3) ? 1 : 0) : (sum === 3 ? 1 : 0);
-        }
-      }
-      grid = newGrid;
-    }
-
-    let frameCount = 0;
-    function animate() {
-      frameCount++;
-      updateGrid();
-      if (frameCount % 100 === 0) {
-        injectActivity();
-      }
-      drawGrid();
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    window.addEventListener("resize", () => {
-      setupCanvas();
-      updateGridSize();
-      grid = Array.from({ length: rows }, () =>
-        Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
-      );
-      drawGrid();
     });
     
-    window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
+    $(document).ready(function(){
+      $("#flipbook").turn({
+        autoCenter: false,
+        display: 'double'
+      });
+      
+      // Redimensionamento responsivo do flipbook
+      function resizeFlipbook() {
+        if ($(window).width() < 1024) {
+          var newWidth = $(window).width() * 0.9;
+          var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
+        } else {
+          var newWidth = $("#flipbook-wrapper").width();
+          var newHeight = $("#flipbook-wrapper").height();
+          $("#flipbook").turn("size", newWidth, newHeight);
+        }
+      }
+      resizeFlipbook();
+      $(window).resize(function(){
+        resizeFlipbook();
+      });
+      
+      // Áudio de virar página
+      $("#flipbook").on("mousedown touchstart", function(){
+        if (flipAudio) {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+          flipAudio.play().then(() => {
+            flipAudio.addEventListener('timeupdate', function onTimeUpdate() {
+              if (flipAudio.currentTime >= flipAudioEnd) {
+                flipAudio.pause();
+                flipAudio.currentTime = flipAudioStart;
+                flipAudio.removeEventListener('timeupdate', onTimeUpdate);
+              }
+            });
+          }).catch(err => console.error("Erro ao tocar flipAudio:", err));
+        }
+      });
+      
+      // Inicia a música de fundo com a primeira interação
+      $(document).one("click touchstart", function(){
+        var bg = document.getElementById("bgm");
+        bg.currentTime = 0;
+        bg.volume = 0.5;
+        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+      });
+      
+      // Overlay: fechar quando clicar fora
+      $("#overlayContainer").on("click", function(e){
+        if(e.target.id === "overlayContainer"){
+          $(this).fadeOut(500);
+        }
+      });
+      
+      // Botões de overlay (veleywei)
+      $(document).on("click", "#veleyweiBtn", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      $(document).on("click", "#veleyweiBtn2", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      $(document).on("click", "#veleyweiBtn3", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+    });
+  </script>
+  <script src="./globo.js"></script>
+  <script>
+    // Animação do canvas (efeito warp/starfield)
+    (function() {
+      const canvas = document.getElementById("automatonCanvas");
+      const ctx = canvas.getContext("2d");
+
+      let stars = [];
+      const numStars = 300;
+      const speed = 2;
+      let animationFrameId;
+
+      function setupCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width - canvas.width / 2,
+            y: Math.random() * canvas.height - canvas.height / 2,
+            z: Math.random() * canvas.width
+          });
+        }
+      }
+      function updateStars() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+
+        stars.forEach(star => {
+          star.z -= speed;
+          if (star.z <= 0) {
+            star.x = Math.random() * canvas.width - canvas.width / 2;
+            star.y = Math.random() * canvas.height - canvas.height / 2;
+            star.z = canvas.width;
+          }
+          let perspective = 300 / star.z;
+          let sx = star.x * perspective + canvas.width / 2;
+          let sy = star.y * perspective + canvas.height / 2;
+          let size = Math.max(2 * perspective, 0.5);
+          ctx.beginPath();
+          ctx.arc(sx, sy, size, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+        animationFrameId = requestAnimationFrame(updateStars);
+      }
+      setupCanvas();
+      createStars();
+      updateStars();
+      window.addEventListener("resize", function() {
+        setupCanvas();
+        createStars();
+      });
+      window.addEventListener("load", function() {
+        document.getElementById("loading-screen").style.display = "none";
+        cancelAnimationFrame(animationFrameId);
+      });
+    })();
+  </script>
+  <script>
+    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
+    document.addEventListener("globoCarregado", function() {
+      document.getElementById("globeLoading").style.display = "none";
     });
   </script>
 </body>
