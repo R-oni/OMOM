@@ -1,5 +1,6 @@
 {
+  "public": "public",
   "routes": [
-    { "src": "/admin/config.yml", "dest": "/admin/config.yml", "headers": { "cache-control": "no-cache" } }
+    { "src": "/admin/config.yml", "dest": "/public/admin/config.yml", "headers": { "cache-control": "no-cache" } }
   ]
 }
