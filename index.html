@@ -111,6 +111,36 @@
       filter: brightness(50%);
     }
     
+    /* ===== MODAL DE ESCOLHA DE MÚSICA ===== */
+    #musicModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100000;
+    }
+    #musicModalContent {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      text-align: center;
+    }
+    #musicModalContent button {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      background: transparent;
+      border: 2px solid #00FFE7;
+      margin: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    
     /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -159,12 +189,20 @@
   </style>
 </head>
 <body>
+  <!-- Modal de escolha de música -->
+  <div id="musicModal">
+    <div id="musicModalContent">
+      <p>Música?</p>
+      <button id="musicYes">Sim</button>
+      <button id="musicNo">Não</button>
+    </div>
+  </div>
+  
   <!-- Tela de Loading -->
   <div id="loading-screen">
+    <canvas id="automatonCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
-
-  <canvas id="automatonCanvas"></canvas>
 
   <div class="title-container">
     <a href="omom.html" class="title-text">
@@ -260,25 +298,70 @@
   </audio>
 
   <script>
-    window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
-    });
-
+    // Função para fazer fade out no áudio
+    function fadeOutAudio(audio, duration, callback) {
+      const step = 50;
+      const initialVolume = audio.volume;
+      const fadeAmount = initialVolume / (duration / step);
+      const fadeInterval = setInterval(function() {
+        if (audio.volume > fadeAmount) {
+          audio.volume = Math.max(audio.volume - fadeAmount, 0);
+        } else {
+          clearInterval(fadeInterval);
+          audio.pause();
+          audio.volume = initialVolume; // opcional: reseta o volume
+          if (callback) callback();
+        }
+      }, step);
+    }
+    
+    // Inicialização da música e do modal de escolha
     document.addEventListener("DOMContentLoaded", function() {
       const bgm = document.getElementById("bgm");
-      bgm.volume = 0.5;
-      const playPromise = bgm.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function(error) {
-          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
+      bgm.volume = 0.7;
+      const choice = localStorage.getItem("musicChoice");
+      if (choice === null) {
+        document.getElementById("musicModal").style.display = "flex";
+      } else if (choice === "true") {
+        bgm.play().catch(function(error) {
+          console.log("Autoplay bloqueado, aguardando interação...", error);
           document.addEventListener("click", function handler() {
             bgm.play();
             document.removeEventListener("click", handler);
           });
         });
       }
+      
+      // Intercepta cliques em links dos mundos para aplicar fade out
+      document.querySelectorAll('a[href^="mundos/"]').forEach(function(link) {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+          if (localStorage.getItem("musicChoice") === "true") {
+            fadeOutAudio(bgm, 2000, function() {
+              window.location.href = link.href;
+            });
+          } else {
+            window.location.href = link.href;
+          }
+        });
+      });
     });
     
+    // Eventos dos botões do modal
+    document.getElementById("musicYes").addEventListener("click", function() {
+      localStorage.setItem("musicChoice", "true");
+      document.getElementById("musicModal").style.display = "none";
+      const bgm = document.getElementById("bgm");
+      bgm.play().catch(function(error) {
+        console.log("Erro ao tocar música:", error);
+      });
+    });
+    document.getElementById("musicNo").addEventListener("click", function() {
+      localStorage.setItem("musicChoice", "false");
+      document.getElementById("musicModal").style.display = "none";
+    });
+    
+    // Animação dos símbolos (permanece inalterada)
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -292,7 +375,8 @@
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
-
+    
+    // (Resto do código relacionado ao canvas de fundo e grid permanece inalterado)
     const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
     function setupCanvas() {
@@ -384,6 +468,10 @@
         Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
       );
       drawGrid();
+    });
+    
+    window.addEventListener("load", function() {
+      document.getElementById("loading-screen").style.display = "none";
     });
   </script>
 </body>
