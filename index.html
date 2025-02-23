@@ -7,7 +7,7 @@
   <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ===== ESTILOS PARA MOBILE (Vertical) – Mantidos inalterados ===== */
+    /* ===== ESTILOS PARA MOBILE (Vertical) ===== */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -49,18 +49,12 @@
     
     .title-container {
       text-align: center;
-      margin-top: 5px;
+      margin: 5vh auto 0 auto;
+      width: 50%;
       position: relative;
       z-index: 2;
-      width: 40vw;
-      margin-bottom: 5px;
     }
-
-    .no-break {
-      white-space: nowrap;
-    }
-     
-    /* Novo estilo para o título em texto */
+    
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #FFFFFF;
@@ -68,8 +62,10 @@
       line-height: 1.2;
       font-size: 100%;
       text-decoration: none;
+      display: block;
     }
     
+    /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
     .symbols-wrapper {
       position: absolute;
       top: 150px;
@@ -111,15 +107,10 @@
       filter: brightness(50%);
     }
     
-    /* ===== ESTILOS GLOBAIS PARA O FUNDO E ÁUDIO ===== */
-    /* (mantidos conforme seu código original) */
+    /* ===== ESTILOS GLOBAIS PARA FUNDO E ÁUDIO ===== */
     
-    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL =====
-         Esses estilos serão aplicados apenas em telas com largura mínima de 1024px
-         e em orientação landscape.
-    =================================================================== */
+    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
-      /* Container principal */
       .page-container {
         display: grid;
         grid-template-columns: 50% 50%;
@@ -135,19 +126,18 @@
         box-sizing: border-box;
       }
       
-      /* Área do Título */
       .title-container {
         grid-area: title;
-        margin: 60px;
+        margin: 60px auto 0 auto;
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 50%;
       }
       .title-container .title-text {
         font-size: 36px;
       }
       
-      /* Área dos Símbolos */
       .symbols-wrapper {
         grid-area: symbols;
         padding: 30px;
@@ -175,12 +165,11 @@
   <canvas id="automatonCanvas"></canvas>
 
   <div class="title-container">
-  <a href="omom.html" class="title-text">
-    <span class="no-break">OUTROS MUNDOS</span><br>
-    OUTRAS MENTES
-  </a>
-</div>
-
+    <a href="omom.html" class="title-text">
+      OUTROS MUNDOS<br>
+      OUTRAS MENTES
+    </a>
+  </div>
 
   <div class="symbols-wrapper">
     <div class="symbols-container">
@@ -239,7 +228,6 @@
           <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
         </a>
       </div>
-      
       <div class="symbol locked" id="symbol12">
         <a href="mundos/mundo 1/index.html">
           <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
@@ -270,17 +258,13 @@
   </audio>
 
   <script>
-    // Remove a tela de loading quando a página for carregada
     window.addEventListener("load", function() {
       document.getElementById("loading-screen").style.display = "none";
     });
 
-    // Tenta iniciar a música de fundo "memories.mp3" assim que possível.
-    // Se o autoplay for bloqueado, aguarda o primeiro clique do usuário.
     document.addEventListener("DOMContentLoaded", function() {
       const bgm = document.getElementById("bgm");
       bgm.volume = 0.5;
-      // Tenta tocar a música imediatamente
       const playPromise = bgm.play();
       if (playPromise !== undefined) {
         playPromise.catch(function(error) {
@@ -293,7 +277,6 @@
       }
     });
     
-    // Animação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -308,7 +291,6 @@
     }
     floatSymbols();
 
-    // Configuração do canvas de fundo (autômato)
     const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
     function setupCanvas() {
@@ -343,7 +325,6 @@
       }
     }
 
-    // Injeta atividade para manter o autômato dinâmico
     function injectActivity() {
       const injectionSize = 10;
       const corner = Math.floor(Math.random() * 4);
@@ -404,4 +385,4 @@
     });
   </script>
 </body>
-      </html>
+</html>
