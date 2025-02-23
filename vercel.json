@@ -1,5 +1,0 @@
-{
-  "routes": [
-    { "src": "/admin/config.yml", "dest": "/public/admin/config.yml", "headers": { "cache-control": "no-cache" } }
-  ]
-}
