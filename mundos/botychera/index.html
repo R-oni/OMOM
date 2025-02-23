@@ -353,14 +353,14 @@
   <script>
     // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
     const flipAudioStart = 1;
-    const flipAudioEnd = 1.4;
+    const flipAudioEnd = 1.2;
     
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
       flipAudio = new Audio('sompagina.aac');
       flipAudio.preload = 'auto';
       flipAudio.load();
-      flipAudio.volume = 0.2;
+      flipAudio.volume = 0.4;
       
       document.addEventListener('click', function unlockAudio() {
         flipAudio.play().then(() => {
