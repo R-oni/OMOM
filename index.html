@@ -7,7 +7,7 @@
   <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ===== ESTILOS PARA MOBILeE (Vertical) ===== */
+    /* ===== ESTILOS PARA MOBILE (Vertical) ===== */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -50,7 +50,7 @@
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
-      width: 100%; /* Usa toda a largura do dispositivo em mobile */
+      width: 100%;
       position: relative;
       z-index: 2;
     }
@@ -134,7 +134,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 50%; /* Largura de 50% em telas maiores */
+        width: 50%;
       }
       .title-container .title-text {
         font-size: 36px;
@@ -157,6 +157,7 @@
       }
     }
   </style>
+  <!-- Se desejar, mantenha os links e estilos de outras bibliotecas -->
 </head>
 <body>
   <!-- Tela de Loading -->
@@ -217,37 +218,37 @@
       </div>
       <div class="symbol brither" id="symbol11">
         <a href="mundos/dosirelala/index.html">
-          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="dosirelala">
         </a>
       </div>
       <div class="symbol locked" id="symbol9">
         <a href="mundos/calindreno/index.html">
-          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+          <img src="mundos/calindreno/calindreno.png" alt="calindreno">
         </a>
       </div>
       <div class="symbol locked" id="symbol10">
         <a href="mundos/mundo pulsante/index.html">
-          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="mundo pulsante">
         </a>
       </div>
       <div class="symbol locked" id="symbol12">
         <a href="mundos/mundo 1/index.html">
-          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+          <img src="mundos/mundo 1/mundo1.png" alt="mundo 1">
         </a>
       </div>
       <div class="symbol locked" id="symbol13">
         <a href="mundos/mundo 2/index.html">
-          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+          <img src="mundos/mundo 2/mundo2.png" alt="mundo 2">
         </a>
       </div>
       <div class="symbol locked" id="symbol14">
         <a href="mundos/mundo 3/index.html">
-          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="mundo 3">
         </a>
       </div>
       <div class="symbol locked" id="symbol15">
         <a href="mundos/mundo 4/index.html">
-          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="mundo 4">
         </a>
       </div>
     </div>
@@ -259,26 +260,35 @@
     Seu navegador não suporta o elemento de áudio.
   </audio>
 
+  <!-- SCRIPTS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <!-- Removido turn.min.js, utilizando DearFlip não é necessário -->
+  
+  <!-- Inicia os scripts do automato e outros efeitos -->
   <script>
-    window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-      const bgm = document.getElementById("bgm");
-      bgm.volume = 0.5;
-      const playPromise = bgm.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function(error) {
-          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
-          document.addEventListener("click", function handler() {
-            bgm.play();
-            document.removeEventListener("click", handler);
-          });
-        });
-      }
+    // Inicia o background de áudio de virar página
+    const flipAudioStart = 1;
+    const flipAudioEnd = 1.4;
+    let flipAudio;
+    document.addEventListener('DOMContentLoaded', () => {
+      flipAudio = new Audio('sompagina.aac');
+      flipAudio.preload = 'auto';
+      flipAudio.load();
+      flipAudio.volume = 0.2;
+      document.addEventListener('click', function unlockAudio() {
+        flipAudio.play().then(() => {
+          flipAudio.pause();
+          flipAudio.currentTime = flipAudioStart;
+        }).catch(err => console.error(err));
+        document.removeEventListener('click', unlockAudio);
+      });
     });
     
+    // Float animation for symbols
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -292,7 +302,8 @@
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
-
+    
+    // Setup para o automato celular
     const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
     function setupCanvas() {
@@ -301,19 +312,21 @@
       ctx.imageSmoothingEnabled = false;
     }
     setupCanvas();
-
-    const cellSize = 1;
+    
+    const cellSize = 1; // Tamanho dos "pixels" do autômato
     let cols, rows;
     function updateGridSize() {
       cols = Math.floor(canvas.width / cellSize);
       rows = Math.floor(canvas.height / cellSize);
     }
     updateGridSize();
-
+    
+    // Inicializa a grade com uma densidade baixa
     let grid = Array.from({ length: rows }, () =>
       Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
     );
-
+    
+    // Função para desenhar a grade
     function drawGrid() {
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -321,12 +334,35 @@
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
           if (grid[y][x] === 1) {
-            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            // Desenha círculos para um efeito mais orgânico
+            ctx.beginPath();
+            ctx.arc(x * cellSize, y * cellSize, cellSize / 2, 0, 2 * Math.PI);
+            ctx.fill();
           }
         }
       }
     }
-
+    
+    // Atualização do autômato com regras modificadas para filamentos (B2/S12)
+    function updateGrid() {
+      let newGrid = grid.map(arr => [...arr]);
+      for (let y = 1; y < rows - 1; y++) {
+        for (let x = 1; x < cols - 1; x++) {
+          let sum = grid[y-1][x] + grid[y+1][x] + grid[y][x-1] + grid[y][x+1] +
+                    grid[y-1][x-1] + grid[y-1][x+1] + grid[y+1][x-1] + grid[y+1][x+1];
+          if (grid[y][x] === 1) {
+            // Se a célula está viva, sobrevive se tiver 1 ou 2 vizinhos
+            newGrid[y][x] = (sum >= 1 && sum <= 2) ? 1 : 0;
+          } else {
+            // Se estiver morta, nasce se tiver exatamente 2 vizinhos
+            newGrid[y][x] = (sum === 2) ? 1 : 0;
+          }
+        }
+      }
+      grid = newGrid;
+    }
+    
+    // Injeção de atividade ocasional para manter o padrão dinâmico
     function injectActivity() {
       const injectionSize = 10;
       const corner = Math.floor(Math.random() * 4);
@@ -352,31 +388,19 @@
         }
       }
     }
-
-    function updateGrid() {
-      let newGrid = grid.map(arr => [...arr]);
-      for (let y = 1; y < rows - 1; y++) {
-        for (let x = 1; x < cols - 1; x++) {
-          let sum = grid[y-1][x] + grid[y+1][x] + grid[y][x-1] + grid[y][x+1] +
-                    grid[y-1][x-1] + grid[y-1][x+1] + grid[y+1][x-1] + grid[y+1][x+1];
-          newGrid[y][x] = (grid[y][x] === 1) ? ((sum === 2 || sum === 3) ? 1 : 0) : (sum === 3 ? 1 : 0);
-        }
-      }
-      grid = newGrid;
-    }
-
+    
     let frameCount = 0;
     function animate() {
       frameCount++;
       updateGrid();
-      if (frameCount % 100 === 0) {
+      if (frameCount % 200 === 0) {
         injectActivity();
       }
       drawGrid();
       requestAnimationFrame(animate);
     }
     animate();
-
+    
     window.addEventListener("resize", () => {
       setupCanvas();
       updateGridSize();
@@ -384,6 +408,71 @@
         Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
       );
       drawGrid();
+    });
+  </script>
+  
+  <script src="./globo.js"></script>
+  <script>
+    // Animação do canvas (efeito warp/starfield)
+    (function() {
+      const canvas = document.getElementById("warpCanvas");
+      const ctx = canvas.getContext("2d");
+      let stars = [];
+      const numStars = 300;
+      const speed = 2;
+      let animationFrameId;
+      function setupCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width - canvas.width / 2,
+            y: Math.random() * canvas.height - canvas.height / 2,
+            z: Math.random() * canvas.width
+          });
+        }
+      }
+      function updateStars() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        stars.forEach(star => {
+          star.z -= speed;
+          if (star.z <= 0) {
+            star.x = Math.random() * canvas.width - canvas.width / 2;
+            star.y = Math.random() * canvas.height - canvas.height / 2;
+            star.z = canvas.width;
+          }
+          let perspective = 300 / star.z;
+          let sx = star.x * perspective + canvas.width / 2;
+          let sy = star.y * perspective + canvas.height / 2;
+          let size = Math.max(2 * perspective, 0.5);
+          ctx.beginPath();
+          ctx.arc(sx, sy, size, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+        animationFrameId = requestAnimationFrame(updateStars);
+      }
+      setupCanvas();
+      createStars();
+      updateStars();
+      window.addEventListener("resize", function() {
+        setupCanvas();
+        createStars();
+      });
+      window.addEventListener("load", function() {
+        document.getElementById("loading-screen").style.display = "none";
+        cancelAnimationFrame(animationFrameId);
+      });
+    })();
+  </script>
+  <script>
+    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
+    document.addEventListener("globoCarregado", function() {
+      document.getElementById("globeLoading").style.display = "none";
     });
   </script>
 </body>
