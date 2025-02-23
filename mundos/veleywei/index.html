@@ -404,7 +404,7 @@
       
       // Inicia a música de fundo com o primeiro clique/touch na tela
       $(document).one("click touchstart", function(){
-        var bg = document.getElementById("bgMusic");
+        var bg = document.getElementById("bgm");
         bg.currentTime = 0;
         bg.volume = 0.5;
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
