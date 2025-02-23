@@ -45,7 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-    /* Layout padrão para mobile/vertical */
+    /* Layout padrão para mobile/vertical – SEM alterações */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -66,7 +66,6 @@
       z-index: 2;
       margin-bottom: 50px;
     }
-    /* Novo estilo para o título em texto */
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
@@ -100,7 +99,7 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Flipbook para mobile (sem contêiner extra) */
+    /* Flipbook para mobile */
     #flipbook {
       position: relative;
       margin: auto;
@@ -213,50 +212,54 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout Horizontal – para qualquer dispositivo em paisagem */
-    @media screen and (orientation: landscape) {
+    /* Versão PC (landscape com min-width:1024px) – reposiciona imagem e título */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         position: relative;
         display: block;
         width: 100vw;
         height: 100vh;
       }
-      
-      /* Agrupamos imagem e título num container único */
-      .header-container {
+      /* Posiciona a imagem */
+      .top-section {
         position: absolute;
-        top: 2px;
+        top: 20px;
         left: 15vw;
-        width: 40vw;
+        width: 18vw;
+        height: 18vw; /* Define altura fixa para facilitar o posicionamento */
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
       }
-      
-      .header-container img {
-        width: 30%;
-        height: auto;
+      .top-section img {
+        width: 100%;
+        height: 100%;
         object-fit: contain;
       }
-      
-      .header-container .title-text {
-        margin-top: 5px;
+      /* Posiciona o título logo abaixo da imagem */
+      .title-container {
+        position: absolute;
+        top: calc(20px + 18vw + 2vh); /* 20px + altura da imagem + margem */
+        left: 15vw;
+        width: 18vw;
+        text-align: center;
+        margin: 0;
+      }
+      .title-text {
         font-family: 'Press Start 2P', cursive;
         color: #00FFE7;
         font-size: 2.5vh;
         text-decoration: none;
-        text-align: center;
       }
-      
+      /* Outros elementos da versão PC permanecem inalterados */
       #flipbook-wrapper {
         position: absolute;
-        bottom: 5vh;
+        bottom: 10vh;
         left: 5vw;
         width: 40vw;
         height: calc(40vw * 0.75);
         overflow: visible;
       }
-      
       #flipbook {
         width: 100%;
         height: 100%;
@@ -264,7 +267,6 @@
         position: relative;
         overflow: visible;
       }
-      
       .globe-section {
         position: absolute;
         top: 50%;
@@ -276,7 +278,6 @@
         justify-content: center;
         align-items: center;
       }
-      
       #globeCanvas {
         width: 100%;
         height: 100%;
@@ -298,6 +299,7 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
+    <!-- Para mobile, a estrutura original é usada -->
     <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
     </div>
@@ -461,16 +463,16 @@
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
-
       let stars = [];
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
-
+      
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
+      
       function createStars() {
         stars = [];
         for (let i = 0; i < numStars; i++) {
@@ -481,11 +483,11 @@
           });
         }
       }
+      
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
-
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
@@ -503,13 +505,16 @@
         });
         animationFrameId = requestAnimationFrame(updateStars);
       }
+      
       setupCanvas();
       createStars();
       updateStars();
+      
       window.addEventListener("resize", function() {
         setupCanvas();
         createStars();
       });
+      
       window.addEventListener("load", function() {
         document.getElementById("loading-screen").style.display = "none";
         cancelAnimationFrame(animationFrameId);
@@ -523,4 +528,4 @@
     });
   </script>
 </body>
-          </html>
+</html>
