@@ -1,63 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Index – Outros Mundos</title>
-  <!-- Importa a fonte "Press Start 2P" -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outros Mundos Outras Mentes</title>
+  <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Estilos globais */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000;
-      color: #fff;
-      font-family: sans-serif;
-    }
-    /* Loading Screen (já existente) */
+    /* ===== ESTILOS PARA MOBILE (Vertical) ===== */
     #loading-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #000;
-      z-index: 10000;
+      background-color: black;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      z-index: 9999;
     }
-    #warpCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
+    
     #loading-text {
-      position: relative;
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
       font-size: 20px;
-      z-index: 10001;
+      text-align: center;
     }
-    /* Conteúdo principal (exemplo simplificado de layout existente) */
-    .page-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
+    
+    #automatonCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      image-rendering: pixelated;
     }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: black;
+      overflow: hidden;
+      color: white;
+    }
+    
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
-      width: 100%;
+      width: 100%; /* Usa toda a largura do dispositivo em mobile */
       position: relative;
       z-index: 2;
     }
+    
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #FFFFFF;
@@ -67,7 +64,12 @@
       text-decoration: none;
       display: block;
     }
-    .line { white-space: nowrap; }
+    
+    .line {
+      white-space: nowrap;
+    }
+    
+    /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
     .symbols-wrapper {
       position: absolute;
       top: 150px;
@@ -78,91 +80,175 @@
       padding: 20px;
       z-index: 2;
     }
+    
     .symbols-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
     }
+    
     .symbol {
       position: relative;
       transform-origin: center;
       transition: transform 0.1s linear;
     }
+    
     .symbol img {
       width: 25vw;
       transition: transform 0.3s;
     }
+    
     .symbol img:hover {
       transform: scale(1.1);
     }
-    .symbol.brither img { filter: brightness(180%); }
-    .symbol.locked img { filter: brightness(50%); }
-    /* Modal de escolha de música */
-    #musicChoiceModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(8px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100000;
+    
+    .symbol.brither img {
+      filter: brightness(180%);
     }
-    #musicChoiceContent {
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 20px;
-      text-align: center;
+    
+    .symbol.locked img {
+      filter: brightness(50%);
     }
-    #musicChoiceContent button {
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      background: transparent;
-      border: 2px solid #00FFE7;
-      margin: 10px;
-      padding: 5px 10px;
-      cursor: pointer;
+    
+    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      .page-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30% 70%;
+        grid-template-areas:
+          "title symbols"
+          "symbols symbols";
+        width: 100vw;
+        height: 100vh;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      .title-container {
+        grid-area: title;
+        margin: 60px auto 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%; /* Largura de 50% em telas maiores */
+      }
+      .title-container .title-text {
+        font-size: 36px;
+      }
+      
+      .symbols-wrapper {
+        grid-area: symbols;
+        padding: 30px;
+        overflow-y: auto;
+      }
+      
+      .symbols-container {
+        gap: 30px;
+        justify-content: center;
+      }
+      
+      .symbol img {
+        width: 180px;
+        height: auto;
+      }
     }
-    /* (Os demais estilos, inclusive media queries para PC, permanecem conforme seu código original) */
   </style>
 </head>
 <body>
-  <!-- Modal de escolha de música -->
-  <div id="musicChoiceModal" style="display: none;">
-    <div id="musicChoiceContent">
-      <p>Música?</p>
-      <button id="musicYes">Sim</button>
-      <button id="musicNo">Não</button>
-    </div>
-  </div>
-
-  <!-- Loading Screen -->
+  <!-- Tela de Loading -->
   <div id="loading-screen">
-    <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- Conteúdo Principal -->
-  <div class="page-container">
-    <div class="title-container">
-      <a href="omom.html" class="title-text">
-        <span class="line">OUTROS MUNDOS</span><br>
-        <span class="line">OUTRAS MENTES</span>
-      </a>
-    </div>
-    <div class="symbols-wrapper">
-      <div class="symbols-container">
-        <!-- Exemplo: símbolo do mundo de Veleywei -->
-        <div class="symbol brither" id="symbol1">
-          <a href="mundos/veleywei/index.html" class="world-link">
-            <img src="assets/veleyweimenu.png" alt="Velei'wey">
-          </a>
-        </div>
-        <!-- Outros símbolos seguem aqui... -->
+  <canvas id="automatonCanvas"></canvas>
+
+  <div class="title-container">
+    <a href="omom.html" class="title-text">
+      <span class="line">OUTROS MUNDOS</span><br>
+      <span class="line">OUTRAS MENTES</span>
+    </a>
+  </div>
+
+  <div class="symbols-wrapper">
+    <div class="symbols-container">
+      <div class="symbol brither" id="symbol1">
+        <a href="mundos/veleywei/index.html">
+          <img src="assets/veleyweimenu.png" alt="Velei'wey">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol2">
+        <a href="mundos/botychera/index.html">
+          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol3">
+        <a href="mundos/himpis/index.html">
+          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol4">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol5">
+        <a href="mundos/denbou/index.html">
+          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol6">
+        <a href="mundos/araporu/index.html">
+          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol7">
+        <a href="mundos/os artesaos/index.html">
+          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol8">
+        <a href="mundos/sapador/index.html">
+          <img src="mundos/sapador/sapador.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol11">
+        <a href="mundos/dosirelala/index.html">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol9">
+        <a href="mundos/calindreno/index.html">
+          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol10">
+        <a href="mundos/mundo pulsante/index.html">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol12">
+        <a href="mundos/mundo 1/index.html">
+          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol13">
+        <a href="mundos/mundo 2/index.html">
+          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol14">
+        <a href="mundos/mundo 3/index.html">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol15">
+        <a href="mundos/mundo 4/index.html">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+        </a>
       </div>
     </div>
   </div>
@@ -174,69 +260,25 @@
   </audio>
 
   <script>
-    // Função para iniciar a música com volume 70%
-    function playBackgroundMusic() {
-      const bgm = document.getElementById("bgm");
-      bgm.volume = 0.7;
-      bgm.play().catch(err => {
-        console.log("Erro ao tocar música:", err);
-      });
-    }
-    
+    window.addEventListener("load", function() {
+      document.getElementById("loading-screen").style.display = "none";
+    });
+
     document.addEventListener("DOMContentLoaded", function() {
-      const musicAccepted = localStorage.getItem("musicAccepted");
-      const modal = document.getElementById("musicChoiceModal");
-      if (musicAccepted === null) {
-        // Se ainda não houve escolha, mostra o modal
-        modal.style.display = "flex";
-      } else if (musicAccepted === "true") {
-        playBackgroundMusic();
-      }
-      
-      // Eventos para os botões do modal
-      document.getElementById("musicYes").addEventListener("click", function() {
-        localStorage.setItem("musicAccepted", "true");
-        playBackgroundMusic();
-        modal.style.display = "none";
-      });
-      document.getElementById("musicNo").addEventListener("click", function() {
-        localStorage.setItem("musicAccepted", "false");
-        modal.style.display = "none";
-      });
-      
-      // Intercepta cliques nos links dos mundos para realizar fade out
-      const worldLinks = document.querySelectorAll(".world-link");
-      worldLinks.forEach(link => {
-        link.addEventListener("click", function(e) {
-          e.preventDefault();
-          const bgm = document.getElementById("bgm");
-          if (!bgm.paused) {
-            fadeOutAudio(bgm, 2000, function() {
-              window.location.href = link.href;
-            });
-          } else {
-            window.location.href = link.href;
-          }
+      const bgm = document.getElementById("bgm");
+      bgm.volume = 0.5;
+      const playPromise = bgm.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function(error) {
+          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
+          document.addEventListener("click", function handler() {
+            bgm.play();
+            document.removeEventListener("click", handler);
+          });
         });
-      });
+      }
     });
     
-    // Função de fade out (diminui gradualmente o volume)
-    function fadeOutAudio(audio, duration, callback) {
-      const step = 50; // intervalo em ms
-      const fadeAmount = audio.volume / (duration / step);
-      const fadeInterval = setInterval(function() {
-        if (audio.volume > fadeAmount) {
-          audio.volume = Math.max(audio.volume - fadeAmount, 0);
-        } else {
-          clearInterval(fadeInterval);
-          audio.pause();
-          if (callback) callback();
-        }
-      }, step);
-    }
-    
-    // (Outras funções já existentes – animação dos símbolos, canvas de fundo, etc.)
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -250,8 +292,8 @@
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
-    
-    const canvas = document.getElementById("warpCanvas");
+
+    const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
     function setupCanvas() {
       canvas.width = window.innerWidth;
@@ -259,6 +301,7 @@
       ctx.imageSmoothingEnabled = false;
     }
     setupCanvas();
+
     const cellSize = 3;
     let cols, rows;
     function updateGridSize() {
@@ -266,9 +309,11 @@
       rows = Math.floor(canvas.height / cellSize);
     }
     updateGridSize();
+
     let grid = Array.from({ length: rows }, () =>
       Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
     );
+
     function drawGrid() {
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -281,18 +326,23 @@
         }
       }
     }
+
     function injectActivity() {
       const injectionSize = 10;
       const corner = Math.floor(Math.random() * 4);
       let startRow, startCol;
       if (corner === 0) {
-        startRow = 0; startCol = 0;
+        startRow = 0;
+        startCol = 0;
       } else if (corner === 1) {
-        startRow = 0; startCol = cols - injectionSize;
+        startRow = 0;
+        startCol = cols - injectionSize;
       } else if (corner === 2) {
-        startRow = rows - injectionSize; startCol = 0;
+        startRow = rows - injectionSize;
+        startCol = 0;
       } else {
-        startRow = rows - injectionSize; startCol = cols - injectionSize;
+        startRow = rows - injectionSize;
+        startCol = cols - injectionSize;
       }
       for (let i = startRow; i < startRow + injectionSize && i < rows; i++) {
         for (let j = startCol; j < startCol + injectionSize && j < cols; j++) {
@@ -302,6 +352,7 @@
         }
       }
     }
+
     function updateGrid() {
       let newGrid = grid.map(arr => [...arr]);
       for (let y = 1; y < rows - 1; y++) {
@@ -313,6 +364,7 @@
       }
       grid = newGrid;
     }
+
     let frameCount = 0;
     function animate() {
       frameCount++;
@@ -324,6 +376,7 @@
       requestAnimationFrame(animate);
     }
     animate();
+
     window.addEventListener("resize", () => {
       setupCanvas();
       updateGridSize();
@@ -331,10 +384,6 @@
         Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
       );
       drawGrid();
-    });
-    
-    window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
     });
   </script>
 </body>
