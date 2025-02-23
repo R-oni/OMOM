@@ -50,7 +50,7 @@
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
-      width: 50%;
+      width: 100%; /* Usa toda a largura do dispositivo em mobile */
       position: relative;
       z-index: 2;
     }
@@ -63,6 +63,10 @@
       font-size: 100%;
       text-decoration: none;
       display: block;
+    }
+    
+    .line {
+      white-space: nowrap;
     }
     
     /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
@@ -107,8 +111,6 @@
       filter: brightness(50%);
     }
     
-    /* ===== ESTILOS GLOBAIS PARA FUNDO E ÁUDIO ===== */
-    
     /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -132,7 +134,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 50%;
+        width: 50%; /* Largura de 50% em telas maiores */
       }
       .title-container .title-text {
         font-size: 36px;
@@ -166,8 +168,8 @@
 
   <div class="title-container">
     <a href="omom.html" class="title-text">
-      OUTROS MUNDOS<br>
-      OUTRAS MENTES
+      <span class="line">OUTROS MUNDOS</span><br>
+      <span class="line">OUTRAS MENTES</span>
     </a>
   </div>
 
