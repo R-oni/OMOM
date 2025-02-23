@@ -19,6 +19,18 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
+      flex-direction: column;
+    }
+    
+    /* Canvas para animação de loading */
+    #warpCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      image-rendering: pixelated;
     }
     
     #loading-text {
@@ -26,6 +38,7 @@
       color: #00FFE7;
       font-size: 20px;
       text-align: center;
+      z-index: 10001;
     }
     
     #automatonCanvas {
@@ -34,7 +47,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: -1;
+      z-index: -2;
       image-rendering: pixelated;
     }
     
@@ -50,7 +63,7 @@
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
-      width: 100%;
+      width: 100%; /* Usa toda a largura do dispositivo em mobile */
       position: relative;
       z-index: 2;
     }
@@ -157,11 +170,14 @@
       }
     }
   </style>
-  <!-- Se desejar, mantenha os links e estilos de outras bibliotecas -->
+  
+  <!-- Incluir DearFlip CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dearflip@2.0.0/dist/dearflip.min.css">
 </head>
 <body>
-  <!-- Tela de Loading -->
+  <!-- Tela de Loading com canvas para animação warp/starfield -->
   <div id="loading-screen">
+    <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
@@ -266,19 +282,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-  <!-- Removido turn.min.js, utilizando DearFlip não é necessário -->
+  <!-- Removido turn.min.js -->
   
-  <!-- Inicia os scripts do automato e outros efeitos -->
+  <!-- Incluir DearFlip JS -->
+  <script src="https://cdn.jsdelivr.net/npm/dearflip@2.0.0/dist/jquery.dearflip.min.js"></script>
+  
   <script>
-    // Inicia o background de áudio de virar página
+    // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
     const flipAudioStart = 1;
     const flipAudioEnd = 1.4;
+    
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
       flipAudio = new Audio('sompagina.aac');
       flipAudio.preload = 'auto';
       flipAudio.load();
       flipAudio.volume = 0.2;
+      
       document.addEventListener('click', function unlockAudio() {
         flipAudio.play().then(() => {
           flipAudio.pause();
@@ -303,25 +323,25 @@
     }
     floatSymbols();
     
-    // Setup para o automato celular
-    const canvas = document.getElementById("automatonCanvas");
-    const ctx = canvas.getContext("2d");
+    // Setup para o autômato celular
+    const automatonCanvas = document.getElementById("automatonCanvas");
+    const ctx = automatonCanvas.getContext("2d");
     function setupCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      automatonCanvas.width = window.innerWidth;
+      automatonCanvas.height = window.innerHeight;
       ctx.imageSmoothingEnabled = false;
     }
     setupCanvas();
     
-    const cellSize = 1; // Tamanho dos "pixels" do autômato
+    const cellSize = 1;
     let cols, rows;
     function updateGridSize() {
-      cols = Math.floor(canvas.width / cellSize);
-      rows = Math.floor(canvas.height / cellSize);
+      cols = Math.floor(automatonCanvas.width / cellSize);
+      rows = Math.floor(automatonCanvas.height / cellSize);
     }
     updateGridSize();
     
-    // Inicializa a grade com uma densidade baixa
+    // Inicializa a grade com baixa densidade
     let grid = Array.from({ length: rows }, () =>
       Array.from({ length: cols }, () => Math.random() > 0.95 ? 1 : 0)
     );
@@ -329,12 +349,11 @@
     // Função para desenhar a grade
     function drawGrid() {
       ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, automatonCanvas.width, automatonCanvas.height);
       ctx.fillStyle = "#FFFFFF";
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
           if (grid[y][x] === 1) {
-            // Desenha círculos para um efeito mais orgânico
             ctx.beginPath();
             ctx.arc(x * cellSize, y * cellSize, cellSize / 2, 0, 2 * Math.PI);
             ctx.fill();
@@ -343,7 +362,7 @@
       }
     }
     
-    // Atualização do autômato com regras modificadas para filamentos (B2/S12)
+    // Regra modificada para formar padrões filamentosos (B2/S12)
     function updateGrid() {
       let newGrid = grid.map(arr => [...arr]);
       for (let y = 1; y < rows - 1; y++) {
@@ -351,10 +370,8 @@
           let sum = grid[y-1][x] + grid[y+1][x] + grid[y][x-1] + grid[y][x+1] +
                     grid[y-1][x-1] + grid[y-1][x+1] + grid[y+1][x-1] + grid[y+1][x+1];
           if (grid[y][x] === 1) {
-            // Se a célula está viva, sobrevive se tiver 1 ou 2 vizinhos
             newGrid[y][x] = (sum >= 1 && sum <= 2) ? 1 : 0;
           } else {
-            // Se estiver morta, nasce se tiver exatamente 2 vizinhos
             newGrid[y][x] = (sum === 2) ? 1 : 0;
           }
         }
@@ -362,7 +379,7 @@
       grid = newGrid;
     }
     
-    // Injeção de atividade ocasional para manter o padrão dinâmico
+    // Injeta atividade ocasional para manter o padrão dinâmico
     function injectActivity() {
       const injectionSize = 10;
       const corner = Math.floor(Math.random() * 4);
@@ -413,7 +430,7 @@
   
   <script src="./globo.js"></script>
   <script>
-    // Animação do canvas (efeito warp/starfield)
+    // Animação do canvas (efeito warp/starfield) para o loading-screen
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
@@ -421,10 +438,12 @@
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
+      
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
+      
       function createStars() {
         stars = [];
         for (let i = 0; i < numStars; i++) {
@@ -435,6 +454,7 @@
           });
         }
       }
+      
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -456,13 +476,16 @@
         });
         animationFrameId = requestAnimationFrame(updateStars);
       }
+      
       setupCanvas();
       createStars();
       updateStars();
+      
       window.addEventListener("resize", function() {
         setupCanvas();
         createStars();
       });
+      
       window.addEventListener("load", function() {
         document.getElementById("loading-screen").style.display = "none";
         cancelAnimationFrame(animationFrameId);
