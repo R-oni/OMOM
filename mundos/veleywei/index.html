@@ -17,7 +17,6 @@
       color: #fff;
       font-family: sans-serif;
     }
-    
     /* Loading Screen */
     #loading-screen {
       position: fixed;
@@ -32,7 +31,6 @@
       justify-content: center;
       align-items: center;
     }
-    
     #warpCanvas {
       position: absolute;
       top: 0;
@@ -40,7 +38,6 @@
       width: 100%;
       height: 100%;
     }
-    
     #loading-text {
       position: relative;
       font-family: 'Press Start 2P', cursive;
@@ -48,7 +45,6 @@
       font-size: 20px;
       z-index: 10001;
     }
-    
     /* Layout padrão para mobile/vertical */
     .page-container {
       display: flex;
@@ -58,14 +54,11 @@
       width: 100%;
       height: 100%;
     }
-    
-    /* Para mobile, mantém as seções separadas */
     .top-section img {
       width: 15vmax;
       max-width: 80vw;
       height: auto;
     }
-    
     .title-container {
       text-align: center;
       margin-top: 1px;
@@ -73,7 +66,7 @@
       z-index: 2;
       margin-bottom: 50px;
     }
-    
+    /* Novo estilo para o título em texto */
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
@@ -82,14 +75,12 @@
       font-size: 14px;
       text-decoration: none;
     }
-    
     .globe-section {
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
     }
-    
     /* Configuração original do globo */
     #globeCanvas {
       width: 40vmax;
@@ -97,7 +88,6 @@
       max-width: 80vw;
       max-height: 50vh;
     }
-    
     /* Loading overlay para o globo */
     #globeLoading {
       position: absolute;
@@ -110,7 +100,6 @@
       z-index: 100;
       pointer-events: none;
     }
-    
     /* Flipbook para mobile (sem contêiner extra) */
     #flipbook {
       position: relative;
@@ -124,18 +113,15 @@
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
     }
-    
     .page {
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
     }
-    
     .page img {
       width: 100%;
       height: auto;
       display: block;
     }
-    
     .sound-button {
       position: absolute;
       top: 50%;
@@ -146,7 +132,6 @@
       background: rgba(255, 255, 200, 0.2);
       cursor: pointer;
     }
-    
     /* Overlay */
     #overlayContainer {
       display: none;
@@ -158,7 +143,6 @@
       background: rgba(0, 0, 0, 0.8);
       z-index: 9999;
     }
-    
     #overlayImage {
       position: absolute;
       top: 50%;
@@ -167,7 +151,6 @@
       max-width: 90vw;
       max-height: 90vh;
     }
-    
     #btnSair {
       position: absolute;
       top: 20px;
@@ -181,7 +164,6 @@
       padding: 20px;
       z-index: 10000;
     }
-    
     /* Botão Veleywei */
     #veleyweiBtn,
     #veleyweiBtn3,
@@ -195,13 +177,11 @@
       top: 0;
       animation: fadeInOut 2s infinite;
     }
-    
     @keyframes fadeInOut {
       0% { opacity: 1; }
       50% { opacity: 0; }
       100% { opacity: 1; }
     }
-    
     .btn-overlay {
       position: absolute;
       top: 100px;
@@ -211,18 +191,15 @@
       cursor: pointer;
       padding: 0;
     }
-    
     .btn-overlay img {
       width: 60px;
       height: auto;
       display: block;
     }
-    
     /* Imagem flutuante */
     .floating-container {
       position: relative;
     }
-    
     #spiraqel {
       position: absolute;
       right: 70px;
@@ -231,14 +208,12 @@
       cursor: pointer;
       animation: pulse 2s infinite ease-in-out;
     }
-    
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    
-    /* Layout Horizontal – para dispositivos em paisagem */
+    /* Layout Horizontal – para qualquer dispositivo em paisagem */
     @media screen and (orientation: landscape) {
       .page-container {
         position: relative;
@@ -246,42 +221,29 @@
         width: 100vw;
         height: 100vh;
       }
-      
-      /* Agrupamos imagem e título num container único */
-      .header-container {
+      .top-section {
         position: absolute;
-        top: 2px;
+        top: 20px;
         left: 15vw;
-        width: 40vw;
+        width: 18vw;
+        height: auto;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         align-items: center;
       }
-      
-      .header-container img {
-        width: 30%;
+      .top-section img {
+        width: 100%;
         height: auto;
         object-fit: contain;
       }
-      
-      .header-container .title-text {
-        margin-top: 5px;
-        font-family: 'Press Start 2P', cursive;
-        color: #00FFE7;
-        font-size: 2.5vh;
-        text-decoration: none;
-        text-align: center;
-      }
-      
       #flipbook-wrapper {
         position: absolute;
-        bottom: 5vh;
+        bottom: 10vh;
         left: 5vw;
         width: 40vw;
         height: calc(40vw * 0.75);
         overflow: visible;
       }
-      
       #flipbook {
         width: 100%;
         height: 100%;
@@ -289,7 +251,6 @@
         position: relative;
         overflow: visible;
       }
-      
       .globe-section {
         position: absolute;
         top: 50%;
@@ -301,7 +262,6 @@
         justify-content: center;
         align-items: center;
       }
-      
       #globeCanvas {
         width: 100%;
         height: 100%;
@@ -323,17 +283,16 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <!-- Para versão PC (landscape), a imagem e o título ficam agrupados -->
-    <div class="header-container">
+    <div class="top-section">
       <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+    </div>
+    <div class="title-container">
       <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
     </div>
-    
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
     </div>
-    
     <!-- Contêiner para o flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
@@ -487,16 +446,16 @@
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
+
       let stars = [];
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
-      
+
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
-      
       function createStars() {
         stars = [];
         for (let i = 0; i < numStars; i++) {
@@ -507,11 +466,11 @@
           });
         }
       }
-      
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
+
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
@@ -529,16 +488,13 @@
         });
         animationFrameId = requestAnimationFrame(updateStars);
       }
-      
       setupCanvas();
       createStars();
       updateStars();
-      
       window.addEventListener("resize", function() {
         setupCanvas();
         createStars();
       });
-      
       window.addEventListener("load", function() {
         document.getElementById("loading-screen").style.display = "none";
         cancelAnimationFrame(animationFrameId);
@@ -552,4 +508,4 @@
     });
   </script>
 </body>
-</html>
+          </html>
