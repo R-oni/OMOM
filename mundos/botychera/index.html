@@ -45,7 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-    /* Layout padrão para mobile/vertical */
+/* Layout padrão para mobile/vertical */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -72,7 +72,7 @@
       color: #00FFE7;
       text-align: center;
       line-height: 1.2;
-      font-size: 14px;
+      font-size: 18px;
       text-decoration: none;
     }
     .globe-section {
@@ -100,7 +100,7 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Flipbook para mobile (sem contêiner extra) */
+    /* Flipbook para mobile */
     #flipbook {
       position: relative;
       margin: auto;
@@ -213,32 +213,50 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Layout Horizontal – para qualquer dispositivo em paisagem */
-    @media screen and (orientation: landscape) {
+    /* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         position: relative;
         display: block;
         width: 100vw;
         height: 100vh;
       }
-      .top-section {
+      /* Novo container que agrupa a imagem e o título */
+      .header-container {
         position: absolute;
         top: 20px;
         left: 15vw;
         width: 18vw;
-        height: auto;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
       }
-      .top-section img {
+      .header-container .top-section {
         width: 100%;
+        height: auto;
+      }
+      .header-container .top-section img {
+        width: 50%;
         height: auto;
         object-fit: contain;
       }
+      .header-container .title-container {
+        margin-top: 2vh;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0;
+      }
+      .header-container .title-text {
+        font-family: 'Press Start 2P', cursive;
+        color: #00FFE7;
+        font-size: 2.5vh;
+        text-decoration: none;
+        text-align: center;
+      }
+      /* Outros elementos da versão PC permanecem inalterados */
       #flipbook-wrapper {
         position: absolute;
-        bottom: 10vh;
+        bottom: 2vh;
         left: 5vw;
         width: 40vw;
         height: calc(40vw * 0.75);
@@ -273,7 +291,7 @@
 </head>
 <body>
   <!-- Música de fundo: utiliza "byfire.mp3" conforme solicitado -->
-  <audio id="bgMusic" src="subnautica.mp3" preload="auto" loop style="display: none;"></audio>
+  <audio id="bgMusic" src="byfire.mp3" preload="auto" loop style="display: none;"></audio>
   
   <!-- Loading Screen -->
   <div id="loading-screen">
@@ -283,11 +301,14 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <div class="top-section">
-      <img src="imagens/titulobotychera.webp" alt="Título Velei'wey">
-    </div>
-    <div class="title-container">
-      <a href="omom.html" class="title-text">O MUNDO OCEÂNICO DE<br>BOTYCHERA</a>
+    <!-- Para mobile, o layout original é exibido; para PC, a media query reestiliza o header -->
+    <div class="header-container">
+      <div class="top-section">
+        <img src="imagens/titulobotychera.webp" alt="Título Velei'wey">
+      </div>
+      <div class="title-container">
+        <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
+      </div>
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
@@ -309,21 +330,10 @@
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquebotychera1.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquebotychera2.webp" alt="Botão Cliquey Eroben">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-        <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 12">
-          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page">
-          <img src="imagens/cap1/pagina11.webp" alt="Página 13">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
-        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
+        
       </div>
     </div>
   </div>
@@ -420,24 +430,19 @@
       // Corrige o problema de propagação dos cliques dos botões veleywei
       $(document).on("click", "#veleyweiBtn", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayImage").attr("src", "seresbotychera.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
       $(document).on("click", "#veleyweiBtn2", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayImage").attr("src", "seresbotychera.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      $(document).on("click", "#veleyweiBtn3", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
+      
     });
   </script>
   <script src="./globo.js"></script>
@@ -446,16 +451,16 @@
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
-
       let stars = [];
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
-
+      
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
+      
       function createStars() {
         stars = [];
         for (let i = 0; i < numStars; i++) {
@@ -466,11 +471,11 @@
           });
         }
       }
+      
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
-
         stars.forEach(star => {
           star.z -= speed;
           if (star.z <= 0) {
@@ -488,13 +493,16 @@
         });
         animationFrameId = requestAnimationFrame(updateStars);
       }
+      
       setupCanvas();
       createStars();
       updateStars();
+      
       window.addEventListener("resize", function() {
         setupCanvas();
         createStars();
       });
+      
       window.addEventListener("load", function() {
         document.getElementById("loading-screen").style.display = "none";
         cancelAnimationFrame(animationFrameId);
@@ -508,4 +516,4 @@
     });
   </script>
 </body>
-          </html>
+</html>
