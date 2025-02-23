@@ -54,6 +54,7 @@
       width: 100%;
       height: 100%;
     }
+    /* Para mobile, a estrutura original é usada */
     .top-section img {
       width: 15vmax;
       max-width: 80vw;
@@ -212,7 +213,7 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Versão PC (landscape com min-width:1024px) – reposiciona imagem e título */
+    /* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         position: relative;
@@ -220,41 +221,42 @@
         width: 100vw;
         height: 100vh;
       }
-      /* Posiciona a imagem */
-      .top-section {
+      /* Novo container que agrupa a imagem e o título */
+      .header-container {
         position: absolute;
         top: 20px;
-        left: 8vw;
-        width: 8vw;
-        height: auto; /* Define altura fixa para facilitar o posicionamento */
+        left: 15vw;
+        width: 18vw;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
       }
-      .top-section img {
+      .header-container .top-section {
         width: 100%;
-        height: 100%;
+        height: auto;
+      }
+      .header-container .top-section img {
+        width: 100%;
+        height: auto;
         object-fit: contain;
       }
-      /* Posiciona o título logo abaixo da imagem */
-      .title-container {
-        position: absolute;
-        top: calc(20px + 8vw + 2vh); /* 20px + altura da imagem + margem */
-        left: 8vw;
-        width: 50vw;
+      .header-container .title-container {
+        margin-top: 2vh;
+        width: 100%;
         text-align: center;
-        margin: 0;
+        margin-bottom: 0;
       }
-      .title-text {
+      .header-container .title-text {
         font-family: 'Press Start 2P', cursive;
         color: #00FFE7;
         font-size: 2.5vh;
         text-decoration: none;
+        text-align: center;
       }
       /* Outros elementos da versão PC permanecem inalterados */
       #flipbook-wrapper {
         position: absolute;
-        bottom: 5vh;
+        bottom: 10vh;
         left: 5vw;
         width: 40vw;
         height: calc(40vw * 0.75);
@@ -299,12 +301,14 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <!-- Para mobile, a estrutura original é usada -->
-    <div class="top-section">
-      <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
-    </div>
-    <div class="title-container">
-      <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
+    <!-- Para mobile, o layout original é exibido; para PC, a media query reestiliza o header -->
+    <div class="header-container">
+      <div class="top-section">
+        <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+      </div>
+      <div class="title-container">
+        <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
+      </div>
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
