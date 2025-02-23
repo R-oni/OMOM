@@ -214,42 +214,27 @@
       100% { transform: scale(1); }
     }
     /* Layout Horizontal – para qualquer dispositivo em paisagem */
-    @media screen and (orientation: landscape) {
-  .page-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-  }
-  /* Container que agrupa imagem e título */
-  .top-section {
-    position: absolute;
-    top: 20px;
-    left: 15vw;
-    width: 40vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .top-section img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-  /* Título logo abaixo da imagem */
-  .title-container {
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-  }
-  .title-text {
-    font-family: 'Press Start 2P', cursive;
-    color: #00FFE7;
-    line-height: 1.2;
-    font-size: 14px;
-    text-decoration: none;
-  }
-}
-
+        @media screen and (orientation: landscape) {
+      /* Container à esquerda com imagem e título */
+      .left-content {
+        position: absolute;
+        top: 2vh;
+        left: 2vw;
+        width: 30vw; /* Largura responsiva */
+      }
+      .left-content img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+      .left-content .title-text {
+        font-family: 'Press Start 2P', cursive;
+        color: #00FFE7;
+        font-size: 2.5vh; /* Tamanho responsivo */
+        text-align: left;
+        margin-top: 1vh;
+      }
+    }
       
       #flipbook-wrapper {
         position: absolute;
