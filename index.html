@@ -298,9 +298,13 @@
   </audio>
 
   <script>
-    // Função para fazer fade out no áudio
+    window.addEventListener("load", function() {
+      document.getElementById("loading-screen").style.display = "none";
+    });
+
+    // Função para fazer fade out no áudio (2 segundos)
     function fadeOutAudio(audio, duration, callback) {
-      const step = 50;
+      const step = 50; // intervalo em ms
       const initialVolume = audio.volume;
       const fadeAmount = initialVolume / (duration / step);
       const fadeInterval = setInterval(function() {
@@ -315,7 +319,7 @@
       }, step);
     }
     
-    // Inicialização da música e do modal de escolha
+    // Inicializa a música e o modal de escolha
     document.addEventListener("DOMContentLoaded", function() {
       const bgm = document.getElementById("bgm");
       bgm.volume = 0.7;
@@ -332,7 +336,7 @@
         });
       }
       
-      // Intercepta cliques em links dos mundos para aplicar fade out
+      // Intercepta cliques em links que levam a mundos (ex: "mundos/...")
       document.querySelectorAll('a[href^="mundos/"]').forEach(function(link) {
         link.addEventListener("click", function(e) {
           e.preventDefault();
@@ -361,7 +365,6 @@
       document.getElementById("musicModal").style.display = "none";
     });
     
-    // Animação dos símbolos (permanece inalterada)
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -375,8 +378,7 @@
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
-    
-    // (Resto do código relacionado ao canvas de fundo e grid permanece inalterado)
+
     const canvas = document.getElementById("automatonCanvas");
     const ctx = canvas.getContext("2d");
     function setupCanvas() {
