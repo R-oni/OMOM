@@ -215,44 +215,41 @@
     }
     /* Layout Horizontal – para qualquer dispositivo em paisagem */
     @media screen and (orientation: landscape) {
-      .page-container {
-        position: relative;
-        display: block;
-        width: 100vw;
-        height: 100vh;
-      }
-      .top-section {
-        position: absolute;
-        top: 20px;
-        left: 15vw;
-        width: 40vw;
-        height: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .top-section img {
-        width: 100%;
-        height: auto;
-        object-fit: contain;
-      }
+  .page-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+  /* Container que agrupa imagem e título */
+  .top-section {
+    position: absolute;
+    top: 20px;
+    left: 15vw;
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .top-section img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+  /* Título logo abaixo da imagem */
+  .title-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .title-text {
+    font-family: 'Press Start 2P', cursive;
+    color: #00FFE7;
+    line-height: 1.2;
+    font-size: 14px;
+    text-decoration: none;
+  }
+}
 
-      .title-container {
-      text-align: center;
-      margin-top: 1px;
-      position: relative;
-      z-index: 2;
-    }
-    /* Novo estilo para o título em texto */
-    .title-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      left: 15vw;
-      text-align: center;
-      line-height: 1.2;
-      font-size: 14px;
-      text-decoration: none;
-    }
       
       #flipbook-wrapper {
         position: absolute;
