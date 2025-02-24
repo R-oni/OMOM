@@ -176,27 +176,28 @@
 /* Defina os botões com tamanho e posição em porcentagem */
 #cliquemaior {
   position: absolute;
-  top: 4%;       /* 50% da altura da página */
+  top: 5%;       /* 50% da altura da página */
   left: 15%;      /* 20% da largura da página */
   center: 0%;     /* 10% da largura da página */
   height: auto;
-  animation: fadeInOut 1.5s infinite, pulse 2s infinite ease-in-out;
+  animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
 }
 
 #cliquemenor {
   position: absolute;
   bottom: 15%;
-  left: 60%;     /* Posicionado a 20% da direita da página */
+  left: 60%; 
+  center: 0%; 
   width: 25%;
   height: auto;
-  animation: fadeInOut 1.5s infinite, pulse 0.7s infinite ease-in-out;
+  animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
 }
 
 /* Animação de fade */
 @keyframes fadeInOut {
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Animação de pulso (flutuação) */
