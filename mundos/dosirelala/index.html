@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+C~BD~A(F)₂ <!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
@@ -309,8 +309,17 @@
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquedosirela" alt="Botão Cliquey Eroben">
         </div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 9"></div>
+        <div class="page"><img src="imagens/cap1/pagina10.webp" alt="Página 9"></div>
+        <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 9"></div>
+        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 9"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina13.webp" alt="Página 10">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquequadrifono.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 9"></div>
         
     </div>
   </div>
@@ -407,14 +416,14 @@
       // Corrige o problema de propagação dos cliques dos botões veleywei
       $(document).on("click", "#veleyweiBtn", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayImage").attr("src", "imagens/desenhodosirela.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
       $(document).on("click", "#veleyweiBtn2", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayImage").attr("src", "imagens/quadrifono.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
