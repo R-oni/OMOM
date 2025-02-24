@@ -55,7 +55,7 @@
       height: 100%;
     }
     .top-section {
-      display: flex;  /* Contêiner flexível */
+      display: flex;
       justify-content: center;
       align-items: center;
       width: 100%;
@@ -160,23 +160,24 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Estilo e posicionamento dos botões de globo (usando unidades vw e vh) */
+    /* Botões para tracking na página 6 */
     #cliquemaior, #cliquemenor {
       position: absolute;
       width: 10vw;
-      height: auto;
       cursor: pointer;
     }
-    /* Exemplo de posicionamento – ajuste conforme sua arte */
+    /* Exemplo de posicionamento dos botões na página 6 */
     #cliquemaior {
-      top: 50vh;
-      left: 20vw;
+      top: 50%;
+      left: 20%;
+      transform: translate(-50%, -50%);
     }
     #cliquemenor {
-      top: 50vh;
-      left: 40vw;
+      top: 50%;
+      right: 20%;
+      transform: translate(50%, -50%);
     }
-    /* Para PC (landscape com min-width:1024px) */
+    /* Media queries para PC */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         position: relative;
@@ -262,6 +263,7 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
+    <!-- Header -->
     <div class="header-container">
       <div class="top-section">
         <img src="imagens/titulottok.webp" alt="Título Velei'wey">
@@ -270,11 +272,12 @@
         <a href="omom.html" class="title-text">OS BATEDORES DE TT'TOK'TAK'TAK'T</a>
       </div>
     </div>
+    <!-- Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
     </div>
-    <!-- Contêiner para o flipbook -->
+    <!-- Flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
@@ -284,18 +287,20 @@
         <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
         <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
         <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 5"></div>
-        <!-- Página 6 com os botões para tracking do globo -->
+        <!-- Página 6 com os botões para tracking -->
         <div class="page" style="position: relative;">
-          <img src="imagens/cap1/pagina6.webp" alt="Página 6">
+          <img src="imagens/cap1/pagina4.webp" alt="Página 6">
           <img id="cliquemaior" src="imagens/cap1/cliquemaior.jpg" alt="Botão Clique Maior">
           <img id="cliquemenor" src="imagens/cap1/cliquemenor.jpg" alt="Botão Clique Menor">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 7"></div>
-        <div class="page"><img src="imagens/cap1/pagina8.webp" alt="Página 8"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
+        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
-        <div class="page"><img src="imagens/cap1/pagina8.webp" alt="Página 10"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquebatedor.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben">
+        </div>
       </div>
     </div>
   </div>
@@ -314,15 +319,17 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
   <script>
-    // Variáveis para o áudio de virar página
+    // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
     const flipAudioStart = 1;
     const flipAudioEnd = 1.4;
+    
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
       flipAudio = new Audio('sompagina.aac');
       flipAudio.preload = 'auto';
       flipAudio.load();
       flipAudio.volume = 0.2;
+      
       document.addEventListener('click', function unlockAudio() {
         flipAudio.play().then(() => {
           flipAudio.pause();
@@ -338,6 +345,7 @@
         display: 'double'
       });
       
+      // Redimensionamento responsivo do flipbook
       function resizeFlipbook() {
         if ($(window).width() < 1024) {
           var newWidth = $(window).width() * 0.9;
@@ -354,7 +362,7 @@
         resizeFlipbook();
       });
       
-      // Dispara o áudio de virar página
+      // Dispara o áudio de virar página no mousedown/touchstart
       $("#flipbook").on("mousedown touchstart", function(){
         if (flipAudio) {
           flipAudio.pause();
@@ -379,33 +387,110 @@
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Fechamento do overlay
+      // Overlay: fecha quando clica fora da imagem
       $("#overlayContainer").on("click", function(e){
         if(e.target.id === "overlayContainer"){
           $(this).fadeOut(500);
         }
       });
       
-      // Eventos dos botões de globo: atualizam o tracking mode
-      document.getElementById("cliquemaior").addEventListener("click", function(e) {
+      // Corrige o problema de propagação dos cliques dos botões veleywei
+      $(document).on("click", "#veleyweiBtn", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "mergulhador.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      $(document).on("click", "#veleyweiBtn2", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "mergulhador.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      
+      // Eventos dos botões de tracking na Página 6
+      $(document).on("click", "#cliquemaior", function(e){
         e.stopPropagation();
         window.myGlobe.trackingMode = "central";
       });
-      document.getElementById("cliquemenor").addEventListener("click", function(e) {
+      
+      $(document).on("click", "#cliquemenor", function(e){
         e.stopPropagation();
         window.myGlobe.trackingMode = "orbit";
       });
       
     });
   </script>
-  <!-- Inclui o script do globo (contendo a função initGlobe abaixo) -->
   <script src="./globo.js"></script>
   <script>
-    // A função initGlobe() está definida em globo.js e será chamada no window.load.
-    // Quando o evento "globoCarregado" ocorrer, remove o loading do globo.
+    // Animação do canvas (efeito warp/starfield)
+    (function() {
+      const canvas = document.getElementById("warpCanvas");
+      const ctx = canvas.getContext("2d");
+      let stars = [];
+      const numStars = 300;
+      const speed = 2;
+      let animationFrameId;
+      
+      function setupCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width - canvas.width / 2,
+            y: Math.random() * canvas.height - canvas.height / 2,
+            z: Math.random() * canvas.width
+          });
+        }
+      }
+      
+      function updateStars() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        stars.forEach(star => {
+          star.z -= speed;
+          if (star.z <= 0) {
+            star.x = Math.random() * canvas.width - canvas.width / 2;
+            star.y = Math.random() * canvas.height - canvas.height / 2;
+            star.z = canvas.width;
+          }
+          let perspective = 300 / star.z;
+          let sx = star.x * perspective + canvas.width / 2;
+          let sy = star.y * perspective + canvas.height / 2;
+          let size = Math.max(2 * perspective, 0.5);
+          ctx.beginPath();
+          ctx.arc(sx, sy, size, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+        animationFrameId = requestAnimationFrame(updateStars);
+      }
+      
+      setupCanvas();
+      createStars();
+      updateStars();
+      
+      window.addEventListener("resize", function() {
+        setupCanvas();
+        createStars();
+      });
+      
+      window.addEventListener("load", function() {
+        document.getElementById("loading-screen").style.display = "none";
+        cancelAnimationFrame(animationFrameId);
+      });
+    })();
+  </script>
+  <script>
+    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
     });
   </script>
 </body>
-                            </html>
+  </html>
