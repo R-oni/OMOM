@@ -13,7 +13,7 @@ function initGlobe() {
 
   // Configura a câmera
   const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-  camera.position.set(0, 0, 4);
+  camera.position.set(0, 0, 3);
 
   // Cria o renderizador
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -60,7 +60,7 @@ function initGlobe() {
 
   // Variáveis para o movimento do globo orbitante
   let orbitAngle = 0;
-  const orbitSpeed = -0.5; // radianos por segundo
+  const orbitSpeed = -0.3; // radianos por segundo
   const clock = new THREE.Clock();
 
   // Variável para definir o modo de tracking:
