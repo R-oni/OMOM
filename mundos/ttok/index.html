@@ -180,7 +180,7 @@
   left: 15%;      /* 20% da largura da página */
   width: 65%;     /* 10% da largura da página */
   height: auto;
-  animation: fadeOutIn 2s infinite, pulse 2s infinite ease-in-out;
+  animation: fadeInOut 2s infinite, pulse 2s infinite ase-out-in;
 }
 
 #cliquemenor {
@@ -194,9 +194,9 @@
 
 /* Animação de fade */
 @keyframes fadeInOut {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* Animação de pulso (flutuação) */
