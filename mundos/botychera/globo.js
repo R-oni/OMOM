@@ -111,14 +111,29 @@ function initGlobe() {
 
   scene.add(pivot1);
 
-  const miniGeo = new THREE.SphereGeometry(0.3, 32, 32);
+  const miniGeo = new THREE.SphereGeometry(0.1, 32, 32);
 
   const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x654321 });
   const miniSphere1 = new THREE.Mesh(miniGeo, miniMat1);
   miniSphere1.position.x = 2.2;
   pivot1.add(miniSphere1);
 
-  
+    // (6) Função de animação
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotação contínua do globo principal e das nuvens
+    sphere.rotation.y += 0.003;
+    cloudMesh.rotation.y += 0.0039;
+
+    // Rotação dos pivôs (orbitas)
+    pivot1.rotation.y += 0.03;
+    pivot2.rotation.y += 0.015;
+    pivot3.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+  }
+  animate();
 
   // (5) Função de animação
   function animate() {
@@ -130,6 +145,10 @@ function initGlobe() {
 
     // Rotaciona o anel para criar o efeito de órbita
     ringGroup.rotation.y += 0.005;
+
+
+    // Rotação dos pivôs (orbitas)
+    pivot1.rotation.y += 0.03;
 
     controls.update();
     renderer.render(scene, camera);
