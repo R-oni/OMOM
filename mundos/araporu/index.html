@@ -72,7 +72,7 @@
       color: #00FFE7;
       text-align: center;
       line-height: 1.2;
-      font-size: 14px;
+      font-size: 18px;
       text-decoration: none;
     }
     .globe-section {
@@ -284,7 +284,7 @@
   <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
-      <img src="tituloaraporu.png" alt="Título Velei'wey">
+      <img src="imagens/tituloaraporu.webp" alt="Título Velei'wey">
     </div>
     <div class="title-container">
       <a href="omom.html" class="title-text">ARAPORU</a>
@@ -306,24 +306,16 @@
         <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
         <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
         <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+        
+        <div class="page">
+          <img src="imagens/cap1/pagina7.webp" alt="Página 10">
+          <img id="veleyweiBtn" src="imagens/cap1/cliquerolodoborao.webp" alt="Botão Cliquey Eroben">
+        </div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquearaporu.webp" alt="Botão Cliquey Eroben">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-        <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 12">
-          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page">
-          <img src="imagens/cap1/pagina11.webp" alt="Página 13">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
-        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
+        
       </div>
     </div>
   </div>
@@ -344,7 +336,7 @@
   <script>
     // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
     const flipAudioStart = 1;
-    const flipAudioEnd = 1.4;
+    const flipAudioEnd = 1.2;
     
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
@@ -420,14 +412,14 @@
       // Corrige o problema de propagação dos cliques dos botões veleywei
       $(document).on("click", "#veleyweiBtn", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayImage").attr("src", "corpoaraporu.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
       $(document).on("click", "#veleyweiBtn2", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+        $("#overlayImage").attr("src", "rolodoborao.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
