@@ -172,16 +172,23 @@
   --globe-btn-height: auto;
 }
 
-/* Efeito de fade e pulso para os botões "Globo Maior" e "Globo Menor" */
-#cliquemaior,
+
+/* Defina os botões com tamanho e posição em porcentagem */
+#cliquemaior {
+  position: absolute;
+  top: 10%;       /* 50% da altura da página */
+  left: 50%;      /* 20% da largura da página */
+  width: 30%;     /* 10% da largura da página */
+  height: auto;
+  animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
+}
+
 #cliquemenor {
   position: absolute;
-  width: var(--globe-btn-width);
-  height: var(--globe-btn-height);
-  z-index: 10;
-  left: 0;
-  top: 0;
-  /* Aplica a animação de fade e o efeito de pulso */
+  bottom: 20%;
+  right: 50%;     /* Posicionado a 20% da direita da página */
+  width: 10%;
+  height: auto;
   animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
 }
 
