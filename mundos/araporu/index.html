@@ -72,7 +72,7 @@
       color: #00FFE7;
       text-align: center;
       line-height: 1.2;
-      font-size: 18px;
+      font-size: 20px;
       text-decoration: none;
     }
     .globe-section {
@@ -200,14 +200,7 @@
     .floating-container {
       position: relative;
     }
-    #spiraqel {
-      position: absolute;
-      right: 70px;
-      top: 170px;
-      width: 55px;
-      cursor: pointer;
-      animation: pulse 2s infinite ease-in-out;
-    }
+
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
@@ -323,7 +316,7 @@
   <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
-    <button id="btnSair">Sair</button>
+    <button id="btnSair"></button>
   </div>
   
   <!-- Scripts -->
@@ -412,14 +405,14 @@
       // Corrige o problema de propagação dos cliques dos botões veleywei
       $(document).on("click", "#veleyweiBtn", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "corpoaraporu.png");
+        $("#overlayImage").attr("src", "rolodoborao.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
       $(document).on("click", "#veleyweiBtn2", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "rolodoborao.png");
+        $("#overlayImage").attr("src", "corpoaraporu.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
