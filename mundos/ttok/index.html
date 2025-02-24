@@ -45,13 +45,42 @@
       font-size: 20px;
       z-index: 10001;
     }
+/* Layout padrão para mobile/vertical */
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .top-section {
+    display: flex;  /* Torna um contêiner flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente (se precisar) */
+    width: 100%;  /* Ocupa toda a largura */
+    }
+
+    .top-section img {
+      width: 15vw;
+      max-width: 80vw;
+      height: auto;
+    }
+    
+    .title-container {
+      text-align: center;
+      margin-top: 0px;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 0px;
+    }
     /* Novo estilo para o título em texto */
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
       text-align: center;
       line-height: 1.2;
-      font-size: 22px;
+      font-size: 20px;
       text-decoration: none;
     }
     .globe-section {
@@ -63,7 +92,9 @@
     /* Configuração original do globo */
     #globeCanvas {
       width: auto;
-      height: 35vh;
+      margin-top: 0px;
+      height: 34vh;
+      margin-bottom: 0px;
     }
     /* Loading overlay para o globo */
     #globeLoading {
