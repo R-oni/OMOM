@@ -166,17 +166,38 @@
       width: 10vw;
       cursor: pointer;
     }
-    /* Exemplo de posicionamento dos botões na página 6 */
-    #cliquemaior {
-      top: 50%;
-      left: 20%;
-      transform: translate(-50%, -50%);
-    }
-    #cliquemenor {
-      top: 50%;
-      right: 20%;
-      transform: translate(50%, -50%);
-    }
+    /* Defina variáveis para ajuste manual (opcional) */
+:root {
+  --globe-btn-width: 10vw;
+  --globe-btn-height: auto;
+}
+
+/* Efeito de fade e pulso para os botões "Globo Maior" e "Globo Menor" */
+#cliquemaior,
+#cliquemenor {
+  position: absolute;
+  width: var(--globe-btn-width);
+  height: var(--globe-btn-height);
+  z-index: 10;
+  left: 0;
+  top: 0;
+  /* Aplica a animação de fade e o efeito de pulso */
+  animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
+}
+
+/* Animação de fade */
+@keyframes fadeInOut {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Animação de pulso (flutuação) */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
     /* Media queries para PC */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
