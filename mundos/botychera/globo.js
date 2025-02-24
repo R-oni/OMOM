@@ -115,7 +115,7 @@ function initGlobe() {
 
   const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x654321 });
   const miniSphere1 = new THREE.Mesh(miniGeo, miniMat1);
-  miniSphere1.position.x = 2.2;
+  miniSphere1.position.x = 4;
   pivot1.add(miniSphere1);
 
     // (6) Função de animação
@@ -148,7 +148,7 @@ function initGlobe() {
 
 
     // Rotação dos pivôs (orbitas)
-    pivot1.rotation.y += 0.03;
+    pivot1.rotation.y += 0.02;
 
     controls.update();
     renderer.render(scene, camera);
