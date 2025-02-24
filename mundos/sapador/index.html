@@ -165,9 +165,8 @@
       z-index: 10000;
     }
     /* Botão Veleywei */
-    #veleyweiBtn,
-    #veleyweiBtn3,
-    #veleyweiBtn2 {
+  
+    #botaosapador1 {
       position: absolute;
       cursor: pointer;
       width: 100%; 
@@ -284,10 +283,10 @@
   <!-- Conteúdo Principal -->
   <div class="page-container">
     <div class="top-section">
-      <img src="titulosapador.png" alt="Título Velei'wey">
+      <img src="imagens/titulosapador.webp" alt="Título Velei'wey">
     </div>
     <div class="title-container">
-      <a href="omom.html" class="title-text">O OMNÍVORO<br>SISTEMA SAPADOR</a>
+      <a href="omom.html" class="title-text">O OMNÍVORO SISTEMA SAPADOR</a>
     </div>
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
@@ -308,22 +307,10 @@
         <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 12">
+          <img id="botaosapador1" src="imagens/cap1/cliquesapador.webp" alt="Botão Cliquey Eroben">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-        <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 12">
-          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page">
-          <img src="imagens/cap1/pagina11.webp" alt="Página 13">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
-        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
+  
       </div>
     </div>
   </div>
@@ -418,26 +405,13 @@
       });
       
       // Corrige o problema de propagação dos cliques dos botões veleywei
-      $(document).on("click", "#veleyweiBtn", function(e){
+      $(document).on("click", "#botaosapador1", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+        $("#overlayImage").attr("src", "desenhosapador.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      
-      $(document).on("click", "#veleyweiBtn2", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      
-      $(document).on("click", "#veleyweiBtn3", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
+    
     });
   </script>
   <script src="./globo.js"></script>
