@@ -13,7 +13,7 @@ function initGlobe() {
 
   // Configura a câmera
   const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-  camera.position.set(0, 0, 3);
+  camera.position.set(0, 0, 4);
 
   // Cria o renderizador
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -60,7 +60,7 @@ function initGlobe() {
 
   // Variáveis para o movimento do globo orbitante
   let orbitAngle = 0;
-  const orbitSpeed = -0.3; // radianos por segundo
+  const orbitSpeed = -0.5; // radianos por segundo
   const clock = new THREE.Clock();
 
   // Variável para definir o modo de tracking:
@@ -87,13 +87,13 @@ function initGlobe() {
 
     // Atualiza a câmera de acordo com o modo de tracking
     if (window.myGlobe.trackingMode === "orbit") {
-      // Para o globo orbitante, usamos um offset menor para mais zoom (por exemplo, 1 unidade)
+      // Para o globo orbitante, usamos um offset menor para mais zoom (ex.: 0.6 unidades)
       const offset = new THREE.Vector3(0, 0, 0.6);
       const desiredPos = orbitSphere.position.clone().add(offset);
       camera.position.lerp(desiredPos, 0.1);
       controls.target.copy(orbitSphere.position);
     } else if (window.myGlobe.trackingMode === "central") {
-      // Para o globo central, usamos um offset maior (por exemplo, 3 unidades)
+      // Para o globo central, usamos um offset maior (ex.: 2 unidades)
       const offset = new THREE.Vector3(0, 0, 2);
       const desiredPos = centralSphere.position.clone().add(offset);
       camera.position.lerp(desiredPos, 0.1);
