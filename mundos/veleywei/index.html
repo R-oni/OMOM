@@ -54,11 +54,19 @@
       width: 100%;
       height: 100%;
     }
-    .top-section img {
-      width: 15vmax;
-      max-width: 80vw;
-      height: auto;
+    .top-section {
+    display: flex;  /* Torna um contêiner flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente (se precisar) */
+    width: 100%;  /* Ocupa toda a largura */
     }
+
+    .top-section img {
+    width: 15vmax;
+    max-width: 80vw;
+    height: auto;
+    }
+    
     .title-container {
       text-align: center;
       margin-top: 0px;
