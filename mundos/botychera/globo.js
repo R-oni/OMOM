@@ -1,4 +1,3 @@
-// Função principal para inicializar o globo
 function initGlobe() {
   // Cena
   const scene = new THREE.Scene();
@@ -6,11 +5,11 @@ function initGlobe() {
   // Câmera
   const camera = new THREE.PerspectiveCamera(
     60,
-    1,        // Aspect ratio será ajustado depois no resize
+    1,        // Aspect ratio ajustado depois no resize
     0.1,
     1000
   );
-  camera.position.z = 3; // Valor inicial; será ajustado no resize
+  camera.position.z = 4; // Zoom inicial
 
   // Renderizador
   const canvas = document.getElementById('globeCanvas');
@@ -20,21 +19,17 @@ function initGlobe() {
     canvas, 
     antialias: true 
   });
-  
-  // Ativa sombras
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-  // Ajusta o tamanho inicial do renderer e configura a câmera conforme a orientação
   resizeRenderer();
 
   // Controles de órbita
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  // Geometria com resolução maior
+  // (1) Geometria do globo principal
   const geometry = new THREE.SphereGeometry(1, 64, 64);
 
-  // Carregamento das texturas
+  // (2) Carregar textura do planeta
   const textureLoader = new THREE.TextureLoader();
   let texturesLoaded = 0;
   function checkLoaded() {
@@ -45,16 +40,10 @@ function initGlobe() {
       document.dispatchEvent(new Event("globoCarregado"));
     }
   }
+  const texture = textureLoader.load('mapabotychera.png', checkLoaded); // seu arquivo
+  const material = new THREE.MeshStandardMaterial({ map: texture });
 
-  // (2) Carregar textura principal do globo
-  const texture = textureLoader.load('mapabotychera.png', checkLoaded);
-
-  // (3) Material que reage à luz
-  const material = new THREE.MeshStandardMaterial({
-    map: texture
-  });
-
-  // (4) Mesh do globo principal
+  // (3) Mesh do globo principal
   const sphere = new THREE.Mesh(geometry, material);
   sphere.castShadow = true;  
   sphere.receiveShadow = true; 
@@ -65,14 +54,18 @@ function initGlobe() {
   const cloudTexture = textureLoader.load('mapabotychera.png', checkLoaded); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
-    transparent: true,
-    opacity: 1,
-    depthWrite: false
+    transparent: true,  
+    opacity: 1,        
+    depthWrite: false  
   });
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
-  // (5) Luz ambiente + direcional
+  // Inclinação para melhorar a visualização do anel
+  sphere.rotation.x = Math.PI / 8; // ~30° de inclinação
+  cloudMesh.rotation.x = Math.PI / 8; // Acompanha a inclinação
+
+  // (4) Luz ambiente + direcional
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
 
@@ -82,62 +75,74 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // Criando 3 globos menores orbitando
+  // Criando um anel de pequenas esferas orbitando o globo
+  // =========================================
+  const ringGroup = new THREE.Group();
+  const numRingSpheres = 1024;   // Número de esferas no anel
+  const rInner = 1.8;           // Raio interno do anel
+  const rOuter = 1.9;           // Raio externo do anel
+  const ringSphereGeo = new THREE.SphereGeometry(0.005, 4, 4); // Esferas menores
+  const ringSphereMat = new THREE.MeshStandardMaterial({ color: 0xF0F0F0 }); // Quase branco
+
+  for (let i = 0; i < numRingSpheres; i++) {
+    // Distribuição aleatória no ângulo (0 a 2π)
+    const angle = Math.random() * Math.PI * 2;
+    // Distribuição uniforme na área do anel
+    const radius = Math.sqrt(Math.random() * (rOuter * rOuter - rInner * rInner) + rInner * rInner);
+    const x = radius * Math.cos(angle);
+    const z = radius * Math.sin(angle);
+    const sphereMesh = new THREE.Mesh(ringSphereGeo, ringSphereMat);
+    sphereMesh.position.set(x, 0, z); // No plano XZ
+    ringGroup.add(sphereMesh);
+  }
+
+  // Inclina o anel para seguir o mesmo eixo do globo
+  ringGroup.rotation.x = Math.PI / 6;
+
+  scene.add(ringGroup);
+
+
+
+  // =========================================
+  // Criando 1 globo orbitando
   // =========================================
 
   const pivot1 = new THREE.Object3D();
-  const pivot2 = new THREE.Object3D();
-  const pivot3 = new THREE.Object3D();
-  scene.add(pivot1, pivot2, pivot3);
 
-  const miniGeo = new THREE.SphereGeometry(0.01, 32, 32);
+  scene.add(pivot1);
 
-  const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x808080 });
+  const miniGeo = new THREE.SphereGeometry(0.3, 32, 32);
+
+  const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x654321 });
   const miniSphere1 = new THREE.Mesh(miniGeo, miniMat1);
-  miniSphere1.position.x = 1.5;
+  miniSphere1.position.x = 2.2;
   pivot1.add(miniSphere1);
 
-  const miniMat2 = new THREE.MeshStandardMaterial({ color: 0x808080 });
-  const miniSphere2 = new THREE.Mesh(miniGeo, miniMat2);
-  miniSphere2.position.x = 2.0;
-  pivot2.add(miniSphere2);
+  
 
-  const miniMat3 = new THREE.MeshStandardMaterial({ color: 0x555555 });
-  const miniSphere3 = new THREE.Mesh(miniGeo, miniMat3);
-  miniSphere3.position.x = 2.5;
-  pivot3.add(miniSphere3);
-
-  // (6) Função de animação
+  // (5) Função de animação
   function animate() {
     requestAnimationFrame(animate);
 
-    // Rotação contínua do globo principal e das nuvens
-    sphere.rotation.y += 0.003;
+    // Rotação lenta do globo principal e das nuvens
+    sphere.rotation.y += 0.003;  
     cloudMesh.rotation.y += 0.0039;
 
-    // Rotação dos pivôs (orbitas)
-    pivot1.rotation.y += 0.03;
-    pivot2.rotation.y += 0.015;
-    pivot3.rotation.y += 0.01;
+    // Rotaciona o anel para criar o efeito de órbita
+    ringGroup.rotation.y += 0.005;
 
+    controls.update();
     renderer.render(scene, camera);
   }
   animate();
 
-  // Redimensiona o renderer e ajusta a câmera conforme a janela muda
+  // Redimensiona conforme a janela muda
   window.addEventListener('resize', resizeRenderer);
   function resizeRenderer() {
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    
-    // Se estiver em orientação horizontal, aproxima a câmera
-    if (window.matchMedia("(orientation: landscape)").matches) {
-      camera.position.z = 2; // Mais próximo (planeta fica maior)
-    } else {
-      camera.position.z = 3; // Posição padrão para vertical
-    }
     camera.updateProjectionMatrix();
   }
 }
