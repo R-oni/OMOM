@@ -26,18 +26,24 @@ function initGlobe() {
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
 
-  // Inicializa os globos com materiais temporários
+  // Carrega as texturas
+  const textureLoader = new THREE.TextureLoader();
+
+  // --- Globo Central (maior) ---
   const centralGeometry = new THREE.SphereGeometry(1, 64, 64);
-  const centralMaterial = new THREE.MeshStandardMaterial({ color: 0x1a75ff });
+  const centralTexture = textureLoader.load('mapatoktok.png');
+  const centralMaterial = new THREE.MeshStandardMaterial({ map: centralTexture });
   const centralSphere = new THREE.Mesh(centralGeometry, centralMaterial);
   centralSphere.castShadow = true;
   centralSphere.receiveShadow = true;
   scene.add(centralSphere);
 
-  const orbitRadius = 3;
-  const orbitSphereRadius = 0.1;
+  // --- Globo Orbitante (menor) ---
+  const orbitRadius = 3;          // distância do centro
+  const orbitSphereRadius = 0.1;    // cerca de 1/10 do diâmetro do central
   const orbitGeometry = new THREE.SphereGeometry(orbitSphereRadius, 64, 64);
-  const orbitMaterial = new THREE.MeshStandardMaterial({ color: 0xff4d4d });
+  const orbitTexture = textureLoader.load('mapattok.png');
+  const orbitMaterial = new THREE.MeshStandardMaterial({ map: orbitTexture });
   const orbitSphere = new THREE.Mesh(orbitGeometry, orbitMaterial);
   orbitSphere.castShadow = true;
   orbitSphere.receiveShadow = true;
@@ -57,97 +63,47 @@ function initGlobe() {
   const orbitSpeed = -0.5; // radianos por segundo
   const clock = new THREE.Clock();
 
-  // Variável para definir o modo de tracking
+  // Variável para definir o modo de tracking:
+  // "none" = nenhum tracking, "orbit" = seguir globo orbitante, "central" = seguir globo central
   window.myGlobe = {
     camera: camera,
     controls: controls,
     centralSphere: centralSphere,
     orbitSphere: orbitSphere,
-    trackingMode: "none", // modo inicial
-    texturesLoaded: false
+    trackingMode: "none" // modo inicial
   };
 
-  // Inicia a animação imediatamente com cores sólidas
-  startAnimation();
+  function animate() {
+    requestAnimationFrame(animate);
+    const delta = clock.getDelta();
 
-  // Carrega as texturas de forma assíncrona
-  const textureLoader = new THREE.TextureLoader();
-  const manager = new THREE.LoadingManager();
-  let centralTexture, orbitTexture;
+    // Rotação lenta do globo central
+    centralSphere.rotation.y += 0.003;
 
-  manager.onLoad = function() {
-    // Quando todas as texturas estiverem carregadas
-    centralSphere.material.map = centralTexture;
-    centralSphere.material.needsUpdate = true;
-    
-    orbitSphere.material.map = orbitTexture;
-    orbitSphere.material.needsUpdate = true;
-    
-    window.myGlobe.texturesLoaded = true;
-    console.log("Todas as texturas foram carregadas com sucesso!");
-  };
+    // Movimento circular do globo orbitante (no plano XZ)
+    orbitAngle += orbitSpeed * delta;
+    orbitSphere.position.x = centralSphere.position.x + orbitRadius * Math.cos(orbitAngle);
+    orbitSphere.position.z = centralSphere.position.z + orbitRadius * Math.sin(orbitAngle);
 
-  manager.onProgress = function(url, itemsLoaded, itemsTotal) {
-    console.log(`Carregando texturas: ${itemsLoaded}/${itemsTotal}`);
-  };
-
-  manager.onError = function(url) {
-    console.error(`Erro ao carregar a textura: ${url}`);
-    // Se houver erro, mantenha as cores sólidas para não travar a animação
-  };
-
-  // Carrega as texturas usando o manager
-  centralTexture = textureLoader.load(
-    'mapatoktok.png', 
-    undefined, 
-    undefined, 
-    function(err) {
-      console.error("Erro ao carregar mapatoktok.png:", err);
+    // Atualiza a câmera de acordo com o modo de tracking
+    if (window.myGlobe.trackingMode === "orbit") {
+      // Para o globo orbitante, usamos um offset menor para mais zoom (ex.: 0.6 unidades)
+      const offset = new THREE.Vector3(0, 0, 0.6);
+      const desiredPos = orbitSphere.position.clone().add(offset);
+      camera.position.lerp(desiredPos, 0.1);
+      controls.target.copy(orbitSphere.position);
+    } else if (window.myGlobe.trackingMode === "central") {
+      // Para o globo central, usamos um offset maior (ex.: 2 unidades)
+      const offset = new THREE.Vector3(0, 0, 2);
+      const desiredPos = centralSphere.position.clone().add(offset);
+      camera.position.lerp(desiredPos, 0.1);
+      controls.target.copy(centralSphere.position);
     }
-  );
-  
-  orbitTexture = textureLoader.load(
-    'mapattok.png',
-    undefined,
-    undefined,
-    function(err) {
-      console.error("Erro ao carregar mapattok.png:", err);
-    }
-  );
 
-  function startAnimation() {
-    function animate() {
-      requestAnimationFrame(animate);
-      const delta = clock.getDelta();
-
-      // Rotação lenta do globo central
-      centralSphere.rotation.y += 0.003;
-
-      // Movimento circular do globo orbitante (no plano XZ)
-      orbitAngle += orbitSpeed * delta;
-      orbitSphere.position.x = centralSphere.position.x + orbitRadius * Math.cos(orbitAngle);
-      orbitSphere.position.z = centralSphere.position.z + orbitRadius * Math.sin(orbitAngle);
-
-      // Atualiza a câmera de acordo com o modo de tracking
-      if (window.myGlobe.trackingMode === "orbit") {
-        // Para o globo orbitante, usamos um offset menor para mais zoom
-        const offset = new THREE.Vector3(0, 0, 0.6);
-        const desiredPos = orbitSphere.position.clone().add(offset);
-        camera.position.lerp(desiredPos, 0.1);
-        controls.target.copy(orbitSphere.position);
-      } else if (window.myGlobe.trackingMode === "central") {
-        // Para o globo central, usamos um offset maior
-        const offset = new THREE.Vector3(0, 0, 2);
-        const desiredPos = centralSphere.position.clone().add(offset);
-        camera.position.lerp(desiredPos, 0.1);
-        controls.target.copy(centralSphere.position);
-      }
-
-      controls.update();
-      renderer.render(scene, camera);
-    }
-    animate();
+    controls.update();
+    renderer.render(scene, camera);
   }
+  animate();
 
   // Atualiza o renderer e a câmera ao redimensionar a janela
   window.addEventListener('resize', () => {
@@ -159,21 +115,4 @@ function initGlobe() {
   });
 }
 
-// Verifica se THREE está disponível antes de inicializar
-window.addEventListener('load', function() {
-  if (typeof THREE === 'undefined') {
-    console.error("THREE.js não está carregado! Certifique-se de incluir a biblioteca antes deste script.");
-    
-    // Adiciona um elemento na página informando o erro
-    const errorMsg = document.createElement('div');
-    errorMsg.style.color = 'red';
-    errorMsg.style.padding = '20px';
-    errorMsg.innerHTML = 'Erro: THREE.js não encontrado. Verifique se todas as bibliotecas foram carregadas corretamente.';
-    document.body.appendChild(errorMsg);
-    
-    return;
-  }
-  
-  // Se THREE estiver disponível, inicializa o globo
-  initGlobe();
-});
+window.addEventListener('load', initGlobe);
