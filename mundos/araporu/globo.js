@@ -61,8 +61,8 @@ function initGlobe() {
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
-  // Inclinação para melhorar a visualização do globo
-  sphere.rotation.x = Math.PI / 8; // ~30° de inclinação
+  // Inclina o globo para melhorar a visualização
+  sphere.rotation.x = Math.PI / 8; // ~22.5° de inclinação
   cloudMesh.rotation.x = Math.PI / 8; // Acompanha a inclinação
 
   // (4) Luz ambiente + direcional
@@ -75,25 +75,29 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // Criando um anel único sem partículas:
-  // O anel terá a mesma espessura do original (rInner e rOuter)
-  // e será uma superfície semitransparente branca.
+  // Criando o anel como filho do globo para que fique
+  // sempre paralelo ao equador, mesmo com a inclinação.
   // =========================================
   const rInner = 1.7; // Raio interno do anel
   const rOuter = 1.9; // Raio externo do anel
   const ringGeometry = new THREE.RingGeometry(rInner, rOuter, 64);
   const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xFFFFFF,
+    color: 0xFFFFFF, // Branco
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0.5
   });
   const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
-  // O THREE.RingGeometry é criado no plano XY (normal +z).
-  // Para que o anel fique paralelo ao equador (do globo, que tem o equador definido em XZ após rotação)
-  // é preciso primeiro girá-lo -90° (ou -Math.PI/2) em X e depois aplicar a mesma rotação do globo.
-  ringMesh.rotation.x = -Math.PI / 2 + sphere.rotation.x; // Resultado: -Math.PI/2 + Math.PI/8 = -3*Math.PI/8
-  scene.add(ringMesh);
+  // Por padrão, a geometria de anel é criada no plano XY (normal +Z).
+  // Na geometria do globo, o equador está no plano XZ.
+  // Rotaciona o anel -90° em X para alinhá-lo ao plano XZ.
+  ringMesh.rotation.x = -Math.PI / 2;
+  
+  // Cria um grupo para o anel e o adiciona como filho do globo.
+  // Assim, ele herdará a inclinação (e rotações) do globo.
+  const ringGroup = new THREE.Group();
+  ringGroup.add(ringMesh);
+  sphere.add(ringGroup); // Agora o anel fica posicionado no centro do globo.
 
   // (5) Função de animação
   function animate() {
@@ -103,8 +107,8 @@ function initGlobe() {
     sphere.rotation.y += 0.003;  
     cloudMesh.rotation.y += 0.0039;
 
-    // Rotaciona o anel para criar o efeito de órbita
-    ringMesh.rotation.y += 0.005;
+    // Rotaciona o grupo do anel para criar o efeito de órbita
+    ringGroup.rotation.y += 0.005;
 
     controls.update();
     renderer.render(scene, camera);
