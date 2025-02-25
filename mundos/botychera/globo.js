@@ -75,11 +75,13 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // Alteração: Criando um anel único semitransparente branco,
-  // alinhado ao equador (em vez de 1024 esferas)
+  // Alteração no anel:
+  // Removemos o código de 1024 esferas e substituímos
+  // por um anel único semitransparente branco, alinhado ao equador.
+  // Raio aumentado: interno = 2.3, externo = 2.4.
   // =========================================
-  const ringInner = 1.8;           // Raio interno do anel
-  const ringOuter = 1.9;           // Raio externo do anel
+  const ringInner = 2.3;           // Raio interno do anel
+  const ringOuter = 2.4;           // Raio externo do anel
   const ringGeometry = new THREE.RingGeometry(ringInner, ringOuter, 64);
   const ringMaterial = new THREE.MeshStandardMaterial({
     color: 0xFFFFFF,             // Branco
@@ -91,10 +93,11 @@ function initGlobe() {
   // A geometria do anel é criada no plano XY; para alinhá-lo com o equador (plano XZ),
   // rotacionamos -90° em X.
   ringMesh.rotation.x = -Math.PI / 2;
-  scene.add(ringMesh);
+  // Adiciona o anel como filho do globo para que ele mantenha o alinhamento
+  sphere.add(ringMesh);
 
   // =========================================
-  // Criando 1 globo orbitando
+  // Criando 1 globo orbitante
   // =========================================
   const pivot1 = new THREE.Object3D();
   scene.add(pivot1);
@@ -105,16 +108,15 @@ function initGlobe() {
   miniSphere1.position.x = 4;
   pivot1.add(miniSphere1);
 
-  // (5) Função de animação (única)
+  // (5) Função de animação unificada
   function animate() {
     requestAnimationFrame(animate);
 
     // Rotação lenta do globo principal e das nuvens
-    sphere.rotation.y += 0.003;  
+    sphere.rotation.y += 0.003;
     cloudMesh.rotation.y += 0.0039;
 
-    // Rotaciona o anel para criar o efeito de órbita
-    ringMesh.rotation.y += 0.005;
+    // O anel é filho do globo, então ele acompanha a rotação automaticamente
 
     // Rotação do pivot (globo orbitante) desacelerada
     pivot1.rotation.y += 0.01;
