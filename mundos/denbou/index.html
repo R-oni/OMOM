@@ -352,7 +352,7 @@
   <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
-    <button id="btnSair">Sair</button>
+    <button id="btnSair">Voltar</button>
   </div>
 
   <!-- Scripts -->
@@ -430,8 +430,11 @@
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      $("#btnSair").on("click", function(){
-        $("#overlayContainer").fadeOut(500);
+      // Adicione este código dentro do $(document).ready()
+      $("#btnSair").on("click", function(e) {
+        
+        e.preventDefault();
+      $("#overlayContainer").fadeOut(500);
       });
       
       var overlayScale = 1;
