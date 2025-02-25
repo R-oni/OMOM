@@ -164,24 +164,62 @@
       padding: 20px;
       z-index: 10000;
     }
-    /* Botão Veleywei */
-    #veleyweiBtn,
-    #veleyweiBtn3,
-    #veleyweiBtn2 {
+    /* Botões para tracking na página 6 */
+    #cliquemaior, #cliquemenor, #cliquebatedor, #cliquemergulhador, #cliquesangue {
       position: absolute;
+      width: 10vw;
       cursor: pointer;
-      width: 100%; 
-      height: 97%;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      animation: fadeInOut 2s infinite;
     }
-    @keyframes fadeInOut {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
-    }
+    /* Defina variáveis para ajuste manual (opcional) */
+:root {
+  --globe-btn-width: 10vw;
+  --globe-btn-height: auto;
+}
+
+
+
+
+#cliquedenbou1 {
+  position: absolute;
+  bottom: 17%;
+  left: 8%; 
+  width: 60%;
+  height: auto;
+  animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
+}
+
+#cliquedenbou2 {
+  position: absolute;
+  top: 6%;
+  left: 26%; 
+  width: 48%;
+  height: auto;
+  animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
+}
+
+#cliquedenbou3 {
+  position: absolute;
+  bottom: 38%;
+  right: -3%; 
+  width: 28%;
+  height: auto;
+  animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
+}
+
+/* Animação de fade */
+@keyframes fadeInOut {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Animação de pulso (flutuação) */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+    
     .btn-overlay {
       position: absolute;
       top: 100px;
@@ -196,19 +234,8 @@
       height: auto;
       display: block;
     }
-    #spiraqel {
-      position: absolute;
-      right: 70px;
-      top: 170px;
-      width: 55px;
-      cursor: pointer;
-      animation: pulse 2s infinite ease-in-out;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
+
+
     /* Layout Horizontal – para qualquer dispositivo em paisagem */
     @media screen and (orientation: landscape) {
       .page-container {
@@ -330,22 +357,11 @@
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+          <img id="cliquedenbou1" src="imagens/cap1/cliquedenbou1.webp" alt="Botão Cliquey Eroben">
+          <img id="cliquedenbou2" src="imagens/cap1/cliquedenbou2.webp" alt="Botão Cliquey Eroben">
+          <img id="cliquedenbou3" src="imagens/cap1/cliquedenbou3.webp" alt="Botão Cliquey Eroben">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-        <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
-          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page">
-          <img src="imagens/cap1/pagina11.webp" alt="Página 10">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 11"></div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 11"></div>
-      </div>
+        
     </div>
   </div>
 
@@ -412,20 +428,20 @@
         resizeFlipbook();
       });
       
-      $(document).on("click", "#veleyweiBtn", function(){
-        $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
+      $(document).on("click", "#cliquedenbou1", function(){
+        $("#overlayImage").attr("src", "desenhodenbou.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
 
-      $(document).on("click", "#veleyweiBtn2", function(){
-        $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
+      $(document).on("click", "#cliquedenbou2", function(){
+        $("#overlayImage").attr("src", "imagens/artilharia.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
 
-      $(document).on("click", "#veleyweiBtn3", function(){
-        $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
+      $(document).on("click", "#cliquedenbou3", function(){
+        $("#overlayImage").attr("src", "imagens/kuitakionor.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
