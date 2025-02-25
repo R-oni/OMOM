@@ -225,7 +225,7 @@
             <img src="assets/veleyweimenu.png" alt="Velei'wey">
           </a>
         </div>
-        <!-- Os demais símbolos continuam iguais -->
+        <!-- Outros símbolos seguem iguais -->
         <div class="symbol brither" id="symbol2">
           <a href="mundos/botychera/index.html">
             <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
@@ -366,9 +366,10 @@
     // Função para carregar o conteúdo de um mundo via fetch
     function loadWorld(url) {
       const bgm = document.getElementById('bgm');
-      // Transição de áudio: fade out da música do menu (memories) e, opcionalmente, iniciar outra (by fire)
+      console.log("Iniciando transição para mundo: " + url);
+      // Transição de áudio: fade out da música do menu (memories)
       fadeOutAudio(bgm, 2000, function() {
-        // Aqui você poderia iniciar a música do mundo, se desejar
+        console.log("Fade out concluído.");
       });
       showLoading(function() {
         fetch(url)
@@ -379,6 +380,7 @@
             return response.text();
           })
           .then(html => {
+            console.log("Conteúdo carregado com sucesso.");
             const contentContainer = document.getElementById('content');
             contentContainer.innerHTML = html;
             // Oculta o menu principal e exibe o conteúdo carregado
