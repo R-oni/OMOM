@@ -327,7 +327,7 @@
   <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
-    <button id="btnSair"></button>
+    <button id="btnSair">Voltar</button>
   </div>
   
   <!-- Scripts -->
@@ -406,11 +406,11 @@
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Overlay: fecha quando clica fora da imagem
-      $("#overlayContainer").on("click", function(e){
-        if(e.target.id === "overlayContainer"){
-          $(this).fadeOut(500);
-        }
+      // Adicione este código dentro do $(document).ready()
+      $("#btnSair").on("click", function(e) {
+        
+        e.preventDefault();
+      $("#overlayContainer").fadeOut(500);
       });
       
       // Corrige o problema de propagação dos cliques dos botões veleywei
