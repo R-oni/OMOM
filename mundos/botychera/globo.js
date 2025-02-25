@@ -5,7 +5,7 @@ function initGlobe() {
   // Câmera
   const camera = new THREE.PerspectiveCamera(
     60,
-    1, // Aspect ratio ajustado depois no resize
+    1,        // Aspect ratio ajustado depois no resize
     0.1,
     1000
   );
@@ -62,7 +62,7 @@ function initGlobe() {
   scene.add(cloudMesh);
 
   // Inclinação para melhorar a visualização do anel
-  sphere.rotation.x = Math.PI / 8; // ~22.5° de inclinação
+  sphere.rotation.x = Math.PI / 8; // ~30° de inclinação
   cloudMesh.rotation.x = Math.PI / 8; // Acompanha a inclinação
 
   // (4) Luz ambiente + direcional
@@ -75,26 +75,26 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // Substituindo o anel de partículas por um anel único semitransparente branco
+  // Alteração: Criando um anel único semitransparente branco,
+  // alinhado ao equador (em vez de 1024 esferas)
   // =========================================
-  const ringInner = 1.8; // Raio interno do anel
-  const ringOuter = 1.9; // Raio externo do anel
+  const ringInner = 1.8;           // Raio interno do anel
+  const ringOuter = 1.9;           // Raio externo do anel
   const ringGeometry = new THREE.RingGeometry(ringInner, ringOuter, 64);
   const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xFFFFFF, // Branco
+    color: 0xFFFFFF,             // Branco
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0.5
   });
   const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
-  // A geometria do anel é criada no plano XY; para alinhá-lo com o equador do globo,
+  // A geometria do anel é criada no plano XY; para alinhá-lo com o equador (plano XZ),
   // rotacionamos -90° em X.
   ringMesh.rotation.x = -Math.PI / 2;
-  // Adiciona o anel como filho do globo para herdar sua inclinação
-  sphere.add(ringMesh);
+  scene.add(ringMesh);
 
   // =========================================
-  // Criando 1 globo orbitante (pivot)
+  // Criando 1 globo orbitando
   // =========================================
   const pivot1 = new THREE.Object3D();
   scene.add(pivot1);
@@ -105,17 +105,18 @@ function initGlobe() {
   miniSphere1.position.x = 4;
   pivot1.add(miniSphere1);
 
-  // =========================================
-  // Função de animação unificada
-  // =========================================
+  // (5) Função de animação (única)
   function animate() {
     requestAnimationFrame(animate);
 
-    // Rotação contínua do globo principal e das nuvens
-    sphere.rotation.y += 0.003;
+    // Rotação lenta do globo principal e das nuvens
+    sphere.rotation.y += 0.003;  
     cloudMesh.rotation.y += 0.0039;
 
-    // Rotaciona o pivot (globo orbitante) com velocidade desacelerada
+    // Rotaciona o anel para criar o efeito de órbita
+    ringMesh.rotation.y += 0.005;
+
+    // Rotação do pivot (globo orbitante) desacelerada
     pivot1.rotation.y += 0.01;
 
     controls.update();
@@ -137,5 +138,4 @@ function initGlobe() {
 // Inicia o globo quando a página carrega
 window.onload = () => {
   initGlobe();
-};oad = () => {
-  initGlo
+};
