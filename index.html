@@ -3,20 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outros Mundos Outras Mentes - SPA</title>
-  <!-- Fonte "Press Start 2P" -->
+  <title>Outros Mundos Outras Mentes</title>
+  <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Estilos comuns */
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      overflow: hidden;
-      color: white;
-      font-family: 'Courier New', Courier, monospace;
-    }
-    /* Tela de Loading (com warp stars) */
+    /* ===== ESTILOS PARA MOBILeE (Vertical) ===== */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -24,25 +15,19 @@
       width: 100vw;
       height: 100vh;
       background-color: black;
-      display: none; /* Será exibida durante as transições */
+      display: flex;
       align-items: center;
       justify-content: center;
       z-index: 9999;
     }
+    
     #loading-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
       font-size: 20px;
       text-align: center;
     }
-    /* Container da SPA */
-    #mainMenu, #veleyweiContent {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-    }
-    /* ==================== Estilos do Menu Principal ==================== */
-    /* (Adaptados do seu index principal) */
+    
     #automatonCanvas {
       position: fixed;
       top: 0;
@@ -52,6 +37,16 @@
       z-index: -1;
       image-rendering: pixelated;
     }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: black;
+      overflow: hidden;
+      color: white;
+    }
+    
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
@@ -59,17 +54,22 @@
       position: relative;
       z-index: 2;
     }
+    
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #FFFFFF;
+      text-align: center;
       line-height: 1.2;
       font-size: 20px;
       text-decoration: none;
       display: block;
     }
+    
     .line {
       white-space: nowrap;
     }
+    
+    /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
     .symbols-wrapper {
       position: absolute;
       top: 150px;
@@ -80,31 +80,95 @@
       padding: 20px;
       z-index: 2;
     }
+    
     .symbols-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 25px;
     }
+    
     .symbol {
       position: relative;
       transform-origin: center;
       transition: transform 0.1s linear;
     }
+    
     .symbol img {
       width: 25vw;
       transition: transform 0.3s;
     }
+    
     .symbol img:hover {
       transform: scale(1.1);
     }
+    
     .symbol.brither img {
       filter: brightness(180%);
     }
+    
     .symbol.locked img {
       filter: brightness(50%);
     }
-    /* Modal de escolha de música (mantém o mesmo comportamento) */
+    
+    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      .page-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30% 70%;
+        grid-template-areas:
+          "title symbols"
+          "symbols symbols";
+        width: 100vw;
+        height: 100vh;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      .title-container {
+        grid-area: title;
+        margin: 60px auto 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+      }
+      .title-container .title-text {
+        font-size: 36px;
+      }
+      
+      .symbols-wrapper {
+        grid-area: symbols;
+        padding: 30px;
+        overflow-y: auto;
+      }
+      
+      .symbols-container {
+        gap: 30px;
+        justify-content: center;
+      }
+      
+      .symbol img {
+        width: 180px;
+        height: auto;
+      }
+    }
+    
+    /* ==== Novos estilos para o canvas do autômato celular na área do título ==== */
+    #automataTitleCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    /* ===== ESTILOS DO MODAL ===== */
     #musicModal {
       position: fixed;
       top: 0;
@@ -120,354 +184,298 @@
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
     }
+    
     #musicModal .modal-content {
       background: transparent;
       text-align: center;
     }
+    
     #musicModal p {
       font-size: 24px;
       margin-bottom: 20px;
     }
+    
     #musicModal button {
+      font-family: 'Press Start 2P', cursive;
       background-color: transparent;
       color: #00FFE7;
       border: 2px solid #00FFE7;
       padding: 10px 20px;
       margin: 10px;
       cursor: pointer;
-      font-family: 'Press Start 2P', cursive;
     }
+    
     #musicModal button:hover {
       background-color: #00FFE7;
       color: black;
     }
-    /* ==================== Estilos da Página Veleywei ==================== */
-    /* Conteúdo da página veleywei (adaptado do seu segundo código) */
-    #veleyweiContent {
-      display: none; /* Oculto inicialmente */
-    }
-    .page-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
-    .header-container {
-      position: absolute;
-      top: 20px;
-      left: 15vw;
-      width: 18vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .header-container .top-section img {
-      width: 50%;
-      height: auto;
-      object-fit: contain;
-    }
-    .header-container .title-container {
-      margin-top: 2vh;
-      width: 100%;
-      text-align: center;
-    }
-    .header-container .title-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 2.5vh;
-      text-decoration: none;
-      text-align: center;
-    }
-    .globe-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-    #globeCanvas {
-      width: 100%;
-      height: 100%;
-    }
-    /* Flipbook (mantém os estilos originais do veleywei) */
-    #flipbook-wrapper {
-      position: absolute;
-      bottom: 2vh;
-      left: 5vw;
-      width: 40vw;
-      height: calc(40vw * 0.75);
-      overflow: visible;
-    }
-    #flipbook {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      position: relative;
-      overflow: visible;
-    }
-    .page img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    /* Overlay (usado na página veleywei) */
-    #overlayContainer {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 9999;
-    }
-    #overlayImage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1);
-      max-width: 90vw;
-      max-height: 90vh;
-    }
-    #btnSair {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: #00EEF7;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 32px;
-      cursor: pointer;
-      padding: 20px;
-      z-index: 10000;
-    }
   </style>
 </head>
 <body>
-  <!-- Tela de Loading para transições (com stars warp space) -->
+  <!-- Tela de Loading -->
   <div id="loading-screen">
-    <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
 
-  <!-- Áudio persistentes -->
-  <!-- Música "memories" (inicialmente tocando no menu principal) -->
-  <audio id="memoriesAudio" loop>
+  <canvas id="automatonCanvas"></canvas>
+
+  <div class="title-container">
+    <!-- Canvas para o autômato celular ao redor do título -->
+    <canvas id="automataTitleCanvas"></canvas>
+    <a href="omom.html" class="title-text">
+      <span class="line"> OUTROS MUNDOS™</span><br>
+      <span class="line">OUTRAS MENTES&nbsp;</span>
+    </a>
+  </div>
+
+  <div class="symbols-wrapper">
+    <div class="symbols-container">
+      <div class="symbol brither" id="symbol1">
+        <a href="mundos/veleywei/index.html">
+          <img src="assets/veleyweimenu.png" alt="Velei'wey">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol2">
+        <a href="mundos/botychera/index.html">
+          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol3">
+        <a href="mundos/himpis/index.html">
+          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol4">
+        <a href="mundos/ttok/index.html">
+          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol5">
+        <a href="mundos/denbou/index.html">
+          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol6">
+        <a href="mundos/araporu/index.html">
+          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol7">
+        <a href="mundos/os artesaos/index.html">
+          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol8">
+        <a href="mundos/sapador/index.html">
+          <img src="mundos/sapador/sapador.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol11">
+        <a href="mundos/dosirelala/index.html">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol9">
+        <a href="mundos/calindreno/index.html">
+          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol10">
+        <a href="mundos/mundo pulsante/index.html">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol12">
+        <a href="mundos/mundo 1/index.html">
+          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol13">
+        <a href="mundos/mundo 2/index.html">
+          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol14">
+        <a href="mundos/mundo 3/index.html">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol15">
+        <a href="mundos/mundo 4/index.html">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol16">
+        <a href="mundos/mundo 5/index.html">
+          <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Música de fundo: memories.mp3 -->
+  <audio id="bgm" loop style="display:none;">
     <source src="memories.mp3" type="audio/mpeg">
     Seu navegador não suporta o elemento de áudio.
   </audio>
-  <!-- Música "by fire" (usada na página veleywei) -->
-  <audio id="byfireAudio" loop>
-    <source src="byfire.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
 
-  <!-- ===================== Menu Principal ===================== -->
-  <div id="mainMenu">
-    <!-- Canvas de fundo (autômato celular) -->
-    <canvas id="automatonCanvas"></canvas>
-    <div class="title-container">
-      <!-- Canvas para o autômato ao redor do título -->
-      <canvas id="automataTitleCanvas"></canvas>
-      <a href="#" class="title-text" id="mainTitle">
-        <span class="line"> OUTROS MUNDOS™</span><br>
-        <span class="line">OUTRAS MENTES&nbsp;</span>
-      </a>
-    </div>
-    <div class="symbols-wrapper">
-      <div class="symbols-container">
-        <!-- Exemplo de símbolo que leva à página veleywei -->
-        <div class="symbol brither" id="symbolVeleywei">
-          <a href="#" data-target="veleywei">
-            <img src="assets/veleyweimenu.png" alt="Velei'wey">
-          </a>
-        </div>
-        <!-- Outros símbolos podem manter seus links ou usar data-target para SPA -->
-      </div>
-    </div>
-    <!-- Modal de escolha de música (permanece no menu) -->
-    <div id="musicModal">
-      <div class="modal-content">
-        <p>música?</p>
-        <div class="modal-buttons">
-          <button id="yesBtn">Sim</button>
-          <button id="noBtn">Não</button>
-        </div>
+  <!-- Modal de escolha de música -->
+  <div id="musicModal">
+    <div class="modal-content">
+      <p>música?</p>
+      <div class="modal-buttons">
+        <button id="yesBtn">Sim</button>
+        <button id="noBtn">Não</button>
       </div>
     </div>
   </div>
 
-  <!-- ===================== Página Veleywei ===================== -->
-  <div id="veleyweiContent">
-    <div class="page-container">
-      <div class="header-container">
-        <div class="top-section">
-          <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
-        </div>
-        <div class="title-container">
-          <a href="#" class="title-text" id="veleyweiTitle">O POVO DE VELEY'WEI</a>
-        </div>
-      </div>
-      <div class="globe-section">
-        <canvas id="globeCanvas"></canvas>
-        <div id="globeLoading">CARREGANDO...</div>
-      </div>
-      <!-- Flipbook -->
-      <div id="flipbook-wrapper">
-        <div id="flipbook">
-          <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
-          <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-          <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-          <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-          <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-          <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-          <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
-          <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-          <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-          <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
-          <div class="page">
-            <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-            <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
-          </div>
-          <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-          <div class="page">
-            <img src="imagens/cap1/pagina10.webp" alt="Página 12">
-            <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
-          </div>
-          <div class="page">
-            <img src="imagens/cap1/pagina11.webp" alt="Página 13">
-            <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-          </div>
-          <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
-          <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
-          <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
-          <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
-          <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 18"></div>
-        </div>
-      </div>
-    </div>
-    <!-- Botão Voltar (para retornar ao menu principal) -->
-    <div id="overlayContainer">
-      <img id="overlayImage" src="" alt="Imagem Overlay">
-      <button id="btnSair">Voltar</button>
-    </div>
-  </div>
-
-  <!-- ===================== Scripts ===================== -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Aqui você pode incluir também os scripts externos (jQuery UI, Three.js, Turn.js etc.) conforme seu projeto -->
   <script>
-    /* Funções de fade in/out para áudio */
-    function fadeOutAudio(audio, duration, callback) {
-      const interval = 50;
-      const step = audio.volume / (duration / interval);
-      const timer = setInterval(() => {
-        if (audio.volume > step) {
-          audio.volume -= step;
-        } else {
-          audio.volume = 0;
-          audio.pause();
-          clearInterval(timer);
-          if(callback) callback();
-        }
-      }, interval);
-    }
-    function fadeInAudio(audio, duration) {
-      audio.volume = 0;
-      audio.play();
-      const interval = 50;
-      const target = 0.5; // volume desejado
-      const step = target / (duration / interval);
-      const timer = setInterval(() => {
-        if (audio.volume < target - step) {
-          audio.volume += step;
-        } else {
-          audio.volume = target;
-          clearInterval(timer);
-        }
-      }, interval);
-    }
-    
-    /* Funções de transição de conteúdo com tela de loading */
-    function showLoading(callback) {
-      const loading = document.getElementById('loading-screen');
-      loading.style.display = 'flex';
-      // Aqui você pode iniciar animações no canvas "warpCanvas" se desejar
-      setTimeout(callback, 2000); // Simula 2s de loading
-    }
-    function hideLoading() {
-      document.getElementById('loading-screen').style.display = 'none';
-    }
-    
-    /* Navegação SPA */
-    function loadVeleywei() {
-      const memories = document.getElementById('memoriesAudio');
-      const byfire = document.getElementById('byfireAudio');
-      fadeOutAudio(memories, 2000, () => {
-        fadeInAudio(byfire, 2000);
-      });
-      showLoading(() => {
-        document.getElementById('mainMenu').style.display = 'none';
-        document.getElementById('veleyweiContent').style.display = 'block';
-        hideLoading();
-      });
-    }
-    function loadMainMenu() {
-      const memories = document.getElementById('memoriesAudio');
-      const byfire = document.getElementById('byfireAudio');
-      fadeOutAudio(byfire, 2000, () => {
-        fadeInAudio(memories, 2000);
-      });
-      showLoading(() => {
-        document.getElementById('veleyweiContent').style.display = 'none';
-        document.getElementById('mainMenu').style.display = 'block';
-        hideLoading();
-      });
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-      // Modal de música: aqui você pode manter sua lógica; para exemplo, já inicia Memories
-      const musicModal = document.getElementById('musicModal');
-      const memories = document.getElementById('memoriesAudio');
-      // Se o usuário escolher "Sim", inicia a música memories
-      document.getElementById('yesBtn').addEventListener('click', function() {
-        musicModal.style.display = 'none';
-        memories.volume = 0.5;
-        memories.play();
-      });
-      document.getElementById('noBtn').addEventListener('click', function() {
-        musicModal.style.display = 'none';
-        memories.pause();
-      });
-      // Para efeito de exemplo, se o modal não for usado, inicie Memories automaticamente
-      if(musicModal.style.display !== 'block'){
-        memories.volume = 0.5;
-        memories.play();
-      }
-      
-      // Ao clicar no símbolo do veleywei, carregar aquela página na SPA
-      document.querySelector('a[data-target="veleywei"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        loadVeleywei();
-      });
-      
-      // Na página veleywei, o botão Voltar (overlay) retorna ao menu principal
-      document.getElementById('btnSair').addEventListener('click', function(e) {
-        e.preventDefault();
-        loadMainMenu();
-      });
-    });
-  </script>
-  
-  <!-- Aqui você pode incluir os scripts de animação (automata, warp, flipbook etc.) conforme já estavam nos seus códigos -->
-  <script>
-    // Exemplo: esconder loading-screen quando a página é carregada
+    // Esconde a tela de loading quando a página é carregada
     window.addEventListener("load", function() {
       document.getElementById("loading-screen").style.display = "none";
     });
-    // Outros scripts já existentes (ex.: automataTitleCanvas, flipbook, etc.) devem ser integrados aqui.
+
+    // Função para realizar o fade out do áudio
+    function fadeOutAudio(audio, duration) {
+      const fadeOutInterval = 50; // intervalo em ms
+      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
+      const fadeOutTimer = setInterval(() => {
+        if (audio.volume > fadeOutStep) {
+          audio.volume -= fadeOutStep;
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeOutTimer);
+        }
+      }, fadeOutInterval);
+    }
+
+    // Configura os event listeners após o carregamento do DOM
+    document.addEventListener("DOMContentLoaded", function() {
+      // Modal de escolha de música
+      const musicModal = document.getElementById("musicModal");
+      const bgm = document.getElementById("bgm");
+
+      document.getElementById("yesBtn").addEventListener("click", function() {
+        musicModal.style.display = "none";
+        bgm.volume = 0.5;
+        bgm.play();
+      });
+
+      document.getElementById("noBtn").addEventListener("click", function() {
+        musicModal.style.display = "none";
+        bgm.pause();
+      });
+
+      // Adiciona o fade out ao clicar em um dos mundos
+      document.querySelectorAll('.symbols-container a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Se a música estiver tocando, inicia o fade out em 2 segundos
+          if (!bgm.paused) {
+            fadeOutAudio(bgm, 2000);
+            setTimeout(() => {
+              window.location.href = this.href;
+            }, 2000);
+          } else {
+            window.location.href = this.href;
+          }
+        });
+      });
+    });
+
+    // Animação de flutuação dos símbolos
+    const symbols = document.querySelectorAll('.symbol');
+    let time = 0;
+    function floatSymbols() {
+      time += 0.02;
+      symbols.forEach((symbol, index) => {
+        let amplitude = 6;
+        let speed = 0.1 + (index * 0.01);
+        let y = Math.sin(time * speed * 10) * amplitude;
+        symbol.style.transform = `translateY(${y}px)`;
+      });
+      requestAnimationFrame(floatSymbols);
+    }
+    floatSymbols();
+
+    // Autômato celular no canvas do título
+    (function() {
+      const titleCanvas = document.getElementById("automataTitleCanvas");
+      if (!titleCanvas) return;
+      const ctxTitle = titleCanvas.getContext("2d");
+
+      function resizeTitleCanvas() {
+        titleCanvas.width = titleCanvas.clientWidth;
+        titleCanvas.height = titleCanvas.clientHeight;
+        initGrid();
+      }
+      window.addEventListener("resize", resizeTitleCanvas);
+      resizeTitleCanvas();
+
+      const cellSize = 10;
+      let cols, rows;
+      let grid = [];
+
+      function initGrid() {
+        cols = Math.floor(titleCanvas.width / cellSize);
+        rows = Math.floor(titleCanvas.height / cellSize);
+        grid = [];
+        for (let r = 0; r < rows; r++) {
+          let row = [];
+          for (let c = 0; c < cols; c++) {
+            row.push(Math.random() < 0.2 ? 1 : 0);
+          }
+          grid.push(row);
+        }
+      }
+
+      function updateGrid() {
+        let newGrid = [];
+        for (let r = 0; r < rows; r++) {
+          newGrid[r] = [];
+          for (let c = 0; c < cols; c++) {
+            let liveNeighbors = 0;
+            for (let i = -1; i <= 1; i++) {
+              for (let j = -1; j <= 1; j++) {
+                if (i === 0 && j === 0) continue;
+                let nr = r + i;
+                let nc = c + j;
+                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
+                  liveNeighbors += grid[nr][nc];
+                }
+              }
+            }
+            if (grid[r][c] === 1) {
+              newGrid[r][c] = (liveNeighbors === 2 || liveNeighbors === 3) ? 1 : 0;
+            } else {
+              newGrid[r][c] = (liveNeighbors === 3) ? 1 : 0;
+            }
+          }
+        }
+        grid = newGrid;
+      }
+
+      function drawGrid() {
+        ctxTitle.clearRect(0, 0, titleCanvas.width, titleCanvas.height);
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === 1) {
+              ctxTitle.fillStyle = "white";
+              ctxTitle.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+      }
+
+      function loop() {
+        updateGrid();
+        drawGrid();
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
   </script>
 </body>
 </html>
