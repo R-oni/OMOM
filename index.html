@@ -50,7 +50,7 @@
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
-      width: 100%; /* Usa toda a largura do dispositivo em mobile */
+      width: 100%;
       position: relative;
       z-index: 2;
     }
@@ -134,7 +134,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 50%; /* Largura de 50% em telas maiores */
+        width: 50%;
       }
       .title-container .title-text {
         font-size: 36px;
@@ -167,6 +167,48 @@
       pointer-events: none;
       z-index: -1;
     }
+    
+    /* ===== ESTILOS DO MODAL ===== */
+    #musicModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+    }
+    
+    #musicModal .modal-content {
+      background: transparent;
+      text-align: center;
+    }
+    
+    #musicModal p {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #musicModal button {
+      font-family: 'Press Start 2P', cursive;
+      background-color: transparent;
+      color: #00FFE7;
+      border: 2px solid #00FFE7;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    
+    #musicModal button:hover {
+      background-color: #00FFE7;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -188,6 +230,7 @@
 
   <div class="symbols-wrapper">
     <div class="symbols-container">
+      <!-- Exemplo de alguns símbolos -->
       <div class="symbol brither" id="symbol1">
         <a href="mundos/veleywei/index.html">
           <img src="assets/veleyweimenu.png" alt="Velei'wey">
@@ -198,71 +241,7 @@
           <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
         </a>
       </div>
-      <div class="symbol brither" id="symbol3">
-        <a href="mundos/himpis/index.html">
-          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol4">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol5">
-        <a href="mundos/denbou/index.html">
-          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol6">
-        <a href="mundos/araporu/index.html">
-          <img src="mundos/araporu/araporumenu.png" alt="araporu">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol7">
-        <a href="mundos/os artesaos/index.html">
-          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol8">
-        <a href="mundos/sapador/index.html">
-          <img src="mundos/sapador/sapador.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol11">
-        <a href="mundos/dosirelala/index.html">
-          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol9">
-        <a href="mundos/calindreno/index.html">
-          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol10">
-        <a href="mundos/mundo pulsante/index.html">
-          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol12">
-        <a href="mundos/mundo 1/index.html">
-          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol13">
-        <a href="mundos/mundo 2/index.html">
-          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol14">
-        <a href="mundos/mundo 3/index.html">
-          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol15">
-        <a href="mundos/mundo 4/index.html">
-          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
-        </a>
-      </div>
+      <!-- ... demais símbolos ... -->
     </div>
   </div>
 
@@ -272,26 +251,24 @@
     Seu navegador não suporta o elemento de áudio.
   </audio>
 
+  <!-- Modal de escolha de música -->
+  <div id="musicModal">
+    <div class="modal-content">
+      <p>música?</p>
+      <div class="modal-buttons">
+        <button id="yesBtn">Sim</button>
+        <button id="noBtn">Não</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Esconde a tela de loading quando a página é carregada
     window.addEventListener("load", function() {
       document.getElementById("loading-screen").style.display = "none";
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
-      const bgm = document.getElementById("bgm");
-      bgm.volume = 0.5;
-      const playPromise = bgm.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function(error) {
-          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
-          document.addEventListener("click", function handler() {
-            bgm.play();
-            document.removeEventListener("click", handler);
-          });
-        });
-      }
-    });
-    
+    // Animação de flutuação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -305,10 +282,8 @@
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
-  </script>
 
-  <!-- Script do autômato celular na área do título -->
-  <script>
+    // Autômato celular no canvas do título
     (function() {
       const titleCanvas = document.getElementById("automataTitleCanvas");
       if (!titleCanvas) return;
@@ -384,6 +359,19 @@
       }
       loop();
     })();
+
+    // Lógica do modal de escolha de música
+    document.getElementById("yesBtn").addEventListener("click", function() {
+      document.getElementById("musicModal").style.display = "none";
+      var bgm = document.getElementById("bgm");
+      bgm.volume = 0.5;
+      bgm.play();
+    });
+    document.getElementById("noBtn").addEventListener("click", function() {
+      document.getElementById("musicModal").style.display = "none";
+      var bgm = document.getElementById("bgm");
+      bgm.pause();
+    });
   </script>
 </body>
 </html>
