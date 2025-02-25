@@ -5,7 +5,7 @@ function initGlobe() {
   // Câmera
   const camera = new THREE.PerspectiveCamera(
     60,
-    1,        // Aspect ratio ajustado depois no resize
+    1, // Aspect ratio ajustado depois no resize
     0.1,
     1000
   );
@@ -61,8 +61,8 @@ function initGlobe() {
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
   scene.add(cloudMesh);
 
-  // Inclinação para melhorar a visualização do anel
-  sphere.rotation.x = Math.PI / 8; // ~30° de inclinação
+  // Inclina o globo para melhorar a visualização
+  sphere.rotation.x = Math.PI / 8; // ~22.5° de inclinação
   cloudMesh.rotation.x = Math.PI / 8; // Acompanha a inclinação
 
   // (4) Luz ambiente + direcional
@@ -75,31 +75,29 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // Criando um anel de pequenas esferas orbitando o globo
+  // Criando o anel como filho do globo para que fique
+  // sempre paralelo ao equador, mesmo com a inclinação.
   // =========================================
+  const rInner = 1.7; // Raio interno do anel
+  const rOuter = 1.9; // Raio externo do anel
+  const ringGeometry = new THREE.RingGeometry(rInner, rOuter, 64);
+  const ringMaterial = new THREE.MeshStandardMaterial({
+    color: 0xFFFFFF, // Branco
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.5
+  });
+  const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
+  // Por padrão, a geometria de anel é criada no plano XY (normal +Z).
+  // Na geometria do globo, o equador está no plano XZ.
+  // Rotaciona o anel -90° em X para alinhá-lo ao plano XZ.
+  ringMesh.rotation.x = -Math.PI / 2;
+  
+  // Cria um grupo para o anel e o adiciona como filho do globo.
+  // Assim, ele herdará a inclinação (e rotações) do globo.
   const ringGroup = new THREE.Group();
-  const numRingSpheres = 1024;   // Número de esferas no anel
-  const rInner = 1.7;           // Raio interno do anel
-  const rOuter = 1.9;           // Raio externo do anel
-  const ringSphereGeo = new THREE.SphereGeometry(0.005, 4, 4); // Esferas menores
-  const ringSphereMat = new THREE.MeshStandardMaterial({ color: 0xF0F0F0 }); // Quase branco
-
-  for (let i = 0; i < numRingSpheres; i++) {
-    // Distribuição aleatória no ângulo (0 a 2π)
-    const angle = Math.random() * Math.PI * 2;
-    // Distribuição uniforme na área do anel
-    const radius = Math.sqrt(Math.random() * (rOuter * rOuter - rInner * rInner) + rInner * rInner);
-    const x = radius * Math.cos(angle);
-    const z = radius * Math.sin(angle);
-    const sphereMesh = new THREE.Mesh(ringSphereGeo, ringSphereMat);
-    sphereMesh.position.set(x, 0, z); // No plano XZ
-    ringGroup.add(sphereMesh);
-  }
-
-  // Inclina o anel para seguir o mesmo eixo do globo
-  ringGroup.rotation.x = Math.PI / 6;
-
-  scene.add(ringGroup);
+  ringGroup.add(ringMesh);
+  sphere.add(ringGroup); // Agora o anel fica posicionado no centro do globo.
 
   // (5) Função de animação
   function animate() {
@@ -109,7 +107,7 @@ function initGlobe() {
     sphere.rotation.y += 0.003;  
     cloudMesh.rotation.y += 0.0039;
 
-    // Rotaciona o anel para criar o efeito de órbita
+    // Rotaciona o grupo do anel para criar o efeito de órbita
     ringGroup.rotation.y += 0.005;
 
     controls.update();

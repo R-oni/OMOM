@@ -50,7 +50,7 @@
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
-      width: 100%; /* Usa toda a largura do dispositivo em mobile */
+      width: 100%;
       position: relative;
       z-index: 2;
     }
@@ -60,7 +60,7 @@
       color: #FFFFFF;
       text-align: center;
       line-height: 1.2;
-      font-size: 22px;
+      font-size: 20px;
       text-decoration: none;
       display: block;
     }
@@ -85,7 +85,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 25px;
     }
     
     .symbol {
@@ -134,7 +134,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 50%; /* Largura de 50% em telas maiores */
+        width: 50%;
       }
       .title-container .title-text {
         font-size: 36px;
@@ -167,6 +167,48 @@
       pointer-events: none;
       z-index: -1;
     }
+    
+    /* ===== ESTILOS DO MODAL ===== */
+    #musicModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+    }
+    
+    #musicModal .modal-content {
+      background: transparent;
+      text-align: center;
+    }
+    
+    #musicModal p {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #musicModal button {
+      font-family: 'Press Start 2P', cursive;
+      background-color: transparent;
+      color: #00FFE7;
+      border: 2px solid #00FFE7;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    
+    #musicModal button:hover {
+      background-color: #00FFE7;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -181,8 +223,8 @@
     <!-- Canvas para o autômato celular ao redor do título -->
     <canvas id="automataTitleCanvas"></canvas>
     <a href="omom.html" class="title-text">
-      <span class="line">OUTROS MUNDOS</span><br>
-      <span class="line">OUTRAS MENTES</span>
+      <span class="line"> OUTROS MUNDOS™</span><br>
+      <span class="line">OUTRAS MENTES&nbsp;</span>
     </a>
   </div>
 
@@ -263,6 +305,11 @@
           <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
         </a>
       </div>
+      <div class="symbol locked" id="symbol16">
+        <a href="mundos/mundo 5/index.html">
+          <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
+        </a>
+      </div>
     </div>
   </div>
 
@@ -272,26 +319,73 @@
     Seu navegador não suporta o elemento de áudio.
   </audio>
 
+  <!-- Modal de escolha de música -->
+  <div id="musicModal">
+    <div class="modal-content">
+      <p>música?</p>
+      <div class="modal-buttons">
+        <button id="yesBtn">Sim</button>
+        <button id="noBtn">Não</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Esconde a tela de loading quando a página é carregada
     window.addEventListener("load", function() {
       document.getElementById("loading-screen").style.display = "none";
     });
 
+    // Função para realizar o fade out do áudio
+    function fadeOutAudio(audio, duration) {
+      const fadeOutInterval = 50; // intervalo em ms
+      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
+      const fadeOutTimer = setInterval(() => {
+        if (audio.volume > fadeOutStep) {
+          audio.volume -= fadeOutStep;
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeOutTimer);
+        }
+      }, fadeOutInterval);
+    }
+
+    // Configura os event listeners após o carregamento do DOM
     document.addEventListener("DOMContentLoaded", function() {
+      // Modal de escolha de música
+      const musicModal = document.getElementById("musicModal");
       const bgm = document.getElementById("bgm");
-      bgm.volume = 0.5;
-      const playPromise = bgm.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function(error) {
-          console.log("Autoplay bloqueado, aguardando interação do usuário...", error);
-          document.addEventListener("click", function handler() {
-            bgm.play();
-            document.removeEventListener("click", handler);
-          });
+
+      document.getElementById("yesBtn").addEventListener("click", function() {
+        musicModal.style.display = "none";
+        bgm.volume = 0.5;
+        bgm.play();
+      });
+
+      document.getElementById("noBtn").addEventListener("click", function() {
+        musicModal.style.display = "none";
+        bgm.pause();
+      });
+
+      // Adiciona o fade out ao clicar em um dos mundos
+      document.querySelectorAll('.symbols-container a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Se a música estiver tocando, inicia o fade out em 2 segundos
+          if (!bgm.paused) {
+            fadeOutAudio(bgm, 2000);
+            setTimeout(() => {
+              window.location.href = this.href;
+            }, 2000);
+          } else {
+            window.location.href = this.href;
+          }
         });
-      }
+      });
     });
-    
+
+    // Animação de flutuação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -305,10 +399,8 @@
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
-  </script>
 
-  <!-- Script do autômato celular na área do título -->
-  <script>
+    // Autômato celular no canvas do título
     (function() {
       const titleCanvas = document.getElementById("automataTitleCanvas");
       if (!titleCanvas) return;

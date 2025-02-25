@@ -75,80 +75,51 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // Criando um anel de pequenas esferas orbitando o globo
+  // Alteração no anel:
+  // Removemos o código de 1024 esferas e substituímos
+  // por um anel único semitransparente branco, alinhado ao equador.
+  // Raio aumentado: interno = 2.3, externo = 2.4.
   // =========================================
-  const ringGroup = new THREE.Group();
-  const numRingSpheres = 1024;   // Número de esferas no anel
-  const rInner = 1.8;           // Raio interno do anel
-  const rOuter = 1.9;           // Raio externo do anel
-  const ringSphereGeo = new THREE.SphereGeometry(0.005, 4, 4); // Esferas menores
-  const ringSphereMat = new THREE.MeshStandardMaterial({ color: 0xF0F0F0 }); // Quase branco
-
-  for (let i = 0; i < numRingSpheres; i++) {
-    // Distribuição aleatória no ângulo (0 a 2π)
-    const angle = Math.random() * Math.PI * 2;
-    // Distribuição uniforme na área do anel
-    const radius = Math.sqrt(Math.random() * (rOuter * rOuter - rInner * rInner) + rInner * rInner);
-    const x = radius * Math.cos(angle);
-    const z = radius * Math.sin(angle);
-    const sphereMesh = new THREE.Mesh(ringSphereGeo, ringSphereMat);
-    sphereMesh.position.set(x, 0, z); // No plano XZ
-    ringGroup.add(sphereMesh);
-  }
-
-  // Inclina o anel para seguir o mesmo eixo do globo
-  ringGroup.rotation.x = Math.PI / 6;
-
-  scene.add(ringGroup);
-
-
+  const ringInner = 2.3;           // Raio interno do anel
+  const ringOuter = 2.4;           // Raio externo do anel
+  const ringGeometry = new THREE.RingGeometry(ringInner, ringOuter, 64);
+  const ringMaterial = new THREE.MeshStandardMaterial({
+    color: 0xFFFFFF,             // Branco
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.5
+  });
+  const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
+  // A geometria do anel é criada no plano XY; para alinhá-lo com o equador (plano XZ),
+  // rotacionamos -90° em X.
+  ringMesh.rotation.x = -Math.PI / 2;
+  // Adiciona o anel como filho do globo para que ele mantenha o alinhamento
+  sphere.add(ringMesh);
 
   // =========================================
-  // Criando 1 globo orbitando
+  // Criando 1 globo orbitante
   // =========================================
-
   const pivot1 = new THREE.Object3D();
-
   scene.add(pivot1);
 
   const miniGeo = new THREE.SphereGeometry(0.1, 32, 32);
-
   const miniMat1 = new THREE.MeshStandardMaterial({ color: 0x654321 });
   const miniSphere1 = new THREE.Mesh(miniGeo, miniMat1);
   miniSphere1.position.x = 4;
   pivot1.add(miniSphere1);
 
-    // (6) Função de animação
-  function animate() {
-    requestAnimationFrame(animate);
-
-    // Rotação contínua do globo principal e das nuvens
-    sphere.rotation.y += 0.003;
-    cloudMesh.rotation.y += 0.0039;
-
-    // Rotação dos pivôs (orbitas)
-    pivot1.rotation.y += 0.03;
-    pivot2.rotation.y += 0.015;
-    pivot3.rotation.y += 0.01;
-
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  // (5) Função de animação
+  // (5) Função de animação unificada
   function animate() {
     requestAnimationFrame(animate);
 
     // Rotação lenta do globo principal e das nuvens
-    sphere.rotation.y += 0.003;  
+    sphere.rotation.y += 0.003;
     cloudMesh.rotation.y += 0.0039;
 
-    // Rotaciona o anel para criar o efeito de órbita
-    ringGroup.rotation.y += 0.005;
+    // O anel é filho do globo, então ele acompanha a rotação automaticamente
 
-
-    // Rotação dos pivôs (orbitas)
-    pivot1.rotation.y += 0.02;
+    // Rotação do pivot (globo orbitante) desacelerada
+    pivot1.rotation.y += 0.01;
 
     controls.update();
     renderer.render(scene, camera);
