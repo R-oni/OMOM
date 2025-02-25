@@ -75,7 +75,7 @@ function initGlobe() {
   scene.add(directionalLight);
 
   // =========================================
-  // Criando um anel sem partículas:
+  // Criando um anel único sem partículas:
   // O anel terá a mesma espessura do original (rInner e rOuter)
   // e será uma superfície semitransparente branca.
   // =========================================
@@ -83,14 +83,16 @@ function initGlobe() {
   const rOuter = 1.9; // Raio externo do anel
   const ringGeometry = new THREE.RingGeometry(rInner, rOuter, 64);
   const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xF0F0F0,
+    color: 0xFFFFFF,
     side: THREE.DoubleSide,
     transparent: true,
     opacity: 0.5
   });
   const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
-  // O THREE.RingGeometry é criado no plano XY; rotaciona para alinhar com o globo
-  ringMesh.rotation.x = Math.PI / 3; // Inclinação para acompanhar o globo
+  // O THREE.RingGeometry é criado no plano XY (normal +z).
+  // Para que o anel fique paralelo ao equador (do globo, que tem o equador definido em XZ após rotação)
+  // é preciso primeiro girá-lo -90° (ou -Math.PI/2) em X e depois aplicar a mesma rotação do globo.
+  ringMesh.rotation.x = -Math.PI / 2 + sphere.rotation.x; // Resultado: -Math.PI/2 + Math.PI/8 = -3*Math.PI/8
   scene.add(ringMesh);
 
   // (5) Função de animação
