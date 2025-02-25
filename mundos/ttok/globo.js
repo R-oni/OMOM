@@ -1,56 +1,56 @@
 function initGlobe() {
-  // Obtém o canvas e define suas dimensões
   const canvas = document.getElementById('globeCanvas');
-  if (!canvas) {
-    console.error("Canvas 'globeCanvas' não encontrado!");
-    return;
-  }
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
+  if (!canvas) return;
 
-  // Cria a cena
-  const scene = new THREE.Scene();
-
-  // Configura a câmera
-  const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-  camera.position.set(0, 0, 4);
-
-  // Cria o renderizador
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setSize(width, height);
-
-  // Configura o OrbitControls
-  const controls = new THREE.OrbitControls(camera, canvas);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
-
-  // Carrega as texturas
-  const textureLoader = new THREE.TextureLoader();
+  // Controle de carregamento de texturas
   let texturesLoaded = 0;
   const totalTextures = 2;
 
-  // --- Globo Central (maior) ---
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+  camera.position.set(0, 0, 4);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(width, height);
+  renderer.shadowMap.enabled = true; // Adicionado
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Adicionado
+
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05; // Adicionado
+
+  const textureLoader = new THREE.TextureLoader();
+
+  function checkTexturesLoaded() {
+    texturesLoaded++;
+    if (texturesLoaded === totalTextures) {
+      document.dispatchEvent(new Event('globoCarregado'));
+    }
+  }
+
+  // Globo Central
   const centralGeometry = new THREE.SphereGeometry(1, 64, 64);
-  const centralMaterial = new THREE.MeshStandardMaterial({ color: 0x1a75ff }); // Cor temporária
+  const centralTexture = textureLoader.load('mapatoktok.png', checkTexturesLoaded);
+  const centralMaterial = new THREE.MeshStandardMaterial({ map: centralTexture });
   const centralSphere = new THREE.Mesh(centralGeometry, centralMaterial);
-  centralSphere.castShadow = true;
-  centralSphere.receiveShadow = true;
+  centralSphere.castShadow = true; // Adicionado
+  centralSphere.receiveShadow = true; // Adicionado
   scene.add(centralSphere);
 
-  // --- Globo Orbitante (menor) ---
-  const orbitRadius = 3;          // distância do centro
-  const orbitSphereRadius = 0.1;    // cerca de 1/10 do diâmetro do central
-  const orbitGeometry = new THREE.SphereGeometry(orbitSphereRadius, 64, 64);
-  const orbitMaterial = new THREE.MeshStandardMaterial({ color: 0xff4d4d }); // Cor temporária
+  // Globo Orbitante
+  const orbitRadius = 3;
+  const orbitGeometry = new THREE.SphereGeometry(0.1, 64, 64);
+  const orbitTexture = textureLoader.load('mapattok.png', checkTexturesLoaded);
+  const orbitMaterial = new THREE.MeshStandardMaterial({ map: orbitTexture });
   const orbitSphere = new THREE.Mesh(orbitGeometry, orbitMaterial);
-  orbitSphere.castShadow = true;
-  orbitSphere.receiveShadow = true;
+  orbitSphere.castShadow = true; // Adicionado
+  orbitSphere.receiveShadow = true; // Adicionado
   orbitSphere.position.set(orbitRadius, 0, 0);
   scene.add(orbitSphere);
 
-  // --- Iluminação ---
+  // Iluminação (Essencial para visualização)
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
   scene.add(ambientLight);
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -58,57 +58,35 @@ function initGlobe() {
   directionalLight.castShadow = true;
   scene.add(directionalLight);
 
-  // Carrega as texturas em segundo plano
-  textureLoader.load('mapatoktok.png', function(texture) {
-    centralSphere.material.map = texture;
-    centralSphere.material.needsUpdate = true;
-    texturesLoaded++;
-    console.log("Textura do globo central carregada");
-  });
-
-  textureLoader.load('mapattok.png', function(texture) {
-    orbitSphere.material.map = texture;
-    orbitSphere.material.needsUpdate = true;
-    texturesLoaded++;
-    console.log("Textura do globo orbitante carregada");
-  });
-
-  // Variáveis para o movimento do globo orbitante
+  // Animação e Controles
   let orbitAngle = 0;
-  const orbitSpeed = -0.5; // radianos por segundo
+  const orbitSpeed = -0.5;
   const clock = new THREE.Clock();
 
-  // Variável para definir o modo de tracking:
-  // "none" = nenhum tracking, "orbit" = seguir globo orbitante, "central" = seguir globo central
   window.myGlobe = {
     camera: camera,
     controls: controls,
     centralSphere: centralSphere,
     orbitSphere: orbitSphere,
-    trackingMode: "none" // modo inicial
+    trackingMode: "none"
   };
 
   function animate() {
     requestAnimationFrame(animate);
     const delta = clock.getDelta();
 
-    // Rotação lenta do globo central
     centralSphere.rotation.y += 0.003;
 
-    // Movimento circular do globo orbitante (no plano XZ)
     orbitAngle += orbitSpeed * delta;
     orbitSphere.position.x = centralSphere.position.x + orbitRadius * Math.cos(orbitAngle);
     orbitSphere.position.z = centralSphere.position.z + orbitRadius * Math.sin(orbitAngle);
 
-    // Atualiza a câmera de acordo com o modo de tracking
     if (window.myGlobe.trackingMode === "orbit") {
-      // Para o globo orbitante, usamos um offset menor para mais zoom (ex.: 0.6 unidades)
       const offset = new THREE.Vector3(0, 0, 0.6);
       const desiredPos = orbitSphere.position.clone().add(offset);
       camera.position.lerp(desiredPos, 0.1);
       controls.target.copy(orbitSphere.position);
     } else if (window.myGlobe.trackingMode === "central") {
-      // Para o globo central, usamos um offset maior (ex.: 2 unidades)
       const offset = new THREE.Vector3(0, 0, 2);
       const desiredPos = centralSphere.position.clone().add(offset);
       camera.position.lerp(desiredPos, 0.1);
@@ -120,7 +98,6 @@ function initGlobe() {
   }
   animate();
 
-  // Atualiza o renderer e a câmera ao redimensionar a janela
   window.addEventListener('resize', () => {
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
