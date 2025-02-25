@@ -90,7 +90,7 @@ function initGlobe() {
   });
   const ringMesh = new THREE.Mesh(ringGeometry, ringMaterial);
   // O THREE.RingGeometry é criado no plano XY; rotaciona para alinhar com o globo
-  ringMesh.rotation.x = Math.PI / 6; // Inclinação para acompanhar o globo
+  ringMesh.rotation.x = Math.PI / 3; // Inclinação para acompanhar o globo
   scene.add(ringMesh);
 
   // (5) Função de animação
