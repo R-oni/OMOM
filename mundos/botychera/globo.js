@@ -62,8 +62,8 @@ function initGlobe() {
   scene.add(cloudMesh);
 
   // Inclinação para melhorar a visualização do anel
-  sphere.rotation.x = Math.PI / 12; // ~30° de inclinação
-  cloudMesh.rotation.x = Math.PI / 12; // Acompanha a inclinação
+  sphere.rotation.x = Math.PI / 14; // ~30° de inclinação
+  cloudMesh.rotation.x = Math.PI / 14; // Acompanha a inclinação
 
   // (4) Luz ambiente + direcional
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
