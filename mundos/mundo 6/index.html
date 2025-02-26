@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Página com Interrog Flutuante</title>
+  <!-- Adicione o jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     /* Zera margens e define box-sizing */
     * {
@@ -20,11 +22,26 @@
       align-items: center;
       overflow: hidden;
     }
+
+    .top-section {
+      display: flex;  /* Torna um contêiner flexível */
+      justify-content: center;  /* Centraliza horizontalmente */
+      align-items: center;  /* Centraliza verticalmente (se precisar) */
+      width: 100%;  /* Ocupa toda a largura */
+    }
+
+    .top-section img {
+      width: 40vw;
+      max-width: 80vw;
+      height: auto;
+    }
+    
     /* Imagem interrog centralizada e responsiva com animação de flutuação */
     #interrog {
       width: 300px; /* tamanho base */
       max-width: 90%;
       height: auto;
+      align-items: center; 
       animation: float 3s ease-in-out infinite;
     }
     /* Animação: sobe 20px e volta à posição */
@@ -48,6 +65,27 @@
   </style>
 </head>
 <body>
+  <!-- Áudio -->
+  <audio id="bgMusic" src="22ready.mp3" preload="auto" loop style="display: none;"></audio>
+
+  <!-- Imagem interrog -->
   <img id="interrog" src="../calindreno/interrog.jpg" alt="Interrog">
+
+  <!-- Top section com a imagem da criatura -->
+  <div class="top-section">
+    <img src="criatura.png" alt="Título Velei'wey">
+  </div>
+
+  <!-- Script no final do body -->
+  <script>
+    $(document).one("click touchstart", function(){
+      var bg = document.getElementById("bgMusic");
+      bg.currentTime = 0;
+      bg.volume = 0.5;
+      bg.play().catch(function(err){ 
+        console.error("Erro ao tocar bgMusic:", err); 
+      });
+    });
+  </script>
 </body>
 </html>

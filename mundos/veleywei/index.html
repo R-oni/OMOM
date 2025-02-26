@@ -381,7 +381,7 @@
       flipAudio = new Audio('sompagina.aac');
       flipAudio.preload = 'auto';
       flipAudio.load();
-      flipAudio.volume = 0.2;
+      flipAudio.volume = 0.4;
       
       document.addEventListener('click', function unlockAudio() {
         flipAudio.play().then(() => {
@@ -436,7 +436,7 @@
       $(document).one("click touchstart", function(){
         var bg = document.getElementById("bgMusic");
         bg.currentTime = 0;
-        bg.volume = 0.5;
+        bg.volume = 0.9;
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
