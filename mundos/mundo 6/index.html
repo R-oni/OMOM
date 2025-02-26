@@ -64,6 +64,15 @@
   </style>
 </head>
 <body>
+  <script>
+          // Inicia a música de fundo com o primeiro clique/touch
+      $(document).one("click touchstart", function(){
+        var bg = document.getElementById("bgMusic");
+        bg.currentTime = 0;
+        bg.volume = 0.5;
+        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+      });
+  </script>
   <audio id="bgMusic" src="22ready.mp3" preload="auto" loop style="display: none;"></audio>
   
   <img id="interrog" src="../calindreno/interrog.jpg" alt="Interrog">
