@@ -3,86 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <title>Página com Interrog Flutuante</title>
+  <!-- Adicione o jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-    /* Zera margens e define box-sizing */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    /* Corpo com fundo preto, ocupa toda a tela e centraliza o conteúdo */
-    body {
-      background-color: #000;
-      height: 100vh;
-      width: 100vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .top-section {
-      display: flex;  /* Torna um contêiner flexível */
-      justify-content: center;  /* Centraliza horizontalmente */
-      align-items: center;  /* Centraliza verticalmente (se precisar) */
-      width: 100%;  /* Ocupa toda a largura */
-      
-    
-    }
-
-    .top-section img {
-      width: 40vw;
-      max-width: 80vw;
-      height: auto;
-    }
-    
-    /* Imagem interrog centralizada e responsiva com animação de flutuação */
-    #interrog {
-      width: 300px; /* tamanho base */
-      max-width: 90%;
-      height: auto;
-      align-items: center; 
-      animation: float 3s ease-in-out infinite;
-    }
-    /* Animação: sobe 20px e volta à posição */
-    @keyframes float {
-      0%   { transform: translateY(0); }
-      50%  { transform: translateY(-20px); }
-      100% { transform: translateY(0); }
-    }
-    /* Ajuste para telas horizontais/PC */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
-      #interrog {
-        width: 400px;
-      }
-    }
-    /* Ajuste para dispositivos mobile */
-    @media screen and (max-width: 768px) {
-      #interrog {
-        width: 250px;
-      }
-    }
+    /* ... (mantenha os estilos existentes) ... */
   </style>
 </head>
 <body>
-  <script>
-          // Inicia a música de fundo com o primeiro clique/touch
-      $(document).one("click touchstart", function(){
-        var bg = document.getElementById("bgMusic");
-        bg.currentTime = 0;
-        bg.volume = 0.5;
-        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
-      });
-  </script>
+  <!-- Coloque o áudio primeiro -->
   <audio id="bgMusic" src="22ready.mp3" preload="auto" loop style="display: none;"></audio>
-  
-  <img id="interrog" src="../calindreno/interrog.jpg" alt="Interrog">
 
+  <img id="interrog" src="../calindreno/interrog.jpg" alt="Interrog">
 
   <div class="top-section">
     <img src="criatura.png" alt="Título Velei'wey">
   </div>
 
-  
+  <!-- Mova o script para o final do body -->
+  <script>
+    $(document).one("click touchstart", function(){
+      var bg = document.getElementById("bgMusic");
+      bg.currentTime = 0;
+      bg.volume = 0.5;
+      bg.play().catch(function(err){ 
+        console.error("Erro ao tocar bgMusic:", err); 
+      });
+    });
+  </script>
 </body>
 </html>
