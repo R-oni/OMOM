@@ -229,12 +229,12 @@
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh;
+    grid-template-rows: auto;
     height: 100vh;
     width: 100vw;
   }
 
-  /* Linha Superior - Esquerda (Imagem + Título) */
+  /* Linha Superior - Esquerda (Imagem + Título) 
   .header-container {
     grid-column: 1;
     grid-row: 1;
@@ -243,10 +243,12 @@
     align-items: center;
     justify-content: center;
     gap: 1px;
-  }
+  } */
 
   /* Ajustes da Imagem */
   .top-section img {
+    grid-column: 1;
+    grid-row: 1;
     width: auto;
     height: 50%;
     transition: transform 0.3s ease;
@@ -254,6 +256,8 @@
 
   /* Estilos do Título */
   .top-section text {
+    grid-column: 1;
+    grid-row: 2;
     font-family: 'Press Start 2P', cursive;
     color: #00FFE7;
     font-size: 1.4rem;
@@ -266,7 +270,7 @@
   /* Flipbook */
   #flipbook-wrapper {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 3;
     height: 100%;
     width: 90%;
     margin: 0 auto;
