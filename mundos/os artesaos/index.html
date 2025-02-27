@@ -223,80 +223,68 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
-      .page-container {
-        position: relative;
-        display: block;
-        width: 100vw;
-        height: 100vh;
-      }
-      /* Novo container que agrupa a imagem e o título */
-      .header-container {
-        position: absolute;
-        top: 20px;
-        left: 15vw;
-        width: 18vw;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .header-container .top-section {
-        width: 100%;
-        height: auto;
-      }
-      .header-container .top-section img {
-        width: 50%;
-        height: auto;
-        object-fit: contain;
-      }
-      .header-container .title-container {
-        margin-top: 2vh;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 0;
-      }
-      .header-container .title-text {
-        font-family: 'Press Start 2P', cursive;
-        color: #00FFE7;
-        font-size: 2.5vh;
-        text-decoration: none;
-        text-align: center;
-      }
-      /* Outros elementos da versão PC permanecem inalterados */
-      #flipbook-wrapper {
-        position: absolute;
-        bottom: 2vh;
-        left: 5vw;
-        width: 40vw;
-        height: calc(40vw * 0.75);
-        overflow: visible;
-      }
-      #flipbook {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        position: relative;
-        overflow: visible;
-      }
-      .globe-section {
-        position: absolute;
-        top: 50%;
-        right: 10vw;
-        transform: translateY(-50%);
-        width: 700px;
-        height: 700px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      #globeCanvas {
-        width: 100%;
-        height: 100%;
-        max-width: none;
-        max-height: none;
-      }
-    }
+/* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+  .page-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* Coluna esquerda (30% título + 70% flipbook) */
+  .header-container,
+  #flipbook-wrapper {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .header-container {
+    flex: 0 0 30%;
+    padding: 20px;
+  }
+
+  #flipbook-wrapper {
+    flex: 1;
+    height: 70%;
+    position: relative;
+    left: auto;
+    bottom: auto;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  /* Coluna direita (globo) */
+  .globe-section {
+    grid-column: 2;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: auto;
+    right: auto;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Ajustes finos para manter compatibilidade */
+  .header-container .top-section img {
+    width: 40%;
+  }
+  
+  #flipbook {
+    width: 100%;
+    height: 100%;
+  }
+  
+  #globeCanvas {
+    width: 90% !important;
+    height: 90% !important;
+  }
+}
   </style>
 </head>
 <body>
