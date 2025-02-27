@@ -224,6 +224,7 @@
       100% { transform: scale(1); }
     }
 /* Para PC (landscape com min-width:1024px) - Versão Corrigida */
+/* Para PC (landscape com min-width:1024px) - Versão Simplificada */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
@@ -233,55 +234,46 @@
     width: 100vw;
   }
 
-  /* Coluna Esquerda - Container Principal */
+  /* Linha Superior - Esquerda (Imagem + Título) */
   .header-container {
     grid-column: 1;
     grid-row: 1;
-    display: grid;
-    grid-template-rows: 30% 70%;
-    height: 100%;
-    width: 100%;
-  }
-
-  /* Sub-container da Imagem (70% do header) */
-  .top-section {
-    grid-row: 1;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 1px;
+    gap: 15px;
   }
 
-  /* Sub-container do Título (30% do header) */
-  .title-container {
-    grid-row: 1;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 1px;
+  /* Ajustes da Imagem */
+  .top-section img {
+    width: auto;
+    height: 70%;
+    max-height: 150px;
+    transition: transform 0.3s ease;
   }
 
+  /* Estilos do Título */
   .title-text {
     font-family: 'Press Start 2P', cursive;
     color: #00FFE7;
     font-size: 1.4rem;
     text-align: center;
-    line-height: 1.4;
     margin: 0;
-    padding: 0 1px;
+    padding: 0 20px;
+    line-height: 1.4;
   }
 
-  /* Flipbook (abaixo do header, na mesma coluna) */
+  /* Flipbook */
   #flipbook-wrapper {
     grid-column: 1;
     grid-row: 2;
     height: 100%;
     width: 90%;
     margin: 0 auto;
-    position: relative;
   }
 
-  /* Coluna Direita - Globo */
+  /* Globo */
   .globe-section {
     grid-column: 2;
     grid-row: 1 / span 2;
@@ -290,16 +282,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
   }
 
-  /* Ajustes de Proporção */
-  .top-section img {
-    width: auto;
-    height: 80%;
-    transition: transform 0.3s ease;
-  }
-
+  /* Restante mantido igual */
   #flipbook {
     width: 100%;
     height: 100%;
@@ -309,10 +294,8 @@
   #globeCanvas {
     width: 90% !important;
     height: 90% !important;
-    margin-left: 5%;
   }
 
-  /* Efeitos de Hover para Feedback Visual */
   .top-section img:hover {
     transform: scale(1.05);
   }
