@@ -228,57 +228,62 @@
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: auto;
+    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
     height: 100vh;
     width: 100vw;
     position: relative;
   }
 
-  /* Container da Imagem + Texto (posicionamento manual) */
+  /* Container da Imagem + Texto */
   .header-container {
     grid-column: 1;
-    position: relative; /* Container de referência */
-    height: 30vh; /* Altura fixa */
+    position: relative;
+    height: 30vh;
   }
 
-  /* Imagem */
   .top-section img {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centraliza */
-    max-height: 100px; /* Ajuste manual */
+    transform: translate(-50%, -50%);
+    max-height: 100px;
     z-index: 1;
   }
 
-  /* Texto */
   .title-text {
     position: absolute;
-    top: 70%; /* Posiciona abaixo da imagem */
+    top: 70%;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Press Start 2P', cursive;
     color: #00FFE7;
-    font-size: 16px; /* Tamanho fixo */
+    font-size: 16px;
     white-space: nowrap;
     z-index: 2;
-    text-shadow: 2px 2px 4px #000; /* Para contraste */
+    text-shadow: 2px 2px 4px #000;
   }
 
   /* Flipbook */
   #flipbook-wrapper {
     grid-column: 1;
-    height: 70vh; /* Altura fixa */
+    grid-row: 2; /* Linha 2 explícita */
+    height: 70vh;
     width: 90%;
     margin: 0 auto;
   }
 
-  /* Globo */
+  /* Globo - Ajustes principais */
   .globe-section {
     grid-column: 2;
-    grid-row: 1 / span 2;
-    width: 90%;
+    grid-row: 1 / -1; /* Ocupa do início ao fim */
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+
+  /* Mantenha o resto do CSS original */
 }
   </style>
 </head>
