@@ -177,8 +177,10 @@
     }
     /* Botão Veleywei */
     #veleyweiBtn,
+    #veleyweiBtn2,
     #veleyweiBtn3,
-    #veleyweiBtn2 {
+    #veleyweiBtn4,
+    #veleyweiBtn5{
       position: absolute;
       cursor: pointer;
       width: 100%; 
@@ -355,8 +357,17 @@
         <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
         <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
         <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
-         <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 17"></div>
+        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 17"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina17.webp" alt="Página 13">
+          <img id="veleyweiBtn4" src="imagens/cap1/cliquesketch1.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page">
+          <img src="imagens/cap1/pagina18.webp" alt="Página 13">
+          <img id="veleyweiBtn5" src="imagens/cap1/cliquesketch2.webp" alt="Botão Cliquey Eroben">
+        </div>
       </div>
+      
     </div>
   </div>
   
@@ -467,6 +478,20 @@
       $(document).on("click", "#veleyweiBtn3", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn4", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/sketch1.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn5", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/sketch2.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
