@@ -119,13 +119,14 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      touch-action: none;
+      /* REMOVA: touch-action: none; */
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
     }
     .page {
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
+      touch-action: manipulation;
     }
     .page img {
       width: 100%;
