@@ -228,55 +228,99 @@
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 30vh 70vh;
     height: 100vh;
     width: 100vw;
   }
 
-  /* Linha Superior - Esquerda */
+  /* Coluna Esquerda - Container Principal */
   .header-container {
     grid-column: 1;
     grid-row: 1;
+    display: grid;
+    grid-template-rows: 30% 70%;
+    height: 100%;
+    width: 100%;
+  }
+
+  /* Sub-container da Imagem (70% do header) */
+  .top-section {
+    grid-row: 1;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    gap: 10px; /* Espaço entre imagem e título */
+    align-items: flex-end;
+    padding-bottom: 1px;
   }
 
-  .top-section img {
-    width: auto;
-    max-height: 120px;
-  }
-
-  /* Container do Título */
+  /* Sub-container do Título (30% do header) */
   .title-container {
-    padding-bottom: 1px; /* Espaço mínimo para evitar corte */
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1px;
   }
 
   .title-text {
     font-family: 'Press Start 2P', cursive;
     color: #00FFE7;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     text-align: center;
-    margin: 0;
     line-height: 1.4;
-    white-space: nowrap;
+    margin: 0;
+    padding: 0 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
 
-  /* Flipbook */
+  /* Flipbook (abaixo do header, na mesma coluna) */
   #flipbook-wrapper {
     grid-column: 1;
     grid-row: 2;
     height: 100%;
     width: 90%;
     margin: 0 auto;
+    position: relative;
   }
 
-  /* Globo */
+  /* Coluna Direita - Globo */
   .globe-section {
     grid-column: 2;
     grid-row: 1 / span 2;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  /* Ajustes de Proporção */
+  .top-section img {
+    width: auto;
+    height: 80%;
+    max-height: 180px;
+    transition: transform 0.3s ease;
+  }
+
+  #flipbook {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  #globeCanvas {
+    width: 90% !important;
+    height: 90% !important;
+    margin-left: 5%;
+  }
+
+  /* Efeitos de Hover para Feedback Visual */
+  .top-section img:hover {
+    transform: scale(1.05);
+  }
+
+  .title-text:hover {
+    text-shadow: 0 0 10px #00ffe780;
   }
 }
   </style>
