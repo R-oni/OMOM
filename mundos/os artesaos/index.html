@@ -223,63 +223,57 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-/* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
+/* Para PC (landscape com min-width:1024px) - Versão Corrigida */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 50% 50%; /* Divisão vertical 50-50 */
+    grid-template-rows: 30vh 70vh; /* Divisão horizontal 30-70 na coluna esquerda */
     height: 100vh;
-    position: relative;
+    width: 100vw;
   }
 
-  /* Coluna esquerda (30% título + 70% flipbook) */
-  .header-container,
-  #flipbook-wrapper {
+  /* Coluna Esquerda */
+  .header-container {
     grid-column: 1;
+    grid-row: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100%;
   }
 
-  .header-container {
-    flex: 0 0 30%;
-    padding: 20px;
-  }
-
   #flipbook-wrapper {
-    flex: 1;
-    height: 70%;
-    position: relative;
-    left: auto;
-    bottom: auto;
+    grid-column: 1;
+    grid-row: 2;
+    height: 100%;
     width: 90%;
     margin: 0 auto;
   }
 
-  /* Coluna direita (globo) */
+  /* Coluna Direita (Globo) */
   .globe-section {
     grid-column: 2;
-    position: relative;
-    width: 100%;
+    grid-row: 1 / span 2; /* Ocupa ambas as linhas verticais */
     height: 100%;
-    top: auto;
-    right: auto;
-    transform: none;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  /* Ajustes finos para manter compatibilidade */
+  /* Ajustes Finais para Manter Proporções */
   .header-container .top-section img {
     width: 40%;
+    max-width: 200px;
   }
-  
+
   #flipbook {
     width: 100%;
     height: 100%;
   }
-  
+
   #globeCanvas {
     width: 90% !important;
     height: 90% !important;
