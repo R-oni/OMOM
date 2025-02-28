@@ -6,90 +6,240 @@
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-/* =============================================================================
-   Estilos Globais
-   ========================================================================== */
-html, body {
-  touch-action: manipulation;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #000;
-  color: #fff;
-  font-family: sans-serif;
-}
+    /* Estilos globais */
+    html, body {
+      touch-action: manipulation;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #warpCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #loading-text {
+      position: relative;
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 10001;
+    }
+* Layout padrão para mobile/vertical */
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .top-section {
+    display: flex;  /* Torna um contêiner flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente (se precisar) */
+    width: 100%;  /* Ocupa toda a largura */
+    }
 
-/* =============================================================================
-   Layout Principal (Mobile First)
-   ========================================================================== */
-.page-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
+    .top-section img {
+      width: auto;
+      height: 10vh;
+    }
+    
+    .title-container {
+      text-align: center;
+      margin-top: 0px;
+      height: 5vh;
+      width: auto;
+      z-index: 2;
+      margin-bottom: 0px;
+    }
+    /* Novo estilo para o título em texto */
+    .title-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      text-align: center;
+      line-height: 1.2;
+      font-size: 16px;
+      text-decoration: none;
 
-.top-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.top-section img {
-  width: auto;
-  height: 10vh;
-}
-
-.title-container {
-  text-align: center;
-  margin-top: 0px;
-  height: 5vh;
-  width: auto;
-  z-index: 2;
-  margin-bottom: 0px;
-}
-
-.title-text {
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  text-align: center;
-  line-height: 1.2;
-  font-size: 16px;
-  text-decoration: none;
-}
-
-.globe-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-#globeCanvas {
-  width: auto;
-  margin-top: 0px;
-  height: 37.5vh;
-  margin-bottom: 0px;
-}
-
-/* =============================================================================
-   Layout PC
-   ========================================================================== */
+    }
+    .globe-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    /* Configuração original do globo */
+    #globeCanvas {
+      width: auto;
+      margin-top: 0px;
+      height: 37.5vh;
+      margin-bottom: 0px;
+    }
+    /* Loading overlay para o globo */
+    #globeLoading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 100;
+      pointer-events: none;
+    }
+    /* Flipbook para mobile (sem contêiner extra) */
+    #flipbook {
+      position: relative;
+      margin: auto;
+      cursor: grab;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      /* REMOVA: touch-action: none; */
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    .page {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      touch-action: manipulation;
+      position: relative;
+    }
+    .page img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .sound-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 30px;
+      background: rgba(255, 255, 200, 0.2);
+      cursor: pointer;
+    }
+    /* Overlay */
+    #overlayContainer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+    }
+    #overlayImage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+    #btnSair {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #00EEF7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 32px;
+      cursor: pointer;
+      padding: 20px;
+      z-index: 10000;
+    }
+    /* Botão Veleywei */
+    #veleyweiBtn,
+    #veleyweiBtn2,
+    #veleyweiBtn3,
+    #veleyweiBtn4,
+    #veleyweiBtn5{
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 2s infinite;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .btn-overlay {
+      position: absolute;
+      top: 100px;
+      right: 100px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .btn-overlay img {
+      width: 60px;
+      height: auto;
+      display: block;
+    }
+    /* Imagem flutuante */
+    .floating-container {
+      position: relative;
+    }
+    #spiraqel {
+      position: absolute;
+      right: 70px;
+      top: 170px;
+      width: 55px;
+      cursor: pointer;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+/* Para PC (landscape com min-width:1024px) - Versão Corrigida */
+/* Para PC (landscape com min-width:1024px) - Versão Simplificada */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh;
+    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
     height: 100vh;
     width: 100vw;
     position: relative;
   }
 
+  /* Container da Imagem + Texto */
   .header-container {
     grid-column: 1;
     position: relative;
@@ -110,89 +260,45 @@ html, body {
     top: 70%;
     left: 50%;
     transform: translateX(-50%);
+    font-family: 'Press Start 2P', cursive;
+    color: #00FFE7;
     font-size: 16px;
     white-space: nowrap;
+    z-index: 2;
     text-shadow: 2px 2px 4px #000;
   }
 
+  /* Flipbook */
   #flipbook-wrapper {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 2; /* Linha 2 explícita */
     height: 70vh;
     width: 90%;
     margin: 0 auto;
   }
 
-  .globe-section {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-
-  #globeCanvas {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: contain;
-  }
-}
-
-/* =============================================================================
-   Componentes/Botões
-   ========================================================================== */
-#veleyweiBtn,
-#veleyweiBtn2,
-#veleyweiBtn3,
-#veleyweiBtn4,
-#veleyweiBtn5 {
-  position: absolute;
-  cursor: pointer;
+  /* Globo - Ajustes principais */
+.globe-section {
+  grid-column: 2;
+  grid-row: 1 / span 2; /* Modificado */
   width: 100%;
-  height: 97%;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  animation: fadeInOut 2s infinite;
+  height: 100%; /* Alterado de 100vh para 100% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Adicionado */
+  position: relative; /* Adicionado */
 }
 
-.btn-overlay {
-  position: absolute;
-  top: 100px;
-  right: 100px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
+/* Garanta que o canvas do globo preencha o container */
+#globeCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: contain;
 }
-
-.btn-overlay img {
-  width: 60px;
-  height: auto;
-  display: block;
-}
-
-#spiraqel {
-  position: absolute;
-  right: 70px;
-  top: 170px;
-  width: 55px;
-  cursor: pointer;
-  animation: pulse 2s infinite ease-in-out;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  /* Mantenha o resto do CSS original */
 }
   </style>
 </head>
