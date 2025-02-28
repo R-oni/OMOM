@@ -5,186 +5,187 @@
   <title>Exemplo Responsivo sem Rolagem</title>
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-    /* Estilos globais */
-    html, body {
-      touch-action: manipulation;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000;
-      color: #fff;
-      font-family: sans-serif;
-    }
-    /* Loading Screen */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: #000;
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    #warpCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    #loading-text {
-      position: relative;
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 20px;
-      z-index: 10001;
-    }
-* Layout padrão para mobile/vertical */
-    .page-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
-    .top-section {
-    display: flex;  /* Torna um contêiner flexível */
-    justify-content: center;  /* Centraliza horizontalmente */
-    align-items: center;  /* Centraliza verticalmente (se precisar) */
-    width: 100%;  /* Ocupa toda a largura */
-    }
-
-    .top-section img {
-      width: auto;
-      height: 10vh;
-    }
-    
-    .title-container {
-      text-align: center;
-      margin-top: 0px;
-      height: 5vh;
-      width: auto;
-      z-index: 2;
-      margin-bottom: 0px;
-    }
-    /* Novo estilo para o título em texto */
-    .title-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      text-align: center;
-      line-height: 1.2;
-      font-size: 16px;
-      text-decoration: none;
-
-    }
-    .globe-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-    /* Configuração original do globo */
-    #globeCanvas {
-      width: auto;
-      margin-top: 0px;
-      height: 37.5vh;
-      margin-bottom: 0px;
-    }
-    /* Loading overlay para o globo */
-    #globeLoading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 20px;
-      z-index: 100;
-      pointer-events: none;
-    }
-    /* Flipbook para mobile (sem contêiner extra) */
-    #flipbook {
-      position: relative;
-      margin: auto;
-      cursor: grab;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      /* REMOVA: touch-action: none; */
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-    }
-    .page {
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      touch-action: manipulation;
-    }
-    .page img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    /* Overlay */
-    #overlayContainer {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 9999;
-    }
-    #overlayImage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1);
-      max-width: 90vw;
-      max-height: 90vh;
-    }
-    #btnSair {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: #00EEF7;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 32px;
-      cursor: pointer;
-      padding: 20px;
-      z-index: 10000;
-    }
-    /* Botões para tracking na página 6 */
-    #cliquemaior, #cliquemenor, #cliquebatedor, #cliquemergulhador, #cliquesangue {
-      position: absolute;
-      width: 10vw;
-      cursor: pointer;
-    }
-    /* Defina variáveis para ajuste manual (opcional) */
-:root {
-  --globe-btn-width: 10vw;
-  --globe-btn-height: auto;
+<style>
+/* Estilos globais */
+html, body {
+  touch-action: manipulation;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+  font-family: sans-serif;
 }
 
+/* Loading Screen */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-/* Defina os botões com tamanho e posição em porcentagem */
+#warpCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#loading-text {
+  position: relative;
+  font-family: 'Press Start 2P', cursive;
+  color: #00FFE7;
+  font-size: 20px;
+  z-index: 10001;
+}
+
+/* Layout mobile/vertical */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.top-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.top-section img {
+  width: auto;
+  height: 10vh;
+}
+
+.title-container {
+  text-align: center;
+  margin-top: 0;
+  height: 5vh;
+  width: auto;
+  z-index: 2;
+  margin-bottom: 0;
+}
+
+.title-text {
+  font-family: 'Press Start 2P', cursive;
+  color: #00FFE7;
+  text-align: center;
+  line-height: 1.2;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.glovbe-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#globeCanvas {
+  width: auto;
+  margin-top: 0;
+  height: 37.5vh;
+  margin-bottom: 0;
+}
+
+#globeLoading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Press Start 2P', cursive;
+  color: #00FFE7;
+  font-size: 20px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Flipbook base - Unificado em um único container */
+#flipbook {
+  position: relative;
+  margin: auto;
+  cursor: grab;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Dimensões padrão para mobile; na versão desktop serão ajustadas */
+  width: 100%;
+  height: auto;
+}
+
+.page {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  touch-action: manipulation;
+  position: relative;
+}
+
+.page img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Overlay */
+#overlayContainer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+}
+
+#overlayImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+#btnSair {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #00EEF7;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 20px;
+  z-index: 10000;
+}
+
+/* Botões específicos da página 6 */
 #cliquemaior {
   position: absolute;
-  top: 5%;       /* 50% da altura da página */
-  left: 15%;   
-  width: 65%; /* 20% da largura da página */
-  center: 0%;     /* 10% da largura da página */
+  top: 5%;
+  left: 15%;
+  width: 65%;
   height: auto;
   animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
 }
@@ -192,7 +193,7 @@
 #cliquemenor {
   position: absolute;
   bottom: 16%;
-  left: 37%; 
+  left: 37%;
   width: 23%;
   height: auto;
   animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
@@ -201,7 +202,7 @@
 #cliquebatedor {
   position: absolute;
   bottom: 17%;
-  left: 8%; 
+  left: 8%;
   width: 61%;
   height: auto;
   animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
@@ -210,7 +211,7 @@
 #cliquemergulhador {
   position: absolute;
   top: 11%;
-  right: 5%; 
+  right: 5%;
   width: 48%;
   height: auto;
   animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
@@ -219,41 +220,39 @@
 #cliquesangue {
   position: absolute;
   bottom: 38%;
-  right: -3%; 
+  right: -3%;
   width: 28%;
   height: auto;
   animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
 }
 
-/* Animação de fade */
+/* Animações */
 @keyframes fadeInOut {
   0% { opacity: 1; }
   50% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-/* Animação de pulso (flutuação) */
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
-    /* Media queries para PC */
+
+/* Versão Desktop */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
+    grid-template-rows: 25vh 75vh;
     height: 100vh;
     width: 100vw;
-    position: relative;
   }
 
-  /* Container da Imagem + Texto */
   .header-container {
     grid-column: 1;
     position: relative;
-    height: 30vh;
+    height: 100%;
   }
 
   .top-section img {
@@ -261,8 +260,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-height: 100px;
+    max-height: 200px;
     z-index: 1;
+    margin-bottom: 1vh;
   }
 
   .title-text {
@@ -270,47 +270,38 @@
     top: 70%;
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Press Start 2P', cursive;
-    color: #00FFE7;
     font-size: 16px;
     white-space: nowrap;
-    z-index: 2;
-    text-shadow: 2px 2px 4px #000;
   }
 
-  /* Flipbook */
-  #flipbook-wrapper {
+  /* Ajustando o container unificado do flipbook para desktop */
+  #flipbook {
     grid-column: 1;
-    grid-row: 2; /* Linha 2 explícita */
-    height: 70vh;
-    width: 90%;
+    grid-row: 2;
+    height: 90%;
+    width: 80%;
     margin: 0 auto;
+    z-index: 1;
   }
 
-  /* Globo - Ajustes principais */
-.globe-section {
-  grid-column: 2;
-  grid-row: 1 / span 2; /* Modificado */
-  width: 100%;
-  height: 100%; /* Alterado de 100vh para 100% */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* Adicionado */
-  position: relative; /* Adicionado */
+  /* A seção do globo */
+  .globe-section {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 100%;
+    height: 100%;
+  }
+
+  #globeCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: contain;
+  } 
 }
 
-/* Garanta que o canvas do globo preencha o container */
-#globeCanvas {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 100%;
-  min-height: 100%;
-  object-fit: contain;
-}
-
-}
-  </style>
+</style>
 </head>
 <body>
   <!-- Música de fundo -->
@@ -387,10 +378,10 @@
     
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
-      flipAudio = new Audio('sompagina.aac');
+      flipAudio = new Audio('https://www.omom.com.br/assets/sompagina.mp3');
       flipAudio.preload = 'auto';
       flipAudio.load();
-      flipAudio.volume = 0.2;
+      flipAudio.volume = 0.9;
       
       document.addEventListener('click', function unlockAudio() {
         flipAudio.play().then(() => {

@@ -134,7 +134,7 @@ function initGlobe() {
     
     // Se estiver em orientação horizontal, aproxima a câmera
     if (window.matchMedia("(orientation: landscape)").matches) {
-      camera.position.z = 2; // Mais próximo (planeta fica maior)
+      camera.position.z = 2.5; // Mais próximo (planeta fica maior)
     } else {
       camera.position.z = 3; // Posição padrão para vertical
     }

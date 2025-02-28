@@ -370,10 +370,10 @@
     
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
-      flipAudio = new Audio('sompagina.aac');
+      flipAudio = new Audio('https://www.omom.com.br/assets/sompagina.mp3');
       flipAudio.preload = 'auto';
       flipAudio.load();
-      flipAudio.volume = 0.2;
+      flipAudio.volume = 0.6;
       
       document.addEventListener('click', function unlockAudio() {
         flipAudio.play().then(() => {
