@@ -85,26 +85,19 @@
       text-decoration: none;
 
     }
-    /* Atualize as regras da seção do globo */
-     .globe-section {
-       position: absolute;
-       top: 0;
-       left: 0;
-       width: 100vw;
-       height: 100vh;
-       overflow: visible; /* Permite que o globo ultrapasse os limites */
-       pointer-events: none; /* Para não interferir em cliques de outros elementos */
-      }
-
-      /* Atualize as regras do canvas do globo */
-      #globeCanvas {
-        position: absolute;
-        width: 150vw;  /* Exemplo: 150% da largura da viewport */
-        height: 150vh; /* Exemplo: 150% da altura da viewport */
-        max-width: none;
-        max-height: none;
-        pointer-events: none;
-       }
+    .globe-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    /* Configuração original do globo */
+    #globeCanvas {
+      width: auto;
+      margin-top: 0px;
+      height: 37.5vh;
+      margin-bottom: 0px;
+    }
     /* Loading overlay para o globo */
     #globeLoading {
       position: absolute;
@@ -529,4 +522,4 @@
     });
   </script>
 </body>
-</html>
+    </html>
