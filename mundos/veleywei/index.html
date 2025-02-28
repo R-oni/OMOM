@@ -8,6 +8,7 @@
   <style>
     /* Estilos globais */
     html, body {
+      touch-action: manipulation;
       margin: 0;
       padding: 0;
       width: 100%;
@@ -45,7 +46,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-/* Layout padrão para mobile/vertical */
+* Layout padrão para mobile/vertical */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -62,15 +63,15 @@
     }
 
     .top-section img {
-      width: 15vw;
-      max-width: 80vw;
-      height: auto;
+      width: auto;
+      height: 10vh;
     }
     
     .title-container {
       text-align: center;
       margin-top: 0px;
-      position: relative;
+      height: 5vh;
+      width: auto;
       z-index: 2;
       margin-bottom: 0px;
     }
@@ -82,6 +83,7 @@
       line-height: 1.2;
       font-size: 16px;
       text-decoration: none;
+
     }
     .globe-section {
       display: flex;
@@ -93,7 +95,7 @@
     #globeCanvas {
       width: auto;
       margin-top: 0px;
-      height: 34vh;
+      height: 37.5vh;
       margin-bottom: 0px;
     }
     /* Loading overlay para o globo */
@@ -108,7 +110,7 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Flipbook para mobile */
+    /* Flipbook para mobile (sem contêiner extra) */
     #flipbook {
       position: relative;
       margin: auto;
@@ -117,13 +119,14 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      touch-action: none;
+      /* REMOVA: touch-action: none; */
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
     }
     .page {
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
+      touch-action: manipulation;
     }
     .page img {
       width: 100%;
@@ -174,8 +177,10 @@
     }
     /* Botão Veleywei */
     #veleyweiBtn,
+    #veleyweiBtn2,
     #veleyweiBtn3,
-    #veleyweiBtn2 {
+    #veleyweiBtn4,
+    #veleyweiBtn5{
       position: absolute;
       cursor: pointer;
       width: 100%; 
@@ -221,80 +226,79 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
-      .page-container {
-        position: relative;
-        display: block;
-        width: 100vw;
-        height: 100vh;
-      }
-      /* Novo container que agrupa a imagem e o título */
-      .header-container {
-        position: absolute;
-        top: 20px;
-        left: 15vw;
-        width: 18vw;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .header-container .top-section {
-        width: 100%;
-        height: auto;
-      }
-      .header-container .top-section img {
-        width: 50%;
-        height: auto;
-        object-fit: contain;
-      }
-      .header-container .title-container {
-        margin-top: 2vh;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 0;
-      }
-      .header-container .title-text {
-        font-family: 'Press Start 2P', cursive;
-        color: #00FFE7;
-        font-size: 2.5vh;
-        text-decoration: none;
-        text-align: center;
-      }
-      /* Outros elementos da versão PC permanecem inalterados */
-      #flipbook-wrapper {
-        position: absolute;
-        bottom: 2vh;
-        left: 5vw;
-        width: 40vw;
-        height: calc(40vw * 0.75);
-        overflow: visible;
-      }
-      #flipbook {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        position: relative;
-        overflow: visible;
-      }
-      .globe-section {
-        position: absolute;
-        top: 50%;
-        right: 10vw;
-        transform: translateY(-50%);
-        width: 700px;
-        height: 700px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      #globeCanvas {
-        width: 100%;
-        height: 100%;
-        max-width: none;
-        max-height: none;
-      }
-    }
+/* Para PC (landscape com min-width:1024px) - Versão Corrigida */
+/* Para PC (landscape com min-width:1024px) - Versão Simplificada */
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+  .page-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+  }
+
+  /* Container da Imagem + Texto */
+  .header-container {
+    grid-column: 1;
+    position: relative;
+    height: 30vh;
+  }
+
+  .top-section img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 100px;
+    z-index: 1;
+  }
+
+  .title-text {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Press Start 2P', cursive;
+    color: #00FFE7;
+    font-size: 16px;
+    white-space: nowrap;
+    z-index: 2;
+    text-shadow: 2px 2px 4px #000;
+  }
+
+  /* Flipbook */
+  #flipbook-wrapper {
+    grid-column: 1;
+    grid-row: 2; /* Linha 2 explícita */
+    height: 70vh;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  /* Globo - Ajustes principais */
+.globe-section {
+  grid-column: 2;
+  grid-row: 1 / span 2; /* Modificado */
+  width: 100%;
+  height: 100%; /* Alterado de 100vh para 100% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Adicionado */
+  position: relative; /* Adicionado */
+}
+
+/* Garanta que o canvas do globo preencha o container */
+#globeCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: contain;
+}
+  /* Mantenha o resto do CSS original */
+}
   </style>
 </head>
 <body>
@@ -314,7 +318,7 @@
       <div class="top-section">
         <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
       </div>
-      <div class="title-container">
+      <div class="title-text">
         <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
       </div>
     </div>
@@ -353,8 +357,17 @@
         <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
         <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
         <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
-         <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 17"></div>
+        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 17"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina17.webp" alt="Página 13">
+          <img id="veleyweiBtn4" src="imagens/cap1/cliquesketch1.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page">
+          <img src="imagens/cap1/pagina18.webp" alt="Página 13">
+          <img id="veleyweiBtn5" src="imagens/cap1/cliquesketch2.webp" alt="Botão Cliquey Eroben">
+        </div>
       </div>
+      
     </div>
   </div>
   
@@ -465,6 +478,20 @@
       $(document).on("click", "#veleyweiBtn3", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn4", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/sketch1.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+      $(document).on("click", "#veleyweiBtn5", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/sketch2.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
