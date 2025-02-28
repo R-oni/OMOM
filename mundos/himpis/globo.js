@@ -17,9 +17,12 @@ function initGlobe() {
   canvas.style.visibility = "hidden"; // Oculta o globo até carregar
   const renderer = new THREE.WebGLRenderer({ 
     canvas, 
-    antialias: true 
+    antialias: true,
+    alpha: true   // Permite fundo transparente
   });
-  
+  // Define o clear color com alfa 0 para transparência
+  renderer.setClearColor(0x000000, 0);
+
   // Permite sombras (se quiser projetar em um plano, por exemplo)
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -37,13 +40,13 @@ function initGlobe() {
   // (2) Carregar textura
   let texturesLoaded = 0;
   function checkLoaded() {
-  texturesLoaded++;
-  if (texturesLoaded === 2) {
-    // Agora que tudo carregou, mostrar o globo e remover o loading
-    canvas.style.visibility = "visible";
-    document.dispatchEvent(new Event("globoCarregado"));
+    texturesLoaded++;
+    if (texturesLoaded === 2) {
+      // Agora que tudo carregou, mostrar o globo e remover o loading
+      canvas.style.visibility = "visible";
+      document.dispatchEvent(new Event("globoCarregado"));
+    }
   }
-}
   const textureLoader = new THREE.TextureLoader();
   const texture = textureLoader.load('mapahimpis.png', checkLoaded); // seu arquivo
 
@@ -64,7 +67,7 @@ function initGlobe() {
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,   // permite transparência
-    opacity: 1,        // ajuste de opacidade conforme desejado
+    opacity: 1,          // ajuste de opacidade conforme desejado
     depthWrite: false    // evita problemas de renderização de transparência
   });
   const cloudMesh = new THREE.Mesh(cloudGeometry, cloudMaterial);
@@ -78,17 +81,6 @@ function initGlobe() {
   directionalLight.position.set(3, 3, 5); // posição da luz
   directionalLight.castShadow = true;     // habilita sombra
   scene.add(directionalLight);
-
-  // Se quiser ver sombra projetada num "chão", crie um plano abaixo do globo:
-  /*
-  const planeGeometry = new THREE.PlaneGeometry(10, 10);
-  const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane.rotation.x = -Math.PI / 2;
-  plane.position.y = -1.5;
-  plane.receiveShadow = true;
-  scene.add(plane);
-  */
 
   // Função de animação
   function animate() {
