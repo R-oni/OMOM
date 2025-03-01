@@ -1,70 +1,53 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot DeepSeek via OpenRouter</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
-        #chatbox { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; margin-bottom: 10px; }
-        .message { padding: 10px; margin: 5px; border-radius: 10px; }
-        .user { background-color: #d1e7dd; text-align: right; }
-        .bot { background-color: #f8d7da; text-align: left; }
-        input, button { padding: 10px; width: 100%; margin-top: 10px; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Página com Interrog Flutuante</title>
+  <style>
+    /* Zera margens e define box-sizing */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* Corpo com fundo preto, ocupa toda a tela e centraliza o conteúdo */
+    body {
+      background-color: #000;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    /* Imagem interrog centralizada e responsiva com animação de flutuação */
+    #interrog {
+      width: 300px; /* tamanho base */
+      max-width: 90%;
+      height: auto;
+      animation: float 3s ease-in-out infinite;
+    }
+    /* Animação: sobe 20px e volta à posição */
+    @keyframes float {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+    /* Ajuste para telas horizontais/PC */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      #interrog {
+        width: 400px;
+      }
+    }
+    /* Ajuste para dispositivos mobile */
+    @media screen and (max-width: 768px) {
+      #interrog {
+        width: 250px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Chatbot DeepSeek (via OpenRouter)</h1>
-    <div id="chatbox"></div>
-    <input type="text" id="userInput" placeholder="Digite sua mensagem..." onkeypress="if(event.key === 'Enter') sendMessage()" />
-    <button onclick="sendMessage()">Enviar</button>
-
-    <script>
-        const chatbox = document.getElementById("chatbox");
-
-        function displayMessage(message, sender) {
-            const messageDiv = document.createElement("div");
-            messageDiv.className = `message ${sender}`;
-            messageDiv.textContent = message;
-            chatbox.appendChild(messageDiv);
-            chatbox.scrollTop = chatbox.scrollHeight;
-        }
-
-        async function sendMessage() {
-            const userInput = document.getElementById("userInput").value.trim();
-            if (!userInput) return;
-
-            displayMessage(userInput, "user");
-
-            const apiKey = "Bearer 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"; // Substitua pela sua chave de API
-            const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
-
-            const headers = {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${apiKey}`,
-                /*"HTTP-Referer": "https://seu-site.com", // Opcional, pode remover se não tiver um site*/
-                "X-Title": "Meu Chatbot", // Opcional
-            };
-
-            const body = JSON.stringify({
-                model: "deepseek/deepseek-r1:free", // Modelo gratuito do DeepSeek via OpenRouter
-                messages: [{ role: "user", content: userInput }]
-            });
-
-            try {
-                const response = await fetch(apiUrl, { method: "POST", headers, body });
-                if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
-
-                const data = await response.json();
-                const botMessage = data.choices[0].message.content.trim();
-                displayMessage(botMessage, "bot");
-            } catch (error) {
-                console.error("Erro ao se comunicar com a API:", error);
-                displayMessage("Erro ao se comunicar com o chatbot.", "bot");
-            }
-
-            document.getElementById("userInput").value = "";
-        }
-    </script>
+  <img id="interrog" src="../calindreno/interrog.jpg" alt="Interrog">
 </body>
 </html>
