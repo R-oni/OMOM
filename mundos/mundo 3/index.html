@@ -1,86 +1,69 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot DeepSeek</title>
+    <title>Chatbot DeepSeek via OpenRouter</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: auto;
-            text-align: center;
-        }
-        #chatbox {
-            border: 1px solid #ccc;
-            padding: 10px;
-            height: 400px;
-            overflow-y: scroll;
-        }
-        .user, .bot {
-            padding: 10px;
-            margin: 5px;
-            border-radius: 10px;
-        }
-        .user {
-            background-color: #d1e7dd;
-            text-align: right;
-        }
-        .bot {
-            background-color: #f8d7da;
-            text-align: left;
-        }
-        input, button {
-            margin-top: 10px;
-            padding: 10px;
-            width: 80%;
-        }
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+        #chatbox { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; margin-bottom: 10px; }
+        .message { padding: 10px; margin: 5px; border-radius: 10px; }
+        .user { background-color: #d1e7dd; text-align: right; }
+        .bot { background-color: #f8d7da; text-align: left; }
+        input, button { padding: 10px; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <h1>Chatbot DeepSeek</h1>
+    <h1>Chatbot DeepSeek (via OpenRouter)</h1>
     <div id="chatbox"></div>
-    <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+    <input type="text" id="userInput" placeholder="Digite sua mensagem..." onkeypress="if(event.key === 'Enter') sendMessage()" />
     <button onclick="sendMessage()">Enviar</button>
 
     <script>
-        async function sendMessage() {
-            const userInput = document.getElementById("userInput").value;
-            if (!userInput.trim()) return;
-
-            // Exibir mensagem do usuário no chat
-            displayMessage(userInput, "user");
-
-            // Enviar mensagem para a API do DeepSeek
-            const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer sk-f9bcdff6fe874ff683c52b7e64730220"
-                },
-                body: JSON.stringify({
-                    model: "deepseek-chat",
-                    messages: [{ role: "user", content: userInput }]
-                })
-            });
-
-            const data = await response.json();
-            const botResponse = data.choices[0].message.content;
-
-            // Exibir resposta do bot no chat
-            displayMessage(botResponse, "bot");
-
-            // Limpar o campo de entrada
-            document.getElementById("userInput").value = "";
-        }
+        const chatbox = document.getElementById("chatbox");
 
         function displayMessage(message, sender) {
-            const chatbox = document.getElementById("chatbox");
             const messageDiv = document.createElement("div");
-            messageDiv.classList.add(sender);
+            messageDiv.className = `message ${sender}`;
             messageDiv.textContent = message;
             chatbox.appendChild(messageDiv);
             chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value.trim();
+            if (!userInput) return;
+
+            displayMessage(userInput, "user");
+
+            const apiKey = "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"; // Substitua pela sua chave de API
+            const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
+
+            const headers = {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`,
+                /*"HTTP-Referer": "https://seu-site.com", // Opcional, pode remover se não tiver um site*/
+                "X-Title": "Meu Chatbot", // Opcional
+            };
+
+            const body = JSON.stringify({
+                model: "deepseek/deepseek-r1:free", // Modelo gratuito do DeepSeek via OpenRouter
+                messages: [{ role: "user", content: userInput }]
+            });
+
+            try {
+                const response = await fetch(apiUrl, { method: "POST", headers, body });
+                if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+
+                const data = await response.json();
+                const botMessage = data.choices[0].message.content.trim();
+                displayMessage(botMessage, "bot");
+            } catch (error) {
+                console.error("Erro ao se comunicar com a API:", error);
+                displayMessage("Erro ao se comunicar com o chatbot.", "bot");
+            }
+
+            document.getElementById("userInput").value = "";
         }
     </script>
 </body>
