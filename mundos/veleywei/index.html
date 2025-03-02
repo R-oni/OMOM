@@ -400,12 +400,12 @@ html, body {
   <script src="turn.min.js"></script>
   <script>
     // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
-    const flipAudioStart = 1;
+    const flipAudioStart = 0;
     const flipAudioEnd = 1.4;
     
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
-      flipAudio = new Audio('https://www.omom.com.br/assets/sompagina.mp3');
+      flipAudio = new Audio('sompagina.mp3');
       flipAudio.preload = 'auto';
       flipAudio.load();
       flipAudio.volume = 0.9;
@@ -467,11 +467,11 @@ html, body {
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Adicione este código dentro do $(document).ready()
+      // Handler para fechar o overlay sem interromper a música de fundo
       $("#btnSair").on("click", function(e) {
-        
         e.preventDefault();
-      $("#overlayContainer").fadeOut(500);
+        e.stopPropagation();
+        $("#overlayContainer").fadeOut(500);
       });
       
       // Corrige o problema de propagação dos cliques dos botões veleywei
