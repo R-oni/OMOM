@@ -250,7 +250,71 @@
           <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
         </a>
       </div>
-      <!-- ... Outros símbolos permanecem inalterados ... -->
+      <div class="symbol brither" id="symbol5">
+        <a href="mundos/denbou/index.html">
+          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol6">
+        <a href="mundos/araporu/index.html">
+          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol7">
+        <a href="mundos/os artesaos/index.html">
+          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol8">
+        <a href="mundos/sapador/index.html">
+          <img src="mundos/sapador/sapador.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol11">
+        <a href="mundos/dosirelala/index.html">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol9">
+        <a href="mundos/calindreno/index.html">
+          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol10">
+        <a href="mundos/mundo pulsante/index.html">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol12">
+        <a href="mundos/mundo 1/index.html">
+          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol13">
+        <a href="mundos/mundo 2/index.html">
+          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol14">
+        <a href="mundos/mundo 3/index.html">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol15">
+        <a href="mundos/mundo 4/index.html">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol16">
+        <a href="mundos/mundo 5/index.html">
+          <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol16">
+        <a href="mundos/mundo 6/index.html">
+          <img src="mundos/mundo 6/criaturamenu.webp" alt="cal8ndreno">
+        </a>
+      </div>
     </div>
   </div>
 
@@ -313,10 +377,6 @@
       document.querySelectorAll('.symbols-container a').forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
-          // Se o link for para veleywei, salva no localStorage a música do mundo
-          if (this.getAttribute("href").includes("veleywei")) {
-            localStorage.setItem("worldMusic", "byfire.mp3");
-          }
           // Se a música estiver tocando, inicia o fade out em 2 segundos
           if (!bgm.paused) {
             fadeOutAudio(bgm, 2000);
@@ -345,81 +405,7 @@
     }
     floatSymbols();
 
-    // Autômato celular no canvas do título
-    (function() {
-      const titleCanvas = document.getElementById("automataTitleCanvas");
-      if (!titleCanvas) return;
-      const ctxTitle = titleCanvas.getContext("2d");
-
-      function resizeTitleCanvas() {
-        titleCanvas.width = titleCanvas.clientWidth;
-        titleCanvas.height = titleCanvas.clientHeight;
-        initGrid();
-      }
-      window.addEventListener("resize", resizeTitleCanvas);
-      resizeTitleCanvas();
-
-      const cellSize = 10;
-      let cols, rows;
-      let grid = [];
-
-      function initGrid() {
-        cols = Math.floor(titleCanvas.width / cellSize);
-        rows = Math.floor(titleCanvas.height / cellSize);
-        grid = [];
-        for (let r = 0; r < rows; r++) {
-          let row = [];
-          for (let c = 0; c < cols; c++) {
-            row.push(Math.random() < 0.2 ? 1 : 0);
-          }
-          grid.push(row);
-        }
-      }
-
-      function updateGrid() {
-        let newGrid = [];
-        for (let r = 0; r < rows; r++) {
-          newGrid[r] = [];
-          for (let c = 0; c < cols; c++) {
-            let liveNeighbors = 0;
-            for (let i = -1; i <= 1; i++) {
-              for (let j = -1; j <= 1; j++) {
-                if (i === 0 && j === 0) continue;
-                let nr = r + i;
-                let nc = c + j;
-                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
-                  liveNeighbors += grid[nr][nc];
-                }
-              }
-            }
-            if (grid[r][c] === 1) {
-              newGrid[r][c] = (liveNeighbors === 2 || liveNeighbors === 3) ? 1 : 0;
-            } else {
-              newGrid[r][c] = (liveNeighbors === 3) ? 1 : 0;
-            }
-          }
-        }
-        grid = newGrid;
-      }
-
-      function drawGrid() {
-        ctxTitle.clearRect(0, 0, titleCanvas.width, titleCanvas.height);
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            if (grid[r][c] === 1) {
-              ctxTitle.fillStyle = "white";
-              ctxTitle.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
-            }
-          }
-        }
-      }
-
-      function loop() {
-        updateGrid();
-        drawGrid();
-        requestAnimationFrame(loop);
-      }
-      loop();
+    
     })();
   </script>
 </body>
