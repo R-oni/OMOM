@@ -351,7 +351,7 @@
         link.addEventListener('click', function(e) {
           e.preventDefault();
           // Se o link for para veleywei, por exemplo, troque para a música do mundo (ex.: byfire.mp3)
-          if (this.getAttribute("href").includes("veleywei")) {
+          if (this.getAttribute("href").includes("mundos/veleywei/index.html")) {
             fadeOutAudio(bgm, 2000, () => {
               // Após o fade-out, muda a música do menu para a do mundo, se necessário
               bgm.src = "byfire.mp3";
