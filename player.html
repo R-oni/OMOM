@@ -9,36 +9,28 @@
         <source src="" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
     </audio>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const audio = document.getElementById("persistentAudio");
-
-            // Verifica se o usuário permitiu a música
             if (localStorage.getItem("musicAllowed") === "true") {
-                let musicaAtual = localStorage.getItem("currentMusic") || "memories.mp3"; // Música padrão
-                
-                // Se a música mudou, troca o src e recarrega o áudio
-                if (audio.src !== musicaAtual) {
+                // Usa a música definida ou a padrão ("memories.mp3")
+                let musicaAtual = localStorage.getItem("currentMusic") || "memories.mp3";
+                if (audio.src.indexOf(musicaAtual) === -1) {
                     audio.src = musicaAtual;
                     audio.load();
-                    audio.play().catch(err => {
-                        console.warn("Autoplay bloqueado ou aguardando interação:", err);
-                    });
                 }
-                
-                // Se houver um tempo salvo, restaurar
+                // Se houver um tempo salvo, restaura a posição
                 if (localStorage.getItem("musicTime")) {
                     audio.currentTime = localStorage.getItem("musicTime");
                 }
+                audio.play().catch(err => {
+                    console.warn("Autoplay bloqueado ou aguardando interação:", err);
+                });
             }
-
-            // Salva o tempo da música para continuidade
             audio.addEventListener("timeupdate", function() {
                 localStorage.setItem("musicTime", audio.currentTime);
             });
-
-            // Atualiza a música ao mudar de mundo
+            // Se a música mudar em outra página, o listener de storage atualizará
             window.addEventListener("storage", function(event) {
                 if (event.key === "currentMusic") {
                     audio.src = event.newValue;
