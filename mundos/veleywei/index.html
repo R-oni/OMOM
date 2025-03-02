@@ -495,13 +495,22 @@ html, body {
         }
       });
       
-      // Inicia a música de fundo com o primeiro clique/touch na tela
-      $(document).one("click touchstart", function(){
-        var bg = document.getElementById("bgMusic");
-        bg.currentTime = 0;
-        bg.volume = 0.9;
-        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
-      });
+      document.addEventListener("DOMContentLoaded", function() {
+        
+        
+        const bgWorld = document.getElementById("bgMusic");
+        // Se o usuário autorizou a música, toca automaticamente
+        if (localStorage.getItem("musicAllowed") === "true") {
+          bgWorld.volume = 0.9;
+          bgWorld.currentTime = 0;
+          bgWorld.play().catch(err => console.error("Erro ao tocar bgMusic automaticamente:", err));
+
+            }
+         });
+          
+    
+
+
       
       // Adicione este código dentro do $(document).ready()
       $("#btnSair").on("click", function(e) {
