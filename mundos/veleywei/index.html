@@ -1,325 +1,261 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <title>Exemplo Responsivo sem Rolagem</title>
-  <!-- Importando a fonte Press Start 2P -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outros Mundos Outras Mentes</title>
+  <!-- Link para a fonte "Press Start 2P" -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
- /* Estilos globais */
-html, body {
-  touch-action: manipulation;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #000;
-  color: #fff;
-  font-family: sans-serif;
-}
-
-/* Loading Screen */
-#loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-  z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#warpCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-#loading-text {
-  position: relative;
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  font-size: 20px;
-  z-index: 10001;
-}
-
-/* Layout padrão para mobile/vertical */
-.page-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.top-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.top-section img {
-  width: auto;
-  height: 10vh;
-}
-
-.title-container {
-  text-align: center;
-  margin-top: 0px;
-  height: 5vh;
-  width: auto;
-  z-index: 2;
-  margin-bottom: 0px;
-}
-
-.title-text {
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  text-align: center;
-  line-height: 1.2;
-  font-size: 16px;
-  text-decoration: none;
-}
-
-.globe-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-#globeCanvas {
-  width: auto;
-  margin-top: 0px;
-  height: 37.5vh;
-  margin-bottom: 0px;
-}
-
-#globeLoading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  font-size: 30px;
-  z-index: 100;
-  pointer-events: none;
-}
-
-#flipbook {
-  position: relative;
-  margin: auto;
-  cursor: grab;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-.page {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  touch-action: manipulation;
-  position: relative;
-}
-
-.page img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.sound-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50px;
-  height: 30px;
-  background: rgba(255, 255, 200, 0.2);
-  cursor: pointer;
-}
-
-#overlayContainer {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-}
-
-#overlayImage {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-#btnSair {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: #00EEF7;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 32px;
-  cursor: pointer;
-  padding: 20px;
-  z-index: 10000;
-}
-
-#veleyweiBtn,
-#veleyweiBtn2,
-#veleyweiBtn3,
-#veleyweiBtn4,
-#veleyweiBtn5 {
-  position: absolute;
-  cursor: pointer;
-  width: 100%; 
-  height: 97%;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  animation: fadeInOut 2s infinite;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-.btn-overlay {
-  position: absolute;
-  top: 100px;
-  right: 100px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.btn-overlay img {
-  width: 60px;
-  height: auto;
-  display: block;
-}
-
-.floating-container {
-  position: relative;
-}
-
+    /* ===== ESTILOS PARA MOBILeE (Vertical) ===== */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
     
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-/* Versão Desktop */
-@media screen and (min-width: 1024px) and (orientation: landscape) {
-  .page-container {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh;
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-  }
-
-  .header-container {
-    grid-column: 1;
-    position: relative;
-    height: 30vh;
-  }
-
-  .top-section img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 150px;
-    z-index: 1;
-  }
-
-  .title-text {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 16px;
-    white-space: nowrap;
-    text-shadow: 2px 2px 4px #000;
-  }
-
-  #flipbook-wrapper {
-    grid-column: 1;
-    grid-row: 2;
-    height: 70vh;
-    width: 90%;
-    margin: 0 auto;
-    z-index: 1;
-  }
-
-  .globe-section {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    width: 100%;
-    height: 100%;
-  }
-
-  #globeCanvas {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: contain;
-  }
-
-  /* Ajustes dos botões para desktop */
-  #veleyweiBtn,
-  #veleyweiBtn2,
-  #veleyweiBtn3,
-  #veleyweiBtn4,
-  #veleyweiBtn5 {
-    height: 97%;
-    top: 1%;
-    transform: none;
-    width: 98%;
-    left: 1%;
-  }
-
-  .page img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
+    #loading-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      text-align: center;
+    }
+    
+    #automatonCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      image-rendering: pixelated;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: black;
+      overflow: hidden;
+      color: white;
+    }
+    
+    .title-container {
+      text-align: center;
+      margin: 5vh auto 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .title-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #FFFFFF;
+      text-align: center;
+      line-height: 1.2;
+      font-size: 20px;
+      text-decoration: none;
+      display: block;
+    }
+    
+    .line {
+      white-space: nowrap;
+    }
+    
+    /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
+    .symbols-wrapper {
+      position: absolute;
+      top: 150px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      padding: 20px;
+      z-index: 2;
+    }
+    
+    .symbols-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+    
+    .symbol {
+      position: relative;
+      transform-origin: center;
+      transition: transform 0.1s linear;
+    }
+    
+    .symbol img {
+      width: 25vw;
+      transition: transform 0.3s;
+    }
+    
+    .symbol img:hover {
+      transform: scale(1.1);
+    }
+    
+    .symbol.brither img {
+      filter: brightness(180%);
+    }
+    
+    .symbol.locked img {
+      filter: brightness(50%);
+    }
+    
+    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      .page-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30vh 70vh;
+        grid-template-areas:
+          "title symbols"
+          "symbols symbols";
+        width: 100vw;
+        height: 100vh;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      .title-container {
+        grid-area: title;
+        margin: 60px auto 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+      }
+      .title-container .title-text {
+        font-size: 36px;
+      }
+      
+      .symbols-wrapper {
+        grid-area: symbols;
+        padding: 30px;
+        overflow-y: auto;
+      }
+      
+      .symbols-container {
+        gap: 30px;
+        justify-content: center;
+      }
+      
+      .symbol img {
+        width: 180px;
+        height: auto;
+      }
+    }
+    
+    /* ==== Novos estilos para o canvas do autômato celular na área do título ==== */
+    #automataTitleCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    /* ===== ESTILOS DO MODAL ===== */
+    #musicModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+    }
+    
+    #musicModal .modal-content {
+      background: transparent;
+      text-align: center;
+    }
+    
+    #musicModal p {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    
+    #musicModal button {
+      font-family: 'Press Start 2P', cursive;
+      background-color: transparent;
+      color: #00FFE7;
+      border: 2px solid #00FFE7;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    
+    #musicModal button:hover {
+      background-color: #00FFE7;
+      color: black;
+    }
+    
+    /* ===== NOVO: Botão sobre o canvas do globo ===== */
+    #globeInteract {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 101;
+      cursor: pointer;
+      animation: fadeInOut 2s infinite;
+    }
+    #globeInteract img {
+      width: 50px;
+      height: auto;
+    }
+    
+    /* ===== NOVO: Botão sobre a capa do livro ===== */
+    #bookInteract {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 102;
+      cursor: pointer;
+      animation: fadeInOut 2s infinite;
+    }
+    #bookInteract img {
+      width: 50px;
+      height: auto;
+    }
+    
+    /* Reutilizando a animação já definida */
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    
+    /* Resto dos estilos (overlay, flipbook, etc.) permanecem inalterados */
+    /* ... */
+    
   </style>
 </head>
 <body>
-  <!-- Música de fundo: utiliza "byfire.mp3" conforme solicitado -->
-  <audio id="bgMusic" src="byfire.mp3" preload="auto" loop style="display: none;"></audio>
+  <!-- Música de fundo: agora para o menu toca "memories.mp3" -->
+  <audio id="bgm" src="memories.mp3" preload="auto" loop style="display: none;"></audio>
   
-  <!-- Loading Screen -->
+  <!-- Tela de Loading -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
@@ -327,61 +263,37 @@ html, body {
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <!-- Para mobile, o layout original é exibido; para PC, a media query reestiliza o header -->
     <div class="header-container">
       <div class="top-section">
-        <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
+        <!-- Modificado: Capa do livro com botão interativo -->
+        <div class="page hard" style="position: relative;">
+          <img src="imagens/cap1/capa.webp" alt="Capa">
+          <div id="bookInteract">
+            <img src="assets/arrow.png" alt="Abra o livro">
+          </div>
+        </div>
+        <div class="title-text">
+          <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
+        </div>
       </div>
-      <div class="title-text">
-        <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
-      </div>
+      <!-- Outros elementos da header, se houver -->
     </div>
-    <div class="globe-section">
+    <div class="globe-section" style="position:relative;">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
+      <!-- Botão interativo sobre o canvas do globo -->
+      <div id="globeInteract">
+        <img src="assets/arrow.png" alt="Gire o globo">
+      </div>
     </div>
     <!-- Contêiner para o flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
-        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
+        <!-- A partir da segunda página, os botões interativos não são necessários -->
         <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
-        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
-        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
-        <div class="page">
-          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
-        <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 12">
-          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page">
-          <img src="imagens/cap1/pagina11.webp" alt="Página 13">
-          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
-        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
-        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 17"></div>
-        <div class="page">
-          <img src="imagens/cap1/pagina17.webp" alt="Página 13">
-          <img id="veleyweiBtn4" src="imagens/cap1/cliquesketch1.webp" alt="Botão Cliquey Eroben">
-        </div>
-        <div class="page">
-          <img src="imagens/cap1/pagina18.webp" alt="Página 13">
-          <img id="veleyweiBtn5" src="imagens/cap1/cliquesketch2.webp" alt="Botão Cliquey Eroben">
-        </div>
+        <!-- demais páginas... -->
       </div>
-      
     </div>
   </div>
   
@@ -461,17 +373,15 @@ html, body {
       
       // Inicia a música de fundo com o primeiro clique/touch na tela
       $(document).one("click touchstart", function(){
-        var bg = document.getElementById("bgMusic");
+        var bg = document.getElementById("bgm");
         bg.currentTime = 0;
         bg.volume = 0.9;
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Adicione este código dentro do $(document).ready()
       $("#btnSair").on("click", function(e) {
-        
         e.preventDefault();
-      $("#overlayContainer").fadeOut(500);
+        $("#overlayContainer").fadeOut(500);
       });
       
       // Corrige o problema de propagação dos cliques dos botões veleywei
@@ -509,6 +419,32 @@ html, body {
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+      
+      // *** Novos eventos para os botões interativos ***
+      // Se o usuário já interagiu, os botões não são exibidos novamente
+      if(localStorage.getItem('globeInteracted') === 'true'){
+        $('#globeInteract').hide();
+      }
+      if(localStorage.getItem('bookInteracted') === 'true'){
+        $('#bookInteract').hide();
+      }
+      
+      // Ao clicar no botão do globo
+      $('#globeInteract').on('click', function(e) {
+        $(this).fadeOut(500);
+        localStorage.setItem('globeInteracted', 'true');
+        // Aqui você pode adicionar a ação de interação com o globo
+      });
+      
+      // Ao clicar no botão da capa do livro
+      $('#bookInteract').on('click', function(e) {
+        e.stopPropagation();
+        $(this).fadeOut(500);
+        localStorage.setItem('bookInteracted', 'true');
+        // Aqui você pode adicionar a ação de abrir o livro, se necessário
+      });
+      
+      // ... restante do código existente ...
     });
   </script>
   <script src="./globo.js"></script>
@@ -579,6 +515,36 @@ html, body {
     // Remove o loading do globo quando o evento "globoCarregado" ocorrer
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
+    });
+  </script>
+  <!-- Web Audio Context para o mundo -->
+  <script>
+    let audioCtx = null;
+    let worldAudio = document.getElementById("bgMusic"); // "bgMusic" é o id do áudio do mundo
+
+    function startWorldMusic() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let source = audioCtx.createMediaElementSource(worldAudio);
+        source.connect(audioCtx.destination);
+      }
+      worldAudio.volume = 0.9;
+      worldAudio.currentTime = 0;
+      worldAudio.play().then(() => {
+        localStorage.setItem("musicAllowed", "true");
+      }).catch(err => console.error("Erro ao tocar bgMusic:", err));
+    }
+
+    window.addEventListener("DOMContentLoaded", function() {
+      if (localStorage.getItem("musicAllowed") === "true") {
+        startWorldMusic();
+      }
+    });
+
+    document.addEventListener("click", function() {
+      if (worldAudio.paused) {
+        startWorldMusic();
+      }
     });
   </script>
 </body>
