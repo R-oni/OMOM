@@ -440,6 +440,7 @@
       
       // Corrige o problema de propagação dos cliques dos botões veleywei
       $(document).on("click", "#veleyweiBtn", function(e){
+        e.preventDefault();
         e.stopPropagation();
         $("#overlayImage").attr("src", "desenhoirmaos.png");
         $("#overlayContainer").fadeIn(500);
