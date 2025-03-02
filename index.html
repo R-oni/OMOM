@@ -20,12 +20,14 @@
       justify-content: center;
       z-index: 9999;
     }
+    
     #loading-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
       font-size: 20px;
       text-align: center;
     }
+    
     #automatonCanvas {
       position: fixed;
       top: 0;
@@ -35,6 +37,7 @@
       z-index: -1;
       image-rendering: pixelated;
     }
+    
     body {
       margin: 0;
       padding: 0;
@@ -43,6 +46,7 @@
       overflow: hidden;
       color: white;
     }
+    
     .title-container {
       text-align: center;
       margin: 5vh auto 0 auto;
@@ -50,6 +54,7 @@
       position: relative;
       z-index: 2;
     }
+    
     .title-text {
       font-family: 'Press Start 2P', cursive;
       color: #FFFFFF;
@@ -59,9 +64,11 @@
       text-decoration: none;
       display: block;
     }
+    
     .line {
       white-space: nowrap;
     }
+    
     /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
     .symbols-wrapper {
       position: absolute;
@@ -73,30 +80,37 @@
       padding: 20px;
       z-index: 2;
     }
+    
     .symbols-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 25px;
     }
+    
     .symbol {
       position: relative;
       transform-origin: center;
       transition: transform 0.1s linear;
     }
+    
     .symbol img {
       width: 25vw;
       transition: transform 0.3s;
     }
+    
     .symbol img:hover {
       transform: scale(1.1);
     }
+    
     .symbol.brither img {
       filter: brightness(180%);
     }
+    
     .symbol.locked img {
       filter: brightness(50%);
     }
+    
     /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -113,6 +127,7 @@
         padding: 0;
         box-sizing: border-box;
       }
+      
       .title-container {
         grid-area: title;
         margin: 60px auto 0 auto;
@@ -124,20 +139,24 @@
       .title-container .title-text {
         font-size: 36px;
       }
+      
       .symbols-wrapper {
         grid-area: symbols;
         padding: 30px;
         overflow-y: auto;
       }
+      
       .symbols-container {
         gap: 30px;
         justify-content: center;
       }
+      
       .symbol img {
         width: 180px;
         height: auto;
       }
     }
+    
     /* ==== Novos estilos para o canvas do autômato celular na área do título ==== */
     #automataTitleCanvas {
       position: absolute;
@@ -148,6 +167,7 @@
       pointer-events: none;
       z-index: -1;
     }
+    
     /* ===== ESTILOS DO MODAL ===== */
     #musicModal {
       position: fixed;
@@ -164,14 +184,17 @@
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
     }
+    
     #musicModal .modal-content {
       background: transparent;
       text-align: center;
     }
+    
     #musicModal p {
       font-size: 24px;
       margin-bottom: 20px;
     }
+    
     #musicModal button {
       font-family: 'Press Start 2P', cursive;
       background-color: transparent;
@@ -181,6 +204,7 @@
       margin: 10px;
       cursor: pointer;
     }
+    
     #musicModal button:hover {
       background-color: #00FFE7;
       color: black;
@@ -206,7 +230,6 @@
 
   <div class="symbols-wrapper">
     <div class="symbols-container">
-      <!-- Exemplo dos símbolos. Cada link apontará para o mundo correspondente -->
       <div class="symbol brither" id="symbol1">
         <a href="mundos/veleywei/index.html">
           <img src="assets/veleyweimenu.png" alt="Velei'wey">
@@ -227,9 +250,15 @@
           <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
         </a>
       </div>
-      <!-- ... Outros símbolos ... -->
+      <!-- ... Outros símbolos permanecem inalterados ... -->
     </div>
   </div>
+
+  <!-- Música de fundo: memories.mp3 -->
+  <audio id="bgm" loop style="display:none;">
+    <source src="memories.mp3" type="audio/mpeg">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
 
   <!-- Modal de escolha de música -->
   <div id="musicModal">
@@ -242,59 +271,66 @@
     </div>
   </div>
 
-  <!-- Incluir o iframe do player persistente -->
-  <iframe src="player.html" style="display: none;"></iframe>
-
   <script>
-    // Ao carregar a página, esconde a tela de loading
+    // Esconde a tela de loading quando a página é carregada
     window.addEventListener("load", function() {
       document.getElementById("loading-screen").style.display = "none";
     });
 
-    // Se ainda não existir uma música definida para o menu, define "memories.mp3" como padrão
-    if (!localStorage.getItem("currentMusic")) {
-      localStorage.setItem("currentMusic", "memories.mp3");
+    // Função para realizar o fade out do áudio
+    function fadeOutAudio(audio, duration) {
+      const fadeOutInterval = 50; // intervalo em ms
+      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
+      const fadeOutTimer = setInterval(() => {
+        if (audio.volume > fadeOutStep) {
+          audio.volume -= fadeOutStep;
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeOutTimer);
+        }
+      }, fadeOutInterval);
     }
 
-    // Configura o modal de escolha de música
+    // Configura os event listeners após o carregamento do DOM
     document.addEventListener("DOMContentLoaded", function() {
+      // Modal de escolha de música
       const musicModal = document.getElementById("musicModal");
-      // Ao clicar "Sim", marca a permissão para tocar música
+      const bgm = document.getElementById("bgm");
+
       document.getElementById("yesBtn").addEventListener("click", function() {
-        localStorage.setItem("musicAllowed", "true");
         musicModal.style.display = "none";
-      });
-      // Ao clicar "Não", marca como não permitido
-      document.getElementById("noBtn").addEventListener("click", function() {
-        localStorage.setItem("musicAllowed", "false");
-        musicModal.style.display = "none";
+        bgm.volume = 0.9;
+        bgm.play();
       });
 
-      // Para cada símbolo (mundo), define a música correspondente antes de navegar
+      document.getElementById("noBtn").addEventListener("click", function() {
+        musicModal.style.display = "none";
+        bgm.pause();
+      });
+
+      // Adiciona o fade out ao clicar em um dos mundos
       document.querySelectorAll('.symbols-container a').forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
-          let mundo = this.getAttribute("href");
-          let musica = "";
-          // Exemplos: se o link contém "veleywei", usa "byfire.mp3"
-          if (mundo.includes("veleywei")) {
-            musica = "byfire.mp3";
-          } else if (mundo.includes("botychera")) {
-            musica = "musica_botychera.mp3";
-          } else if (mundo.includes("himpis")) {
-            musica = "musica_himpis.mp3";
-          } else if (mundo.includes("ttok")) {
-            musica = "musica_ttok.mp3";
-          } else {
-            musica = "memories.mp3"; // padrão para outros casos
+          // Se o link for para veleywei, salva no localStorage a música do mundo
+          if (this.getAttribute("href").includes("veleywei")) {
+            localStorage.setItem("worldMusic", "byfire.mp3");
           }
-          localStorage.setItem("currentMusic", musica);
-          window.location.href = mundo;
+          // Se a música estiver tocando, inicia o fade out em 2 segundos
+          if (!bgm.paused) {
+            fadeOutAudio(bgm, 2000);
+            setTimeout(() => {
+              window.location.href = this.href;
+            }, 2000);
+          } else {
+            window.location.href = this.href;
+          }
         });
       });
     });
 
-    // Animação de flutuação dos símbolos (seu código permanece)
+    // Animação de flutuação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
     let time = 0;
     function floatSymbols() {
@@ -309,11 +345,12 @@
     }
     floatSymbols();
 
-    // Autômato celular no canvas do título (seu código permanece)
+    // Autômato celular no canvas do título
     (function() {
       const titleCanvas = document.getElementById("automataTitleCanvas");
       if (!titleCanvas) return;
       const ctxTitle = titleCanvas.getContext("2d");
+
       function resizeTitleCanvas() {
         titleCanvas.width = titleCanvas.clientWidth;
         titleCanvas.height = titleCanvas.clientHeight;
@@ -321,9 +358,11 @@
       }
       window.addEventListener("resize", resizeTitleCanvas);
       resizeTitleCanvas();
+
       const cellSize = 10;
       let cols, rows;
       let grid = [];
+
       function initGrid() {
         cols = Math.floor(titleCanvas.width / cellSize);
         rows = Math.floor(titleCanvas.height / cellSize);
@@ -336,6 +375,7 @@
           grid.push(row);
         }
       }
+
       function updateGrid() {
         let newGrid = [];
         for (let r = 0; r < rows; r++) {
@@ -361,6 +401,7 @@
         }
         grid = newGrid;
       }
+
       function drawGrid() {
         ctxTitle.clearRect(0, 0, titleCanvas.width, titleCanvas.height);
         for (let r = 0; r < rows; r++) {
@@ -372,6 +413,7 @@
           }
         }
       }
+
       function loop() {
         updateGrid();
         drawGrid();
