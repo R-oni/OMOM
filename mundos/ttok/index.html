@@ -444,6 +444,7 @@ html, body {
       $("#btnSair").on("click", function(e) {
         
         e.preventDefault();
+        e.stopPropagation();
       $("#overlayContainer").fadeOut(500);
       });
       
