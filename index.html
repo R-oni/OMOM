@@ -220,8 +220,7 @@
   <canvas id="automatonCanvas"></canvas>
 
   <div class="title-container">
-    <!-- Canvas para o autômato celular ao redor do título -->
-    <canvas id="automataTitleCanvas"></canvas>
+
     <a href="omom.html" class="title-text">
       <span class="line"> OUTROS MUNDOS™</span><br>
       <span class="line">OUTRAS MENTES&nbsp;</span>
@@ -341,66 +340,54 @@
       document.getElementById("loading-screen").style.display = "none";
     });
 
-// Função para realizar o fade out do áudio
-function fadeOutAudio(audio, duration) {
-  const fadeOutInterval = 50; // intervalo em ms
-  const fadeOutStep = audio.volume / (duration / fadeOutInterval);
-  const fadeOutTimer = setInterval(() => {
-    if (audio.volume > fadeOutStep) {
-      audio.volume -= fadeOutStep;
-    } else {
-      audio.volume = 0;
-      audio.pause();
-      clearInterval(fadeOutTimer);
+    // Função para realizar o fade out do áudio
+    function fadeOutAudio(audio, duration) {
+      const fadeOutInterval = 50; // intervalo em ms
+      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
+      const fadeOutTimer = setInterval(() => {
+        if (audio.volume > fadeOutStep) {
+          audio.volume -= fadeOutStep;
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeOutTimer);
+        }
+      }, fadeOutInterval);
     }
-  }, fadeOutInterval);
-}
 
-// Configura os event listeners após o carregamento do DOM
-document.addEventListener("DOMContentLoaded", function () {
-  // Modal de escolha de música
-  const musicModal = document.getElementById("musicModal");
-  const bgm = document.getElementById("bgm");
+    // Configura os event listeners após o carregamento do DOM
+    document.addEventListener("DOMContentLoaded", function() {
+      // Modal de escolha de música
+      const musicModal = document.getElementById("musicModal");
+      const bgm = document.getElementById("bgm");
 
-  // Se o usuário já aceitou tocar a música antes, inicia automaticamente
-  if (localStorage.getItem("musicAllowed") === "true") {
-    musicModal.style.display = "none"; // Esconde o modal
-    bgm.volume = 0.9;
-    bgm.currentTime = 0; // Reinicia a música para evitar pausas esquisitas
-    bgm.play().catch(err => console.error("Erro ao tocar bgm automaticamente:", err));
-  }
+      document.getElementById("yesBtn").addEventListener("click", function() {
+        musicModal.style.display = "none";
+        bgm.volume = 0.9;
+        bgm.play();
+      });
 
-  // Botão "Sim" para ativar a música e salvar a preferência
-  document.getElementById("yesBtn").addEventListener("click", function () {
-    musicModal.style.display = "none";
-    localStorage.setItem("musicAllowed", "true");
-    bgm.volume = 0.9;
-    bgm.play();
-  });
+      document.getElementById("noBtn").addEventListener("click", function() {
+        musicModal.style.display = "none";
+        bgm.pause();
+      });
 
-  // Botão "Não" para recusar a música
-  document.getElementById("noBtn").addEventListener("click", function () {
-    musicModal.style.display = "none";
-    localStorage.removeItem("musicAllowed"); // Remove a permissão para não tocar automaticamente
-    bgm.pause();
-  });
-
-  // Adiciona o fade out ao clicar em um dos mundos
-  document.querySelectorAll(".symbols-container a").forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      // Se a música estiver tocando, inicia o fade out em 2 segundos
-      if (!bgm.paused) {
-        fadeOutAudio(bgm, 2000);
-        setTimeout(() => {
-          window.location.href = this.href;
-        }, 2000);
-      } else {
-        window.location.href = this.href;
-      }
+      // Adiciona o fade out ao clicar em um dos mundos
+      document.querySelectorAll('.symbols-container a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Se a música estiver tocando, inicia o fade out em 2 segundos
+          if (!bgm.paused) {
+            fadeOutAudio(bgm, 2000);
+            setTimeout(() => {
+              window.location.href = this.href;
+            }, 2000);
+          } else {
+            window.location.href = this.href;
+          }
+        });
+      });
     });
-  });
-});
 
     // Animação de flutuação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
@@ -416,7 +403,6 @@ document.addEventListener("DOMContentLoaded", function () {
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
-
 
   </script>
 </body>
