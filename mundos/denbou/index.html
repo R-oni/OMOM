@@ -193,7 +193,7 @@
 #cliquedenbou1 {
   position: absolute;
   bottom: 14%;
-  left: 8%; 
+  left: 6%; 
   width: 85%;
   height: auto;
   animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
@@ -457,6 +457,7 @@
       $("#btnSair").on("click", function(e) {
         
         e.preventDefault();
+        e.stopPropagation();
       $("#overlayContainer").fadeOut(500);
       });
       
