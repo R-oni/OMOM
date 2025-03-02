@@ -220,12 +220,14 @@
       cursor: pointer;
       animation: fadeInOut 2s infinite;
     }
+    /* Você pode ajustar o tamanho conforme necessário */
     #globeInteract img {
       width: 50px;
       height: auto;
     }
     
     /* ===== NOVO: Botão sobre a capa do livro ===== */
+    /* Adicionado na página de capa do flipbook */
     #bookInteract {
       position: absolute;
       top: 10px;
@@ -265,18 +267,11 @@
   <div class="page-container">
     <div class="header-container">
       <div class="top-section">
-        <!-- Modificado: Capa do livro com botão interativo -->
-        <div class="page hard" style="position: relative;">
-          <img src="imagens/cap1/capa.webp" alt="Capa">
-          <div id="bookInteract">
-            <img src="assets/arrow.png" alt="Abra o livro">
-          </div>
-        </div>
-        <div class="title-text">
-          <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
-        </div>
+        <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
       </div>
-      <!-- Outros elementos da header, se houver -->
+      <div class="title-text">
+        <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
+      </div>
     </div>
     <div class="globe-section" style="position:relative;">
       <canvas id="globeCanvas"></canvas>
@@ -290,9 +285,48 @@
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
-        <!-- A partir da segunda página, os botões interativos não são necessários -->
+        <div class="page hard" style="position: relative;">
+          <img src="imagens/cap1/capa.webp" alt="Capa">
+          <!-- Botão da capa do livro -->
+          <div id="bookInteract">
+            <img src="assets/arrow.png" alt="Abra o livro">
+          </div>
+        </div>
         <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-        <!-- demais páginas... -->
+        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
+        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
+        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
+        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 8"></div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
+          <img id="veleyweiBtn" src="imagens/cap1/cliqueyeroben.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 12">
+          <img id="veleyweiBtn3" src="imagens/cap1/cliquevoreyabaron.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page">
+          <img src="imagens/cap1/pagina11.webp" alt="Página 13">
+          <img id="veleyweiBtn2" src="imagens/cap1/cliquesazonalidade.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina12.webp" alt="Página 14"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15"></div>
+        <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 16"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17"></div>
+        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 17"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina17.webp" alt="Página 13">
+          <img id="veleyweiBtn4" src="imagens/cap1/cliquesketch1.webp" alt="Botão Cliquey Eroben">
+        </div>
+        <div class="page">
+          <img src="imagens/cap1/pagina18.webp" alt="Página 13">
+          <img id="veleyweiBtn5" src="imagens/cap1/cliquesketch2.webp" alt="Botão Cliquey Eroben">
+        </div>
       </div>
     </div>
   </div>
