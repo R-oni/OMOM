@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Player de Música</title>
+</head>
+<body>
+    <audio id="persistentAudio" loop preload="auto">
+        <source src="" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const audio = document.getElementById("persistentAudio");
+
+            // Verifica se o usuário permitiu a música
+            if (localStorage.getItem("musicAllowed") === "true") {
+                let musicaAtual = localStorage.getItem("currentMusic") || "memories.mp3"; // Música padrão
+                
+                // Se a música mudou, troca o src e recarrega o áudio
+                if (audio.src !== musicaAtual) {
+                    audio.src = musicaAtual;
+                    audio.load();
+                    audio.play().catch(err => {
+                        console.warn("Autoplay bloqueado ou aguardando interação:", err);
+                    });
+                }
+                
+                // Se houver um tempo salvo, restaurar
+                if (localStorage.getItem("musicTime")) {
+                    audio.currentTime = localStorage.getItem("musicTime");
+                }
+            }
+
+            // Salva o tempo da música para continuidade
+            audio.addEventListener("timeupdate", function() {
+                localStorage.setItem("musicTime", audio.currentTime);
+            });
+
+            // Atualiza a música ao mudar de mundo
+            window.addEventListener("storage", function(event) {
+                if (event.key === "currentMusic") {
+                    audio.src = event.newValue;
+                    audio.load();
+                    audio.play();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
