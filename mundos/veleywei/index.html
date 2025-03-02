@@ -50,13 +50,7 @@ html, body {
   z-index: 10001;
 }
 
-
-
-
-
-
-    
-/* LAYOUT MOBILE*/
+/* Layout padrão para mobile/vertical */
 .page-container {
   display: flex;
   flex-direction: column;
@@ -240,19 +234,6 @@ html, body {
   100% { transform: scale(1); }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
 /* Versão Desktop */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
@@ -334,23 +315,6 @@ html, body {
 }
   </style>
 </head>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
 <body>
   <!-- Música de fundo: utiliza "byfire.mp3" conforme solicitado -->
   <audio id="bgMusic" src="byfire.mp3" preload="auto" loop style="display: none;"></audio>
@@ -495,22 +459,13 @@ html, body {
         }
       });
       
-      document.addEventListener("DOMContentLoaded", function() {
-        
-        
-        const bgWorld = document.getElementById("bgMusic");
-        // Se o usuário autorizou a música, toca automaticamente
-        if (localStorage.getItem("musicAllowed") === "true") {
-          bgWorld.volume = 0.9;
-          bgWorld.currentTime = 0;
-          bgWorld.play().catch(err => console.error("Erro ao tocar bgMusic automaticamente:", err));
-
-            }
-         });
-          
-    
-
-
+      // Inicia a música de fundo com o primeiro clique/touch na tela
+      $(document).one("click touchstart", function(){
+        var bg = document.getElementById("bgMusic");
+        bg.currentTime = 0;
+        bg.volume = 0.9;
+        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+      });
       
       // Adicione este código dentro do $(document).ready()
       $("#btnSair").on("click", function(e) {
