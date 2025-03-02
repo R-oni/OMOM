@@ -157,6 +157,17 @@
       }
     }
     
+    /* ==== Novos estilos para o canvas do autômato celular na área do título ==== */
+    #automataTitleCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
     /* ===== ESTILOS DO MODAL ===== */
     #musicModal {
       position: fixed;
@@ -198,34 +209,6 @@
       background-color: #00FFE7;
       color: black;
     }
-    
-    /* Estilo para o iframe que carrega os mundos */
-    #worldFrame {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      border: none;
-      z-index: 5000;
-    }
-    
-    /* Botão para fechar o iframe e voltar ao menu */
-    #closeFrame {
-      display: none;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 6000;
-      font-family: 'Press Start 2P', cursive;
-      background: transparent;
-      color: #00FFE7;
-      border: 2px solid #00FFE7;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-    
   </style>
 </head>
 <body>
@@ -237,6 +220,8 @@
   <canvas id="automatonCanvas"></canvas>
 
   <div class="title-container">
+    <!-- Canvas para o autômato celular ao redor do título -->
+    <canvas id="automataTitleCanvas"></canvas>
     <a href="omom.html" class="title-text">
       <span class="line"> OUTROS MUNDOS™</span><br>
       <span class="line">OUTRAS MENTES&nbsp;</span>
@@ -265,7 +250,71 @@
           <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
         </a>
       </div>
-      <!-- Outros símbolos permanecem inalterados -->
+      <div class="symbol brither" id="symbol5">
+        <a href="mundos/denbou/index.html">
+          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol6">
+        <a href="mundos/araporu/index.html">
+          <img src="mundos/araporu/araporumenu.png" alt="araporu">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol7">
+        <a href="mundos/os artesaos/index.html">
+          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol8">
+        <a href="mundos/sapador/index.html">
+          <img src="mundos/sapador/sapador.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol11">
+        <a href="mundos/dosirelala/index.html">
+          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol9">
+        <a href="mundos/calindreno/index.html">
+          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol10">
+        <a href="mundos/mundo pulsante/index.html">
+          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol12">
+        <a href="mundos/mundo 1/index.html">
+          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol13">
+        <a href="mundos/mundo 2/index.html">
+          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol14">
+        <a href="mundos/mundo 3/index.html">
+          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol15">
+        <a href="mundos/mundo 4/index.html">
+          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol locked" id="symbol16">
+        <a href="mundos/mundo 5/index.html">
+          <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
+        </a>
+      </div>
+      <div class="symbol brither" id="symbol16">
+        <a href="mundos/mundo 6/index.html">
+          <img src="mundos/mundo 6/criaturamenu.webp" alt="cal8ndreno">
+        </a>
+      </div>
     </div>
   </div>
 
@@ -286,100 +335,72 @@
     </div>
   </div>
 
-  <!-- Iframe para carregar os mundos -->
-  <iframe id="worldFrame"></iframe>
-  <!-- Botão para fechar o iframe e voltar ao menu -->
-  <button id="closeFrame">Início</button>
-
   <script>
     // Esconde a tela de loading quando a página é carregada
     window.addEventListener("load", function() {
       document.getElementById("loading-screen").style.display = "none";
     });
 
-    // Função para realizar o fade out do áudio
-    function fadeOutAudio(audio, duration, callback) {
-      const fadeOutInterval = 50; // intervalo em ms
-      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
-      const fadeOutTimer = setInterval(() => {
-        if (audio.volume > fadeOutStep) {
-          audio.volume -= fadeOutStep;
-        } else {
-          audio.volume = 0;
-          audio.pause();
-          clearInterval(fadeOutTimer);
-          if (callback) callback();
-        }
-      }, fadeOutInterval);
-    }
-
-    // Função para realizar o fade in do áudio
-    function fadeInAudio(audio, targetVolume, duration) {
-      const fadeInInterval = 50;
-      const fadeInStep = targetVolume / (duration / fadeInInterval);
+// Função para realizar o fade out do áudio
+function fadeOutAudio(audio, duration) {
+  const fadeOutInterval = 50; // intervalo em ms
+  const fadeOutStep = audio.volume / (duration / fadeOutInterval);
+  const fadeOutTimer = setInterval(() => {
+    if (audio.volume > fadeOutStep) {
+      audio.volume -= fadeOutStep;
+    } else {
       audio.volume = 0;
-      audio.play();
-      const fadeInTimer = setInterval(() => {
-        if (audio.volume < targetVolume - fadeInStep) {
-          audio.volume += fadeInStep;
-        } else {
-          audio.volume = targetVolume;
-          clearInterval(fadeInTimer);
-        }
-      }, fadeInInterval);
+      audio.pause();
+      clearInterval(fadeOutTimer);
     }
+  }, fadeOutInterval);
+}
 
-    // Configura os event listeners após o carregamento do DOM
-    document.addEventListener("DOMContentLoaded", function() {
-      // Modal de escolha de música
-      const musicModal = document.getElementById("musicModal");
-      const bgm = document.getElementById("bgm");
+// Configura os event listeners após o carregamento do DOM
+document.addEventListener("DOMContentLoaded", function () {
+  // Modal de escolha de música
+  const musicModal = document.getElementById("musicModal");
+  const bgm = document.getElementById("bgm");
 
-      document.getElementById("yesBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.volume = 0.9;
-        bgm.play();
-      });
+  // Se o usuário já aceitou tocar a música antes, inicia automaticamente
+  if (localStorage.getItem("musicAllowed") === "true") {
+    musicModal.style.display = "none"; // Esconde o modal
+    bgm.volume = 0.9;
+    bgm.currentTime = 0; // Reinicia a música para evitar pausas esquisitas
+    bgm.play().catch(err => console.error("Erro ao tocar bgm automaticamente:", err));
+  }
 
-      document.getElementById("noBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.pause();
-      });
+  // Botão "Sim" para ativar a música e salvar a preferência
+  document.getElementById("yesBtn").addEventListener("click", function () {
+    musicModal.style.display = "none";
+    localStorage.setItem("musicAllowed", "true");
+    bgm.volume = 0.9;
+    bgm.play();
+  });
 
-      // Ao clicar em um símbolo, carrega o mundo no iframe com fade-out/in da música
-      document.querySelectorAll('.symbols-container a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          // Se o link for para veleywei, por exemplo, troque para a música do mundo (ex.: byfire.mp3)
-          if (this.getAttribute("href").includes("veleywei")) {
-            fadeOutAudio(bgm, 2000, () => {
-              // Após o fade-out, muda a música do menu para a do mundo, se necessário
-              bgm.src = "byfire.mp3";
-              bgm.load();
-              fadeInAudio(bgm, 0.9, 2000);
-            });
-          }
-          // Exibe o iframe e carrega o conteúdo do mundo
-          document.getElementById("worldFrame").style.display = "block";
-          document.getElementById("worldFrame").src = this.href;
-          // Exibe o botão de fechar o iframe
-          document.getElementById("closeFrame").style.display = "block";
-        });
-      });
+  // Botão "Não" para recusar a música
+  document.getElementById("noBtn").addEventListener("click", function () {
+    musicModal.style.display = "none";
+    localStorage.removeItem("musicAllowed"); // Remove a permissão para não tocar automaticamente
+    bgm.pause();
+  });
 
-      // Evento do botão "Voltar ao Menu"
-      document.getElementById("closeFrame").addEventListener("click", function() {
-        fadeOutAudio(bgm, 2000, () => {
-          // Volta a definir a música do menu
-          bgm.src = "memories.mp3";
-          bgm.load();
-          fadeInAudio(bgm, 0.9, 2000);
-        });
-        // Oculta o iframe e o botão de fechar
-        document.getElementById("worldFrame").style.display = "none";
-        this.style.display = "none";
-      });
+  // Adiciona o fade out ao clicar em um dos mundos
+  document.querySelectorAll(".symbols-container a").forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      // Se a música estiver tocando, inicia o fade out em 2 segundos
+      if (!bgm.paused) {
+        fadeOutAudio(bgm, 2000);
+        setTimeout(() => {
+          window.location.href = this.href;
+        }, 2000);
+      } else {
+        window.location.href = this.href;
+      }
     });
+  });
+});
 
     // Animação de flutuação dos símbolos
     const symbols = document.querySelectorAll('.symbol');
@@ -395,6 +416,8 @@
       requestAnimationFrame(floatSymbols);
     }
     floatSymbols();
+
+
   </script>
 </body>
 </html>
