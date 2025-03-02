@@ -467,11 +467,11 @@ html, body {
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Adicione este código dentro do $(document).ready()
+      // Handler para fechar o overlay sem interromper a música de fundo
       $("#btnSair").on("click", function(e) {
-        
         e.preventDefault();
-      $("#overlayContainer").fadeOut(500);
+        e.stopPropagation();
+        $("#overlayContainer").fadeOut(500);
       });
       
       // Corrige o problema de propagação dos cliques dos botões veleywei
