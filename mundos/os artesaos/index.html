@@ -369,7 +369,7 @@
   <script src="turn.min.js"></script>
   <script>
     // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
-    const flipAudioStart = 1;
+    const flipAudioStart = 0;
     const flipAudioEnd = 1.4;
     
     let flipAudio;
@@ -440,6 +440,7 @@
       $("#btnSair").on("click", function(e) {
         
         e.preventDefault();
+        e.stopPropagation();
       $("#overlayContainer").fadeOut(500);
       });
       
