@@ -6,313 +6,281 @@
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
- /* Estilos globais */
-html, body {
-  touch-action: manipulation;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #000;
-  color: #fff;
-  font-family: sans-serif;
-}
-
-/* Loading Screen */
-#loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-  z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#warpCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-#loading-text {
-  position: relative;
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  font-size: 20px;
-  z-index: 10001;
-}
-
-/* Layout padrão para mobile/vertical */
-.page-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.top-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.top-section img {
-  width: auto;
-  height: 10vh;
-}
-
-.title-container {
-  text-align: center;
-  margin-top: 0px;
-  height: 5vh;
-  width: auto;
-  z-index: 2;
-  margin-bottom: 0px;
-}
-
-.title-text {
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  text-align: center;
-  line-height: 1.2;
-  font-size: 16px;
-  text-decoration: none;
-}
-
-.globe-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-#globeCanvas {
-  width: auto;
-  margin-top: 0px;
-  height: 37.5vh;
-  margin-bottom: 0px;
-}
-
-#globeLoading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  font-size: 30px;
-  z-index: 100;
-  pointer-events: none;
-}
-
-#flipbook {
-  position: relative;
-  margin: auto;
-  cursor: grab;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-.page {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  touch-action: manipulation;
-  position: relative;
-}
-
-.page img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.sound-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50px;
-  height: 30px;
-  background: rgba(255, 255, 200, 0.2);
-  cursor: pointer;
-}
-
-#overlayContainer {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-}
-
-#overlayImage {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-#btnSair {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: #00EEF7;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 32px;
-  cursor: pointer;
-  padding: 20px;
-  z-index: 10000;
-}
-
-#veleyweiBtn,
-#veleyweiBtn2,
-#veleyweiBtn3,
-#veleyweiBtn4,
-#veleyweiBtn5 {
-  position: absolute;
-  cursor: pointer;
-  width: 100%; 
-  height: 97%;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  animation: fadeInOut 2s infinite;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-.btn-overlay {
-  position: absolute;
-  top: 100px;
-  right: 100px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.btn-overlay img {
-  width: 60px;
-  height: auto;
-  display: block;
-}
-
-.floating-container {
-  position: relative;
-}
-
-    
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-/* Versão Desktop */
-@media screen and (min-width: 1024px) and (orientation: landscape) {
-  .page-container {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh;
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-  }
-
-  .header-container {
-    grid-column: 1;
-    position: relative;
-    height: 30vh;
-  }
-
-  .top-section img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 150px;
-    z-index: 1;
-  }
-
-  .title-text {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 16px;
-    white-space: nowrap;
-    text-shadow: 2px 2px 4px #000;
-  }
-
-  #flipbook-wrapper {
-    grid-column: 1;
-    grid-row: 2;
-    height: 70vh;
-    width: 90%;
-    margin: 0 auto;
-    z-index: 1;
-  }
-
-  .globe-section {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    width: 100%;
-    height: 100%;
-  }
-
-  #globeCanvas {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: contain;
-  }
-
-  /* Ajustes dos botões para desktop */
-  #veleyweiBtn,
-  #veleyweiBtn2,
-  #veleyweiBtn3,
-  #veleyweiBtn4,
-  #veleyweiBtn5 {
-    height: 97%;
-    top: 1%;
-    transform: none;
-    width: 98%;
-    left: 1%;
-  }
-
-  .page img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
+    /* Estilos globais */
+    html, body {
+      touch-action: manipulation;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #warpCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #loading-text {
+      position: relative;
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 10001;
+    }
+    /* Layout padrão para mobile/vertical */
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    .top-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .top-section img {
+      width: auto;
+      height: 10vh;
+    }
+    .title-container {
+      text-align: center;
+      margin-top: 0px;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 0px;
+    }
+    .title-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      text-align: center;
+      line-height: 1.2;
+      font-size: 16px;
+      text-decoration: none;
+    }
+    .globe-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    /* Configuração original do globo */
+    #globeCanvas {
+      width: auto;
+      margin-top: 0px;
+      height: 34vh;
+      margin-bottom: 0px;
+    }
+    /* Loading overlay para o globo */
+    #globeLoading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 100;
+      pointer-events: none;
+    }
+    /* Flipbook para mobile */
+    #flipbook {
+      position: relative;
+      margin: auto;
+      cursor: grab;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      touch-action: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    .page {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .page img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .sound-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 30px;
+      background: rgba(255, 255, 200, 0.2);
+      cursor: pointer;
+    }
+    /* Overlay */
+    #overlayContainer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+    }
+    #overlayImage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+    #btnSair {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #00EEF7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 32px;
+      cursor: pointer;
+      padding: 20px;
+      z-index: 10000;
+    }
+    #veleyweiBtn,
+    #veleyweiBtn2,
+    #veleyweiBtn3,
+    #veleyweiBtn4,
+    #veleyweiBtn5 {
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 2s infinite;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .btn-overlay {
+      position: absolute;
+      top: 100px;
+      right: 100px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .btn-overlay img {
+      width: 60px;
+      height: auto;
+      display: block;
+    }
+    .floating-container {
+      position: relative;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    /* Versão Desktop */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      .page-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30vh 70vh;
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      }
+      .header-container {
+        grid-column: 1;
+        position: relative;
+        height: 30vh;
+      }
+      .top-section img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 150px;
+        z-index: 1;
+      }
+      .title-text {
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        white-space: nowrap;
+        text-shadow: 2px 2px 4px #000;
+      }
+      #flipbook-wrapper {
+        grid-column: 1;
+        grid-row: 2;
+        height: 70vh;
+        width: 90%;
+        margin: 0 auto;
+        z-index: 1;
+      }
+      .globe-section {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        width: 100%;
+        height: 100%;
+      }
+      #globeCanvas {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: contain;
+      }
+      /* Ajustes dos botões para desktop */
+      #veleyweiBtn,
+      #veleyweiBtn2,
+      #veleyweiBtn3,
+      #veleyweiBtn4,
+      #veleyweiBtn5 {
+        height: 97%;
+        top: 1%;
+        transform: none;
+        width: 98%;
+        left: 1%;
+      }
+      .page img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
   </style>
 </head>
 <body>
@@ -327,7 +295,6 @@ html, body {
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <!-- Para mobile, o layout original é exibido; para PC, a media query reestiliza o header -->
     <div class="header-container">
       <div class="top-section">
         <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -459,19 +426,20 @@ html, body {
         }
       });
       
-      // Inicia a música de fundo com o primeiro clique/touch na tela
+      // Inicia a música de fundo com o primeiro clique/touch na tela (Web Audio Context)
       $(document).one("click touchstart", function(){
-        var bg = document.getElementById("bgMusic");
-        bg.currentTime = 0;
-        bg.volume = 0.9;
-        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+        // Se o usuário já autorizou, a função startWorldMusic será chamada abaixo
+        if(localStorage.getItem("musicAllowed") === "true"){
+          // Já deve ter sido iniciada automaticamente via DOMContentLoaded
+        } else {
+          // Caso não, tente iniciar (isso é uma precaução)
+          document.dispatchEvent(new Event("click"));
+        }
       });
       
-      // Adicione este código dentro do $(document).ready()
       $("#btnSair").on("click", function(e) {
-        
         e.preventDefault();
-      $("#overlayContainer").fadeOut(500);
+        $("#overlayContainer").fadeOut(500);
       });
       
       // Corrige o problema de propagação dos cliques dos botões veleywei
@@ -579,6 +547,36 @@ html, body {
     // Remove o loading do globo quando o evento "globoCarregado" ocorrer
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
+    });
+  </script>
+  <!-- Web Audio Context para o mundo -->
+  <script>
+    let audioCtx = null;
+    let worldAudio = document.getElementById("bgMusic"); // "bgMusic" é o id do áudio do mundo
+
+    function startWorldMusic() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let source = audioCtx.createMediaElementSource(worldAudio);
+        source.connect(audioCtx.destination);
+      }
+      worldAudio.volume = 0.9;
+      worldAudio.currentTime = 0;
+      worldAudio.play().then(() => {
+        localStorage.setItem("musicAllowed", "true");
+      }).catch(err => console.error("Erro ao tocar bgMusic:", err));
+    }
+
+    window.addEventListener("DOMContentLoaded", function() {
+      if (localStorage.getItem("musicAllowed") === "true") {
+        startWorldMusic();
+      }
+    });
+
+    document.addEventListener("click", function() {
+      if (worldAudio.paused) {
+        startWorldMusic();
+      }
     });
   </script>
 </body>
