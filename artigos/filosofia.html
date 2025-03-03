@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Filosofia - OMOM</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <!-- Use as versões compat para evitar erros de import/export -->
+  <!-- Scripts do Firebase (Compat para evitar erro de import/export) -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
@@ -39,7 +39,7 @@
       max-width: 600px;
       text-align: center;
     }
-    
+
     .article-form input, 
     .article-form textarea {
       width: 90%;
@@ -51,7 +51,7 @@
       background-color: rgba(255, 49, 49, 0.1);
       color: #FF3131;
     }
-    
+
     .article-form button {
       background-color: #FF3131;
       color: black;
@@ -61,11 +61,11 @@
       font-family: 'Press Start 2P', cursive;
       font-size: 16px;
     }
-    
+
     .article-form button:hover {
       background-color: #FF6969;
     }
-    
+
     /* Área dos artigos */
     .articles-container {
       display: flex;
@@ -74,44 +74,61 @@
       gap: 20px;
       margin-top: 40px;
     }
-    
+
     .article {
       width: 250px;
       padding: 20px;
-      background-color: rgba(255, 49, 49, 0.1); /* Vermelho sutil */
+      background-color: rgba(255, 49, 49, 0.1);
       border: 2px solid #FF3131;
       text-align: center;
       transition: transform 0.2s, background 0.3s;
       cursor: pointer;
+      position: relative;
     }
-    
+
     .article:hover {
       transform: scale(1.05);
       background-color: rgba(255, 49, 49, 0.3);
     }
-    
+
     .article-title {
       font-size: 14px;
       font-weight: bold;
       color: #FF3131;
     }
-    
+
     .article-desc {
       font-size: 12px;
       color: #CCCCCC;
       margin-top: 10px;
     }
-    
+
+    /* Botão de excluir */
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: none;
+      border: none;
+      color: #FF3131;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      color: #FF0000;
+    }
+
     /* Link de volta */
     .back-link {
       display: block;
       margin-top: 40px;
       font-family: 'Press Start 2P', cursive;
-      color: #00FFE7; /* Azul do OMOM */
+      color: #00FFE7;
       text-decoration: none;
       font-size: 14px;
     }
-    
+
     .back-link:hover {
       text-decoration: underline;
     }
@@ -134,45 +151,25 @@
     <textarea id="articleContent" placeholder="Escreva seu artigo aqui..."></textarea>
     <button onclick="saveArticle()">Salvar Artigo</button>
   </div>
-  
-  <!-- Container de Artigos Estáticos -->
-  <div class="articles-container" id="staticArticlesContainer">
-    <div class="article" onclick="location.href='artigos/consciencia.html'">
-      <div class="article-title">O que é Consciência?</div>
-      <div class="article-desc">Uma abordagem filosófica e científica.</div>
-    </div>
-    <div class="article" onclick="location.href='artigos/mente-maquina.html'">
-      <div class="article-title">Mente & Máquina</div>
-      <div class="article-desc">O debate entre IA e cognição humana.</div>
-    </div>
-    <div class="article" onclick="location.href='artigos/realidade.html'">
-      <div class="article-title">O que é Realidade?</div>
-      <div class="article-desc">Explorando idealismo, materialismo e fenomenologia.</div>
-    </div>
-    <div class="article" onclick="location.href='artigos/neurofilosofia.html'">
-      <div class="article-title">Neurofilosofia</div>
-      <div class="article-desc">Onde o cérebro encontra a metafísica.</div>
-    </div>
-  </div>
-  
+
   <!-- Container de Artigos Dinâmicos (do Firebase) -->
   <div class="articles-container" id="dynamicArticlesContainer">
     <!-- Artigos serão carregados aqui dinamicamente do Firebase -->
   </div>
-  
+
   <!-- Link de Voltar -->
   <a href="index.html" class="back-link">← Voltar para OMOM</a>
-  
+
   <script>
     // 🔥 Configuração do Firebase (substitua pelos seus dados reais)
     const firebaseConfig = {
       apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
       authDomain: "fundamentos-omom.firebaseapp.com",
       databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
-      projectId: "fundamentos-omom", // Certifique-se que este valor está correto
-      storageBucket: "fundamentos-omom.appspot.com", // Certifique-se que este valor está correto
-      messagingSenderId: "402132741780", // Verifique o valor
-      appId: "1:402132741780:web:3f78aa356a12ef4ea64e81" // Verifique o valor
+      projectId: "fundamentos-omom",
+      storageBucket: "fundamentos-omom.appspot.com",
+      messagingSenderId: "402132741780",
+      appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
     };
 
     // Inicializa o Firebase
@@ -200,26 +197,42 @@
       }
     }
 
-    // Função para carregar artigos dinâmicos do Firebase
+    // 🔥 Função para excluir um artigo do Firebase
+    function deleteArticle(articleId) {
+      if (confirm("Tem certeza que deseja excluir este artigo?")) {
+        database.ref("articles/" + articleId).remove()
+          .then(() => {
+            alert("Artigo excluído!");
+            loadDynamicArticles();
+          })
+          .catch((error) => {
+            console.error("Erro ao excluir artigo:", error);
+          });
+      }
+    }
+
+    // 📚 Função para carregar artigos dinâmicos do Firebase
     function loadDynamicArticles() {
       const container = document.getElementById("dynamicArticlesContainer");
       container.innerHTML = "";
       database.ref("articles").once("value", (snapshot) => {
         snapshot.forEach((childSnapshot) => {
           const article = childSnapshot.val();
+          const articleId = childSnapshot.key; // Obtém o ID único do artigo
           const articleDiv = document.createElement("div");
           articleDiv.classList.add("article");
-          // Opcional: definir um onclick para visualizar ou editar o artigo
-          articleDiv.innerHTML = `<div class="article-title">${article.title}</div>
-                                  <div class="article-desc">${article.content}</div>`;
+          articleDiv.innerHTML = `
+            <button class="delete-btn" onclick="deleteArticle('${articleId}')">🗑</button>
+            <div class="article-title">${article.title}</div>
+            <div class="article-desc">${article.content}</div>
+          `;
           container.appendChild(articleDiv);
         });
       });
     }
 
-    // Carrega os artigos dinâmicos ao abrir a página
+    // 🔄 Carrega artigos ao abrir a página
     document.addEventListener("DOMContentLoaded", loadDynamicArticles);
   </script>
-  
 </body>
 </html>
