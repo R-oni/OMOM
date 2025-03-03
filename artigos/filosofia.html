@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Filosofia - OMOM</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Scripts do Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
   <style>
     /* ====== ESTILO GERAL ====== */
     body {
@@ -30,7 +33,40 @@
       margin: 20px auto;
     }
 
-    /* Área dos textos e artigos */
+    /* Formulário para inserir novo artigo */
+    .article-form {
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .article-form input, 
+    .article-form textarea {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      font-family: 'Courier New', Courier, monospace;
+      border: 2px solid #FF3131;
+      background-color: rgba(255, 49, 49, 0.1);
+      color: #FF3131;
+    }
+
+    .article-form button {
+      background-color: #FF3131;
+      color: black;
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 16px;
+    }
+
+    .article-form button:hover {
+      background-color: #FF6969;
+    }
+
+    /* Área dos artigos */
     .articles-container {
       display: flex;
       flex-wrap: wrap;
@@ -92,33 +128,98 @@
     Textos e artigos que conectam OMOM à Filosofia da Mente.
   </p>
 
-  <!-- Container de Artigos -->
-  <div class="articles-container">
-    
+  <!-- Formulário para inserir novo artigo -->
+  <div class="article-form">
+    <input type="text" id="articleTitle" placeholder="Título do artigo">
+    <textarea id="articleContent" placeholder="Escreva seu artigo aqui..."></textarea>
+    <button onclick="saveArticle()">Salvar Artigo</button>
+  </div>
+
+  <!-- Container de Artigos Estáticos -->
+  <div class="articles-container" id="staticArticlesContainer">
     <div class="article" onclick="location.href='artigos/consciencia.html'">
       <div class="article-title">O que é Consciência?</div>
       <div class="article-desc">Uma abordagem filosófica e científica.</div>
     </div>
-
     <div class="article" onclick="location.href='artigos/mente-maquina.html'">
       <div class="article-title">Mente & Máquina</div>
       <div class="article-desc">O debate entre IA e cognição humana.</div>
     </div>
-
     <div class="article" onclick="location.href='artigos/realidade.html'">
       <div class="article-title">O que é Realidade?</div>
       <div class="article-desc">Explorando idealismo, materialismo e fenomenologia.</div>
     </div>
-
     <div class="article" onclick="location.href='artigos/neurofilosofia.html'">
       <div class="article-title">Neurofilosofia</div>
       <div class="article-desc">Onde o cérebro encontra a metafísica.</div>
     </div>
+  </div>
 
+  <!-- Container de Artigos Dinâmicos (do Firebase) -->
+  <div class="articles-container" id="dynamicArticlesContainer">
+    <!-- Artigos serão carregados aqui dinamicamente do Firebase -->
   </div>
 
   <!-- Link de Voltar -->
   <a href="index.html" class="back-link">← Voltar para OMOM</a>
+
+  <script>
+    // 🔥 Configuração do Firebase (substitua pelos seus dados)
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_PROJETO.firebaseapp.com",
+      databaseURL: "https://SEU_PROJETO.firebaseio.com",
+      projectId: "SEU_PROJETO",
+      storageBucket: "SEU_PROJETO.appspot.com",
+      messagingSenderId: "SUA_MESSAGING_ID",
+      appId: "SUA_APP_ID"
+    };
+
+    // Inicializa o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Função para salvar artigo no Firebase
+    function saveArticle() {
+      const title = document.getElementById("articleTitle").value;
+      const content = document.getElementById("articleContent").value;
+      if (title && content) {
+        const newArticleRef = database.ref("articles").push();
+        newArticleRef.set({ title, content }, function(error) {
+          if (error) {
+            alert("Erro ao salvar artigo.");
+          } else {
+            alert("Artigo salvo com sucesso!");
+            document.getElementById("articleTitle").value = "";
+            document.getElementById("articleContent").value = "";
+            loadDynamicArticles();
+          }
+        });
+      } else {
+        alert("Preencha título e conteúdo do artigo.");
+      }
+    }
+
+    // Função para carregar artigos dinâmicos do Firebase
+    function loadDynamicArticles() {
+      const container = document.getElementById("dynamicArticlesContainer");
+      container.innerHTML = "";
+      database.ref("articles").once("value", (snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const article = childSnapshot.val();
+          const articleDiv = document.createElement("div");
+          articleDiv.classList.add("article");
+          // Opcional: definir um onclick para visualizar ou editar o artigo
+          articleDiv.innerHTML = `<div class="article-title">${article.title}</div>
+                                  <div class="article-desc">${article.content}</div>`;
+          container.appendChild(articleDiv);
+        });
+      });
+    }
+
+    // Carrega os artigos dinâmicos ao abrir a página
+    document.addEventListener("DOMContentLoaded", loadDynamicArticles);
+  </script>
 
 </body>
 </html>
