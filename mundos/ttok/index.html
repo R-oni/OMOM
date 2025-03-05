@@ -225,6 +225,14 @@ html, body {
   height: auto;
   animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
 }
+#cliqueinversao {
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  width: 100%;
+  height: auto;
+  animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
+}
 
 /* Animações */
 @keyframes fadeInOut {
@@ -354,6 +362,12 @@ html, body {
           <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben">
           <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben">
         </div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
+          <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" alt="Botão Cliquey Eroben">
+          
+        </div>
       </div>
     </div>
   </div>
@@ -469,6 +483,13 @@ html, body {
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+      $(document).on("click", "#cliqueinversao", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "inversao.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
       
       // Eventos dos botões de tracking na Página 6
       $(document).on("click", "#cliquemaior", function(e){
