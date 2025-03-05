@@ -226,11 +226,12 @@ html, body {
   animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
 }
 #cliqueinversao {
-  position: absolute;
-  bottom: 50%;
-  right: 50%;
-  width: 100%;
-  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; /* Mantém a proporção sem distorcer */
   animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
 }
 
@@ -485,7 +486,7 @@ html, body {
       });
       $(document).on("click", "#cliqueinversao", function(e){
         e.stopPropagation();
-        $("#overlayImage").attr("src", "inversao.webp");
+        $("#overlayImage").attr("src", "imagens/cap1/inversao.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
