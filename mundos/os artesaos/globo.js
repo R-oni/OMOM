@@ -47,7 +47,7 @@ function initGlobe() {
   }
 
   // (2) Carregar textura principal do globo
-  const texture = textureLoader.load('mapaporojka.png', checkLoaded);
+  const texture = textureLoader.load('kora-jskpa.png', checkLoaded);
 
   // (3) Material que reage à luz
   const material = new THREE.MeshStandardMaterial({
@@ -62,7 +62,7 @@ function initGlobe() {
 
   // Adicionando a camada de nuvem
   const cloudGeometry = new THREE.SphereGeometry(1.01, 64, 64); 
-  const cloudTexture = textureLoader.load('nuvemporojka.png', checkLoaded); 
+  const cloudTexture = textureLoader.load('kora-jskpa.png', checkLoaded); 
   const cloudMaterial = new THREE.MeshPhongMaterial({
     map: cloudTexture,
     transparent: true,
