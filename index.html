@@ -1,448 +1,447 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outros Mundos Outras Mentes</title>
-  <!-- Link para a fonte "Press Start 2P" -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    /* ===== ESTILOS PARA MOBILeE (Vertical) ===== */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    
-    #loading-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    #automatonCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      image-rendering: pixelated;
-    }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: black;
-      overflow: hidden;
-      color: white;
-    }
-    
-    .title-container {
-      text-align: center;
-      margin: 5vh auto 0 auto;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-    }
-    
-    .title-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #FFFFFF;
-      text-align: center;
-      line-height: 1.2;
-      font-size: 20px;
-      text-decoration: none;
-      display: block;
-    }
-    
-    .line {
-      white-space: nowrap;
-    }
-    
-    /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
-    .symbols-wrapper {
-      position: absolute;
-      top: 150px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-y: auto;
-      padding: 20px;
-      z-index: 2;
-    }
-    
-    .symbols-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
-    }
-    
-    .symbol {
-      position: relative;
-      transform-origin: center;
-      transition: transform 0.1s linear;
-    }
-    
-    .symbol img {
-      width: 25vw;
-      transition: transform 0.3s;
-    }
-    
-    .symbol img:hover {
-      transform: scale(1.1);
-    }
-    
-    .symbol.brither img {
-      filter: brightness(180%);
-    }
-    
-    .symbol.locked img {
-      filter: brightness(50%);
-    }
-
-    /* Estilos para o Modal de Login */
-    #loginModal input {
-    background: #000;
-    color: #00FFE7;
-    border: 1px solid #00FFE7;
-    font-size: 14px;
-    }
-
-    #loginModal button {
-    transition: all 0.3s;
-    }
-
-    #loginModal button:hover {
-    filter: brightness(1.2);
-    }
-    
-    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
-      .page-container {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 30% 70%;
-        grid-template-areas:
-          "title symbols"
-          "symbols symbols";
-        width: 100vw;
-        height: 100vh;
-        gap: 0;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      
-      .title-container {
-        grid-area: title;
-        margin: 60px auto 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 50%;
-      }
-      .title-container .title-text {
-        font-size: 36px;
-      }
-      
-      .symbols-wrapper {
-        grid-area: symbols;
-        padding: 30px;
-        overflow-y: auto;
-      }
-      
-      .symbols-container {
-        gap: 30px;
-        justify-content: center;
-      }
-      
-      .symbol img {
-        width: 180px;
-        height: auto;
-      }
-    }
-    
-    /* ==== Novos estilos para o canvas do autômato celular na área do título ==== */
-    #automataTitleCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-    
-    /* ===== ESTILOS DO MODAL ===== */
-    #musicModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-    }
-    
-    #musicModal .modal-content {
-      background: transparent;
-      text-align: center;
-    }
-    
-    #musicModal p {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    
-    #musicModal button {
-      font-family: 'Press Start 2P', cursive;
-      background-color: transparent;
-      color: #00FFE7;
-      border: 2px solid #00FFE7;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-    
-    #musicModal button:hover {
-      background-color: #00FFE7;
-      color: black;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outros Mundos Outras Mentes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ESTILOS PARA MOBILeE (Vertical) ===== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #loading-text {
+            font-family: 'Press Start 2P', cursive;
+            color: #00FFE7;
+            font-size: 20px;
+            text-align: center;
+        }
+        #automatonCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            image-rendering: pixelated;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: black;
+            overflow: hidden;
+            color: white;
+        }
+        .title-container {
+            text-align: center;
+            margin: 5vh auto 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+        .title-text {
+            font-family: 'Press Start 2P', cursive;
+            color: #FFFFFF;
+            text-align: center;
+            line-height: 1.2;
+            font-size: 20px;
+            text-decoration: none;
+            display: block;
+        }
+        .line {
+            white-space: nowrap;
+        }
+        /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
+        .symbols-wrapper {
+            position: absolute;
+            top: 150px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 20px;
+            z-index: 2;
+        }
+        .symbols-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+        .symbol {
+            position: relative;
+            transform-origin: center;
+            transition: transform 0.1s linear;
+        }
+        .symbol img {
+            width: 25vw;
+            transition: transform 0.3s;
+        }
+        .symbol img:hover {
+            transform: scale(1.1);
+        }
+        .symbol.brither img {
+            filter: brightness(180%);
+        }
+        .symbol.locked img {
+            filter: brightness(50%);
+        }
+        /* Estilos para o Modal de Login */
+        #loginModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+        }
+        #loginModal div {
+            background: #000;
+            padding: 20px;
+            border: 2px solid #00FFE7;
+            text-align: center;
+        }
+        #loginModal input {
+            background: #000;
+            color: #00FFE7;
+            border: 1px solid #00FFE7;
+            font-size: 14px;
+            margin: 10px;
+            padding: 5px;
+            font-family: 'Courier New';
+        }
+        #loginModal button {
+            transition: all 0.3s;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #loginModal button:hover {
+            filter: brightness(1.2);
+        }
+        /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
+        @media screen and (min-width: 1024px) and (orientation: landscape) {
+            .page-container {
+                display: grid;
+                grid-template-columns: 50% 50%;
+                grid-template-rows: 30% 70%;
+                grid-template-areas: "title symbols" "symbols symbols";
+                width: 100vw;
+                height: 100vh;
+                gap: 0;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            .title-container {
+                grid-area: title;
+                margin: 60px auto 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 50%;
+            }
+            .title-container .title-text {
+                font-size: 36px;
+            }
+            .symbols-wrapper {
+                grid-area: symbols;
+                padding: 30px;
+                overflow-y: auto;
+            }
+            .symbols-container {
+                gap: 30px;
+                justify-content: center;
+            }
+            .symbol img {
+                width: 180px;
+                height: auto;
+            }
+        }
+        /* ===== ESTILOS DO MODAL DE MÚSICA ===== */
+        #musicModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            font-family: 'Press Start 2P', cursive;
+            color: #00FFE7;
+        }
+        #musicModal .modal-content {
+            background: transparent;
+            text-align: center;
+        }
+        #musicModal p {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #musicModal button {
+            background-color: transparent;
+            color: #00FFE7;
+            border: 2px solid #00FFE7;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #musicModal button:hover {
+            background-color: #00FFE7;
+            color: black;
+        }
+    </style>
 </head>
 <body>
-  <!-- Tela de Loading -->
-  <div id="loading-screen">
-    <div id="loading-text">CARREGANDO...</div>
-  </div>
-
-  <canvas id="automatonCanvas"></canvas>
-
-  <div class="title-container">
+    <!-- Tela de Loading -->
+    <div id="loading-screen">
+        <div id="loading-text">CARREGANDO...</div>
+    </div>
+    <canvas id="automatonCanvas"></canvas>
     
-    <a href="omom.html" class="title-text">
-      <span class="line"> OUTROS MUNDOS™</span><br>
-      <span class="line">OUTRAS MENTES&nbsp;</span>
-    </a>
-
-    <button onclick="toggleLoginModal()" style="position: absolute; top: 20px; right: 20px; background: #00FFE7; border: none; padding: 10px; font-family: 'Press Start 2P'; cursor: pointer;">
-    LOGIN
-    </button>
-  </div>
-
-  <div class="symbols-wrapper">
-    <div class="symbols-container">
-      <div class="symbol brither" id="symbol1">
-        <a href="mundos/veleywei/index.html">
-          <img src="assets/veleyweimenu.png" alt="Velei'wey">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol2">
-        <a href="mundos/botychera/index.html">
-          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol3">
-        <a href="mundos/himpis/index.html">
-          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol4">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol5">
-        <a href="mundos/denbou/index.html">
-          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol6">
-        <a href="mundos/araporu/index.html">
-          <img src="mundos/araporu/araporumenu.png" alt="araporu">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol7">
-        <a href="mundos/os artesaos/index.html">
-          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol8">
-        <a href="mundos/sapador/index.html">
-          <img src="mundos/sapador/sapador.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol11">
-        <a href="mundos/dosirelala/index.html">
-          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol9">
-        <a href="mundos/calindreno/index.html">
-          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol10">
-        <a href="mundos/mundo pulsante/index.html">
-          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol12">
-        <a href="mundos/mundo 1/index.html">
-          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol13">
-        <a href="mundos/mundo 2/index.html">
-          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol14">
-        <a href="mundos/mundo 3/index.html">
-          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol15">
-        <a href="mundos/mundo 4/index.html">
-          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol16">
-        <a href="mundos/mundo 5/index.html">
-          <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol16">
-        <a href="mundos/mundo 6/index.html">
-          <img src="mundos/mundo 6/criaturamenu.webp" alt="cal8ndreno">
-        </a>
-      </div>
+    <!-- Modal de Login -->
+    <div id="loginModal">
+        <div>
+            <h2 style="color: #00FFE7;">LOGIN</h2>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="E-mail"><br>
+                <input type="password" id="password" placeholder="Senha"><br>
+                <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">
+                    ENTRAR
+                </button>
+            </form>
+            <button onclick="toggleLoginModal()" style="background: #ff0000; border: none; padding: 10px 20px;">
+                FECHAR
+            </button>
+            <p id="loginError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
+        </div>
     </div>
-  </div>
-
-  <!-- Modal de Música -->
-  <div id="musicModal">
-    <div class="modal-content">
-      <p>música?</p>
-      <div class="modal-buttons">
-        <button id="yesBtn">Sim</button>
-        <button id="noBtn">Não</button>
-      </div>
+    
+    <div class="title-container">
+        <a href="omom.html" class="title-text">
+            <span class="line"> OUTROS MUNDOS™</span><br>
+            <span class="line">OUTRAS MENTES&nbsp;</span>
+        </a>
+        <button onclick="toggleLoginModal()" style="position: absolute; top: 20px; right: 20px; background: #00FFE7; border: none; padding: 10px; font-family: 'Press Start 2P'; cursor: pointer;">
+            LOGIN
+        </button>
     </div>
-  </div>
-
-  <audio id="bgm" loop style="display:none;">
-    <source src="memories.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
-
-  <!-- Scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-
-  <script>
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
-      authDomain: "fundamentos-omom.firebaseapp.com",
-      databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
-      projectId: "fundamentos-omom",
-      storageBucket: "fundamentos-omom.appspot.com",
-      messagingSenderId: "402132741780",
-      appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // Login Functions
-    function toggleLoginModal() {
-      const modal = document.getElementById('loginModal');
-      modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
-    }
-
-    // Event Listeners
-    window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-      const musicModal = document.getElementById("musicModal");
-      const bgm = document.getElementById("bgm");
-
-      document.getElementById("yesBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.volume = 0.9;
-        bgm.play();
-      });
-
-      document.getElementById("noBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.pause();
-      });
-
-      document.querySelectorAll('.symbols-container a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          if (!bgm.paused) {
-            fadeOutAudio(bgm, 2000);
-            setTimeout(() => {
-              window.location.href = this.href;
-            }, 2000);
-          } else {
-            window.location.href = this.href;
-          }
-        });
-      });
-    });
-
-    // Audio Functions
-    function fadeOutAudio(audio, duration) {
-      const fadeOutInterval = 50;
-      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
-      const fadeOutTimer = setInterval(() => {
-        if (audio.volume > fadeOutStep) {
-          audio.volume -= fadeOutStep;
-        } else {
-          audio.volume = 0;
-          audio.pause();
-          clearInterval(fadeOutTimer);
+    
+    <div class="symbols-wrapper">
+        <div class="symbols-container">
+            <div class="symbol brither" id="symbol1">
+                <a href="mundos/veleywei/index.html">
+                    <img src="assets/veleyweimenu.png" alt="Velei'wey">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol2">
+                <a href="mundos/botychera/index.html">
+                    <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol3">
+                <a href="mundos/himpis/index.html">
+                    <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol4">
+                <a href="mundos/ttok/index.html">
+                    <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol5">
+                <a href="mundos/denbou/index.html">
+                    <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol6">
+                <a href="mundos/araporu/index.html">
+                    <img src="mundos/araporu/araporumenu.png" alt="araporu">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol7">
+                <a href="mundos/os artesaos/index.html">
+                    <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol8">
+                <a href="mundos/sapador/index.html">
+                    <img src="mundos/sapador/sapador.png" alt="sapador">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol11">
+                <a href="mundos/dosirelala/index.html">
+                    <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol9">
+                <a href="mundos/calindreno/index.html">
+                    <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol10">
+                <a href="mundos/mundo pulsante/index.html">
+                    <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol12">
+                <a href="mundos/mundo 1/index.html">
+                    <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol13">
+                <a href="mundos/mundo 2/index.html">
+                    <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol14">
+                <a href="mundos/mundo 3/index.html">
+                    <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol15">
+                <a href="mundos/mundo 4/index.html">
+                    <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol16">
+                <a href="mundos/mundo 5/index.html">
+                    <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol17">
+                <a href="mundos/mundo 6/index.html">
+                    <img src="mundos/mundo 6/criaturamenu.webp" alt="cal8ndreno">
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Música -->
+    <div id="musicModal">
+        <div class="modal-content">
+            <p>música?</p>
+            <div class="modal-buttons">
+                <button id="yesBtn">Sim</button>
+                <button id="noBtn">Não</button>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="bgm" loop style="display:none;">
+        <source src="memories.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+    
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
+            authDomain: "fundamentos-omom.firebaseapp.com",
+            databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
+            projectId: "fundamentos-omom",
+            storageBucket: "fundamentos-omom.appspot.com",
+            messagingSenderId: "402132741780",
+            appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
+        };
+        
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        // Login Functions
+        function toggleLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
         }
-      }, fadeOutInterval);
-    }
-
-    // Symbol Animation
-    const symbols = document.querySelectorAll('.symbol');
-    let time = 0;
-    function floatSymbols() {
-      time += 0.02;
-      symbols.forEach((symbol, index) => {
-        let amplitude = 6;
-        let speed = 0.1 + (index * 0.01);
-        let y = Math.sin(time * speed * 10) * amplitude;
-        symbol.style.transform = `translateY(${y}px)`;
-      });
-      requestAnimationFrame(floatSymbols);
-    }
-    floatSymbols();
-  </script>
+        
+        // Event Listeners
+        window.addEventListener("load", function() {
+            document.getElementById("loading-screen").style.display = "none";
+        });
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const musicModal = document.getElementById("musicModal");
+            const bgm = document.getElementById("bgm");
+            
+            document.getElementById("yesBtn").addEventListener("click", function() {
+                musicModal.style.display = "none";
+                bgm.volume = 0.9;
+                bgm.play();
+            });
+            
+            document.getElementById("noBtn").addEventListener("click", function() {
+                musicModal.style.display = "none";
+                bgm.pause();
+            });
+            
+            document.querySelectorAll('.symbols-container a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!bgm.paused) {
+                        fadeOutAudio(bgm, 2000);
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 2000);
+                    } else {
+                        window.location.href = this.href;
+                    }
+                });
+            });
+        });
+        
+        // Audio Functions
+        function fadeOutAudio(audio, duration) {
+            const fadeOutInterval = 50;
+            const fadeOutStep = audio.volume / (duration / fadeOutInterval);
+            const fadeOutTimer = setInterval(() => {
+                if (audio.volume > fadeOutStep) {
+                    audio.volume -= fadeOutStep;
+                } else {
+                    audio.volume = 0;
+                    audio.pause();
+                    clearInterval(fadeOutTimer);
+                }
+            }, fadeOutInterval);
+        }
+        
+        // Symbol Animation
+        const symbols = document.querySelectorAll('.symbol');
+        let time = 0;
+        
+        function floatSymbols() {
+            time += 0.02;
+            symbols.forEach((symbol, index) => {
+                let amplitude = 6;
+                let speed = 0.1 + (index * 0.01);
+                let y = Math.sin(time * speed * 10) * amplitude;
+                symbol.style.transform = `translateY(${y}px)`;
+            });
+            requestAnimationFrame(floatSymbols);
+        }
+        
+        floatSymbols();
+    </script>
 </body>
 </html>
