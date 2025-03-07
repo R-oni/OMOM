@@ -110,6 +110,22 @@
     .symbol.locked img {
       filter: brightness(50%);
     }
+
+    /* Estilos para o Modal de Login */
+    #loginModal input {
+    background: #000;
+    color: #00FFE7;
+    border: 1px solid #00FFE7;
+    font-size: 14px;
+    }
+
+    #loginModal button {
+    transition: all 0.3s;
+    }
+
+    #loginModal button:hover {
+    filter: brightness(1.2);
+    }
     
     /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
@@ -225,6 +241,10 @@
       <span class="line"> OUTROS MUNDOS™</span><br>
       <span class="line">OUTRAS MENTES&nbsp;</span>
     </a>
+
+    <button onclick="toggleLoginModal()" style="position: absolute; top: 20px; right: 20px; background: #00FFE7; border: none; padding: 10px; font-family: 'Press Start 2P'; cursor: pointer;">
+    LOGIN
+    </button>
   </div>
 
   <div class="symbols-wrapper">
@@ -406,5 +426,52 @@
 
 
   </script>
+
+  <!-- Adicione isto antes do </body> -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+  <script>
+    // 🔥 Configuração do Firebase (substitua pelos seus dados reais)
+    const firebaseConfig = {
+      apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
+      authDomain: "fundamentos-omom.firebaseapp.com",
+      databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
+      projectId: "fundamentos-omom",
+      storageBucket: "fundamentos-omom.appspot.com",
+      messagingSenderId: "402132741780",
+      appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
+    };
+
+  // Inicialize o Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  </script>
+
+  // Função para abrir/fechar o modal de login
+  
+  function toggleLoginModal() {
+  const modal = document.getElementById('loginModal');
+  modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+  }
+
+  <!-- Modal de Login -->
+<div id="loginModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; font-family: 'Press Start 2P', cursive;">
+  <div style="background: #000; padding: 20px; border: 2px solid #00FFE7; text-align: center;">
+    <h2 style="color: #00FFE7;">LOGIN</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="E-mail" style="margin: 10px; padding: 5px; font-family: 'Courier New';"><br>
+      <input type="password" id="password" placeholder="Senha" style="margin: 10px; padding: 5px; font-family: 'Courier New';"><br>
+      <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px; margin: 10px; cursor: pointer;">
+        ENTRAR
+      </button>
+    </form>
+    <button onclick="toggleLoginModal()" style="background: #ff0000; border: none; padding: 10px 20px; cursor: pointer;">
+      FECHAR
+    </button>
+    <p id="loginError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
+  </div>
+</div>
+  
 </body>
 </html>
