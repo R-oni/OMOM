@@ -1,410 +1,728 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outros Mundos Outras Mentes</title>
-  <!-- Link para a fonte "Press Start 2P" -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    /* ===== ESTILOS PARA MOBILeE (Vertical) ===== */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    
-    #loading-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 20px;
-      text-align: center;
-    }
-    
-    #automatonCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      image-rendering: pixelated;
-    }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: black;
-      overflow: hidden;
-      color: white;
-    }
-    
-    .title-container {
-      text-align: center;
-      margin: 5vh auto 0 auto;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-    }
-    
-    .title-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #FFFFFF;
-      text-align: center;
-      line-height: 1.2;
-      font-size: 20px;
-      text-decoration: none;
-      display: block;
-    }
-    
-    .line {
-      white-space: nowrap;
-    }
-    
-    /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
-    .symbols-wrapper {
-      position: absolute;
-      top: 150px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-y: auto;
-      padding: 20px;
-      z-index: 2;
-    }
-    
-    .symbols-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
-    }
-    
-    .symbol {
-      position: relative;
-      transform-origin: center;
-      transition: transform 0.1s linear;
-    }
-    
-    .symbol img {
-      width: 25vw;
-      transition: transform 0.3s;
-    }
-    
-    .symbol img:hover {
-      transform: scale(1.1);
-    }
-    
-    .symbol.brither img {
-      filter: brightness(180%);
-    }
-    
-    .symbol.locked img {
-      filter: brightness(50%);
-    }
-    
-    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
-      .page-container {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 30% 70%;
-        grid-template-areas:
-          "title symbols"
-          "symbols symbols";
-        width: 100vw;
-        height: 100vh;
-        gap: 0;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      
-      .title-container {
-        grid-area: title;
-        margin: 60px auto 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 50%;
-      }
-      .title-container .title-text {
-        font-size: 36px;
-      }
-      
-      .symbols-wrapper {
-        grid-area: symbols;
-        padding: 30px;
-        overflow-y: auto;
-      }
-      
-      .symbols-container {
-        gap: 30px;
-        justify-content: center;
-      }
-      
-      .symbol img {
-        width: 180px;
-        height: auto;
-      }
-    }
-    
-    /* ==== Novos estilos para o canvas do autômato celular na área do título ==== */
-    #automataTitleCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-    
-    /* ===== ESTILOS DO MODAL ===== */
-    #musicModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-    }
-    
-    #musicModal .modal-content {
-      background: transparent;
-      text-align: center;
-    }
-    
-    #musicModal p {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    
-    #musicModal button {
-      font-family: 'Press Start 2P', cursive;
-      background-color: transparent;
-      color: #00FFE7;
-      border: 2px solid #00FFE7;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-    
-    #musicModal button:hover {
-      background-color: #00FFE7;
-      color: black;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outros Mundos Outras Mentes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ESTILOS PARA MOBILeE (Vertical) ===== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #loading-text {
+            font-family: 'Press Start 2P', cursive;
+            color: #00FFE7;
+            font-size: 20px;
+            text-align: center;
+        }
+        #automatonCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            image-rendering: pixelated;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: black;
+            overflow: hidden;
+            color: white;
+        }
+        .title-container {
+            text-align: center;
+            margin: 5vh auto 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+        .title-text {
+            font-family: 'Press Start 2P', cursive;
+            color: #FFFFFF;
+            text-align: center;
+            line-height: 1.2;
+            font-size: 20px;
+            text-decoration: none;
+            display: block;
+        }
+        .line {
+            white-space: nowrap;
+        }
+        /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
+        .symbols-wrapper {
+            position: absolute;
+            top: 150px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 20px;
+            z-index: 2;
+        }
+        .symbols-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+        }
+        .symbol {
+            position: relative;
+            transform-origin: center;
+            transition: transform 0.1s linear;
+        }
+        .symbol img {
+            width: 25vw;
+            transition: transform 0.3s;
+        }
+        .symbol img:hover {
+            transform: scale(1.1);
+        }
+        .symbol.brither img {
+            filter: brightness(180%);
+        }
+        .symbol.locked img {
+            filter: brightness(50%);
+        }
+        /* Estilos para o Modal de Login */
+        #loginModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+        }
+        #loginModal div {
+            background: #000;
+            padding: 20px;
+            border: 2px solid #00FFE7;
+            text-align: center;
+        }
+        #loginModal input {
+            background: #000;
+            color: #00FFE7;
+            border: 1px solid #00FFE7;
+            font-size: 14px;
+            margin: 10px;
+            padding: 5px;
+            font-family: 'Courier New';
+        }
+        #loginModal button {
+            font-family: 'Press Start 2P', cursive;
+            transition: all 0.3s;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #loginModal button:hover {
+            filter: brightness(1.2);
+        }
+        /* Estilos para o Modal de Cadastro */
+        #signupModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+        }
+        #signupModal div {
+            background: #000;
+            padding: 20px;
+            border: 2px solid #00FFE7;
+            text-align: center;
+        }
+        #signupModal input {
+            background: #000;
+            color: #00FFE7;
+            border: 1px solid #00FFE7;
+            font-size: 14px;
+            margin: 10px;
+            padding: 5px;
+            font-family: 'Courier New';
+        }
+        #signupModal button {
+            font-family: 'Press Start 2P', cursive;
+            transition: all 0.3s;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #signupModal button:hover {
+            filter: brightness(1.2);
+        }
+        /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
+        @media screen and (min-width: 1024px) and (orientation: landscape) {
+            .page-container {
+                display: grid;
+                grid-template-columns: 50% 50%;
+                grid-template-rows: 30% 70%;
+                grid-template-areas: "title symbols" "symbols symbols";
+                width: 100vw;
+                height: 100vh;
+                gap: 0;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            .title-container {
+                grid-area: title;
+                margin: 60px auto 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 50%;
+            }
+            .title-container .title-text {
+                font-size: 36px;
+            }
+            .symbols-wrapper {
+                grid-area: symbols;
+                padding: 30px;
+                overflow-y: auto;
+            }
+            .symbols-container {
+                gap: 30px;
+                justify-content: center;
+            }
+            .symbol img {
+                width: 180px;
+                height: auto;
+            }
+        }
+        /* ===== ESTILOS DO MODAL DE MÚSICA ===== */
+        #musicModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            font-family: 'Press Start 2P', cursive;
+            color: #00FFE7;
+        }
+        #musicModal .modal-content {
+            background: transparent;
+            text-align: center;
+        }
+        #musicModal p {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #musicModal button {
+            font-family: 'Press Start 2P', cursive;
+            background-color: transparent;
+            color: #00FFE7;
+            border: 2px solid #00FFE7;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #musicModal button:hover {
+            background-color: #00FFE7;
+            color: black;
+        }
+        /* Estilo para o botão de login com Google */
+        .google-btn {
+            background-color: white;
+            color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 42px;
+            border-radius: 2px;
+            box-shadow: 0 3px 4px 0 rgba(0,0,0,.25);
+            cursor: pointer;
+            margin: 15px auto;
+        }
+        .google-btn:hover {
+            box-shadow: 0 0 6px #00FFE7;
+        }
+        .google-btn img {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+        }
+        .google-btn-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            letter-spacing: 0.2px;
+        }
+        /* Estilo para botões de navegação */
+        .nav-button {
+            font-family: 'Press Start 2P', cursive;
+            background: #00FFE7;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Tela de Loading -->
-  <div id="loading-screen">
-    <div id="loading-text">CARREGANDO...</div>
-  </div>
-
-  <canvas id="automatonCanvas"></canvas>
-
-  <div class="title-container">
+    <!-- Tela de Loading -->
+    <div id="loading-screen">
+        <div id="loading-text">CARREGANDO...</div>
+    </div>
+    <canvas id="automatonCanvas"></canvas>
     
-    <a href="omom.html" class="title-text">
-      <span class="line"> OUTROS MUNDOS™</span><br>
-      <span class="line">OUTRAS MENTES&nbsp;</span>
-    </a>
-  </div>
-
-  <div class="symbols-wrapper">
-    <div class="symbols-container">
-      <div class="symbol brither" id="symbol1">
-        <a href="mundos/veleywei/index.html">
-          <img src="assets/veleyweimenu.png" alt="Velei'wey">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol2">
-        <a href="mundos/botychera/index.html">
-          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol3">
-        <a href="mundos/himpis/index.html">
-          <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol4">
-        <a href="mundos/ttok/index.html">
-          <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol5">
-        <a href="mundos/denbou/index.html">
-          <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol6">
-        <a href="mundos/araporu/index.html">
-          <img src="mundos/araporu/araporumenu.png" alt="araporu">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol7">
-        <a href="mundos/os artesaos/index.html">
-          <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol8">
-        <a href="mundos/sapador/index.html">
-          <img src="mundos/sapador/sapador.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol11">
-        <a href="mundos/dosirelala/index.html">
-          <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol9">
-        <a href="mundos/calindreno/index.html">
-          <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol10">
-        <a href="mundos/mundo pulsante/index.html">
-          <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol12">
-        <a href="mundos/mundo 1/index.html">
-          <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol13">
-        <a href="mundos/mundo 2/index.html">
-          <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol14">
-        <a href="mundos/mundo 3/index.html">
-          <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol15">
-        <a href="mundos/mundo 4/index.html">
-          <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol locked" id="symbol16">
-        <a href="mundos/mundo 5/index.html">
-          <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
-        </a>
-      </div>
-      <div class="symbol brither" id="symbol16">
-        <a href="mundos/mundo 6/index.html">
-          <img src="mundos/mundo 6/criaturamenu.webp" alt="cal8ndreno">
-        </a>
-      </div>
+    <!-- Modal de Login -->
+    <div id="loginModal">
+        <div>
+            <h2 style="color: #00FFE7;">LOGIN</h2>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="E-mail"><br>
+                <input type="password" id="password" placeholder="Senha"><br>
+                <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">
+                    ENTRAR
+                </button>
+            </form>
+            
+            <!-- Botão de Login com Google -->
+            <div id="googleLogin" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo">
+                <span class="google-btn-text">LOGIN COM GOOGLE</span>
+            </div>
+            
+            <p style="color: white; font-size: 10px; margin-top: 10px;">
+                Não tem conta? <a href="#" onclick="toggleSignupModal(); toggleLoginModal();" style="color: #00FFE7; text-decoration: none;">Cadastre-se</a>
+            </p>
+            <button onclick="toggleLoginModal()" style="background: #ff0000; border: none; padding: 10px 20px;">
+                FECHAR
+            </button>
+            <p id="loginError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
+        </div>
     </div>
-  </div>
-
-  <!-- Música de fundo: memories.mp3 -->
-  <audio id="bgm" loop style="display:none;">
-    <source src="memories.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
-
-  <!-- Modal de escolha de música -->
-  <div id="musicModal">
-    <div class="modal-content">
-      <p>música?</p>
-      <div class="modal-buttons">
-        <button id="yesBtn">Sim</button>
-        <button id="noBtn">Não</button>
-      </div>
+    
+    <!-- Modal de Cadastro -->
+    <div id="signupModal">
+        <div>
+            <h2 style="color: #00FFE7;">CADASTRO</h2>
+            <form id="signupForm">
+                <input type="text" id="newName" placeholder="Nome"><br>
+                <input type="email" id="newEmail" placeholder="E-mail"><br>
+                <input type="password" id="newPassword" placeholder="Senha"><br>
+                <input type="password" id="confirmPassword" placeholder="Confirmar Senha"><br>
+                <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">
+                    CADASTRAR
+                </button>
+            </form>
+            <p style="color: white; font-size: 10px; margin-top: 10px;">
+                Já tem conta? <a href="#" onclick="toggleLoginModal(); toggleSignupModal();" style="color: #00FFE7; text-decoration: none;">Faça login</a>
+            </p>
+            <button onclick="toggleSignupModal()" style="background: #ff0000; border: none; padding: 10px 20px;">
+                FECHAR
+            </button>
+            <p id="signupError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
+            <p id="signupSuccess" style="color: #00FFE7; font-size: 12px; margin-top: 10px; display: none;">
+                Cadastro realizado com sucesso! Você já pode fazer login.
+            </p>
+        </div>
     </div>
-  </div>
+    
+    <div class="title-container">
+        <a href="omom.html" class="title-text">
+            <span class="line"> OUTROS MUNDOS™</span><br>
+            <span class="line">OUTRAS MENTES&nbsp;</span>
+        </a>
+        <button onclick="toggleLoginModal()" class="nav-button" style="position: absolute; top: 20px; right: 20px;">
+            LOGIN
+        </button>
+        <button onclick="toggleSignupModal()" class="nav-button" style="position: absolute; top: 20px; right: 120px;">
+            CADASTRO
+        </button>
+    </div>
+    
+    <div class="symbols-wrapper">
+        <div class="symbols-container">
+            <div class="symbol brither" id="symbol1">
+                <a href="mundos/veleywei/index.html">
+                    <img src="assets/veleyweimenu.png" alt="Velei'wey">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol2">
+                <a href="mundos/botychera/index.html">
+                    <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol3">
+                <a href="mundos/himpis/index.html">
+                    <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol4">
+                <a href="mundos/ttok/index.html">
+                    <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol5">
+                <a href="mundos/denbou/index.html">
+                    <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol6">
+                <a href="mundos/araporu/index.html">
+                    <img src="mundos/araporu/araporumenu.png" alt="araporu">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol7">
+                <a href="mundos/os artesaos/index.html">
+                    <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol8">
+                <a href="mundos/sapador/index.html">
+                    <img src="mundos/sapador/sapador.png" alt="sapador">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol11">
+                <a href="mundos/dosirelala/index.html">
+                    <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol9">
+                <a href="mundos/calindreno/index.html">
+                    <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol10">
+                <a href="mundos/mundo pulsante/index.html">
+                    <img src="mundos/mundo pulsante/jocelyn.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol12">
+                <a href="mundos/mundo 1/index.html">
+                    <img src="mundos/mundo 1/mundo1.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol13">
+                <a href="mundos/mundo 2/index.html">
+                    <img src="mundos/mundo 2/mundo2.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol14">
+                <a href="mundos/mundo 3/index.html">
+                    <img src="mundos/mundo 3/mundo3menu.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol15">
+                <a href="mundos/mundo 4/index.html">
+                    <img src="mundos/mundo 4/mundo4menu.png" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol locked" id="symbol16">
+                <a href="mundos/mundo 5/index.html">
+                    <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="cal8ndreno">
+                </a>
+            </div>
+            <div class="symbol brither" id="symbol17">
+                <a href="mundos/mundo 6/index.html">
+                    <img src="mundos/mundo 6/criaturamenu.webp" alt="cal8ndreno">
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Música -->
+    <div id="musicModal">
+        <div class="modal-content">
+            <p>música?</p>
+            <div class="modal-buttons">
+                <button id="yesBtn">Sim</button>
+                <button id="noBtn">Não</button>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="bgm" loop style="display:none;">
+        <source src="memories.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+    
+    <!-- Scripts -->
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
+            authDomain: "fundamentos-omom.firebaseapp.com",
+            databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
+            projectId: "fundamentos-omom",
+            storageBucket: "fundamentos-omom.appspot.com",
+            messagingSenderId: "402132741780",
+            appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
-  <script>
-    // Esconde a tela de loading quando a página é carregada
-    window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
-    });
-
-    // Função para realizar o fade out do áudio
-    function fadeOutAudio(audio, duration) {
-      const fadeOutInterval = 50; // intervalo em ms
-      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
-      const fadeOutTimer = setInterval(() => {
-        if (audio.volume > fadeOutStep) {
-          audio.volume -= fadeOutStep;
-        } else {
-          audio.volume = 0;
-          audio.pause();
-          clearInterval(fadeOutTimer);
-        }
-      }, fadeOutInterval);
-    }
-
-    // Configura os event listeners após o carregamento do DOM
-    document.addEventListener("DOMContentLoaded", function() {
-      // Modal de escolha de música
-      const musicModal = document.getElementById("musicModal");
-      const bgm = document.getElementById("bgm");
-
-      document.getElementById("yesBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.volume = 0.9;
-        bgm.play();
-      });
-
-      document.getElementById("noBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.pause();
-      });
-
-      // Adiciona o fade out ao clicar em um dos mundos
-      document.querySelectorAll('.symbols-container a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          // Se a música estiver tocando, inicia o fade out em 2 segundos
-          if (!bgm.paused) {
-            fadeOutAudio(bgm, 2000);
-            setTimeout(() => {
-              window.location.href = this.href;
-            }, 2000);
-          } else {
-            window.location.href = this.href;
-          }
+        // Tornar o toggleLoginModal acessível globalmente
+        window.toggleLoginModal = function() {
+            const modal = document.getElementById('loginModal');
+            modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
+        };
+        
+        // Tornar o toggleSignupModal acessível globalmente
+        window.toggleSignupModal = function() {
+            const modal = document.getElementById('signupModal');
+            modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
+        };
+        
+        // Adicionar login e signup handlers quando o documento estiver pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            // Login form handler
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    const errorElement = document.getElementById('loginError');
+                    
+                    // Limpar mensagens de erro anteriores
+                    errorElement.textContent = "";
+                    
+                    // Validar campos
+                    if (!email || !password) {
+                        errorElement.textContent = "Preencha todos os campos";
+                        return;
+                    }
+                    
+                    // Tentar login
+                    signInWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            // Login bem-sucedido
+                            console.log("Usuário logado com sucesso:", userCredential.user);
+                            toggleLoginModal();
+                            // Aqui você pode redirecionar ou atualizar a UI
+                        })
+                        .catch((error) => {
+                            // Tratar erros de login
+                            console.error("Erro no login:", error);
+                            switch (error.code) {
+                                case 'auth/invalid-email':
+                                    errorElement.textContent = "E-mail inválido";
+                                    break;
+                                case 'auth/user-disabled':
+                                    errorElement.textContent = "Usuário desativado";
+                                    break;
+                                case 'auth/user-not-found':
+                                    errorElement.textContent = "Usuário não encontrado";
+                                    break;
+                                case 'auth/wrong-password':
+                                    errorElement.textContent = "Senha incorreta";
+                                    break;
+                                default:
+                                    errorElement.textContent = "Erro no login: " + error.message;
+                            }
+                        });
+                });
+            }
+            
+            // Google login handler
+            const googleLoginBtn = document.getElementById('googleLogin');
+            if (googleLoginBtn) {
+                googleLoginBtn.addEventListener('click', () => {
+                    const errorElement = document.getElementById('loginError');
+                    errorElement.textContent = "";
+                    
+                    signInWithPopup(auth, googleProvider)
+                        .then((result) => {
+                            // Login com Google bem-sucedido
+                            console.log("Usuário logado com Google:", result.user);
+                            toggleLoginModal();
+                            // Aqui você pode redirecionar ou atualizar a UI
+                        })
+                        .catch((error) => {
+                            console.error("Erro no login com Google:", error);
+                            errorElement.textContent = "Erro no login com Google: " + error.message;
+                        });
+                });
+            }
+            
+            // Signup form handler
+            const signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('newName').value;
+                    const email = document.getElementById('newEmail').value;
+                    const password = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    const errorElement = document.getElementById('signupError');
+                    const successElement = document.getElementById('signupSuccess');
+                    
+                    // Limpar mensagens
+                    errorElement.textContent = "";
+                    successElement.style.display = "none";
+                    
+                    // Validar campos
+                    if (!name || !email || !password || !confirmPassword) {
+                        errorElement.textContent = "Preencha todos os campos";
+                        return;
+                    }
+                    
+                    if (password !== confirmPassword) {
+                        errorElement.textContent = "As senhas não coincidem";
+                        return;
+                    }
+                    
+                    if (password.length < 6) {
+                        errorElement.textContent = "A senha deve ter pelo menos 6 caracteres";
+                        return;
+                    }
+                    
+                    // Tentar criar usuário
+                    createUserWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            // Cadastro bem-sucedido
+                            console.log("Usuário criado com sucesso:", userCredential.user);
+                            
+                            // Adicionar nome de usuário ao perfil
+                            return updateProfile(userCredential.user, {
+                                displayName: name
+                            }).then(() => {
+                                // Limpar o formulário
+                                document.getElementById('newName').value = '';
+                                document.getElementById('newEmail').value = '';
+                                document.getElementById('newPassword').value = '';
+                                document.getElementById('confirmPassword').value = '';
+                                
+                                // Mostrar mensagem de sucesso
+                                successElement.style.display = "block";
+                                
+                                // Opcional: redirecionar para login após alguns segundos
+                                setTimeout(() => {
+                                    toggleSignupModal();
+                                    toggleLoginModal();
+                                }, 2000);
+                            });
+                        })
+                        .catch((error) => {
+                            // Tratar erros de cadastro
+                            console.error("Erro no cadastro:", error);
+                            switch (error.code) {
+                                case 'auth/email-already-in-use':
+                                    errorElement.textContent = "Este e-mail já está sendo usado";
+                                    break;
+                                case 'auth/invalid-email':
+                                    errorElement.textContent = "E-mail inválido";
+                                    break;
+                                case 'auth/weak-password':
+                                    errorElement.textContent = "Senha muito fraca";
+                                    break;
+                                default:
+                                    errorElement.textContent = "Erro no cadastro: " + error.message;
+                            }
+                        });
+                });
+            }
         });
-      });
-    });
-
-    // Animação de flutuação dos símbolos
-    const symbols = document.querySelectorAll('.symbol');
-    let time = 0;
-    function floatSymbols() {
-      time += 0.02;
-      symbols.forEach((symbol, index) => {
-        let amplitude = 6;
-        let speed = 0.1 + (index * 0.01);
-        let y = Math.sin(time * speed * 10) * amplitude;
-        symbol.style.transform = `translateY(${y}px)`;
-      });
-      requestAnimationFrame(floatSymbols);
-    }
-    floatSymbols();
-
-
-  </script>
+    </script>
+    
+    <script>
+        // Event Listeners
+        window.addEventListener("load", function() {
+            document.getElementById("loading-screen").style.display = "none";
+        });
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const musicModal = document.getElementById("musicModal");
+            const bgm = document.getElementById("bgm");
+            
+            document.getElementById("yesBtn").addEventListener("click", function() {
+                musicModal.style.display = "none";
+                bgm.volume = 0.9;
+                bgm.play();
+            });
+            
+            document.getElementById("noBtn").addEventListener("click", function() {
+                musicModal.style.display = "none";
+                bgm.pause();
+            });
+            
+            document.querySelectorAll('.symbols-container a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!bgm.paused) {
+                        fadeOutAudio(bgm, 2000);
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 2000);
+                    } else {
+                        window.location.href = this.href;
+                    }
+                });
+            });
+        });
+        
+        // Audio Functions
+        function fadeOutAudio(audio, duration) {
+            const fadeOutInterval = 50;
+            const fadeOutStep = audio.volume / (duration / fadeOutInterval);
+            const fadeOutTimer = setInterval(() => {
+                if (audio.volume > fadeOutStep) {
+                    audio.volume -= fadeOutStep;
+                } else {
+                    audio.volume = 0;
+                    audio.pause();
+                    clearInterval(fadeOutTimer);
+                }
+            }, fadeOutInterval);
+        }
+        
+        // Symbol Animation
+        let symbols = [];
+        let time = 0;
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            symbols = document.querySelectorAll('.symbol');
+            
+            function floatSymbols() {
+                time += 0.02;
+                symbols.forEach((symbol, index) => {
+                    let amplitude = 6;
+                    let speed = 0.1 + (index * 0.01);
+                    let y = Math.sin(time * speed * 10) * amplitude;
+                    symbol.style.transform = `translateY(${y}px)`;
+                });
+                requestAnimationFrame(floatSymbols);
+            }
+            
+            floatSymbols();
+        });
+    </script>
 </body>
 </html>
