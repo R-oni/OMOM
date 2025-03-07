@@ -99,30 +99,6 @@
     .mobile-menu button:hover {
       filter: brightness(1.2);
     }
-    /* ===== Elementos de usuário ===== */
-    #userGreeting {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-      font-size: 10px;
-      display: none;
-      z-index: 10002;
-    }
-    #logoutBtn {
-      position: absolute;
-      top: 20px;
-      left: 140px;
-      background: #00FFE7;
-      border: none;
-      padding: 10px;
-      font-family: 'Press Start 2P', cursive;
-      cursor: pointer;
-      font-size: 10px;
-      display: none;
-      z-index: 10002;
-    }
     /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
     .symbols-wrapper {
       position: absolute;
@@ -345,6 +321,18 @@
       font-size: 9px;
       letter-spacing: 0.2px;
     }
+    .g-blue {
+      color: #4285F4; /* Azul do Google */
+    }
+    .g-red {
+      color: #DB4437; /* Vermelho do Google */
+    }
+    .g-yellow {
+      color: #F4B400; /* Amarelo do Google */
+    }
+    .g-green {
+      color: #0F9D58; /* Verde do Google */
+    }
     /* Estilo para botões de navegação */
     .nav-button {
       font-family: 'Press Start 2P', cursive;
@@ -378,7 +366,8 @@
       </form>
       <!-- Botão de Login com Google -->
       <div id="googleLogin" class="google-btn">
-        <span class="google-btn-text">LOGIN COM GOOGLE</span>
+      <span class="google-text">LOGIN COM <span class="g-blue">G</span><span class="g-red">O</span><span class="g-yellow">O</span><span class="g-blue">G</span><span class="g-green">L</span><span class="g-red">E</span></span>
+  
       </div>
       <p style="color: white; font-size: 10px; margin-top: 10px;">
         Não tem conta? <a href="#" onclick="toggleSignupModal(); toggleLoginModal();" style="color: #00FFE7; text-decoration: none;">Cadastre-se</a>
@@ -422,8 +411,12 @@
       <span class="line">OUTRAS MENTES&nbsp;</span>
     </a>
     <!-- Botões de navegação para desktop -->
-    <button onclick="toggleLoginModal()" class="nav-button" style="right: 20px;">LOGIN</button>
-    <button onclick="toggleSignupModal()" class="nav-button" style="right: 120px;">CADASTRO</button>
+    <button onclick="toggleLoginModal()" class="nav-button" style="right: 20px;">
+      LOGIN
+    </button>
+    <button onclick="toggleSignupModal()" class="nav-button" style="right: 120px;">
+      CADASTRO
+    </button>
     <!-- Botão Hamburger para mobile -->
     <button id="hamburgerBtn" class="hamburger-menu">☰</button>
     <!-- Mobile Menu -->
@@ -431,9 +424,6 @@
       <button onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
       <button onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
     </div>
-    <!-- Área para exibir saudação e botão de logout após login -->
-    <div id="userGreeting"></div>
-    <button id="logoutBtn">SAIR</button>
   </div>
   
   <div class="symbols-wrapper">
@@ -547,7 +537,7 @@
   <script type="module">
     // Import Firebase functions
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
     
     // Firebase Configuration
     const firebaseConfig = {
@@ -692,38 +682,6 @@
                   errorElement.textContent = "Erro no cadastro: " + error.message;
               }
             });
-        });
-      }
-    });
-    
-    // Monitorar o estado de autenticação para atualizar a interface
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // Usuário está logado: ocultar botões de login/cadastro e exibir saudação e logout
-        document.querySelectorAll('.nav-button').forEach(btn => btn.style.display = "none");
-        document.getElementById("hamburgerBtn").style.display = "none";
-        document.getElementById("mobileMenu").style.display = "none";
-        document.getElementById("userGreeting").textContent = `Bem-vindo, ${user.displayName || "Usuário"}!`;
-        document.getElementById("userGreeting").style.display = "block";
-        document.getElementById("logoutBtn").style.display = "block";
-      } else {
-        // Usuário não logado: mostrar botões de login/cadastro e ocultar saudação/logout
-        document.querySelectorAll('.nav-button').forEach(btn => btn.style.display = "block");
-        document.getElementById("userGreeting").style.display = "none";
-        document.getElementById("logoutBtn").style.display = "none";
-      }
-    });
-    
-    // Logout
-    document.addEventListener("DOMContentLoaded", function() {
-      const logoutBtn = document.getElementById("logoutBtn");
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-          signOut(auth).then(() => {
-            console.log("Usuário deslogado.");
-          }).catch((error) => {
-            console.error("Erro ao deslogar:", error);
-          });
         });
       }
     });
