@@ -352,9 +352,11 @@
     </audio>
     
     <!-- Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script>
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
@@ -367,15 +369,32 @@
         };
         
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        
-        // Login Functions
-        function toggleLoginModal() {
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Tornar o toggleLoginModal acessível globalmente
+        window.toggleLoginModal = function() {
             const modal = document.getElementById('loginModal');
             modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
-        }
+        };
         
+        // Adicionar login handler ao form quando o documento estiver pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
+                    
+                    // Implementar login se necessário
+                    console.log("Login tentado com:", email);
+                });
+            }
+        });
+    </script>
+    
+    <script>
         // Event Listeners
         window.addEventListener("load", function() {
             document.getElementById("loading-screen").style.display = "none";
@@ -427,21 +446,25 @@
         }
         
         // Symbol Animation
-        const symbols = document.querySelectorAll('.symbol');
+        let symbols = [];
         let time = 0;
         
-        function floatSymbols() {
-            time += 0.02;
-            symbols.forEach((symbol, index) => {
-                let amplitude = 6;
-                let speed = 0.1 + (index * 0.01);
-                let y = Math.sin(time * speed * 10) * amplitude;
-                symbol.style.transform = `translateY(${y}px)`;
-            });
-            requestAnimationFrame(floatSymbols);
-        }
-        
-        floatSymbols();
+        document.addEventListener("DOMContentLoaded", function() {
+            symbols = document.querySelectorAll('.symbol');
+            
+            function floatSymbols() {
+                time += 0.02;
+                symbols.forEach((symbol, index) => {
+                    let amplitude = 6;
+                    let speed = 0.1 + (index * 0.01);
+                    let y = Math.sin(time * speed * 10) * amplitude;
+                    symbol.style.transform = `translateY(${y}px)`;
+                });
+                requestAnimationFrame(floatSymbols);
+            }
+            
+            floatSymbols();
+        });
     </script>
 </body>
 </html>
