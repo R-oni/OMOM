@@ -126,6 +126,7 @@
             font-family: 'Courier New';
         }
         #loginModal button {
+            font-family: 'Press Start 2P', cursive;
             transition: all 0.3s;
             margin: 10px;
             cursor: pointer;
@@ -163,6 +164,7 @@
             font-family: 'Courier New';
         }
         #signupModal button {
+            font-family: 'Press Start 2P', cursive;
             transition: all 0.3s;
             margin: 10px;
             cursor: pointer;
@@ -234,6 +236,7 @@
             margin-bottom: 20px;
         }
         #musicModal button {
+            font-family: 'Press Start 2P', cursive;
             background-color: transparent;
             color: #00FFE7;
             border: 2px solid #00FFE7;
@@ -244,6 +247,42 @@
         #musicModal button:hover {
             background-color: #00FFE7;
             color: black;
+        }
+        /* Estilo para o botão de login com Google */
+        .google-btn {
+            background-color: white;
+            color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 42px;
+            border-radius: 2px;
+            box-shadow: 0 3px 4px 0 rgba(0,0,0,.25);
+            cursor: pointer;
+            margin: 15px auto;
+        }
+        .google-btn:hover {
+            box-shadow: 0 0 6px #00FFE7;
+        }
+        .google-btn img {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+        }
+        .google-btn-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            letter-spacing: 0.2px;
+        }
+        /* Estilo para botões de navegação */
+        .nav-button {
+            font-family: 'Press Start 2P', cursive;
+            background: #00FFE7;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 10px;
         }
     </style>
 </head>
@@ -265,6 +304,13 @@
                     ENTRAR
                 </button>
             </form>
+            
+            <!-- Botão de Login com Google -->
+            <div id="googleLogin" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo">
+                <span class="google-btn-text">LOGIN COM GOOGLE</span>
+            </div>
+            
             <p style="color: white; font-size: 10px; margin-top: 10px;">
                 Não tem conta? <a href="#" onclick="toggleSignupModal(); toggleLoginModal();" style="color: #00FFE7; text-decoration: none;">Cadastre-se</a>
             </p>
@@ -306,10 +352,10 @@
             <span class="line"> OUTROS MUNDOS™</span><br>
             <span class="line">OUTRAS MENTES&nbsp;</span>
         </a>
-        <button onclick="toggleLoginModal()" style="position: absolute; top: 20px; right: 20px; background: #00FFE7; border: none; padding: 10px; font-family: 'Press Start 2P'; cursor: pointer;">
+        <button onclick="toggleLoginModal()" class="nav-button" style="position: absolute; top: 20px; right: 20px;">
             LOGIN
         </button>
-        <button onclick="toggleSignupModal()" style="position: absolute; top: 20px; right: 120px; background: #00FFE7; border: none; padding: 10px; font-family: 'Press Start 2P'; cursor: pointer;">
+        <button onclick="toggleSignupModal()" class="nav-button" style="position: absolute; top: 20px; right: 120px;">
             CADASTRO
         </button>
     </div>
@@ -424,7 +470,7 @@
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
         
         // Firebase Configuration
         const firebaseConfig = {
@@ -440,6 +486,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
         // Tornar o toggleLoginModal acessível globalmente
         window.toggleLoginModal = function() {
@@ -500,6 +547,27 @@
                                 default:
                                     errorElement.textContent = "Erro no login: " + error.message;
                             }
+                        });
+                });
+            }
+            
+            // Google login handler
+            const googleLoginBtn = document.getElementById('googleLogin');
+            if (googleLoginBtn) {
+                googleLoginBtn.addEventListener('click', () => {
+                    const errorElement = document.getElementById('loginError');
+                    errorElement.textContent = "";
+                    
+                    signInWithPopup(auth, googleProvider)
+                        .then((result) => {
+                            // Login com Google bem-sucedido
+                            console.log("Usuário logado com Google:", result.user);
+                            toggleLoginModal();
+                            // Aqui você pode redirecionar ou atualizar a UI
+                        })
+                        .catch((error) => {
+                            console.error("Erro no login com Google:", error);
+                            errorElement.textContent = "Erro no login com Google: " + error.message;
                         });
                 });
             }
