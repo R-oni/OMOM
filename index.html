@@ -133,6 +133,43 @@
         #loginModal button:hover {
             filter: brightness(1.2);
         }
+        /* Estilos para o Modal de Cadastro */
+        #signupModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Press Start 2P', cursive;
+        }
+        #signupModal div {
+            background: #000;
+            padding: 20px;
+            border: 2px solid #00FFE7;
+            text-align: center;
+        }
+        #signupModal input {
+            background: #000;
+            color: #00FFE7;
+            border: 1px solid #00FFE7;
+            font-size: 14px;
+            margin: 10px;
+            padding: 5px;
+            font-family: 'Courier New';
+        }
+        #signupModal button {
+            transition: all 0.3s;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #signupModal button:hover {
+            filter: brightness(1.2);
+        }
         /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
         @media screen and (min-width: 1024px) and (orientation: landscape) {
             .page-container {
@@ -228,10 +265,39 @@
                     ENTRAR
                 </button>
             </form>
+            <p style="color: white; font-size: 10px; margin-top: 10px;">
+                Não tem conta? <a href="#" onclick="toggleSignupModal(); toggleLoginModal();" style="color: #00FFE7; text-decoration: none;">Cadastre-se</a>
+            </p>
             <button onclick="toggleLoginModal()" style="background: #ff0000; border: none; padding: 10px 20px;">
                 FECHAR
             </button>
             <p id="loginError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
+        </div>
+    </div>
+    
+    <!-- Modal de Cadastro -->
+    <div id="signupModal">
+        <div>
+            <h2 style="color: #00FFE7;">CADASTRO</h2>
+            <form id="signupForm">
+                <input type="text" id="newName" placeholder="Nome"><br>
+                <input type="email" id="newEmail" placeholder="E-mail"><br>
+                <input type="password" id="newPassword" placeholder="Senha"><br>
+                <input type="password" id="confirmPassword" placeholder="Confirmar Senha"><br>
+                <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">
+                    CADASTRAR
+                </button>
+            </form>
+            <p style="color: white; font-size: 10px; margin-top: 10px;">
+                Já tem conta? <a href="#" onclick="toggleLoginModal(); toggleSignupModal();" style="color: #00FFE7; text-decoration: none;">Faça login</a>
+            </p>
+            <button onclick="toggleSignupModal()" style="background: #ff0000; border: none; padding: 10px 20px;">
+                FECHAR
+            </button>
+            <p id="signupError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
+            <p id="signupSuccess" style="color: #00FFE7; font-size: 12px; margin-top: 10px; display: none;">
+                Cadastro realizado com sucesso! Você já pode fazer login.
+            </p>
         </div>
     </div>
     
@@ -242,6 +308,9 @@
         </a>
         <button onclick="toggleLoginModal()" style="position: absolute; top: 20px; right: 20px; background: #00FFE7; border: none; padding: 10px; font-family: 'Press Start 2P'; cursor: pointer;">
             LOGIN
+        </button>
+        <button onclick="toggleSignupModal()" style="position: absolute; top: 20px; right: 120px; background: #00FFE7; border: none; padding: 10px; font-family: 'Press Start 2P'; cursor: pointer;">
+            CADASTRO
         </button>
     </div>
     
@@ -355,7 +424,7 @@
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
         
         // Firebase Configuration
         const firebaseConfig = {
@@ -375,20 +444,141 @@
         // Tornar o toggleLoginModal acessível globalmente
         window.toggleLoginModal = function() {
             const modal = document.getElementById('loginModal');
-            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+            modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
         };
         
-        // Adicionar login handler ao form quando o documento estiver pronto
+        // Tornar o toggleSignupModal acessível globalmente
+        window.toggleSignupModal = function() {
+            const modal = document.getElementById('signupModal');
+            modal.style.display = modal.style.display === 'none' || modal.style.display === '' ? 'flex' : 'none';
+        };
+        
+        // Adicionar login e signup handlers quando o documento estiver pronto
         document.addEventListener('DOMContentLoaded', () => {
+            // Login form handler
             const loginForm = document.getElementById('loginForm');
             if (loginForm) {
                 loginForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const email = document.getElementById('email').value;
                     const password = document.getElementById('password').value;
+                    const errorElement = document.getElementById('loginError');
                     
-                    // Implementar login se necessário
-                    console.log("Login tentado com:", email);
+                    // Limpar mensagens de erro anteriores
+                    errorElement.textContent = "";
+                    
+                    // Validar campos
+                    if (!email || !password) {
+                        errorElement.textContent = "Preencha todos os campos";
+                        return;
+                    }
+                    
+                    // Tentar login
+                    signInWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            // Login bem-sucedido
+                            console.log("Usuário logado com sucesso:", userCredential.user);
+                            toggleLoginModal();
+                            // Aqui você pode redirecionar ou atualizar a UI
+                        })
+                        .catch((error) => {
+                            // Tratar erros de login
+                            console.error("Erro no login:", error);
+                            switch (error.code) {
+                                case 'auth/invalid-email':
+                                    errorElement.textContent = "E-mail inválido";
+                                    break;
+                                case 'auth/user-disabled':
+                                    errorElement.textContent = "Usuário desativado";
+                                    break;
+                                case 'auth/user-not-found':
+                                    errorElement.textContent = "Usuário não encontrado";
+                                    break;
+                                case 'auth/wrong-password':
+                                    errorElement.textContent = "Senha incorreta";
+                                    break;
+                                default:
+                                    errorElement.textContent = "Erro no login: " + error.message;
+                            }
+                        });
+                });
+            }
+            
+            // Signup form handler
+            const signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('newName').value;
+                    const email = document.getElementById('newEmail').value;
+                    const password = document.getElementById('newPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    const errorElement = document.getElementById('signupError');
+                    const successElement = document.getElementById('signupSuccess');
+                    
+                    // Limpar mensagens
+                    errorElement.textContent = "";
+                    successElement.style.display = "none";
+                    
+                    // Validar campos
+                    if (!name || !email || !password || !confirmPassword) {
+                        errorElement.textContent = "Preencha todos os campos";
+                        return;
+                    }
+                    
+                    if (password !== confirmPassword) {
+                        errorElement.textContent = "As senhas não coincidem";
+                        return;
+                    }
+                    
+                    if (password.length < 6) {
+                        errorElement.textContent = "A senha deve ter pelo menos 6 caracteres";
+                        return;
+                    }
+                    
+                    // Tentar criar usuário
+                    createUserWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            // Cadastro bem-sucedido
+                            console.log("Usuário criado com sucesso:", userCredential.user);
+                            
+                            // Adicionar nome de usuário ao perfil
+                            return updateProfile(userCredential.user, {
+                                displayName: name
+                            }).then(() => {
+                                // Limpar o formulário
+                                document.getElementById('newName').value = '';
+                                document.getElementById('newEmail').value = '';
+                                document.getElementById('newPassword').value = '';
+                                document.getElementById('confirmPassword').value = '';
+                                
+                                // Mostrar mensagem de sucesso
+                                successElement.style.display = "block";
+                                
+                                // Opcional: redirecionar para login após alguns segundos
+                                setTimeout(() => {
+                                    toggleSignupModal();
+                                    toggleLoginModal();
+                                }, 2000);
+                            });
+                        })
+                        .catch((error) => {
+                            // Tratar erros de cadastro
+                            console.error("Erro no cadastro:", error);
+                            switch (error.code) {
+                                case 'auth/email-already-in-use':
+                                    errorElement.textContent = "Este e-mail já está sendo usado";
+                                    break;
+                                case 'auth/invalid-email':
+                                    errorElement.textContent = "E-mail inválido";
+                                    break;
+                                case 'auth/weak-password':
+                                    errorElement.textContent = "Senha muito fraca";
+                                    break;
+                                default:
+                                    errorElement.textContent = "Erro no cadastro: " + error.message;
+                            }
+                        });
                 });
             }
         });
