@@ -599,6 +599,13 @@
       hamburgerBtn.addEventListener("click", function() {
         mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
       });
+      
+      // NOVA FUNÇÃO: fecha o mobile menu ao clicar fora dele ou do botão hamburger
+      document.addEventListener("click", function(e) {
+        if (mobileMenu.style.display === "block" && !mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+          mobileMenu.style.display = "none";
+        }
+      });
     });
     
     // Função para fechar o mobile menu ao selecionar uma opção
