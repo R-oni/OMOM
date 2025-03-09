@@ -519,7 +519,7 @@
 
 
 
-  <script type="module">
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
   
@@ -536,27 +536,24 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   
-  // Verifica o estado de autenticação
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // Usuário logado: transforma todos os símbolos bloqueados em desbloqueados
+      // Usuário logado: desbloqueia todos os símbolos bloqueados
       const lockedSymbols = document.querySelectorAll('.symbol.locked');
       lockedSymbols.forEach(symbol => {
         symbol.classList.remove('locked');
         symbol.classList.add('brither');
-        // Reativa o link: o endereço original está armazenado em data-href
+        // Reativa o link usando o valor armazenado em data-href
         const link = symbol.querySelector('a');
         link.setAttribute('href', symbol.getAttribute('data-href'));
-        // Opcional: remove o eventListener de bloqueio, caso tenha sido adicionado anteriormente
+        // Remove event listeners de bloqueio, se houver
         link.onclick = null;
       });
     } else {
-      // Usuário não logado: garante que os símbolos bloqueados permaneçam inativos
+      // Usuário não logado: garante que os links dos símbolos bloqueados permaneçam inativos
       const lockedLinks = document.querySelectorAll('.symbol.locked a');
       lockedLinks.forEach(link => {
-        // Remove o href se existir
         link.removeAttribute('href');
-        // Bloqueia o clique e mostra alerta
         link.addEventListener('click', (e) => {
           e.preventDefault();
           alert("Você precisa estar logado para acessar este mundo.");
@@ -565,6 +562,7 @@
     }
   });
 </script>
+
 
   
   <!-- Modal de Música -->
