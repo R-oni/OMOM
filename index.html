@@ -401,8 +401,8 @@
     <button id="hamburgerBtn" class="hamburger-menu">☰</button>
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu">
-      <button onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
-      <button onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
+      <button id="loginBtnMobile" onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
+      <button id="signupBtnMobile" onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
       <button id="logoutBtnMobile" onclick="logoutUser(); toggleMobileMenu();" style="display: none;">LOGOUT</button>
     </div>
   </div>
@@ -506,7 +506,8 @@
     };
   
     window.toggleMobileMenu = function() {
-      document.getElementById("mobileMenu").style.display = "none";
+      const mobileMenu = document.getElementById("mobileMenu");
+      mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
     };
   
     function closeModals() {
@@ -514,7 +515,7 @@
       document.getElementById('signupModal').style.display = 'none';
     }
   
-    function logoutUser() {
+    window.logoutUser = function() {
       signOut(auth)
         .then(() => {
           console.log("Usuário deslogado com sucesso.");
@@ -522,16 +523,21 @@
         .catch((error) => {
           console.error("Erro ao deslogar:", error);
         });
-    }
+    };
   
     document.getElementById("logoutBtn").addEventListener("click", logoutUser);
     document.getElementById("logoutBtnMobile").addEventListener("click", logoutUser);
   
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        // Esconder botões de login e cadastro no desktop
         document.getElementById("loginBtn").style.display = "none";
         document.getElementById("signupBtn").style.display = "none";
         document.getElementById("logoutBtn").style.display = "block";
+        
+        // Esconder botões de login e cadastro no mobile
+        document.getElementById("loginBtnMobile").style.display = "none";
+        document.getElementById("signupBtnMobile").style.display = "none";
         document.getElementById("logoutBtnMobile").style.display = "block";
   
         // Desbloquear símbolos
@@ -544,9 +550,14 @@
           link.onclick = null;
         });
       } else {
+        // Mostrar botões de login e cadastro no desktop
         document.getElementById("loginBtn").style.display = "block";
         document.getElementById("signupBtn").style.display = "block";
         document.getElementById("logoutBtn").style.display = "none";
+        
+        // Mostrar botões de login e cadastro no mobile
+        document.getElementById("loginBtnMobile").style.display = "block";
+        document.getElementById("signupBtnMobile").style.display = "block";
         document.getElementById("logoutBtnMobile").style.display = "none";
   
         // Bloquear símbolos
@@ -639,6 +650,8 @@
     document.addEventListener("DOMContentLoaded", function() {
       const musicModal = document.getElementById("musicModal");
       const bgm = document.getElementById("bgm");
+      const hamburgerBtn = document.getElementById("hamburgerBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
   
       document.getElementById("yesBtn").addEventListener("click", function() {
         musicModal.style.display = "none";
@@ -653,6 +666,8 @@
   
       document.querySelectorAll('.symbols-container a').forEach(link => {
         link.addEventListener('click', function(e) {
+          if (!this.hasAttribute('href')) return;
+          
           e.preventDefault();
           if (!bgm.paused) {
             fadeOutAudio(bgm, 2000);
@@ -665,12 +680,9 @@
         });
       });
   
-      const hamburgerBtn = document.getElementById("hamburgerBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
-  
       hamburgerBtn.addEventListener("click", function(e) {
         e.stopPropagation();
-        mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
+        toggleMobileMenu();
       });
   
       document.addEventListener("click", function(e) {
