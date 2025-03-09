@@ -83,7 +83,7 @@
       border: 2px solid #00FFE7;
       padding: 10px;
       border-radius: 5px;
-      z-index: 10002;
+      z-index: 10000;
     }
     .mobile-menu button {
       display: block;
@@ -317,7 +317,7 @@
       .hamburger-menu { display: none; }
     }
     @media screen and (max-width: 1023px) {
-      .nav-button { display: none !important; }
+      .nav-button { display: none; }
       .hamburger-menu { display: block; }
     }
   </style>
@@ -506,8 +506,7 @@
     };
   
     window.toggleMobileMenu = function() {
-      const mobileMenu = document.getElementById("mobileMenu");
-      mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
+      document.getElementById("mobileMenu").style.display = "none";
     };
   
     function closeModals() {
@@ -515,7 +514,7 @@
       document.getElementById('signupModal').style.display = 'none';
     }
   
-    window.logoutUser = function() {
+    function logoutUser() {
       signOut(auth)
         .then(() => {
           console.log("Usuário deslogado com sucesso.");
@@ -523,9 +522,10 @@
         .catch((error) => {
           console.error("Erro ao deslogar:", error);
         });
-    };
+    }
   
     document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+    document.getElementById("logoutBtnMobile").addEventListener("click", logoutUser);
   
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -639,7 +639,6 @@
     document.addEventListener("DOMContentLoaded", function() {
       const musicModal = document.getElementById("musicModal");
       const bgm = document.getElementById("bgm");
-      const mobileMenu = document.getElementById("mobileMenu");
   
       document.getElementById("yesBtn").addEventListener("click", function() {
         musicModal.style.display = "none";
@@ -653,30 +652,25 @@
       });
   
       document.querySelectorAll('.symbols-container a').forEach(link => {
-        if (link.hasAttribute('href')) {
-          link.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (!bgm.paused) {
-              fadeOutAudio(bgm, 2000);
-              setTimeout(() => {
-                window.location.href = this.href;
-              }, 2000);
-            } else {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (!bgm.paused) {
+            fadeOutAudio(bgm, 2000);
+            setTimeout(() => {
               window.location.href = this.href;
-            }
-          });
-        }
+            }, 2000);
+          } else {
+            window.location.href = this.href;
+          }
+        });
       });
   
       const hamburgerBtn = document.getElementById("hamburgerBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
   
       hamburgerBtn.addEventListener("click", function(e) {
         e.stopPropagation();
-        if (mobileMenu.style.display === "block") {
-          mobileMenu.style.display = "none";
-        } else {
-          mobileMenu.style.display = "block";
-        }
+        mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
       });
   
       document.addEventListener("click", function(e) {
