@@ -506,7 +506,8 @@
     };
   
     window.toggleMobileMenu = function() {
-      document.getElementById("mobileMenu").style.display = "none";
+      const mobileMenu = document.getElementById("mobileMenu");
+      mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
     };
   
     function closeModals() {
@@ -514,7 +515,7 @@
       document.getElementById('signupModal').style.display = 'none';
     }
   
-    function logoutUser() {
+    window.logoutUser = function() {
       signOut(auth)
         .then(() => {
           console.log("Usuário deslogado com sucesso.");
@@ -522,10 +523,9 @@
         .catch((error) => {
           console.error("Erro ao deslogar:", error);
         });
-    }
+    };
   
     document.getElementById("logoutBtn").addEventListener("click", logoutUser);
-    document.getElementById("logoutBtnMobile").addEventListener("click", logoutUser);
   
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -639,6 +639,7 @@
     document.addEventListener("DOMContentLoaded", function() {
       const musicModal = document.getElementById("musicModal");
       const bgm = document.getElementById("bgm");
+      const mobileMenu = document.getElementById("mobileMenu");
   
       document.getElementById("yesBtn").addEventListener("click", function() {
         musicModal.style.display = "none";
@@ -652,25 +653,32 @@
       });
   
       document.querySelectorAll('.symbols-container a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          if (!bgm.paused) {
-            fadeOutAudio(bgm, 2000);
-            setTimeout(() => {
+        if (link.hasAttribute('href')) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!bgm.paused) {
+              fadeOutAudio(bgm, 2000);
+              setTimeout(() => {
+                window.location.href = this.href;
+              }, 2000);
+            } else {
               window.location.href = this.href;
-            }, 2000);
-          } else {
-            window.location.href = this.href;
-          }
-        });
+            }
+          });
+        }
       });
   
       const hamburgerBtn = document.getElementById("hamburgerBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
   
       hamburgerBtn.addEventListener("click", function(e) {
         e.stopPropagation();
-        mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
+        if (mobileMenu.style.display === "block") {
+          mobileMenu.style.display = "none";
+        } else {
+          mobileMenu.style.display = "block";
+          // Garantir que o menu mobile apareça acima dos símbolos
+          mobileMenu.style.zIndex = "10002";
+        }
       });
   
       document.addEventListener("click", function(e) {
