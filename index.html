@@ -404,27 +404,40 @@
       </p>
     </div>
   </div>
+
+
   
   <div class="title-container">
-    <a href="omom.html" class="title-text">
-      <span class="line"> OUTROS MUNDOS™</span><br>
-      <span class="line">OUTRAS MENTES&nbsp;</span>
-    </a>
-    <!-- Botões de navegação para desktop -->
-    <button onclick="toggleLoginModal()" class="nav-button" style="right: 20px;">
-      LOGIN
+  <a href="omom.html" class="title-text">
+    <span class="line"> OUTROS MUNDOS™</span><br>
+    <span class="line">OUTRAS MENTES&nbsp;</span>
+  </a>
+  
+  <!-- Botões de navegação para desktop -->
+  <button id="loginBtn" onclick="toggleLoginModal()" class="nav-button" style="right: 20px;">
+    LOGIN
+  </button>
+  <button id="signupBtn" onclick="toggleSignupModal()" class="nav-button" style="right: 120px;">
+    CADASTRO
+  </button>
+  <!-- Botão de Logout, inicialmente oculto -->
+  <button id="logoutBtn" class="nav-button" style="right: 20px; display: none;">
+    LOGOUT
+  </button>
+  
+  <!-- Botão Hamburger para mobile -->
+  <button id="hamburgerBtn" class="hamburger-menu">☰</button>
+  
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu">
+    <button onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
+    <button onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
+    <button id="logoutBtnMobile" onclick="logoutUser(); toggleMobileMenu();" style="display: none;">
+      LOGOUT
     </button>
-    <button onclick="toggleSignupModal()" class="nav-button" style="right: 120px;">
-      CADASTRO
-    </button>
-    <!-- Botão Hamburger para mobile -->
-    <button id="hamburgerBtn" class="hamburger-menu">☰</button>
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="mobile-menu">
-      <button onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
-      <button onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
-    </div>
   </div>
+</div>
+
   
 <div class="symbols-wrapper">
   <div class="symbols-container">
@@ -566,6 +579,51 @@
 </script>
 
 
+
+
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
+    authDomain: "fundamentos-omom.firebaseapp.com",
+    databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
+    projectId: "fundamentos-omom",
+    storageBucket: "fundamentos-omom.appspot.com",
+    messagingSenderId: "402132741780",
+    appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Verifica o estado de autenticação para ajustar os botões
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Se o usuário estiver logado, esconde os botões de login e cadastro
+      document.getElementById("loginBtn").style.display = "none";
+      document.getElementById("signupBtn").style.display = "none";
+      
+      // Exibe o botão de logout no desktop
+      document.getElementById("logoutBtn").style.display = "block";
+
+      // Exibe o botão de logout no mobile menu
+      document.getElementById("logoutBtnMobile").style.display = "block";
+    } else {
+      // Se o usuário não estiver logado, exibe login e cadastro
+      document.getElementById("loginBtn").style.display = "block";
+      document.getElementById("signupBtn").style.display = "block";
+      
+      // Oculta o botão de logout no desktop
+      document.getElementById("logoutBtn").style.display = "none";
+
+      // Oculta o botão de logout no mobil
+
+
+      
   
   <!-- Modal de Música -->
   <div id="musicModal">
