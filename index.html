@@ -210,53 +210,6 @@
     #signupModal button:hover {
       filter: brightness(1.2);
     }
-    /* ===== MEDIA QUERY – LAYOUT PC/HORIZONTAL ===== */
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
-      .page-container {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 30% 70%;
-        grid-template-areas: "title symbols" "symbols symbols";
-        width: 100vw;
-        height: 100vh;
-        gap: 0;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      .title-container {
-        grid-area: title;
-        margin: 60px auto 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 50%;
-      }
-      .title-container .title-text {
-        font-size: 36px;
-      }
-      .symbols-wrapper {
-        grid-area: symbols;
-        padding: 30px;
-        overflow-y: auto;
-      }
-      .symbols-container {
-        gap: 30px;
-        justify-content: center;
-      }
-      .symbol img {
-        width: 180px;
-        height: auto;
-      }
-      /* Em telas grandes, exibe os botões originais e esconde o hamburger */
-      .nav-button { display: block; }
-      .hamburger-menu { display: none; }
-    }
-    /* Em telas menores (mobile), oculta os botões originais e exibe o hamburger */
-    @media screen and (max-width: 1023px) {
-      .nav-button { display: none; }
-      .hamburger-menu { display: block; }
-    }
     /* ===== ESTILOS DO MODAL DE MÚSICA ===== */
     #musicModal {
       position: fixed;
@@ -321,18 +274,10 @@
       font-size: 9px;
       letter-spacing: 0.2px;
     }
-    .g-blue {
-      color: #4285F4; /* Azul do Google */
-    }
-    .g-red {
-      color: #DB4437; /* Vermelho do Google */
-    }
-    .g-yellow {
-      color: #F4B400; /* Amarelo do Google */
-    }
-    .g-green {
-      color: #0F9D58; /* Verde do Google */
-    }
+    .g-blue { color: #4285F4; }
+    .g-red { color: #DB4437; }
+    .g-yellow { color: #F4B400; }
+    .g-green { color: #0F9D58; }
     /* Estilo para botões de navegação */
     .nav-button {
       font-family: 'Press Start 2P', cursive;
@@ -343,6 +288,37 @@
       font-size: 10px;
       position: absolute;
       top: 20px;
+    }
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      .title-container {
+        grid-area: title;
+        margin: 60px auto 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+      }
+      .title-container .title-text {
+        font-size: 36px;
+      }
+      .symbols-wrapper {
+        padding: 30px;
+        overflow-y: auto;
+      }
+      .symbols-container {
+        gap: 30px;
+        justify-content: center;
+      }
+      .symbol img {
+        width: 180px;
+        height: auto;
+      }
+      .nav-button { display: block; }
+      .hamburger-menu { display: none; }
+    }
+    @media screen and (max-width: 1023px) {
+      .nav-button { display: none; }
+      .hamburger-menu { display: block; }
     }
   </style>
 </head>
@@ -360,21 +336,16 @@
       <form id="loginForm">
         <input type="email" id="email" placeholder="E-mail"><br>
         <input type="password" id="password" placeholder="Senha"><br>
-        <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">
-          ENTRAR
-        </button>
+        <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">ENTRAR</button>
       </form>
       <!-- Botão de Login com Google -->
       <div id="googleLogin" class="google-btn">
-      <span class="google-text">LOGIN COM <span class="g-blue">G</span><span class="g-red">O</span><span class="g-yellow">O</span><span class="g-blue">G</span><span class="g-green">L</span><span class="g-red">E</span></span>
-  
+        <span class="google-text">LOGIN COM <span class="g-blue">G</span><span class="g-red">O</span><span class="g-yellow">O</span><span class="g-blue">G</span><span class="g-green">L</span><span class="g-red">E</span></span>
       </div>
       <p style="color: white; font-size: 10px; margin-top: 10px;">
         Não tem conta? <a href="#" onclick="toggleSignupModal(); toggleLoginModal();" style="color: #00FFE7; text-decoration: none;">Cadastre-se</a>
       </p>
-      <button onclick="toggleLoginModal()" style="background: #ff0000; border: none; padding: 10px 20px;">
-        FECHAR
-      </button>
+      <button onclick="toggleLoginModal()" style="background: #ff0000; border: none; padding: 10px 20px;">FECHAR</button>
       <p id="loginError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
     </div>
   </div>
@@ -388,242 +359,16 @@
         <input type="email" id="newEmail" placeholder="E-mail"><br>
         <input type="password" id="newPassword" placeholder="Senha"><br>
         <input type="password" id="confirmPassword" placeholder="Confirmar Senha"><br>
-        <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">
-          CADASTRAR
-        </button>
+        <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">CADASTRAR</button>
       </form>
       <p style="color: white; font-size: 10px; margin-top: 10px;">
         Já tem conta? <a href="#" onclick="toggleLoginModal(); toggleSignupModal();" style="color: #00FFE7; text-decoration: none;">Faça login</a>
       </p>
-      <button onclick="toggleSignupModal()" style="background: #ff0000; border: none; padding: 10px 20px;">
-        FECHAR
-      </button>
+      <button onclick="toggleSignupModal()" style="background: #ff0000; border: none; padding: 10px 20px;">FECHAR</button>
       <p id="signupError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
-      <p id="signupSuccess" style="color: #00FFE7; font-size: 12px; margin-top: 10px; display: none;">
-        Cadastro realizado com sucesso! Você já pode fazer login.
-      </p>
+      <p id="signupSuccess" style="color: #00FFE7; font-size: 12px; margin-top: 10px; display: none;">Cadastro realizado com sucesso! Você já pode fazer login.</p>
     </div>
   </div>
-
-
-  
-  <div class="title-container">
-  <a href="omom.html" class="title-text">
-    <span class="line"> OUTROS MUNDOS™</span><br>
-    <span class="line">OUTRAS MENTES&nbsp;</span>
-  </a>
-  
-  <!-- Botões de navegação para desktop -->
-  <button id="loginBtn" onclick="toggleLoginModal()" class="nav-button" style="right: 20px;">
-    LOGIN
-  </button>
-  <button id="signupBtn" onclick="toggleSignupModal()" class="nav-button" style="right: 120px;">
-    CADASTRO
-  </button>
-  <!-- Botão de Logout, inicialmente oculto -->
-  <button id="logoutBtn" class="nav-button" style="right: 20px; display: none;">
-    LOGOUT
-  </button>
-  
-  <!-- Botão Hamburger para mobile -->
-  <button id="hamburgerBtn" class="hamburger-menu">☰</button>
-  
-  <!-- Mobile Menu -->
-  <div id="mobileMenu" class="mobile-menu">
-    <button onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
-    <button onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
-    <button id="logoutBtnMobile" onclick="logoutUser(); toggleMobileMenu();" style="display: none;">
-      LOGOUT
-    </button>
-  </div>
-</div>
-
-  
-<div class="symbols-wrapper">
-  <div class="symbols-container">
-    <!-- Símbolos dos mundos -->
-    <div class="symbol locked" id="symbol1" data-href="mundos/veleywei/index.html">
-      <a>
-        <img src="assets/veleyweimenu.png" alt="Velei'wey">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol2" data-href="mundos/botychera/index.html">
-      <a>
-        <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol3" data-href="mundos/himpis/index.html">
-      <a>
-        <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-      </a>
-    </div>
-    <!-- T'Tok permanece desbloqueado -->
-    <div class="symbol brither" id="symbol4">
-      <a href="mundos/ttok/index.html">
-        <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol5" data-href="mundos/denbou/index.html">
-      <a>
-        <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol6" data-href="mundos/araporu/index.html">
-      <a>
-        <img src="mundos/araporu/araporumenu.png" alt="araporu">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol7" data-href="mundos/os artesaos/index.html">
-      <a>
-        <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol8" data-href="mundos/sapador/index.html">
-      <a>
-        <img src="mundos/sapador/sapador.png" alt="sapador">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol11" data-href="mundos/dosirelala/index.html">
-      <a>
-        <img src="mundos/dosirelala/dosirelalamenu.png" alt="dosirelala">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol9" data-href="mundos/calindreno/index.html">
-      <a>
-        <img src="mundos/calindreno/calindreno.png" alt="cal8ndreno">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol10" data-href="mundos/mundo pulsante/index.html">
-      <a>
-        <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol12" data-href="mundos/mundo 1/index.html">
-      <a>
-        <img src="mundos/mundo 1/mundo1.png" alt="Mundo 1">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol13" data-href="mundos/mundo 2/index.html">
-      <a>
-        <img src="mundos/mundo 2/mundo2.png" alt="Mundo 2">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol14" data-href="mundos/mundo 3/index.html">
-      <a>
-        <img src="mundos/mundo 3/mundo3menu.png" alt="Mundo 3">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol15" data-href="mundos/mundo 4/index.html">
-      <a>
-        <img src="mundos/mundo 4/mundo4menu.png" alt="Mundo 4">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol16" data-href="mundos/mundo 5/index.html">
-      <a>
-        <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Mundo 5">
-      </a>
-    </div>
-    <div class="symbol locked" id="symbol17" data-href="mundos/mundo 6/index.html">
-      <a>
-        <img src="mundos/mundo 6/criaturamenu.webp" alt="Mundo 6">
-      </a>
-    </div>
-  </div>
-</div>
-
-
-
-
- <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-  
-  const firebaseConfig = {
-    apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
-    authDomain: "fundamentos-omom.firebaseapp.com",
-    databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
-    projectId: "fundamentos-omom",
-    storageBucket: "fundamentos-omom.appspot.com",
-    messagingSenderId: "402132741780",
-    appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
-  };
-  
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // Usuário logado: desbloqueia todos os símbolos bloqueados
-      const lockedSymbols = document.querySelectorAll('.symbol.locked');
-      lockedSymbols.forEach(symbol => {
-        symbol.classList.remove('locked');
-        symbol.classList.add('brither');
-        // Reativa o link usando o valor armazenado em data-href
-        const link = symbol.querySelector('a');
-        link.setAttribute('href', symbol.getAttribute('data-href'));
-        // Remove event listeners de bloqueio, se houver
-        link.onclick = null;
-      });
-    } else {
-      // Usuário não logado: garante que os links dos símbolos bloqueados permaneçam inativos
-      const lockedLinks = document.querySelectorAll('.symbol.locked a');
-      lockedLinks.forEach(link => {
-        link.removeAttribute('href');
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          alert("Você precisa estar logado para acessar este mundo.");
-        });
-      });
-    }
-  });
-</script>
-
-
-
-
-
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
-    authDomain: "fundamentos-omom.firebaseapp.com",
-    databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
-    projectId: "fundamentos-omom",
-    storageBucket: "fundamentos-omom.appspot.com",
-    messagingSenderId: "402132741780",
-    appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // Verifica o estado de autenticação para ajustar os botões
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // Se o usuário estiver logado, esconde os botões de login e cadastro
-      document.getElementById("loginBtn").style.display = "none";
-      document.getElementById("signupBtn").style.display = "none";
-      
-      // Exibe o botão de logout no desktop
-      document.getElementById("logoutBtn").style.display = "block";
-
-      // Exibe o botão de logout no mobile menu
-      document.getElementById("logoutBtnMobile").style.display = "block";
-    } else {
-      // Se o usuário não estiver logado, exibe login e cadastro
-      document.getElementById("loginBtn").style.display = "block";
-      document.getElementById("signupBtn").style.display = "block";
-      
-      // Oculta o botão de logout no desktop
-      document.getElementById("logoutBtn").style.display = "none";
-
-      // Oculta o botão de logout no mobil
-
-
-      
   
   <!-- Modal de Música -->
   <div id="musicModal">
@@ -641,13 +386,100 @@
     Seu navegador não suporta o elemento de áudio.
   </audio>
   
-  <!-- Scripts -->
+  <!-- Title Container com Botões -->
+  <div class="title-container">
+    <a href="omom.html" class="title-text">
+      <span class="line"> OUTROS MUNDOS™</span><br>
+      <span class="line">OUTRAS MENTES&nbsp;</span>
+    </a>
+    <!-- Botões de navegação para desktop -->
+    <button id="loginBtn" onclick="toggleLoginModal()" class="nav-button" style="right: 20px;">LOGIN</button>
+    <button id="signupBtn" onclick="toggleSignupModal()" class="nav-button" style="right: 120px;">CADASTRO</button>
+    <!-- Botão de Logout, inicialmente oculto -->
+    <button id="logoutBtn" class="nav-button" style="right: 20px; display: none;">LOGOUT</button>
+    <!-- Botão Hamburger para mobile -->
+    <button id="hamburgerBtn" class="hamburger-menu">☰</button>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+      <button onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
+      <button onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
+      <button id="logoutBtnMobile" onclick="logoutUser(); toggleMobileMenu();" style="display: none;">LOGOUT</button>
+    </div>
+  </div>
+  
+  <!-- Symbols -->
+  <div class="symbols-wrapper">
+    <div class="symbols-container">
+      <!-- Símbolos dos mundos -->
+      <div class="symbol locked" id="symbol1" data-href="mundos/veleywei/index.html">
+        <a><img src="assets/veleyweimenu.png" alt="Velei'wey"></a>
+      </div>
+      <div class="symbol locked" id="symbol2" data-href="mundos/botychera/index.html">
+        <a><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></a>
+      </div>
+      <div class="symbol locked" id="symbol3" data-href="mundos/himpis/index.html">
+        <a><img src="mundos/himpis/himpismenu.png" alt="Himpis"></a>
+      </div>
+      <!-- T'Tok permanece desbloqueado -->
+      <div class="symbol brither" id="symbol4">
+        <a href="mundos/ttok/index.html"><img src="mundos/ttok/ttokmenu.png" alt="T'Tok"></a>
+      </div>
+      <div class="symbol locked" id="symbol5" data-href="mundos/denbou/index.html">
+        <a><img src="mundos/denbou/denboumenu.png" alt="dendenboubou"></a>
+      </div>
+      <div class="symbol locked" id="symbol6" data-href="mundos/araporu/index.html">
+        <a><img src="mundos/araporu/araporumenu.png" alt="araporu"></a>
+      </div>
+      <div class="symbol locked" id="symbol7" data-href="mundos/os artesaos/index.html">
+        <a><img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos"></a>
+      </div>
+      <div class="symbol locked" id="symbol8" data-href="mundos/sapador/index.html">
+        <a><img src="mundos/sapador/sapador.png" alt="sapador"></a>
+      </div>
+      <div class="symbol locked" id="symbol11" data-href="mundos/dosirelala/index.html">
+        <a><img src="mundos/dosirelala/dosirelalamenu.png" alt="dosirelala"></a>
+      </div>
+      <div class="symbol locked" id="symbol9" data-href="mundos/calindreno/index.html">
+        <a><img src="mundos/calindreno/calindreno.png" alt="cal8ndreno"></a>
+      </div>
+      <div class="symbol locked" id="symbol10" data-href="mundos/mundo pulsante/index.html">
+        <a><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></a>
+      </div>
+      <div class="symbol locked" id="symbol12" data-href="mundos/mundo 1/index.html">
+        <a><img src="mundos/mundo 1/mundo1.png" alt="Mundo 1"></a>
+      </div>
+      <div class="symbol locked" id="symbol13" data-href="mundos/mundo 2/index.html">
+        <a><img src="mundos/mundo 2/mundo2.png" alt="Mundo 2"></a>
+      </div>
+      <div class="symbol locked" id="symbol14" data-href="mundos/mundo 3/index.html">
+        <a><img src="mundos/mundo 3/mundo3menu.png" alt="Mundo 3"></a>
+      </div>
+      <div class="symbol locked" id="symbol15" data-href="mundos/mundo 4/index.html">
+        <a><img src="mundos/mundo 4/mundo4menu.png" alt="Mundo 4"></a>
+      </div>
+      <div class="symbol locked" id="symbol16" data-href="mundos/mundo 5/index.html">
+        <a><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Mundo 5"></a>
+      </div>
+      <div class="symbol locked" id="symbol17" data-href="mundos/mundo 6/index.html">
+        <a><img src="mundos/mundo 6/criaturamenu.webp" alt="Mundo 6"></a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scripts de autenticação e modais -->
   <script type="module">
-    // Import Firebase functions
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-    
-    // Firebase Configuration
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      updateProfile,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  
     const firebaseConfig = {
       apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
       authDomain: "fundamentos-omom.firebaseapp.com",
@@ -657,165 +489,168 @@
       messagingSenderId: "402132741780",
       appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
     };
-    
-    // Initialize Firebase
+  
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
-    
-    // Funções globais para abrir/fechar modais
+  
+    // Funções para abrir/fechar modais
     window.toggleLoginModal = function() {
       const modal = document.getElementById('loginModal');
       modal.style.display = (modal.style.display === 'none' || modal.style.display === '') ? 'flex' : 'none';
     };
+  
     window.toggleSignupModal = function() {
       const modal = document.getElementById('signupModal');
       modal.style.display = (modal.style.display === 'none' || modal.style.display === '') ? 'flex' : 'none';
     };
-    
-    // Login com Google
-    window.addEventListener("DOMContentLoaded", () => {
-      const googleLoginBtn = document.getElementById("googleLogin");
-      if (googleLoginBtn) {
-        googleLoginBtn.addEventListener("click", () => {
-          const errorElement = document.getElementById("loginError");
-          errorElement.textContent = "";
-          signInWithPopup(auth, googleProvider)
-            .then((result) => {
-              console.log("Usuário logado com Google:", result.user);
-              toggleLoginModal();
-            })
-            .catch((error) => {
-              console.error("Erro no login com Google:", error);
-              errorElement.textContent = "Erro no login com Google: " + error.message;
-            });
+  
+    window.toggleMobileMenu = function() {
+      document.getElementById("mobileMenu").style.display = "none";
+    };
+  
+    function closeModals() {
+      document.getElementById('loginModal').style.display = 'none';
+      document.getElementById('signupModal').style.display = 'none';
+    }
+  
+    function logoutUser() {
+      signOut(auth)
+        .then(() => {
+          console.log("Usuário deslogado com sucesso.");
+        })
+        .catch((error) => {
+          console.error("Erro ao deslogar:", error);
+        });
+    }
+  
+    document.getElementById("logoutBtn").addEventListener("click", logoutUser);
+    document.getElementById("logoutBtnMobile").addEventListener("click", logoutUser);
+  
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("signupBtn").style.display = "none";
+        document.getElementById("logoutBtn").style.display = "block";
+        document.getElementById("logoutBtnMobile").style.display = "block";
+  
+        // Desbloquear símbolos
+        const lockedSymbols = document.querySelectorAll('.symbol.locked');
+        lockedSymbols.forEach(symbol => {
+          symbol.classList.remove('locked');
+          symbol.classList.add('brither');
+          const link = symbol.querySelector('a');
+          link.setAttribute('href', symbol.getAttribute('data-href'));
+          link.onclick = null;
+        });
+      } else {
+        document.getElementById("loginBtn").style.display = "block";
+        document.getElementById("signupBtn").style.display = "block";
+        document.getElementById("logoutBtn").style.display = "none";
+        document.getElementById("logoutBtnMobile").style.display = "none";
+  
+        // Bloquear símbolos
+        const lockedLinks = document.querySelectorAll('.symbol.locked a');
+        lockedLinks.forEach(link => {
+          link.removeAttribute('href');
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert("Você precisa estar logado para acessar este mundo.");
+          });
         });
       }
     });
-    
-    // Login via email/senha e cadastro
-    document.addEventListener("DOMContentLoaded", function() {
-      const loginForm = document.getElementById('loginForm');
-      if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const email = document.getElementById('email').value;
-          const password = document.getElementById('password').value;
-          const errorElement = document.getElementById('loginError');
-          errorElement.textContent = "";
-          if (!email || !password) {
-            errorElement.textContent = "Preencha todos os campos";
-            return;
-          }
-          signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-              console.log("Usuário logado com sucesso:", userCredential.user);
-              toggleLoginModal();
-            })
-            .catch((error) => {
-              console.error("Erro no login:", error);
-              switch (error.code) {
-                case 'auth/invalid-email':
-                  errorElement.textContent = "E-mail inválido";
-                  break;
-                case 'auth/user-disabled':
-                  errorElement.textContent = "Usuário desativado";
-                  break;
-                case 'auth/user-not-found':
-                  errorElement.textContent = "Usuário não encontrado";
-                  break;
-                case 'auth/wrong-password':
-                  errorElement.textContent = "Senha incorreta";
-                  break;
-                default:
-                  errorElement.textContent = "Erro no login: " + error.message;
-              }
-            });
-        });
+  
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorElement = document.getElementById('loginError');
+      errorElement.textContent = "";
+      if (!email || !password) {
+        errorElement.textContent = "Preencha todos os campos";
+        return;
       }
-      
-      const signupForm = document.getElementById('signupForm');
-      if (signupForm) {
-        signupForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const name = document.getElementById('newName').value;
-          const email = document.getElementById('newEmail').value;
-          const password = document.getElementById('newPassword').value;
-          const confirmPassword = document.getElementById('confirmPassword').value;
-          const errorElement = document.getElementById('signupError');
-          const successElement = document.getElementById('signupSuccess');
-          errorElement.textContent = "";
-          successElement.style.display = "none";
-          if (!name || !email || !password || !confirmPassword) {
-            errorElement.textContent = "Preencha todos os campos";
-            return;
-          }
-          if (password !== confirmPassword) {
-            errorElement.textContent = "As senhas não coincidem";
-            return;
-          }
-          if (password.length < 6) {
-            errorElement.textContent = "A senha deve ter pelo menos 6 caracteres";
-            return;
-          }
-          createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-              console.log("Usuário criado com sucesso:", userCredential.user);
-              return updateProfile(userCredential.user, { displayName: name });
-            })
-            .then(() => {
-              document.getElementById('newName').value = '';
-              document.getElementById('newEmail').value = '';
-              document.getElementById('newPassword').value = '';
-              document.getElementById('confirmPassword').value = '';
-              successElement.style.display = "block";
-              setTimeout(() => {
-                toggleSignupModal();
-                toggleLoginModal();
-              }, 2000);
-            })
-            .catch((error) => {
-              console.error("Erro no cadastro:", error);
-              switch (error.code) {
-                case 'auth/email-already-in-use':
-                  errorElement.textContent = "Este e-mail já está sendo usado";
-                  break;
-                case 'auth/invalid-email':
-                  errorElement.textContent = "E-mail inválido";
-                  break;
-                case 'auth/weak-password':
-                  errorElement.textContent = "Senha muito fraca";
-                  break;
-                default:
-                  errorElement.textContent = "Erro no cadastro: " + error.message;
-              }
-            });
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          console.log("Usuário logado com sucesso");
+          closeModals();
+        })
+        .catch((error) => {
+          errorElement.textContent = error.message;
         });
+    });
+  
+    document.getElementById('signupForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('newName').value;
+      const email = document.getElementById('newEmail').value;
+      const password = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const errorElement = document.getElementById('signupError');
+      const successElement = document.getElementById('signupSuccess');
+      errorElement.textContent = "";
+      successElement.style.display = "none";
+      if (!name || !email || !password || !confirmPassword) {
+        errorElement.textContent = "Preencha todos os campos";
+        return;
       }
+      if (password !== confirmPassword) {
+        errorElement.textContent = "As senhas não coincidem";
+        return;
+      }
+      if (password.length < 6) {
+        errorElement.textContent = "A senha deve ter pelo menos 6 caracteres";
+        return;
+      }
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          return updateProfile(userCredential.user, { displayName: name });
+        })
+        .then(() => {
+          successElement.style.display = "block";
+          setTimeout(() => {
+            closeModals();
+          }, 2000);
+        })
+        .catch((error) => {
+          errorElement.textContent = error.message;
+        });
+    });
+  
+    document.getElementById("googleLogin").addEventListener("click", () => {
+      const errorElement = document.getElementById("loginError");
+      errorElement.textContent = "";
+      signInWithPopup(auth, googleProvider)
+        .then(() => {
+          closeModals();
+        })
+        .catch((error) => {
+          errorElement.textContent = "Erro no login com Google: " + error.message;
+        });
     });
   </script>
   
   <script>
-    // Outras configurações (música, animação, etc.)
     window.addEventListener("load", function() {
       document.getElementById("loading-screen").style.display = "none";
     });
-    
+  
     document.addEventListener("DOMContentLoaded", function() {
       const musicModal = document.getElementById("musicModal");
       const bgm = document.getElementById("bgm");
-      
+  
       document.getElementById("yesBtn").addEventListener("click", function() {
         musicModal.style.display = "none";
         bgm.volume = 0.9;
         bgm.play();
       });
-      
+  
       document.getElementById("noBtn").addEventListener("click", function() {
         musicModal.style.display = "none";
         bgm.pause();
       });
-      
+  
       document.querySelectorAll('.symbols-container a').forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -829,29 +664,22 @@
           }
         });
       });
-      
-      // Configuração para Hamburger e Mobile Menu
+  
       const hamburgerBtn = document.getElementById("hamburgerBtn");
       const mobileMenu = document.getElementById("mobileMenu");
-      
+  
       hamburgerBtn.addEventListener("click", function(e) {
-        e.stopPropagation(); // Evita que o clique no botão feche o menu imediatamente
+        e.stopPropagation();
         mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
       });
-      
-      // Fecha o mobile menu ao clicar fora dele ou do botão hamburger
+  
       document.addEventListener("click", function(e) {
         if (mobileMenu.style.display === "block" && !mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
           mobileMenu.style.display = "none";
         }
       });
     });
-    
-    function toggleMobileMenu() {
-      const mobileMenu = document.getElementById("mobileMenu");
-      mobileMenu.style.display = "none";
-    }
-    
+  
     function fadeOutAudio(audio, duration) {
       const fadeOutInterval = 50;
       const fadeOutStep = audio.volume / (duration / fadeOutInterval);
@@ -865,7 +693,7 @@
         }
       }, fadeOutInterval);
     }
-    
+  
     let symbols = [];
     let time = 0;
     document.addEventListener("DOMContentLoaded", function() {
