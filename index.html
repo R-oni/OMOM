@@ -429,17 +429,17 @@
   <div class="symbols-wrapper">
     <div class="symbols-container">
       <!-- Símbolos dos mundos (conforme o código original) -->
-      <div class="symbol brither" id="symbol1">
+      <div class="symbol locked" id="symbol1">
         <a href="mundos/veleywei/index.html">
           <img src="assets/veleyweimenu.png" alt="Velei'wey">
         </a>
       </div>
-      <div class="symbol brither" id="symbol2">
+      <div class="symbol locked" id="symbol2">
         <a href="mundos/botychera/index.html">
           <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
         </a>
       </div>
-      <div class="symbol brither" id="symbol3">
+      <div class="symbol locked" id="symbol3">
         <a href="mundos/himpis/index.html">
           <img src="mundos/himpis/himpismenu.png" alt="Himpis">
         </a>
@@ -449,27 +449,27 @@
           <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
         </a>
       </div>
-      <div class="symbol brither" id="symbol5">
+      <div class="symbol locked" id="symbol5">
         <a href="mundos/denbou/index.html">
           <img src="mundos/denbou/denboumenu.png" alt="dendenboubou">
         </a>
       </div>
-      <div class="symbol brither" id="symbol6">
+      <div class="symbol locked" id="symbol6">
         <a href="mundos/araporu/index.html">
           <img src="mundos/araporu/araporumenu.png" alt="araporu">
         </a>
       </div>
-      <div class="symbol brither" id="symbol7">
+      <div class="symbol locked" id="symbol7">
         <a href="mundos/os artesaos/index.html">
           <img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos">
         </a>
       </div>
-      <div class="symbol brither" id="symbol8">
+      <div class=symbol locked" id="symbol8">
         <a href="mundos/sapador/index.html">
           <img src="mundos/sapador/sapador.png" alt="sapador">
         </a>
       </div>
-      <div class="symbol brither" id="symbol11">
+      <div class="symbol locked" id="symbol11">
         <a href="mundos/dosirelala/index.html">
           <img src="mundos/dosirelala/dosirelalamenu.png" alt="sapador">
         </a>
@@ -516,6 +516,56 @@
       </div>
     </div>
   </div>
+
+
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
+    authDomain: "fundamentos-omom.firebaseapp.com",
+    databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
+    projectId: "fundamentos-omom",
+    storageBucket: "fundamentos-omom.appspot.com",
+    messagingSenderId: "402132741780",
+    appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  
+  // Verifica o estado de autenticação
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Usuário logado: transforma todos os símbolos bloqueados em desbloqueados
+      const lockedSymbols = document.querySelectorAll('.symbol.locked');
+      lockedSymbols.forEach(symbol => {
+        symbol.classList.remove('locked');
+        symbol.classList.add('brither');
+        // Reativa o link: o endereço original está armazenado em data-href
+        const link = symbol.querySelector('a');
+        link.setAttribute('href', symbol.getAttribute('data-href'));
+        // Opcional: remove o eventListener de bloqueio, caso tenha sido adicionado anteriormente
+        link.onclick = null;
+      });
+    } else {
+      // Usuário não logado: garante que os símbolos bloqueados permaneçam inativos
+      const lockedLinks = document.querySelectorAll('.symbol.locked a');
+      lockedLinks.forEach(link => {
+        // Remove o href se existir
+        link.removeAttribute('href');
+        // Bloqueia o clique e mostra alerta
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          alert("Você precisa estar logado para acessar este mundo.");
+        });
+      });
+    }
+  });
+</script>
+
   
   <!-- Modal de Música -->
   <div id="musicModal">
