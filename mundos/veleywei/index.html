@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>Velei'wey - Acesso Restrito</title>
-  <!-- Verificação de autenticação: se não logado, redireciona -->
+  
+  <!-- Verificação de autenticação Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -24,14 +25,18 @@
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         alert("Você precisa estar logado para acessar este mundo.");
-        window.location.href = "index.html"; // Redireciona para a página principal ou de login
+        window.location.href = "index.html";
       }
     });
   </script>
-  <!-- Importando a fonte Press Start 2P -->
+  
+  <!-- Importação de fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  
   <style>
-    /* Estilos globais */
+    /* ====================================
+     * Estilos globais
+     * ==================================== */
     html, body {
       touch-action: manipulation;
       margin: 0;
@@ -44,7 +49,9 @@
       font-family: sans-serif;
     }
     
-    /* Loading Screen */
+    /* ====================================
+     * Loading Screen
+     * ==================================== */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -75,7 +82,9 @@
       z-index: 10001;
     }
     
-    /* Warning Modal */
+    /* ====================================
+     * Warning Modal
+     * ==================================== */
     #warning-modal {
       position: fixed;
       top: 0;
@@ -127,7 +136,9 @@
       background-color: #555;
     }
     
-    /* Layout padrão para mobile/vertical */
+    /* ====================================
+     * Layout Mobile/Vertical
+     * ==================================== */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -167,6 +178,9 @@
       text-decoration: none;
     }
     
+    /* ====================================
+     * Seção do Globo
+     * ==================================== */
     .globe-section {
       display: flex;
       justify-content: center;
@@ -193,6 +207,9 @@
       pointer-events: none;
     }
     
+    /* ====================================
+     * Flipbook e Páginas
+     * ==================================== */
     #flipbook {
       position: relative;
       margin: auto;
@@ -229,6 +246,9 @@
       cursor: pointer;
     }
     
+    /* ====================================
+     * Overlay e Botões
+     * ==================================== */
     #overlayContainer {
       display: none;
       position: fixed;
@@ -263,6 +283,7 @@
       z-index: 10000;
     }
     
+    /* Botões interativos do flipbook */
     #veleyweiBtn,
     #veleyweiBtn2,
     #veleyweiBtn3,
@@ -290,6 +311,9 @@
       animation: moveAndFade 3s infinite;
     }
     
+    /* ====================================
+     * Animações
+     * ==================================== */
     @keyframes moveAndFade {
       0% {
         opacity: 0.3;
@@ -309,6 +333,12 @@
       0% { opacity: 1; }
       50% { opacity: 0; }
       100% { opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
     
     .btn-overlay {
@@ -331,13 +361,9 @@
       position: relative;
     }
     
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-    
-    /* Versão Desktop */
+    /* ====================================
+     * Layout Desktop
+     * ==================================== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
@@ -424,8 +450,9 @@
     }
   </style>
 </head>
+
 <body>
-  <!-- Música de fundo: utiliza "byfire.mp3" conforme solicitado -->
+  <!-- Áudio -->
   <audio id="bgMusic" src="byfire.mp3" preload="auto" loop style="display: none;"></audio>
   
   <!-- Loading Screen -->
@@ -434,7 +461,7 @@
     <div id="loading-text">CARREGANDO...</div>
   </div>
   
-  <!-- Warning Modal -->
+  <!-- Modal de Aviso -->
   <div id="warning-modal">
     <div class="warning-content">
       <h1 class="warning-title">ATENÇÃO!</h1>
@@ -447,7 +474,7 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <!-- Para mobile, o layout original é exibido; para PC, a media query reestiliza o header -->
+    <!-- Cabeçalho -->
     <div class="header-container">
       <div class="top-section">
         <img src="imagens/tituloveleywei.webp" alt="Título Velei'wey">
@@ -456,14 +483,17 @@
         <a href="omom.html" class="title-text">O POVO DE VELEY'WEI</a>
       </div>
     </div>
+    
+    <!-- Seção do Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
     </div>
-    <!-- Contêiner para o flipbook -->
+    
+    <!-- Flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
-        <!-- Páginas do flipbook -->
+        <!-- Páginas do Livro -->
         <div class="page hard">
           <img src="imagens/cap1/capa.webp" alt="Capa">
           <img id="setaBtn" src="seta.webp" alt="Botão de Seta Animado">
@@ -507,21 +537,23 @@
     </div>
   </div>
   
-  <!-- Overlay -->
+  <!-- Container de Sobreposição -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
     <button id="btnSair">Voltar</button>
   </div>
   
-  <!-- Scripts -->
+  <!-- Importação de Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
+  
+  <!-- Script para controle de áudio do flipbook -->
   <script>
-    // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
+    // Configuração do áudio de virar página
     const flipAudioStart = 0;
     const flipAudioEnd = 1.4;
     
@@ -529,11 +561,13 @@
     let musicStarted = false;
     
     document.addEventListener('DOMContentLoaded', () => {
+      // Inicialização do áudio
       flipAudio = new Audio('sompagina.mp3');
       flipAudio.preload = 'auto';
       flipAudio.load();
       flipAudio.volume = 0.9;
       
+      // Desbloqueio do áudio no primeiro clique
       document.addEventListener('click', function unlockAudio() {
         flipAudio.play().then(() => {
           flipAudio.pause();
@@ -542,14 +576,14 @@
         document.removeEventListener('click', unlockAudio);
       });
       
-      // Mostrar o warning modal quando o loading screen desaparecer
+      // Controle do modal de aviso
       document.getElementById("loading-screen").addEventListener("transitionend", function() {
         if (this.style.display === "none") {
           document.getElementById("warning-modal").style.display = "flex";
         }
       });
       
-      // Fechar o warning modal e iniciar a música quando o botão for clicado
+      // Iniciar música ao aceitar o aviso
       document.getElementById("compreendo-btn").addEventListener("click", function() {
         document.getElementById("warning-modal").style.display = "none";
         if (!musicStarted) {
@@ -561,14 +595,18 @@
         }
       });
     });
-    
+  </script>
+  
+  <!-- Script para controle do flipbook -->
+  <script>
     $(document).ready(function(){
+      // Inicialização do flipbook
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
       });
       
-      // Redimensionamento responsivo do flipbook conforme dispositivo
+      // Redimensionamento responsivo do flipbook
       function resizeFlipbook() {
         if ($(window).width() < 1024) {
           var newWidth = $(window).width() * 0.9;
@@ -580,21 +618,22 @@
           $("#flipbook").turn("size", newWidth, newHeight);
         }
       }
+      
       resizeFlipbook();
       $(window).resize(function(){
         resizeFlipbook();
       });
       
-      // Remover o botão de seta quando virar a página
+      // Remoção do botão de seta após virar a primeira página
       $("#flipbook").bind("turning", function(e, page) {
         if (page > 1) {
           $("#setaBtn").fadeOut(300, function() {
-            $(this).remove(); // Remove completamente o elemento do DOM
+            $(this).remove();
           });
         }
       });
       
-      // Dispara o áudio de virar página no mousedown/touchstart
+      // Ativação do áudio ao virar página
       $("#flipbook").on("mousedown touchstart", function(){
         if (flipAudio) {
           flipAudio.pause();
@@ -611,14 +650,14 @@
         }
       });
       
-      // Handler para fechar o overlay sem interromper a música de fundo
+      // Controle do botão de saída do overlay
       $("#btnSair").on("click", function(e) {
         e.preventDefault();
         e.stopPropagation();
         $("#overlayContainer").fadeOut(500);
       });
       
-      // Corrige o problema de propagação dos cliques dos botões veleywei
+      // Handlers para os botões interativos do flipbook
       $(document).on("click", "#veleyweiBtn", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
@@ -654,16 +693,20 @@
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      // Botão de seta também responde a clique
+      // Controle do botão de seta
       $(document).on("click", "#setaBtn", function(e) {
         e.stopPropagation();
         $("#flipbook").turn("next");
       });
     });
   </script>
+  
+  <!-- Script do globo -->
   <script src="./globo.js"></script>
+  
+  <!-- Script para animação do fundo estrelar -->
   <script>
-    // Animação do canvas (efeito warp/starfield)
+    // Animação do efeito warp/starfield
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
@@ -672,11 +715,13 @@
       const speed = 2;
       let animationFrameId;
       
+      // Configuração inicial do canvas
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
       
+      // Criação das estrelas
       function createStars() {
         stars = [];
         for (let i = 0; i < numStars; i++) {
@@ -688,48 +733,61 @@
         }
       }
       
+      // Atualização e animação das estrelas
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
+        
         stars.forEach(star => {
           star.z -= speed;
+          
+          // Reinicia a estrela quando sai do campo de visão
           if (star.z <= 0) {
             star.x = Math.random() * canvas.width - canvas.width / 2;
             star.y = Math.random() * canvas.height - canvas.height / 2;
             star.z = canvas.width;
           }
+          
+          // Aplica perspectiva para efeito 3D
           let perspective = 300 / star.z;
           let sx = star.x * perspective + canvas.width / 2;
           let sy = star.y * perspective + canvas.height / 2;
           let size = Math.max(2 * perspective, 0.5);
+          
+          // Desenha a estrela
           ctx.beginPath();
           ctx.arc(sx, sy, size, 0, 2 * Math.PI);
           ctx.fill();
         });
+        
         animationFrameId = requestAnimationFrame(updateStars);
       }
       
+      // Inicialização
       setupCanvas();
       createStars();
       updateStars();
       
+      // Tratamento de redimensionamento da janela
       window.addEventListener("resize", function() {
         setupCanvas();
         createStars();
       });
       
+      // Remoção da tela de carregamento após carregamento completo
       window.addEventListener("load", function() {
         setTimeout(function() {
           document.getElementById("loading-screen").style.display = "none";
           document.getElementById("warning-modal").style.display = "flex";
           cancelAnimationFrame(animationFrameId);
-        }, 1000); // Pequeno atraso para garantir que tudo esteja carregado
+        }, 1000);
       });
     })();
   </script>
+  
+  <!-- Script para remoção do indicador de carregamento do globo -->
   <script>
-    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
     });
