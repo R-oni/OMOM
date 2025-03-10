@@ -225,6 +225,42 @@ html, body {
   height: auto;
   animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
 }
+#cliqueinversao {
+  position: absolute;
+  bottom: 4px;
+  right: 0%;
+  width: 100%;
+  height: 100%;
+  animation: fadeInOut 0.7s infinite;
+}
+
+#cliquetipog {
+  position: absolute;
+  bottom: 4px;
+  right: 0%;
+  width: 100%;
+  height: 100%;
+  animation: fadeInOut 0.7s infinite;
+}
+
+#cliquerefracao {
+  position: absolute;
+  bottom: 4px;
+  right: 0%;
+  width: 100%;
+  height: 100%;
+  animation: fadeInOut 0.7s infinite;
+}
+
+#cliquemorse {
+  position: absolute;
+  bottom: 4px;
+  right: 0%;
+  width: 100%;
+  height: 100%;
+  animation: fadeInOut 0.7s infinite;
+}
+
 
 /* Animações */
 @keyframes fadeInOut {
@@ -239,20 +275,22 @@ html, body {
   100% { transform: scale(1); }
 }
 
-/* Versão Desktop */
+/* Para PC (landscape com min-width:1024px) - Versão Simplificada */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 25vh 75vh;
+    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
     height: 100vh;
     width: 100vw;
+    position: relative;
   }
 
+  /* Container da Imagem + Texto */
   .header-container {
     grid-column: 1;
     position: relative;
-    height: 100%;
+    height: 30vh;
   }
 
   .top-section img {
@@ -260,9 +298,8 @@ html, body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-height: 200px;
+    max-height: 100px;
     z-index: 1;
-    margin-bottom: 1vh;
   }
 
   .title-text {
@@ -270,35 +307,44 @@ html, body {
     top: 70%;
     left: 50%;
     transform: translateX(-50%);
+    font-family: 'Press Start 2P', cursive;
+    color: #00FFE7;
     font-size: 16px;
     white-space: nowrap;
+    z-index: 2;
+    text-shadow: 2px 2px 4px #000;
   }
 
-  /* Ajustando o container unificado do flipbook para desktop */
-  #flipbook {
+  /* Flipbook */
+  #flipbook-wrapper {
     grid-column: 1;
-    grid-row: 2;
-    height: 90%;
-    width: 80%;
+    grid-row: 2; /* Linha 2 explícita */
+    height: 70vh;
+    width: 90%;
     margin: 0 auto;
-    z-index: 1;
   }
 
-  /* A seção do globo */
-  .globe-section {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    width: 100%;
-    height: 100%;
-  }
+  /* Globo - Ajustes principais */
+.globe-section {
+  grid-column: 2;
+  grid-row: 1 / span 2; /* Modificado */
+  width: 100%;
+  height: 100%; /* Alterado de 100vh para 100% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Adicionado */
+  position: relative; /* Adicionado */
+}
 
-  #globeCanvas {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: contain;
-  } 
+/* Garanta que o canvas do globo preencha o container */
+#globeCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: contain;
+}
 }
 
 </style>
@@ -354,6 +400,43 @@ html, body {
           <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben">
           <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben">
         </div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
+          <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" alt="Botão Cliquey Eroben">
+          
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 2"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina12.webp" alt="Página 10">
+          <img id="cliquetipog" src="imagens/cap1/cliquetipog.webp" alt="Botão Cliquey Eroben">
+          
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 4"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina14.webp" alt="Página 10">
+          <img id="cliquerefracao" src="imagens/cap1/cliquerefracao.webp" alt="Botão Cliquey Eroben">
+          
+        </div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina17.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina18.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina19.webp" alt="Página 4"></div>
+        
+        <div class="page"><img src="imagens/cap1/pagina20.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina21.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina22.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina23.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina24.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina25.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina26.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina27.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina28.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina29.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina30.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina31.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina32.webp" alt="Página 4"></div>
       </div>
     </div>
   </div>
@@ -469,6 +552,13 @@ html, body {
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+      $(document).on("click", "#cliqueinversao", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cap1/inversao.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
       
       // Eventos dos botões de tracking na Página 6
       $(document).on("click", "#cliquemaior", function(e){

@@ -223,89 +223,76 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-/* Para PC (landscape com min-width:1024px) - Versão Corrigida */
 /* Para PC (landscape com min-width:1024px) - Versão Simplificada */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: auto;
+    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
     height: 100vh;
     width: 100vw;
+    position: relative;
   }
 
-  /* Linha Superior - Esquerda (Imagem + Título) 
+  /* Container da Imagem + Texto */
   .header-container {
     grid-column: 1;
-    grid-row: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1px;
-  } */
-
-  /* Ajustes da Imagem */
-  .top-section img {
-    grid-column: 1;
-    grid-row: 1;
-    width: auto;
-    height: 50%;
-    transition: transform 0.3s ease;
+    position: relative;
+    height: 30vh;
   }
 
-  /* Estilos do Título */
-  .top-section text {
-    grid-column: 1;
-    grid-row: 2;
+  .top-section img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 100px;
+    z-index: 1;
+  }
+
+  .title-text {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: 'Press Start 2P', cursive;
     color: #00FFE7;
-    font-size: 1.4rem;
-    text-align: center;
-    margin: 0;
-    padding: 0 1px;
-    line-height: 1.4;
+    font-size: 16px;
+    white-space: nowrap;
+    z-index: 2;
+    text-shadow: 2px 2px 4px #000;
   }
 
   /* Flipbook */
   #flipbook-wrapper {
     grid-column: 1;
-    grid-row: 3;
-    height: 100%;
+    grid-row: 2; /* Linha 2 explícita */
+    height: 70vh;
     width: 90%;
     margin: 0 auto;
   }
 
-  /* Globo */
-  .globe-section {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  /* Globo - Ajustes principais */
+.globe-section {
+  grid-column: 2;
+  grid-row: 1 / span 2; /* Modificado */
+  width: 100%;
+  height: 100%; /* Alterado de 100vh para 100% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Adicionado */
+  position: relative; /* Adicionado */
+}
 
-  /* Restante mantido igual */
-  #flipbook {
-    width: 100%;
-    height: 100%;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  }
-
-  #globeCanvas {
-    width: 90% !important;
-    height: 90% !important;
-  }
-
-  .top-section img:hover {
-    transform: scale(1.05);
-  }
-
-  .title-text:hover {
-    text-shadow: 0 0 10px #00ffe780;
-  }
+/* Garanta que o canvas do globo preencha o container */
+#globeCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: contain;
+}
 }
   </style>
 </head>
