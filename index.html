@@ -278,7 +278,7 @@
     .g-red { color: #DB4437; }
     .g-yellow { color: #F4B400; }
     .g-green { color: #0F9D58; }
-    /* Estilo para botões de navegação */
+    /* Estilo para botões de navegação - MODIFICADO PARA DESKTOP */
     .nav-button {
       font-family: 'Press Start 2P', cursive;
       background: #00FFE7;
@@ -288,7 +288,10 @@
       font-size: 10px;
       position: absolute;
       top: 20px;
+      display: none; /* Escondido por padrão, mostrado apenas no desktop */
     }
+    
+    /* VERSÃO DESKTOP */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .title-container {
         grid-area: title;
@@ -314,28 +317,30 @@
         height: auto;
       }
       .nav-button { 
-        display: block;
+        display: block; /* Mostrar botões na versão desktop */
       }
       .hamburger-menu { 
-        display: none; 
+        display: none; /* Esconder hamburger na versão desktop */
       }
       /* Ajuste para posicionar os botões mais à direita */
       #loginBtn {
-        right: 120px;
+        right: 20px; /* Mais à direita */
       }
       #signupBtn {
-        right: 220px;
+        right: 150px; /* Mais à direita e espaçado do login */
       }
       #logoutBtn {
-        right: 120px;
+        right: 20px; /* Mais à direita quando visível */
       }
     }
+    
+    /* VERSÃO MOBILE - MODIFICADO */
     @media screen and (max-width: 1023px) {
       .nav-button { 
-        display: none; 
+        display: none !important; /* Força esconder botões na versão mobile */
       }
       .hamburger-menu { 
-        display: block; 
+        display: block; /* Mostrar apenas o hamburger menu */
       }
     }
   </style>
@@ -735,13 +740,4 @@
         symbols.forEach((symbol, index) => {
           let amplitude = 6;
           let speed = 0.1 + (index * 0.01);
-          let y = Math.sin(time * speed * 10) * amplitude;
-          symbol.style.transform = `translateY(${y}px)`;
-        });
-        requestAnimationFrame(floatSymbols);
-      }
-      floatSymbols();
-    });
-  </script>
-</body>
-</html>
+          let
