@@ -219,6 +219,58 @@
       cursor: pointer;
       animation: pulse 2s infinite ease-in-out;
     }
+
+    /* Warning Modal */
+#warning-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.warning-content {
+  background-color: white;
+  color: black;
+  width: 80%;
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.warning-title {
+  color: #FFA500;
+  -webkit-text-stroke: 1px black;
+  text-stroke: 1px black;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.warning-btn {
+  margin-top: 25px;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+}
+
+.warning-btn:hover {
+  background-color: #555;
+}
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
@@ -301,6 +353,19 @@
 <body>
   <!-- Música de fundo: utiliza "byfire.mp3" conforme solicitado -->
   <audio id="bgMusic" src="yourlunarway.mp3" preload="auto" loop style="display: none;"></audio>
+
+
+  <!-- Warning Modal -->
+<div id="warning-modal">
+  <div class="warning-content">
+    <h1 class="warning-title">ATENÇÃO!</h1>
+    <p>ESTA É UMA OBRA DE FICÇÃO</p>
+    <p>Os ambientes, fenômenos e tecnologias presentes foram inspirados em conceitos reais nos campos da física, astronomia, química, geologia e afins.</p>
+    <p>Até o momento atual, não foi detectada nenhuma forma de vida fora da Terra, logo, as criaturas presentes têm inspiração no que conhecemos como vida até então. A narrativa é também inspirada nos campos da sociologia, história e filosofia.</p>
+    <button id="compreendo-btn" class="warning-btn">COMPREENDO</button>
+  </div>
+</div>
+
   
   <!-- Loading Screen -->
   <div id="loading-screen">
@@ -521,6 +586,41 @@
       });
     })();
   </script>
+
+  <script>
+  let musicStarted = false;
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    // Mostrar o warning modal quando o loading screen desaparecer
+    document.getElementById("loading-screen").addEventListener("transitionend", function() {
+      if (this.style.display === "none") {
+        document.getElementById("warning-modal").style.display = "flex";
+      }
+    });
+    
+    // Fechar o warning modal e iniciar a música quando o botão for clicado
+    document.getElementById("compreendo-btn").addEventListener("click", function() {
+      document.getElementById("warning-modal").style.display = "none";
+      if (!musicStarted) {
+        var bg = document.getElementById("bgMusic");
+        bg.currentTime = 0;
+        bg.volume = 0.9;
+        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+        musicStarted = true;
+      }
+    });
+  });
+  
+  // Se você estiver usando uma tela de carregamento similar, adicione isso:
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.getElementById("loading-screen").style.display = "none";
+      document.getElementById("warning-modal").style.display = "flex";
+    }, 1000); // Pequeno atraso para garantir que tudo esteja carregado
+  });
+</script>
+
+  
   <script>
     // Remove o loading do globo quando o evento "globoCarregado" ocorrer
     document.addEventListener("globoCarregado", function() {
