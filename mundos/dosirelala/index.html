@@ -45,7 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
-* Layout padrão para mobile/vertical */
+    /* Layout padrão para mobile/vertical */
     .page-container {
       display: flex;
       flex-direction: column;
@@ -55,24 +55,25 @@
       height: 100%;
     }
     .top-section {
-    display: flex;  /* Torna um contêiner flexível */
-    justify-content: center;  /* Centraliza horizontalmente */
-    align-items: center;  /* Centraliza verticalmente (se precisar) */
-    width: 100%;  /* Ocupa toda a largura */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 10px;
     }
 
     .top-section img {
-      width: 15vw;
+      width: 30vw;
       max-width: 80vw;
       height: auto;
     }
     
     .title-container {
       text-align: center;
-      margin-top: 0px;
+      margin-top: 0;
       position: relative;
       z-index: 2;
-      margin-bottom: 0px;
+      margin-bottom: 15px;
     }
     /* Novo estilo para o título em texto */
     .title-text {
@@ -224,61 +225,75 @@
     /* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 30vh 70vh;
-        height: 100vh;
+        position: relative;
+        display: block;
         width: 100vw;
-        position: relative;
+        height: 100vh;
       }
-    
+      /* Novo container que agrupa a imagem e o título */
       .header-container {
-        grid-column: 1;
-        position: relative;
-        height: 30vh;
-      }
-    
-      .top-section img {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-height: 150px;
-        z-index: 1;
+        top: 20px;
+        left: 15vw;
+        width: 18vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
-    
-      .title-text {
-        position: absolute;
-        top: 70%;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 16px;
-        white-space: nowrap;
-        text-shadow: 2px 2px 4px #000;
+      .header-container .top-section {
+        width: 100%;
+        height: auto;
       }
-    
+      .header-container .top-section img {
+        width: 50%;
+        height: auto;
+        object-fit: contain;
+      }
+      .header-container .title-container {
+        margin-top: 2vh;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0;
+      }
+      .header-container .title-text {
+        font-family: 'Press Start 2P', cursive;
+        color: #00FFE7;
+        font-size: 2.5vh;
+        text-decoration: none;
+        text-align: center;
+      }
+      /* Outros elementos da versão PC permanecem inalterados */
       #flipbook-wrapper {
-        grid-column: 1;
-        grid-row: 2;
-        height: 70vh;
-        width: 90%;
-        margin: 0 auto;
-        z-index: 1;
+        position: absolute;
+        bottom: 2vh;
+        left: 5vw;
+        width: 40vw;
+        height: calc(40vw * 0.75);
+        overflow: visible;
       }
-    
-      .globe-section {
-        grid-column: 2;
-        grid-row: 1 / span 2;
+      #flipbook {
         width: 100%;
         height: 100%;
+        margin: 0;
+        position: relative;
+        overflow: visible;
       }
-    
+      .globe-section {
+        position: absolute;
+        top: 50%;
+        right: 10vw;
+        transform: translateY(-50%);
+        width: 700px;
+        height: 700px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       #globeCanvas {
-        width: 100% !important;
-        height: 100% !important;
-        min-width: 100%;
-        min-height: 100%;
-        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
       }
     }
   </style>
@@ -295,7 +310,6 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <!-- Na versão PC, esses elementos serão agrupados em header-container -->
     <div class="top-section">
       <img src="imagens/titulodosirela.webp" alt="Título Velei'wey">
     </div>
@@ -333,6 +347,7 @@
           <img id="veleyweiBtn2" src="imagens/cap1/cliquequadrifono.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 9"></div>
+        
       </div>
     </div>
   </div>
@@ -372,25 +387,6 @@
     });
     
     $(document).ready(function(){
-      // Criar header-container para desktop
-      if ($(window).width() >= 1024) {
-        $('.page-container').prepend('<div class="header-container"></div>');
-        $('.header-container').append($('.top-section'));
-        $('.header-container').append($('.title-container'));
-      }
-
-      $(window).resize(function() {
-        if ($(window).width() >= 1024 && $('.header-container').length === 0) {
-          $('.page-container').prepend('<div class="header-container"></div>');
-          $('.header-container').append($('.top-section'));
-          $('.header-container').append($('.title-container'));
-        } else if ($(window).width() < 1024 && $('.header-container').length > 0) {
-          $('.page-container').prepend($('.top-section'));
-          $('.page-container').prepend($('.title-container'));
-          $('.header-container').remove();
-        }
-      });
-
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
