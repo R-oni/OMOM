@@ -276,77 +276,78 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-/* Para PC (landscape com min-width:1024px) - Versão Simplificada */
+/* Para PC (landscape com min-width:1024px) - Versão Corrigida */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
+    grid-template-rows: auto auto 1fr; /* Ajuste para três linhas */
     height: 100vh;
     width: 100vw;
     position: relative;
   }
 
-  /* Container da Imagem + Texto */
-  .header-container {
+  /* Header section - título e imagem */
+  .top-section {
     grid-column: 1;
-    position: relative;
-    height: 30vh;
+    grid-row: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    width: 100%;
+    padding-top: 20px;
   }
 
   .top-section img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 100px;
-    z-index: 1;
+    height: 8vh;
+    width: auto;
+  }
+
+  /* Container do título de texto */
+  .title-container {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
+    width: 100%;
+    margin: 10px 0;
   }
 
   .title-text {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Press Start 2P', cursive;
-    color: #00FFE7;
-    font-size: 16px;
-    white-space: nowrap;
-    z-index: 2;
+    font-size: 18px;
     text-shadow: 2px 2px 4px #000;
   }
 
   /* Flipbook */
   #flipbook-wrapper {
     grid-column: 1;
-    grid-row: 2; /* Linha 2 explícita */
-    height: 70vh;
+    grid-row: 3;
+    height: calc(85vh - 15vh); /* Altura total - espaço para título e imagem */
     width: 90%;
     margin: 0 auto;
   }
 
-  /* Globo - Ajustes principais */
-.globe-section {
-  grid-column: 2;
-  grid-row: 1 / span 2; /* Modificado */
-  width: 100%;
-  height: 100%; /* Alterado de 100vh para 100% */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* Adicionado */
-  position: relative; /* Adicionado */
-}
+  /* Globo */
+  .globe-section {
+    grid-column: 2;
+    grid-row: 1 / span 3; /* Ocupa todas as três linhas */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
-/* Garanta que o canvas do globo preencha o container */
-#globeCanvas {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 100%;
-  min-height: 100%;
-  object-fit: contain;
-}
-  /* Mantenha o resto do CSS original */
+  /* Garanta que o canvas do globo preencha o container */
+  #globeCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
 }
   </style>
 </head>
@@ -628,4 +629,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
