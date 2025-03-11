@@ -223,76 +223,84 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-/* Para PC (landscape com min-width:1024px) - Versão Simplificada */
+/* Para PC (landscape com min-width:1024px) - Versão Corrigida */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
+    grid-template-rows: auto auto 1fr; /* Alterado para 3 linhas com altura automática */
     height: 100vh;
     width: 100vw;
-    position: relative;
   }
 
-  /* Container da Imagem + Texto */
-  .header-container {
+  /* Seção do título principal (imagem) */
+  .top-section:first-of-type {
     grid-column: 1;
-    position: relative;
-    height: 30vh;
+    grid-row: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
   }
 
-  .top-section img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 100px;
-    z-index: 1;
+  /* Imagem do título */
+  .top-section:first-of-type img {
+    height: auto;
+    max-height: 10vh;
+    width: auto;
+    max-width: 80%;
   }
 
+  /* Seção do subtítulo (texto) */
+  .top-section:nth-of-type(2) {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  /* Texto do título */
   .title-text {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
     font-family: 'Press Start 2P', cursive;
     color: #00FFE7;
-    font-size: 16px;
-    white-space: nowrap;
-    z-index: 2;
-    text-shadow: 2px 2px 4px #000;
+    font-size: 14px;
+    text-align: center;
   }
 
   /* Flipbook */
   #flipbook-wrapper {
     grid-column: 1;
-    grid-row: 2; /* Linha 2 explícita */
-    height: 70vh;
+    grid-row: 3; /* Agora na terceira linha */
+    height: calc(100vh - 20vh); /* Altura ajustada para compensar o espaço do título */
     width: 90%;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  /* Globo - Ajustes principais */
-.globe-section {
-  grid-column: 2;
-  grid-row: 1 / span 2; /* Modificado */
-  width: 100%;
-  height: 100%; /* Alterado de 100vh para 100% */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* Adicionado */
-  position: relative; /* Adicionado */
-}
+  /* Globo na segunda coluna, ocupando toda a altura */
+  .globe-section {
+    grid-column: 2;
+    grid-row: 1 / span 3; /* Ocupa todas as 3 linhas */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
-/* Garanta que o canvas do globo preencha o container */
-#globeCanvas {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 100%;
-  min-height: 100%;
-  object-fit: contain;
-}
+  /* Canvas do globo */
+  #globeCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: contain;
+  }
 }
   </style>
 </head>
@@ -336,7 +344,6 @@
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
           <img id="veleyweiBtn" src="imagens/cap1/cliqueartesaos.webp" alt="Botão Cliquey Eroben">
         </div>
-        
       </div>
     </div>
   </div>
