@@ -230,22 +230,25 @@
         width: 100vw;
         height: 100vh;
       }
-      /* Novo container que agrupa a imagem e o título */
+      /* Correção para o header container */
       .header-container {
         position: absolute;
         top: 20px;
-        left: 15vw;
-        width: 18vw;
+        left: 5vw;
+        width: 40vw;
         display: flex;
         flex-direction: column;
         align-items: center;
+        z-index: 3;
       }
       .header-container .top-section {
         width: 100%;
         height: auto;
+        display: flex;
+        justify-content: center;
       }
       .header-container .top-section img {
-        width: 50%;
+        width: 15vw;
         height: auto;
         object-fit: contain;
       }
@@ -262,10 +265,10 @@
         text-decoration: none;
         text-align: center;
       }
-      /* Outros elementos da versão PC permanecem inalterados */
+      /* Ajuste do flipbook para ficar abaixo do header */
       #flipbook-wrapper {
         position: absolute;
-        bottom: 2vh;
+        bottom: 5vh;
         left: 5vw;
         width: 40vw;
         height: calc(40vw * 0.75);
@@ -310,12 +313,16 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
-    <div class="top-section">
-      <img src="imagens/titulosapador.webp" alt="Título Velei'wey">
+    <!-- Para PC, agrupar título e imagem no header-container -->
+    <div class="header-container">
+      <div class="top-section">
+        <img src="imagens/titulosapador.webp" alt="Título Velei'wey">
+      </div>
+      <div class="title-container">
+        <a href="omom.html" class="title-text">O OMNÍVORO SISTEMA SAPADOR</a>
+      </div>
     </div>
-    <div class="title-container">
-      <a href="omom.html" class="title-text">O OMNÍVORO SISTEMA SAPADOR</a>
-    </div>
+    
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
@@ -509,6 +516,44 @@
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
     });
+    
+    // Adiciona a lógica para mostrar corretamente elementos em desktop vs. mobile
+    window.addEventListener('DOMContentLoaded', function() {
+      function adjustLayout() {
+        // Move os elementos para a estrutura correta dependendo da visualização
+        const isDesktop = window.innerWidth >= 1024 && window.matchMedia('(orientation: landscape)').matches;
+        const topSection = document.querySelector('.top-section');
+        const titleContainer = document.querySelector('.title-container');
+        const headerContainer = document.querySelector('.header-container');
+        const pageContainer = document.querySelector('.page-container');
+        
+        // Estrutura para desktop
+        if (isDesktop) {
+          if (!headerContainer) {
+            // Criar container de header se não existir
+            const newHeaderContainer = document.createElement('div');
+            newHeaderContainer.className = 'header-container';
+            pageContainer.insertBefore(newHeaderContainer, pageContainer.firstChild);
+            newHeaderContainer.appendChild(topSection);
+            newHeaderContainer.appendChild(titleContainer);
+          }
+        } 
+        // Estrutura para mobile
+        else {
+          if (headerContainer) {
+            // Mover elementos de volta para a estrutura mobile
+            pageContainer.insertBefore(topSection, pageContainer.firstChild);
+            pageContainer.insertBefore(titleContainer, pageContainer.children[1]);
+          }
+        }
+      }
+      
+      // Inicializa a estrutura
+      adjustLayout();
+      
+      // Atualiza quando o tamanho da janela muda
+      window.addEventListener('resize', adjustLayout);
+    });
   </script>
 </body>
-    </html>
+</html>
