@@ -222,78 +222,91 @@
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-    /* Para PC (landscape com min-width:1024px), usamos um header único para imagem e título */
+    /* ====================================
+     * Layout Desktop
+     * ==================================== */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
-        position: relative;
-        display: block;
-        width: 100vw;
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30vh 70vh;
         height: 100vh;
-      }
-      /* Novo container que agrupa a imagem e o título */
-      .header-container {
-        position: absolute;
-        top: 20px;
-        left: 15vw;
-        width: 18vw;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .header-container .top-section {
-        width: 100%;
-        height: auto;
-      }
-      .header-container .top-section img {
-        width: 50%;
-        height: auto;
-        object-fit: contain;
-      }
-      .header-container .title-container {
-        margin-top: 2vh;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 0;
-      }
-      .header-container .title-text {
-        font-family: 'Press Start 2P', cursive;
-        color: #00FFE7;
-        font-size: 2.5vh;
-        text-decoration: none;
-        text-align: center;
-      }
-      /* Outros elementos da versão PC permanecem inalterados */
-      #flipbook-wrapper {
-        position: absolute;
-        bottom: 2vh;
-        left: 5vw;
-        width: 40vw;
-        height: calc(40vw * 0.75);
-        overflow: visible;
-      }
-      #flipbook {
-        width: 100%;
-        height: 100%;
-        margin: 0;
+        width: 100vw;
         position: relative;
-        overflow: visible;
       }
-      .globe-section {
+    
+      .header-container {
+        grid-column: 1;
+        position: relative;
+        height: 30vh;
+      }
+    
+      .top-section img {
         position: absolute;
         top: 50%;
-        right: 10vw;
-        transform: translateY(-50%);
-        width: 700px;
-        height: 700px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 150px;
+        z-index: 1;
       }
-      #globeCanvas {
+    
+      .title-text {
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        white-space: nowrap;
+        text-shadow: 2px 2px 4px #000;
+      }
+    
+      #flipbook-wrapper {
+        grid-column: 1;
+        grid-row: 2;
+        height: 70vh;
+        width: 90%;
+        margin: 0 auto;
+        z-index: 1;
+      }
+    
+      .globe-section {
+        grid-column: 2;
+        grid-row: 1 / span 2;
         width: 100%;
         height: 100%;
-        max-width: none;
-        max-height: none;
+      }
+    
+      #globeCanvas {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: contain;
+      }
+    
+      /* Ajustes dos botões para desktop */
+      #veleyweiBtn,
+      #veleyweiBtn2,
+      #veleyweiBtn3,
+      #veleyweiBtn4,
+      #veleyweiBtn5 {
+        height: 100%;
+        top: 0%;
+        transform: none;
+        width: 100%;
+        left: 0%;
+      }
+    
+      .page img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      
+      /* Ajuste do botão de seta para desktop */
+      #setaBtn {
+        width: 80px;
+        height: 80px;
       }
     }
   </style>
