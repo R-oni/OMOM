@@ -193,6 +193,41 @@
       50% { opacity: 0; }
       100% { opacity: 1; }
     }
+    /* Animação da seta */
+@keyframes moveAndFade {
+  0% {
+    opacity: 0.3;
+    transform: translate(0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-15px, 15px);
+  }
+  100% {
+    opacity: 0.3;
+    transform: translate(0, 0);
+  }
+}
+
+/* Estilo do botão de seta */
+#setaBtn {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  cursor: pointer;
+  animation: moveAndFade 3s infinite;
+}
+
+/* Para desktop (opcional) */
+@media screen and (min-width: 1024px) and (orientation: landscape) {
+  #setaBtn {
+    width: 80px;
+    height: 80px;
+  }
+}
     .btn-overlay {
       position: absolute;
       top: 100px;
@@ -390,7 +425,10 @@
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
-        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
+        <div class="page hard">
+          <img src="imagens/cap1/capa.webp" alt="Capa">
+          <img id="setaBtn" src="seta.webp" alt="Botão de Seta Animado">
+        </div>
         <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
         <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
         <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
@@ -525,6 +563,23 @@
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
     });
+
+    // Evento de clique na seta
+$(document).on("click", "#setaBtn", function(e) {
+  e.stopPropagation();
+  $("#flipbook").turn("next");
+});
+
+// Remoção da seta após virar a primeira página
+$("#flipbook").bind("turning", function(e, page) {
+  if (page > 1) {
+    $("#setaBtn").fadeOut(300, function() {
+      $(this).remove();
+    });
+  }
+});
+
+    
   </script>
   <script src="./globo.js"></script>
   <script>
