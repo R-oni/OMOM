@@ -233,18 +233,19 @@
       .header-container {
         position: absolute;
         top: 20px;
-        left: 15vw;
-        width: 18vw;
+        left: 5vw;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        max-width: 300px;
       }
       .header-container .top-section {
         width: 100%;
         height: auto;
       }
       .header-container .top-section img {
-        width: 50%;
+        width: 100%;
         height: auto;
         object-fit: contain;
       }
@@ -309,6 +310,7 @@
   
   <!-- Conteúdo Principal -->
   <div class="page-container">
+    <!-- Na versão PC, esses elementos serão agrupados em header-container -->
     <div class="top-section">
       <img src="imagens/titulodosirela.webp" alt="Título Velei'wey">
     </div>
@@ -346,7 +348,7 @@
           <img id="veleyweiBtn2" src="imagens/cap1/cliquequadrifono.webp" alt="Botão Cliquey Eroben">
         </div>
         <div class="page"><img src="imagens/cap1/pagina14.webp" alt="Página 9"></div>
-        
+      </div>
     </div>
   </div>
   
@@ -385,6 +387,25 @@
     });
     
     $(document).ready(function(){
+      // Criar header-container para desktop
+      if ($(window).width() >= 1024) {
+        $('.page-container').prepend('<div class="header-container"></div>');
+        $('.header-container').append($('.top-section'));
+        $('.header-container').append($('.title-container'));
+      }
+
+      $(window).resize(function() {
+        if ($(window).width() >= 1024 && $('.header-container').length === 0) {
+          $('.page-container').prepend('<div class="header-container"></div>');
+          $('.header-container').append($('.top-section'));
+          $('.header-container').append($('.title-container'));
+        } else if ($(window).width() < 1024 && $('.header-container').length > 0) {
+          $('.page-container').prepend($('.top-section'));
+          $('.page-container').prepend($('.title-container'));
+          $('.header-container').remove();
+        }
+      });
+
       $("#flipbook").turn({
         autoCenter: false,
         display: 'double'
