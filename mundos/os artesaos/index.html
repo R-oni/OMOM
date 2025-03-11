@@ -218,11 +218,31 @@
       cursor: pointer;
       animation: pulse 2s infinite ease-in-out;
     }
+    
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
+
+    /* Botões específicos da página 6 */
+#cliquemaior {
+  position: absolute;
+  top: 5%;
+  left: 15%;
+  width: 65%;
+  height: auto;
+  animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
+}
+
+#cliquemenor {
+  position: absolute;
+  bottom: 16%;
+  left: 37%;
+  width: 23%;
+  height: auto;
+  animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
+}
 /* Para PC (landscape com min-width:1024px) - Versão Corrigida */
 @media screen and (min-width: 1024px) and (orientation: landscape) {
   .page-container {
@@ -338,7 +358,11 @@
         <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
         <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6"></div>
         <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7"></div>
-        <div class="page"><img src="imagens/cap1/pagina6.png" alt="Página 8"></div>
+        <div class="page" style="position: relative;">
+          <img src="imagens/cap1/pagina6.webp" alt="Página 6">
+          <img id="cliquemaior" src="imagens/cap1/cliquemaior.webp" alt="Botão Clique Maior">
+          <img id="cliquemenor" src="imagens/cap1/cliquemenor.webp" alt="Botão Clique Menor">
+        </div>
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9"></div>
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10">
