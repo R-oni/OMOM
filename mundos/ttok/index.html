@@ -130,10 +130,10 @@
       opacity: 1;
     }
     #globeSeta1 {
-      left: 48%;
+      left: 35%;
     }
     #globeSeta2 {
-      left: 52%;
+      left: 65%;
     }
 
     /* Flipbook */
@@ -578,30 +578,52 @@
         }
       });
 
-      // --- LÓGICA PARA AS SETAS DO GLOBO ---
+      // --- LÓGICA CORRIGIDA PARA AS SETAS DO GLOBO ---
       let cycleRunning = true;
-      function loopSetas() {
+      
+      // Rotacionar a segunda seta 180 graus
+      $("#globeSeta2").css("transform", "translateY(-50%) rotate(180deg)");
+      
+      function animatePinchGesture() {
         if (!cycleRunning) return;
         
-        // Inicia levemente separadas do centro
-        $("#globeSeta1").css({ left: "48%", opacity: 1 });
-        $("#globeSeta2").css({ left: "52%", opacity: 1 });
+        // Começar com as setas mais afastadas (35% e 65%)
+        $("#globeSeta1").css({
+          opacity: 1,
+          left: "35%"
+        });
+        $("#globeSeta2").css({
+          opacity: 1,
+          left: "65%"
+        });
         
-        // Após breve delay
-        setTimeout(() => {
-          // Move e fade as setas
-          $("#globeSeta1").animate({ left: "0%", opacity: 0 }, 1500);
-          $("#globeSeta2").animate({ left: "100%", opacity: 0 }, 1500, function() {
-            if (cycleRunning) loopSetas(); // reinicia
+        // Mover as setas para perto uma da outra (simulando o gesto de pinch)
+        $("#globeSeta1").animate({
+          left: "42%"
+        }, 800);
+        
+        $("#globeSeta2").animate({
+          left: "58%"
+        }, 800, function() {
+          // Fade-out
+          $("#globeSeta1, #globeSeta2").animate({
+            opacity: 0
+          }, 400, function() {
+            // Resetar posições e reiniciar se o ciclo ainda estiver ativo
+            if (cycleRunning) {
+              setTimeout(animatePinchGesture, 500);
+            }
           });
-        }, 200);
+        });
       }
-      loopSetas(); // inicia o ciclo
+      
+      // Iniciar a animação das setas
+      animatePinchGesture();
 
-      // Ao clicar no globo, paramos o ciclo e removemos as setas
-      $("#globeCanvas").one("click", function() {
+      // Ao clicar ou arrastar no globo, paramos o ciclo e removemos as setas
+      $("#globeCanvas").on("click mousedown touchstart", function() {
         cycleRunning = false;
-        $("#globeSeta1, #globeSeta2").stop(true,true).fadeOut(300, function(){
+        $("#globeSeta1, #globeSeta2").stop(true).fadeOut(300, function(){
           $(this).remove();
         });
       });
