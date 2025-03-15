@@ -2,475 +2,284 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>Exemplo Responsivo sem Rolagem</title>
+  <title>Exemplo Responsivo sem Rolagem - Batedores</title>
   <!-- Importando a fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<style>
-/* Estilos globais */
-html, body {
-  touch-action: manipulation;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #000;
-  color: #fff;
-  font-family: sans-serif;
-}
-
-/* Loading Screen */
-#loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000;
-  z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-#warpCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-#loading-text {
-  position: relative;
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  font-size: 20px;
-  z-index: 10001;
-}
-
-/* Layout mobile/vertical */
-.page-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.top-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.top-section img {
-  width: auto;
-  height: 10vh;
-}
-
-.title-container {
-  text-align: center;
-  margin-top: 0;
-  height: 5vh;
-  width: auto;
-  z-index: 2;
-  margin-bottom: 0;
-}
-
-.title-text {
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  text-align: center;
-  line-height: 1.2;
-  font-size: 16px;
-  text-decoration: none;
-}
-
-.glovbe-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-#globeCanvas {
-  width: auto;
-  margin-top: 0;
-  height: 37.5vh;
-  margin-bottom: 0;
-}
-
-#globeLoading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Press Start 2P', cursive;
-  color: #00FFE7;
-  font-size: 20px;
-  z-index: 100;
-  pointer-events: none;
-}
-
-/* Flipbook base - Unificado em um único container */
-#flipbook {
-  position: relative;
-  margin: auto;
-  cursor: grab;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  /* Dimensões padrão para mobile; na versão desktop serão ajustadas */
-  width: 100%;
-  height: auto;
-}
-
-.page {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  touch-action: manipulation;
-  position: relative;
-}
-
-.page img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Overlay */
-#overlayContainer {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-}
-
-#overlayImage {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-#btnSair {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: #00EEF7;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 32px;
-  cursor: pointer;
-  padding: 20px;
-  z-index: 10000;
-}
-/* Warning Modal */
-#warning-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  z-index: 9999;
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-
-.warning-content {
-  background-color: white;
-  color: black;
-  width: 80%;
-  max-width: 600px;
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.warning-title {
-  color: #FFA500;
-  -webkit-text-stroke: 1px black;
-  text-stroke: 1px black;
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-
-.warning-btn {
-  margin-top: 25px;
-  padding: 10px 20px;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 14px;
-}
-
-.warning-btn:hover {
-  background-color: #555;
-}
-
-/* Botão de Seta Animado */
-#setaBtn {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  top: 20px;
-  right: 20px;
-  z-index: 20;
-  cursor: pointer;
-  animation: moveAndFade 3s infinite;
-}
-
-@keyframes moveAndFade {
-  0% {
-    opacity: 0.3;
-    transform: translate(0, 0);
-  }
-  50% {
-    opacity: 1;
-    transform: translate(-15px, 15px);
-  }
-  100% {
-    opacity: 0.3;
-    transform: translate(0, 0);
-  }
-}
-
-
-
-  #globePinchIndicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 180px;
-  height: 100px;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.pinch-arrow {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  z-index: 20;
-}
-
-.pinch-arrow-left {
-  left: 0;
-  transform: rotate(-45deg);
-  animation: moveLeftArrow 2s infinite;
-}
-
-.pinch-arrow-right {
-  right: 0;
-  transform: rotate(135deg);
-  animation: moveRightArrow 2s infinite;
-}
-
-@keyframes moveLeftArrow {
-  0% { transform: rotate(-45deg) translate(0, 0); opacity: 1; }
-  100% { transform: rotate(-45deg) translate(-15px, -15px); opacity: 0; }
-}
-
-@keyframes moveRightArrow {
-  0% { transform: rotate(135deg) translate(0, 0); opacity: 1; }
-  100% { transform: rotate(135deg) translate(15px, -15px); opacity: 0; }
-}
-
-
-  
-  
-/* Botões específicos da página 6 */
-#cliquemaior {
-  position: absolute;
-  top: 5%;
-  left: 15%;
-  width: 65%;
-  height: auto;
-  animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
-}
-
-#cliquemenor {
-  position: absolute;
-  bottom: 16%;
-  left: 37%;
-  width: 23%;
-  height: auto;
-  animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
-}
-
-#cliquebatedor {
-  position: absolute;
-  bottom: 17%;
-  left: 8%;
-  width: 61%;
-  height: auto;
-  animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
-}
-
-#cliquemergulhador {
-  position: absolute;
-  top: 11%;
-  right: 5%;
-  width: 48%;
-  height: auto;
-  animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
-}
-
-#cliquesangue {
-  position: absolute;
-  bottom: 38%;
-  right: -3%;
-  width: 28%;
-  height: auto;
-  animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
-}
-#cliqueinversao {
-  position: absolute;
-  bottom: 4px;
-  right: 0%;
-  width: 100%;
-  height: 100%;
-  animation: fadeInOut 0.7s infinite;
-}
-
-#cliquetipog {
-  position: absolute;
-  bottom: 4px;
-  right: 0%;
-  width: 100%;
-  height: 100%;
-  animation: fadeInOut 0.7s infinite;
-}
-
-#cliquerefracao {
-  position: absolute;
-  bottom: 4px;
-  right: 0%;
-  width: 100%;
-  height: 100%;
-  animation: fadeInOut 0.7s infinite;
-}
-
-#cliquemorse {
-  position: absolute;
-  bottom: 4px;
-  right: 0%;
-  width: 100%;
-  height: 100%;
-  animation: fadeInOut 0.7s infinite;
-}
-
-
-/* Animações */
-@keyframes fadeInOut {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* Para PC (landscape com min-width:1024px) - Versão Simplificada */
-@media screen and (min-width: 1024px) and (orientation: landscape) {
-  .page-container {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 30vh 70vh; /* Linhas redefinidas */
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-  }
-
-  /* Container da Imagem + Texto */
-  .header-container {
-    grid-column: 1;
-    position: relative;
-    height: 30vh;
-  }
-
-  .top-section img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-height: 100px;
-    z-index: 1;
-  }
-
-  .title-text {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Press Start 2P', cursive;
-    color: #00FFE7;
-    font-size: 16px;
-    white-space: nowrap;
-    z-index: 2;
-    text-shadow: 2px 2px 4px #000;
-  }
-
-  /* Flipbook */
-  #flipbook-wrapper {
-    grid-column: 1;
-    grid-row: 2; /* Linha 2 explícita */
-    height: 70vh;
-    width: 90%;
-    margin: 0 auto;
-  }
-
-  /* Globo - Ajustes principais */
-.globe-section {
-  grid-column: 2;
-  grid-row: 1 / span 2; /* Modificado */
-  width: 100%;
-  height: 100%; /* Alterado de 100vh para 100% */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; /* Adicionado */
-  position: relative; /* Adicionado */
-}
-
-/* Garanta que o canvas do globo preencha o container */
-#globeCanvas {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 100%;
-  min-height: 100%;
-  object-fit: contain;
-}
-}
-
-</style>
+  <style>
+    /* Estilos globais */
+    html, body {
+      touch-action: manipulation;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #warpCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    #loading-text {
+      position: relative;
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 10001;
+    }
+    
+    /* Layout mobile/vertical */
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .top-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .top-section img {
+      width: auto;
+      height: 10vh;
+    }
+    
+    .title-container {
+      text-align: center;
+      margin-top: 0;
+      height: 5vh;
+      width: auto;
+      z-index: 2;
+      margin-bottom: 0;
+    }
+    
+    .title-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      text-align: center;
+      line-height: 1.2;
+      font-size: 16px;
+      text-decoration: none;
+    }
+    
+    /* Atualizado: utiliza .globe-section (corrigindo erro de digitação) */
+    .globe-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    #globeCanvas {
+      width: auto;
+      margin-top: 0;
+      height: 37.5vh;
+      margin-bottom: 0;
+    }
+    
+    #globeLoading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
+      font-size: 20px;
+      z-index: 100;
+      pointer-events: none;
+    }
+    
+    /* Novas regras para as setas sobre o globo */
+    #globeSeta1, #globeSeta2 {
+      position: absolute;
+      width: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      z-index: 101;
+    }
+    #globeSeta1 {
+      left: calc(50% - 30px);
+    }
+    #globeSeta2 {
+      left: calc(50% + 30px);
+    }
+    
+    /* Flipbook base - Unificado em um único container */
+    #flipbook {
+      position: relative;
+      margin: auto;
+      cursor: grab;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      /* Dimensões padrão para mobile; na versão desktop serão ajustadas */
+      width: 100%;
+      height: auto;
+    }
+    
+    .page {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      touch-action: manipulation;
+      position: relative;
+    }
+    
+    .page img {
+      width: 100%;
+      height: auto;
+      display: block;
+      /* Impede o arrasto padrão (melhora o comportamento no Chrome) */
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
+    
+    /* Seta para o flipbook na capa */
+    #setaBtn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 50px;
+      cursor: pointer;
+      z-index: 102;
+      animation: moveAndFade 3s infinite;
+    }
+    
+    @keyframes moveAndFade {
+      0% {
+        opacity: 0.3;
+        transform: translate(0, 0);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-15px, 15px);
+      }
+      100% {
+        opacity: 0.3;
+        transform: translate(0, 0);
+      }
+    }
+    
+    /* Animações */
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    /* Para PC (landscape com min-width:1024px) - Versão Simplificada */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      .page-container {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 30vh 70vh;
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      }
+      
+      /* Container da Imagem + Texto */
+      .header-container {
+        grid-column: 1;
+        position: relative;
+        height: 30vh;
+      }
+      
+      .top-section img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 100px;
+        z-index: 1;
+      }
+      
+      .title-container {
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+      }
+      
+      .title-text {
+        font-family: 'Press Start 2P', cursive;
+        color: #00FFE7;
+        font-size: 16px;
+        white-space: nowrap;
+        z-index: 2;
+        text-shadow: 2px 2px 4px #000;
+      }
+      
+      /* Flipbook */
+      #flipbook-wrapper {
+        grid-column: 1;
+        grid-row: 2;
+        height: 70vh;
+        width: 90%;
+        margin: 0 auto;
+      }
+      
+      /* Globo - Ajustes principais */
+      .globe-section {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      /* Garante que o canvas do globo preencha o container */
+      #globeCanvas {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: contain;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Música de fundo -->
@@ -496,19 +305,19 @@ html, body {
     <!-- Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
-      <div id="globePinchIndicator">
-          <img src="seta.webp" alt="Pinch" class="pinch-arrow pinch-arrow-left">
-          <img src="seta.webp" alt="Pinch" class="pinch-arrow pinch-arrow-right">
-      </div>
       <div id="globeLoading">CARREGANDO...</div>
+      <!-- Setas para indicar pinçar o globo -->
+      <img id="globeSeta1" src="seta.webp" alt="Seta para pinçar">
+      <img id="globeSeta2" src="seta.webp" alt="Seta para pinçar">
     </div>
     <!-- Flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
         <div class="page hard">
-            <img src="imagens/cap1/capa.webp" alt="Capa">
-            <img id="setaBtn" src="seta.webp" alt="Botão de Seta Animado">
+          <img src="imagens/cap1/capa.webp" alt="Capa">
+          <!-- Seta para indicar ação na capa -->
+          <img id="setaBtn" src="seta.webp" alt="Botão de Seta Animado">
         </div>
         <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
         <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
@@ -534,26 +343,22 @@ html, body {
         <div class="page">
           <img src="imagens/cap1/pagina10.webp" alt="Página 10">
           <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" alt="Botão Cliquey Eroben">
-          
         </div>
         <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 2"></div>
         <div class="page">
           <img src="imagens/cap1/pagina12.webp" alt="Página 10">
           <img id="cliquetipog" src="imagens/cap1/cliquetipog.webp" alt="Botão Cliquey Eroben">
-          
         </div>
         <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 4"></div>
         <div class="page">
           <img src="imagens/cap1/pagina14.webp" alt="Página 10">
           <img id="cliquerefracao" src="imagens/cap1/cliquerefracao.webp" alt="Botão Cliquey Eroben">
-          
         </div>
         <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 4"></div>
         <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 5"></div>
         <div class="page"><img src="imagens/cap1/pagina17.webp" alt="Página 4"></div>
         <div class="page"><img src="imagens/cap1/pagina18.webp" alt="Página 5"></div>
         <div class="page"><img src="imagens/cap1/pagina19.webp" alt="Página 4"></div>
-        
         <div class="page"><img src="imagens/cap1/pagina20.webp" alt="Página 4"></div>
         <div class="page"><img src="imagens/cap1/pagina21.webp" alt="Página 5"></div>
         <div class="page"><img src="imagens/cap1/pagina22.webp" alt="Página 4"></div>
@@ -578,16 +383,15 @@ html, body {
   </div>
 
   <!-- Warning Modal -->
-<div id="warning-modal">
-  <div class="warning-content">
-    <h1 class="warning-title">ATENÇÃO!</h1>
-    <p>ESTA É UMA OBRA DE FICÇÃO</p>
-    <p>Os ambientes, fenômenos e tecnologias presentes foram inspirados em conceitos reais nos campos da física, astronomia, química, geologia e afins.</p>
-    <p>Até o momento atual, não foi detectada nenhuma forma de vida fora da Terra, logo, as criaturas presentes têm inspiração no que conhecemos como vida até então. A narrativa é também inspirada nos campos da sociologia, história e filosofia.</p>
-    <button id="compreendo-btn" class="warning-btn">COMPREENDO</button>
+  <div id="warning-modal">
+    <div class="warning-content">
+      <h1 class="warning-title">ATENÇÃO!</h1>
+      <p>ESTA É UMA OBRA DE FICÇÃO</p>
+      <p>Os ambientes, fenômenos e tecnologias presentes foram inspirados em conceitos reais nos campos da física, astronomia, química, geologia e afins.</p>
+      <p>Até o momento atual, não foi detectada nenhuma forma de vida fora da Terra, logo, as criaturas presentes têm inspiração no que conhecemos como vida até então. A narrativa é também inspirada nos campos da sociologia, história e filosofia.</p>
+      <button id="compreendo-btn" class="warning-btn">COMPREENDO</button>
+    </div>
   </div>
-</div>
-
   
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -618,22 +422,11 @@ html, body {
     });
     
     $(document).ready(function(){
+      // Inicializa o flipbook
       $("#flipbook").turn({
-  autoCenter: false,
-  display: 'double',
-  acceleration: true, // Ativa aceleração para melhor desempenho
-  elevation: 50, // Ajusta a elevação da página ao virar
-  duration: 1000, // Duração da animação
-  gradients: true, // Ativa gradientes nas bordas das páginas
-  when: {
-    turning: function(e, page, view) {
-      // Impede o comportamento padrão se necessário
-      if (e.type === 'mousedown' || e.type === 'touchstart') {
-        e.preventDefault();
-      }
-    }
-  }
-});
+        autoCenter: false,
+        display: 'double'
+      });
       
       // Redimensionamento responsivo do flipbook
       function resizeFlipbook() {
@@ -651,34 +444,13 @@ html, body {
       $(window).resize(function(){
         resizeFlipbook();
       });
-
-
-      // Remoção do botão de seta após virar a primeira página
-$("#flipbook").bind("turning", function(e, page) {
-  if (page > 1) {
-    $("#setaBtn").fadeOut(300, function() {
-      $(this).remove();
-    });
-  }
-});
-
-// Controle do botão de seta
-$(document).on("click", "#setaBtn", function(e) {
-  e.stopPropagation();
-  $("#flipbook").turn("next");
-});
-
-
-      // Ocultar setas de pinçamento após interação com o globo
-$("#globeCanvas").on("click touchstart mousedown", function() {
-  $("#globePinchIndicator").fadeOut(300, function() {
-    $(this).remove();
-  });
-});
-
       
+      // Impede o arrasto padrão das imagens (corrige problema no Chrome)
+      $('.page img').on('dragstart', function(event) {
+        event.preventDefault();
+      });
       
-      // Dispara o áudio de virar página no mousedown/touchstart
+      // Evento para tocar áudio de virar página
       $("#flipbook").on("mousedown touchstart", function(){
         if (flipAudio) {
           flipAudio.pause();
@@ -695,7 +467,7 @@ $("#globeCanvas").on("click touchstart mousedown", function() {
         }
       });
       
-      // Inicia a música de fundo com o primeiro clique/touch
+      // Inicia a música de fundo no primeiro clique/touch
       $(document).one("click touchstart", function(){
         var bg = document.getElementById("bgMusic");
         bg.currentTime = 0;
@@ -703,15 +475,14 @@ $("#globeCanvas").on("click touchstart mousedown", function() {
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Adicione este código dentro do $(document).ready()
+      // Lógica do overlay
       $("#btnSair").on("click", function(e) {
-        
         e.preventDefault();
         e.stopPropagation();
-      $("#overlayContainer").fadeOut(500);
+        $("#overlayContainer").fadeOut(500);
       });
       
-      // Corrige o problema de propagação dos cliques dos botões veleywei
+      // Propagação dos cliques dos botões
       $(document).on("click", "#cliquebatedor", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "batedor.png");
@@ -725,68 +496,83 @@ $("#globeCanvas").on("click touchstart mousedown", function() {
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-
+  
       $(document).on("click", "#cliquesangue", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "sanguedomundo.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+      
       $(document).on("click", "#cliqueinversao", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cap1/inversao.webp");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-
       
-      // Eventos dos botões de tracking na Página 6
-      $(document).on("click", "#cliquemaior", function(e){
+      $(document).on("click", "#cliquetipog", function(e){
         e.stopPropagation();
-        window.myGlobe.trackingMode = "central";
+        $("#overlayImage").attr("src", "imagens/cap1/inversao.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      $(document).on("click", "#cliquemenor", function(e){
+      $(document).on("click", "#cliquerefracao", function(e){
         e.stopPropagation();
-        window.myGlobe.trackingMode = "orbit";
+        $("#overlayImage").attr("src", "imagens/cap1/inversao.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
+      // Lógica para a seta na capa do flipbook: desaparece ao virar a página
+      $("#flipbook").bind("turning", function(e, page) {
+        if (page > 1) {
+          $("#setaBtn").fadeOut(300, function() {
+            $(this).remove();
+          });
+        }
+      });
+      
+      // Lógica para as setas sobre o globo: se afastam e desaparecem após o primeiro clique
+      $("#globeCanvas").one("click", function(){
+        $("#globeSeta1").animate({ left: "-=100" }, 500, function(){ $(this).fadeOut(300); });
+        $("#globeSeta2").animate({ left: "+=100" }, 500, function(){ $(this).fadeOut(300); });
+      });
     });
   </script>
 
   <script>
-  let musicStarted = false;
+    let musicStarted = false;
   
-  document.addEventListener('DOMContentLoaded', () => {
-    // Mostrar o warning modal quando o loading screen desaparecer
-    document.getElementById("loading-screen").addEventListener("transitionend", function() {
-      if (this.style.display === "none") {
-        document.getElementById("warning-modal").style.display = "flex";
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      // Mostrar o warning modal quando o loading screen desaparecer
+      document.getElementById("loading-screen").addEventListener("transitionend", function() {
+        if (this.style.display === "none") {
+          document.getElementById("warning-modal").style.display = "flex";
+        }
+      });
+      
+      // Fechar o warning modal e iniciar a música quando o botão for clicado
+      document.getElementById("compreendo-btn").addEventListener("click", function() {
+        document.getElementById("warning-modal").style.display = "none";
+        if (!musicStarted) {
+          var bg = document.getElementById("bgMusic");
+          bg.currentTime = 0;
+          bg.volume = 0.9;
+          bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+          musicStarted = true;
+        }
+      });
     });
     
-    // Fechar o warning modal e iniciar a música quando o botão for clicado
-    document.getElementById("compreendo-btn").addEventListener("click", function() {
-      document.getElementById("warning-modal").style.display = "none";
-      if (!musicStarted) {
-        var bg = document.getElementById("bgMusic");
-        bg.currentTime = 0;
-        bg.volume = 0.9;
-        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
-        musicStarted = true;
-      }
+    window.addEventListener("load", function() {
+      setTimeout(function() {
+        document.getElementById("loading-screen").style.display = "none";
+        document.getElementById("warning-modal").style.display = "flex";
+      }, 1000);
     });
-  });
-  
-  // Se você estiver usando uma tela de carregamento similar, adicione isso:
-  window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.getElementById("loading-screen").style.display = "none";
-      document.getElementById("warning-modal").style.display = "flex";
-    }, 1000); // Pequeno atraso para garantir que tudo esteja carregado
-  });
-</script>
-
+  </script>
   
   <script src="./globo.js"></script>
   <script>
@@ -859,4 +645,4 @@ $("#globeCanvas").on("click touchstart mousedown", function() {
     });
   </script>
 </body>
-  </html>
+</html>
