@@ -94,33 +94,32 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Seta da capa – igual ao Veleywei */
+    /* Seta da capa – mesma lógica do Veleywei */
     #setaBtn {
       position: absolute;
       top: 20px;
       right: 20px;
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       cursor: pointer;
       z-index: 102;
-      animation: moveAndFade 3s infinite;
+      animation: moveDiagonal 3s infinite;
     }
-    @keyframes moveAndFade {
-      0% { opacity: 0.3; transform: translate(0, 0); }
-      50% { opacity: 1; transform: translate(15px, 15px); }
-      100% { opacity: 0.3; transform: translate(0, 0); }
+    @keyframes moveDiagonal {
+      0% { opacity: 0.3; transform: translate(0,0); }
+      50% { opacity: 1; transform: translate(-20px,20px); }
+      100% { opacity: 0.3; transform: translate(0,0); }
     }
-    /* Setas do globo – duas setas, inicialmente centralizadas */
+    /* Setas do globo – duas setas inicialmente centralizadas */
     #globeSeta1, #globeSeta2 {
       position: absolute;
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       cursor: pointer;
       z-index: 101;
-      transition: transform 0.5s ease, opacity 0.5s ease;
     }
     /* Flipbook */
     #flipbook {
@@ -129,7 +128,6 @@
       cursor: grab;
       user-select: none;
       transform: translateZ(0);
-      /* Removido touch-action para evitar interferência no Chrome */
       width: 100%;
       height: auto;
     }
@@ -532,20 +530,30 @@
         }
       });
       
-      // --- Lógica para as setas do globo ---
-      var globeArrowsAnimated = false;
-      function animateGlobeArrows() {
-        if (globeArrowsAnimated) return;
-        globeArrowsAnimated = true;
-        // Aplica transição para mover as setas para fora (uma para a esquerda e outra para a direita) e diminuir a opacidade
-        $("#globeSeta1").css({ transform: "translate(calc(-50% - 80px), -50%)", opacity: 0 });
-        $("#globeSeta2").css({ transform: "translate(calc(-50% + 80px), -50%)", opacity: 0 });
-      }
-      // Se o usuário clicar no globo ou se disparar o evento "globoCarregado", anima as setas (apenas uma vez)
-      $("#globeCanvas").one("click", animateGlobeArrows);
-      $(document).on("globoCarregado", animateGlobeArrows);
-      
     });
+    
+    // --- Lógica para as setas do globo ---
+    let arrowDistance = 0;
+    let globeAnimationRunning = true;
+    function animateGlobeArrows() {
+      if (!globeAnimationRunning) return;
+      arrowDistance += 0.5; // Aumenta a cada frame (ajuste conforme necessário)
+      // Atualiza os transforms para que as setas se afastem do centro
+      document.getElementById("globeSeta1").style.transform = "translate(-50%, -50%) translateX(-" + arrowDistance + "px)";
+      document.getElementById("globeSeta2").style.transform = "translate(-50%, -50%) translateX(" + arrowDistance + "px)";
+      requestAnimationFrame(animateGlobeArrows);
+    }
+    // Inicia a animação contínua das setas do globo
+    requestAnimationFrame(animateGlobeArrows);
+    
+    // Quando o usuário clicar no globo, interrompe a animação e esconde as setas
+    document.getElementById("globeCanvas").addEventListener("click", function() {
+      globeAnimationRunning = false;
+      $("#globeSeta1, #globeSeta2").fadeOut(300, function() {
+        $(this).remove();
+      });
+    });
+    
   </script>
   
   <script>
