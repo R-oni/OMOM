@@ -94,7 +94,7 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Seta da capa – mesma lógica do Veleywei */
+    /* Seta da capa – igual ao Veleywei */
     #setaBtn {
       position: absolute;
       top: 20px;
@@ -529,26 +529,47 @@
           $("#setaBtn").fadeOut(300, function() { $(this).remove(); });
         }
       });
-      
     });
     
-    // --- Lógica para as setas do globo ---
+    // --- Lógica para as setas do globo (Ciclo de afastamento, fade out e reinício) ---
     let arrowDistance = 0;
-    let globeAnimationRunning = true;
-    function animateGlobeArrows() {
-      if (!globeAnimationRunning) return;
-      arrowDistance += 0.5; // Aumenta a cada frame (ajuste conforme necessário)
-      // Atualiza os transforms para que as setas se afastem do centro
-      document.getElementById("globeSeta1").style.transform = "translate(-50%, -50%) translateX(-" + arrowDistance + "px)";
-      document.getElementById("globeSeta2").style.transform = "translate(-50%, -50%) translateX(" + arrowDistance + "px)";
-      requestAnimationFrame(animateGlobeArrows);
-    }
-    // Inicia a animação contínua das setas do globo
-    requestAnimationFrame(animateGlobeArrows);
+    const maxDistance = 100; // distância máxima em pixels
+    const speed = 60; // velocidade em pixels por segundo
+    const fadeOutDuration = 500; // duração do fade out em ms
+    let lastTimestamp = null;
+    let cycleRunning = true;
     
-    // Quando o usuário clicar no globo, interrompe a animação e esconde as setas
+    function animateGlobeCycle(timestamp) {
+      if (!cycleRunning) return;
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const dt = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+      arrowDistance += speed * dt;
+      
+      if (arrowDistance >= maxDistance) {
+        // Inicia fade out e reinicia o ciclo
+        $("#globeSeta1, #globeSeta2").animate({ opacity: 0 }, fadeOutDuration, function() {
+          // Reinicia: reseta distância e opacidade, reposiciona as setas no centro
+          $("#globeSeta1, #globeSeta2").css({ transform: "translate(-50%, -50%)", opacity: 1 });
+          arrowDistance = 0;
+          lastTimestamp = null;
+          if (cycleRunning) {
+            requestAnimationFrame(animateGlobeCycle);
+          }
+        });
+      } else {
+        // Atualiza posição das setas: uma para a esquerda e a outra para a direita
+        document.getElementById("globeSeta1").style.transform = "translate(-50%, -50%) translateX(-" + arrowDistance + "px)";
+        document.getElementById("globeSeta2").style.transform = "translate(-50%, -50%) translateX(" + arrowDistance + "px)";
+        requestAnimationFrame(animateGlobeCycle);
+      }
+    }
+    // Inicia o ciclo de animação das setas do globo
+    requestAnimationFrame(animateGlobeCycle);
+    
+    // Quando o usuário clicar no globo, interrompe o ciclo e esconde as setas
     document.getElementById("globeCanvas").addEventListener("click", function() {
-      globeAnimationRunning = false;
+      cycleRunning = false;
       $("#globeSeta1, #globeSeta2").fadeOut(300, function() {
         $(this).remove();
       });
