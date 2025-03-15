@@ -230,6 +230,78 @@ html, body {
 .warning-btn:hover {
   background-color: #555;
 }
+
+/* Botão de Seta Animado */
+#setaBtn {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  cursor: pointer;
+  animation: moveAndFade 3s infinite;
+}
+
+@keyframes moveAndFade {
+  0% {
+    opacity: 0.3;
+    transform: translate(0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-15px, 15px);
+  }
+  100% {
+    opacity: 0.3;
+    transform: translate(0, 0);
+  }
+}
+
+
+
+  #globePinchIndicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 100px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.pinch-arrow {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  z-index: 20;
+}
+
+.pinch-arrow-left {
+  left: 0;
+  transform: rotate(-45deg);
+  animation: moveLeftArrow 2s infinite;
+}
+
+.pinch-arrow-right {
+  right: 0;
+  transform: rotate(135deg);
+  animation: moveRightArrow 2s infinite;
+}
+
+@keyframes moveLeftArrow {
+  0% { transform: rotate(-45deg) translate(0, 0); opacity: 1; }
+  100% { transform: rotate(-45deg) translate(-15px, -15px); opacity: 0; }
+}
+
+@keyframes moveRightArrow {
+  0% { transform: rotate(135deg) translate(0, 0); opacity: 1; }
+  100% { transform: rotate(135deg) translate(15px, -15px); opacity: 0; }
+}
+
+
+  
   
 /* Botões específicos da página 6 */
 #cliquemaior {
@@ -424,13 +496,20 @@ html, body {
     <!-- Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
+      <div id="globePinchIndicator">
+          <img src="seta.webp" alt="Pinch" class="pinch-arrow pinch-arrow-left">
+          <img src="seta.webp" alt="Pinch" class="pinch-arrow pinch-arrow-right">
+      </div>
       <div id="globeLoading">CARREGANDO...</div>
     </div>
     <!-- Flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
-        <div class="page hard"><img src="imagens/cap1/capa.webp" alt="Capa"></div>
+        <div class="page hard">
+            <img src="imagens/cap1/capa.webp" alt="Capa">
+            <img id="setaBtn" src="seta.webp" alt="Botão de Seta Animado">
+        </div>
         <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
         <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
         <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
@@ -540,9 +619,21 @@ html, body {
     
     $(document).ready(function(){
       $("#flipbook").turn({
-        autoCenter: false,
-        display: 'double'
-      });
+  autoCenter: false,
+  display: 'double',
+  acceleration: true, // Ativa aceleração para melhor desempenho
+  elevation: 50, // Ajusta a elevação da página ao virar
+  duration: 1000, // Duração da animação
+  gradients: true, // Ativa gradientes nas bordas das páginas
+  when: {
+    turning: function(e, page, view) {
+      // Impede o comportamento padrão se necessário
+      if (e.type === 'mousedown' || e.type === 'touchstart') {
+        e.preventDefault();
+      }
+    }
+  }
+});
       
       // Redimensionamento responsivo do flipbook
       function resizeFlipbook() {
@@ -560,6 +651,32 @@ html, body {
       $(window).resize(function(){
         resizeFlipbook();
       });
+
+
+      // Remoção do botão de seta após virar a primeira página
+$("#flipbook").bind("turning", function(e, page) {
+  if (page > 1) {
+    $("#setaBtn").fadeOut(300, function() {
+      $(this).remove();
+    });
+  }
+});
+
+// Controle do botão de seta
+$(document).on("click", "#setaBtn", function(e) {
+  e.stopPropagation();
+  $("#flipbook").turn("next");
+});
+
+
+      // Ocultar setas de pinçamento após interação com o globo
+$("#globeCanvas").on("click touchstart mousedown", function() {
+  $("#globePinchIndicator").fadeOut(300, function() {
+    $(this).remove();
+  });
+});
+
+      
       
       // Dispara o áudio de virar página no mousedown/touchstart
       $("#flipbook").on("mousedown touchstart", function(){
