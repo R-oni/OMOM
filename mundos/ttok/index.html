@@ -590,20 +590,20 @@
         // Começar com as setas mais afastadas (35% e 65%)
         $("#globeSeta1").css({
           opacity: 1,
-          left: "35%"
+          left: "42%"
         });
         $("#globeSeta2").css({
           opacity: 1,
-          left: "65%"
+          left: "58%"
         });
         
         // Mover as setas para perto uma da outra (simulando o gesto de pinch)
         $("#globeSeta1").animate({
-          left: "42%"
+          left: "35%"
         }, 800);
         
         $("#globeSeta2").animate({
-          left: "58%"
+          left: "65%"
         }, 800, function() {
           // Fade-out
           $("#globeSeta1, #globeSeta2").animate({
