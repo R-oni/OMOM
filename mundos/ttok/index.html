@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>OS BATEDORES DE TT'TOK'TAK'TAK'T</title>
-  <!-- Importando a fonte Press Start 2P -->
+  <!-- Fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     /* Estilos globais */
@@ -17,6 +17,7 @@
       color: #fff;
       font-family: sans-serif;
     }
+
     /* Loading Screen */
     #loading-screen {
       position: fixed;
@@ -44,6 +45,7 @@
       font-size: 20px;
       z-index: 10001;
     }
+
     /* Layout mobile/vertical */
     .page-container {
       display: flex;
@@ -73,15 +75,19 @@
       font-size: 16px;
       text-decoration: none;
     }
+
     /* Seção do globo */
     .globe-section {
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
+      /* Permite o clique no canvas */
+      pointer-events: none; /* para a DIV */
     }
     #globeCanvas {
       height: 37.5vh;
+      pointer-events: auto; /* Canvas recebe o clique */
     }
     #globeLoading {
       position: absolute;
@@ -94,7 +100,8 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Seta da capa – igual à do Veleywei */
+
+    /* Seta da Capa (flipbook) */
     #setaBtn {
       position: absolute;
       top: 20px;
@@ -106,39 +113,29 @@
       animation: moveDiagonal 3s infinite;
     }
     @keyframes moveDiagonal {
-      0% { opacity: 0.3; transform: translate(0, 0); }
-      50% { opacity: 1; transform: translate(-20px, 20px); }
-      100% { opacity: 0.3; transform: translate(0, 0); }
+      0% { opacity: 0.3; transform: translate(0,0); }
+      50% { opacity: 1; transform: translate(-20px,20px); }
+      100% { opacity: 0.3; transform: translate(0,0); }
     }
-    /* Setas do globo – duas setas inicialmente centralizadas */
-    #globeSeta1, #globeSeta2 {
+
+    /* Setas do Globo */
+    .seta-globo {
       position: absolute;
       width: 80px;
       height: 80px;
       top: 50%;
-      left: 50%;
-      /* Inicia levemente separadas: 10px para cada lado */
-      /* As animações abaixo farão com que se afastem e deem fade */
-      transform: translate(-50%, -50%);
+      transform: translateY(-50%);
       cursor: pointer;
       z-index: 101;
+      opacity: 1;
     }
-    /* CSS Animation para as setas do globo */
-    @keyframes arrowMoveFadeLeft {
-      0% { transform: translate(-50%, -50%) translateX(-10px); opacity: 1; }
-      100% { transform: translate(-50%, -50%) translateX(-100px); opacity: 0; }
-    }
-    @keyframes arrowMoveFadeRight {
-      0% { transform: translate(-50%, -50%) translateX(10px); opacity: 1; }
-      100% { transform: translate(-50%, -50%) translateX(100px); opacity: 0; }
-    }
-    /* Aplicando as animações às setas do globo */
     #globeSeta1 {
-      animation: arrowMoveFadeLeft 2s linear infinite;
+      left: 48%;
     }
     #globeSeta2 {
-      animation: arrowMoveFadeRight 2s linear infinite;
+      left: 52%;
     }
+
     /* Flipbook */
     #flipbook {
       position: relative;
@@ -161,6 +158,7 @@
       -webkit-user-drag: none;
       user-drag: none;
     }
+
     /* Overlay */
     #overlayContainer {
       display: none;
@@ -193,6 +191,7 @@
       padding: 20px;
       z-index: 10000;
     }
+
     /* Warning Modal */
     #warning-modal {
       position: fixed;
@@ -237,15 +236,44 @@
       font-size: 14px;
     }
     .warning-btn:hover { background-color: #555; }
+
     /* Botões da Página 6 (tracking) – inalterados */
-    #cliquemaior { position: absolute; top: 5%; left: 15%; width: 65%; animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out; }
-    #cliquemenor { position: absolute; bottom: 16%; left: 37%; width: 23%; animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out; }
-    #cliquebatedor { position: absolute; bottom: 17%; left: 8%; width: 61%; animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out; }
-    #cliquemergulhador { position: absolute; top: 11%; right: 5%; width: 48%; animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out; }
-    #cliquesangue { position: absolute; bottom: 38%; right: -3%; width: 28%; animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out; }
-    #cliqueinversao, #cliquetipog, #cliquerefracao, #cliquemorse { position: absolute; bottom: 4px; right: 0%; width: 100%; animation: fadeInOut 0.7s infinite; }
-    @keyframes fadeInOut { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    #cliquemaior {
+      position: absolute; top: 5%; left: 15%; width: 65%;
+      animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
+    }
+    #cliquemenor {
+      position: absolute; bottom: 16%; left: 37%; width: 23%;
+      animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
+    }
+    #cliquebatedor {
+      position: absolute; bottom: 17%; left: 8%; width: 61%;
+      animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
+    }
+    #cliquemergulhador {
+      position: absolute; top: 11%; right: 5%; width: 48%;
+      animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
+    }
+    #cliquesangue {
+      position: absolute; bottom: 38%; right: -3%; width: 28%;
+      animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
+    }
+    #cliqueinversao, #cliquetipog, #cliquerefracao, #cliquemorse {
+      position: absolute; bottom: 4px; right: 0%; width: 100%;
+      animation: fadeInOut 0.7s infinite;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
     /* Versão para PC (landscape) */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
@@ -298,11 +326,13 @@
         align-items: center;
         overflow: hidden;
         position: relative;
+        pointer-events: none;
       }
       #globeCanvas {
         width: 100% !important;
         height: 100% !important;
         object-fit: contain;
+        pointer-events: auto;
       }
     }
   </style>
@@ -332,9 +362,9 @@
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
-      <!-- Duas setas idênticas à do Veleywei, inicialmente centralizadas com animação CSS -->
-      <img id="globeSeta1" src="imagens/seta.webp" alt="Seta para pinçar" draggable="false">
-      <img id="globeSeta2" src="imagens/seta.webp" alt="Seta para pinçar" draggable="false">
+      <!-- Duas setas do globo -->
+      <img id="globeSeta1" class="seta-globo" src="imagens/seta.webp" alt="Seta" draggable="false">
+      <img id="globeSeta2" class="seta-globo" src="imagens/seta.webp" alt="Seta" draggable="false">
     </div>
     <!-- Flipbook -->
     <div id="flipbook-wrapper">
@@ -400,13 +430,13 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
     <button id="btnSair">Voltar</button>
   </div>
-  
+
   <!-- Warning Modal -->
   <div id="warning-modal">
     <div class="warning-content">
@@ -426,7 +456,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
   <script>
-    // Áudio para virar página
+    // Áudio de virar página
     const flipAudioStart = 1;
     const flipAudioEnd = 1.4;
     let flipAudio;
@@ -451,7 +481,7 @@
         display: 'double'
       });
       
-      // Redimensionamento responsivo do flipbook
+      // Ajuste responsivo do flipbook
       function resizeFlipbook() {
         if ($(window).width() < 1024) {
           var newWidth = $(window).width() * 0.9;
@@ -468,12 +498,12 @@
         resizeFlipbook();
       });
       
-      // Previne o arrasto das imagens (necessário para o Chrome)
+      // Previne arrasto das imagens (Chrome)
       $(".page img").on("dragstart", function(e) {
         e.preventDefault();
       });
       
-      // Evento para tocar o áudio de virar página
+      // Áudio de virar página no mousedown/touchstart
       $("#flipbook").on("mousedown touchstart", function(){
         if (flipAudio) {
           flipAudio.pause();
@@ -490,7 +520,7 @@
         }
       });
       
-      // Inicia a música de fundo no primeiro clique/touch
+      // Inicia a música de fundo no primeiro clique
       $(document).one("click touchstart", function(){
         var bg = document.getElementById("bgMusic");
         bg.currentTime = 0;
@@ -498,14 +528,14 @@
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Lógica do overlay
+      // Overlay (Botão Sair)
       $("#btnSair").on("click", function(e) {
         e.preventDefault();
         e.stopPropagation();
         $("#overlayContainer").fadeOut(500);
       });
       
-      // Eventos para os botões de tracking da Página 6
+      // Eventos de clique em botões de tracking (Página 6)
       $(document).on("click", "#cliquebatedor", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "batedor.png");
@@ -531,7 +561,7 @@
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
       
-      // Eventos dos botões de tracking na Página 6 (central e órbita)
+      // Botões de tracking (Página 6): central/orbit
       $(document).on("click", "#cliquemaior", function(e){
         e.stopPropagation();
         window.myGlobe.trackingMode = "central";
@@ -541,20 +571,39 @@
         window.myGlobe.trackingMode = "orbit";
       });
       
-      // Lógica para a seta da capa: remove a seta ao virar a página
+      // Remove seta da capa ao virar a página
       $("#flipbook").bind("turning", function(e, page) {
         if (page > 1) {
           $("#setaBtn").fadeOut(300, function() { $(this).remove(); });
         }
       });
-    });
-    
-    // --- Lógica para as setas do globo ---
-    // As setas estão animadas via CSS; quando o usuário clicar no globo, as setas serão removidas.
-    document.getElementById("globeCanvas").addEventListener("click", function() {
-      // Remove as setas com fadeOut
-      $("#globeSeta1, #globeSeta2").stop(true,true).fadeOut(300, function() {
-        $(this).remove();
+
+      // --- LÓGICA PARA AS SETAS DO GLOBO ---
+      let cycleRunning = true;
+      function loopSetas() {
+        if (!cycleRunning) return;
+        
+        // Inicia levemente separadas do centro
+        $("#globeSeta1").css({ left: "48%", opacity: 1 });
+        $("#globeSeta2").css({ left: "52%", opacity: 1 });
+        
+        // Após breve delay
+        setTimeout(() => {
+          // Move e fade as setas
+          $("#globeSeta1").animate({ left: "0%", opacity: 0 }, 1500);
+          $("#globeSeta2").animate({ left: "100%", opacity: 0 }, 1500, function() {
+            if (cycleRunning) loopSetas(); // reinicia
+          });
+        }, 200);
+      }
+      loopSetas(); // inicia o ciclo
+
+      // Ao clicar no globo, paramos o ciclo e removemos as setas
+      $("#globeCanvas").one("click", function() {
+        cycleRunning = false;
+        $("#globeSeta1, #globeSeta2").stop(true,true).fadeOut(300, function(){
+          $(this).remove();
+        });
       });
     });
   </script>
@@ -590,7 +639,7 @@
   
   <script src="./globo.js"></script>
   <script>
-    // Animação do canvas (efeito warp/starfield)
+    // Efeito warp/starfield
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
@@ -645,9 +694,8 @@
         cancelAnimationFrame(animationFrameId);
       });
     })();
-  </script>
-  <script>
-    // Quando o globo estiver carregado, remove o loading do globo
+
+    // Remove loading do globo ao carregá-lo
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
     });
