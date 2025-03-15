@@ -90,7 +90,6 @@
       text-decoration: none;
     }
     
-    /* Atualizado: utiliza .globe-section (corrigindo erro de digitação) */
     .globe-section {
       display: flex;
       justify-content: center;
@@ -117,7 +116,7 @@
       pointer-events: none;
     }
     
-    /* Novas regras para as setas sobre o globo */
+    /* Setas para o globo */
     #globeSeta1, #globeSeta2 {
       position: absolute;
       width: 50px;
@@ -133,7 +132,7 @@
       left: calc(50% + 30px);
     }
     
-    /* Flipbook base - Unificado em um único container */
+    /* Flipbook base */
     #flipbook {
       position: relative;
       margin: auto;
@@ -144,7 +143,7 @@
       user-select: none;
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
-      /* Dimensões padrão para mobile; na versão desktop serão ajustadas */
+      touch-action: none;  /* Força o tratamento de eventos (resolvido no Chrome) */
       width: 100%;
       height: auto;
     }
@@ -152,7 +151,7 @@
     .page {
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
-      touch-action: manipulation;
+      touch-action: none;
       position: relative;
     }
     
@@ -160,15 +159,14 @@
       width: 100%;
       height: auto;
       display: block;
-      /* Impede o arrasto padrão (melhora o comportamento no Chrome) */
       -webkit-user-drag: none;
       user-drag: none;
     }
     
-    /* Seta para o flipbook na capa */
+    /* Seta para o flipbook na capa - posicionada no canto superior direito */
     #setaBtn {
       position: absolute;
-      bottom: 10px;
+      top: 10px;
       right: 10px;
       width: 50px;
       cursor: pointer;
@@ -183,7 +181,7 @@
       }
       50% {
         opacity: 1;
-        transform: translate(-15px, 15px);
+        transform: translate(15px, 15px);
       }
       100% {
         opacity: 0.3;
@@ -191,7 +189,6 @@
       }
     }
     
-    /* Animações */
     @keyframes fadeInOut {
       0% { opacity: 1; }
       50% { opacity: 0; }
@@ -204,7 +201,7 @@
       100% { transform: scale(1); }
     }
     
-    /* Para PC (landscape com min-width:1024px) - Versão Simplificada */
+    /* Versão para PC (landscape) */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
@@ -215,7 +212,6 @@
         position: relative;
       }
       
-      /* Container da Imagem + Texto */
       .header-container {
         grid-column: 1;
         position: relative;
@@ -248,7 +244,6 @@
         text-shadow: 2px 2px 4px #000;
       }
       
-      /* Flipbook */
       #flipbook-wrapper {
         grid-column: 1;
         grid-row: 2;
@@ -257,7 +252,6 @@
         margin: 0 auto;
       }
       
-      /* Globo - Ajustes principais */
       .globe-section {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -270,7 +264,6 @@
         position: relative;
       }
       
-      /* Garante que o canvas do globo preencha o container */
       #globeCanvas {
         width: 100% !important;
         height: 100% !important;
@@ -296,7 +289,7 @@
     <!-- Header -->
     <div class="header-container">
       <div class="top-section">
-        <img src="imagens/titulottok.webp" alt="Título Velei'wey">
+        <img src="imagens/titulottok.webp" alt="Título Velei'wey" draggable="false">
       </div>
       <div class="title-container">
         <a href="omom.html" class="title-text">OS BATEDORES DE TT'TOK'TAK'TAK'T</a>
@@ -306,72 +299,72 @@
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
-      <!-- Setas para indicar pinçar o globo -->
-      <img id="globeSeta1" src="seta.webp" alt="Seta para pinçar">
-      <img id="globeSeta2" src="seta.webp" alt="Seta para pinçar">
+      <!-- Setas para indicar a ação de pinçar -->
+      <img id="globeSeta1" src="seta.webp" alt="Seta para pinçar" draggable="false">
+      <img id="globeSeta2" src="seta.webp" alt="Seta para pinçar" draggable="false">
     </div>
     <!-- Flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
         <!-- Páginas do flipbook -->
         <div class="page hard">
-          <img src="imagens/cap1/capa.webp" alt="Capa">
+          <img src="imagens/cap1/capa.webp" alt="Capa" draggable="false">
           <!-- Seta para indicar ação na capa -->
-          <img id="setaBtn" src="seta.webp" alt="Botão de Seta Animado">
+          <img id="setaBtn" src="seta.webp" alt="Botão de Seta Animado" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1"></div>
-        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2"></div>
-        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3"></div>
-        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 5"></div>
-        <!-- Página 6 com os botões para tracking -->
+        <div class="page"><img src="imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 5" draggable="false"></div>
+        <!-- Página 6 com botões para tracking -->
         <div class="page" style="position: relative;">
-          <img src="imagens/cap1/pagina6.webp" alt="Página 6">
-          <img id="cliquemaior" src="imagens/cap1/cliquemaior.webp" alt="Botão Clique Maior">
-          <img id="cliquemenor" src="imagens/cap1/cliquemenor.webp" alt="Botão Clique Menor">
+          <img src="imagens/cap1/pagina6.webp" alt="Página 6" draggable="false">
+          <img id="cliquemaior" src="imagens/cap1/cliquemaior.webp" alt="Botão Clique Maior" draggable="false">
+          <img id="cliquemenor" src="imagens/cap1/cliquemenor.webp" alt="Botão Clique Menor" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 7"></div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 7" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina8.webp" alt="Página 10">
-          <img id="cliquebatedor" src="imagens/cap1/cliquebatedor.webp" alt="Botão Cliquey Eroben">
-          <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben">
-          <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina8.webp" alt="Página 10" draggable="false">
+          <img id="cliquebatedor" src="imagens/cap1/cliquebatedor.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5"></div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 10">
-          <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 10" draggable="false">
+          <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 2"></div>
+        <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 2" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina12.webp" alt="Página 10">
-          <img id="cliquetipog" src="imagens/cap1/cliquetipog.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina12.webp" alt="Página 10" draggable="false">
+          <img id="cliquetipog" src="imagens/cap1/cliquetipog.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 4" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina14.webp" alt="Página 10">
-          <img id="cliquerefracao" src="imagens/cap1/cliquerefracao.webp" alt="Botão Cliquey Eroben">
+          <img src="imagens/cap1/pagina14.webp" alt="Página 10" draggable="false">
+          <img id="cliquerefracao" src="imagens/cap1/cliquerefracao.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina17.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina18.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina19.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina20.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina21.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina22.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina23.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina24.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina25.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina26.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina27.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina28.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina29.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina30.webp" alt="Página 5"></div>
-        <div class="page"><img src="imagens/cap1/pagina31.webp" alt="Página 4"></div>
-        <div class="page"><img src="imagens/cap1/pagina32.webp" alt="Página 4"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina17.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina18.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina19.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina20.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina21.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina22.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina23.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina24.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina25.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina26.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina27.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina28.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina29.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina30.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina31.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina32.webp" alt="Página 4" draggable="false"></div>
       </div>
     </div>
   </div>
@@ -401,10 +394,9 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
   <script>
-    // Variáveis para definir os tempos de início e fim do áudio de virar página (em segundos)
+    // Áudio para virar página
     const flipAudioStart = 1;
     const flipAudioEnd = 1.4;
-    
     let flipAudio;
     document.addEventListener('DOMContentLoaded', () => {
       flipAudio = new Audio('sompagina.mp3');
@@ -445,12 +437,12 @@
         resizeFlipbook();
       });
       
-      // Impede o arrasto padrão das imagens (corrige problema no Chrome)
+      // Evita o arrasto padrão das imagens (para o Chrome)
       $('.page img').on('dragstart', function(event) {
         event.preventDefault();
       });
       
-      // Evento para tocar áudio de virar página
+      // Evento para o áudio de virar página
       $("#flipbook").on("mousedown touchstart", function(){
         if (flipAudio) {
           flipAudio.pause();
@@ -482,7 +474,7 @@
         $("#overlayContainer").fadeOut(500);
       });
       
-      // Propagação dos cliques dos botões
+      // Propagações para os botões do flipbook
       $(document).on("click", "#cliquebatedor", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "batedor.png");
@@ -534,11 +526,16 @@
         }
       });
       
-      // Lógica para as setas sobre o globo: se afastam e desaparecem após o primeiro clique
-      $("#globeCanvas").one("click", function(){
-        $("#globeSeta1").animate({ left: "-=100" }, 500, function(){ $(this).fadeOut(300); });
-        $("#globeSeta2").animate({ left: "+=100" }, 500, function(){ $(this).fadeOut(300); });
-      });
+      // Lógica para as setas sobre o globo
+      var globeArrowsAnimated = false;
+      function animateGlobeArrows() {
+        if (globeArrowsAnimated) return;
+        globeArrowsAnimated = true;
+        $("#globeSeta1").stop(true,true).animate({ left: "-=100", opacity: 0 }, 500, function(){ $(this).remove(); });
+        $("#globeSeta2").stop(true,true).animate({ left: "+=100", opacity: 0 }, 500, function(){ $(this).remove(); });
+      }
+      // Se o usuário clicar no globo, anima as setas (somente uma vez)
+      $("#globeCanvas").one("click", animateGlobeArrows);
     });
   </script>
 
@@ -546,14 +543,14 @@
     let musicStarted = false;
   
     document.addEventListener('DOMContentLoaded', () => {
-      // Mostrar o warning modal quando o loading screen desaparecer
+      // Exibe o warning modal quando o loading screen desaparecer
       document.getElementById("loading-screen").addEventListener("transitionend", function() {
         if (this.style.display === "none") {
           document.getElementById("warning-modal").style.display = "flex";
         }
       });
       
-      // Fechar o warning modal e iniciar a música quando o botão for clicado
+      // Fecha o warning modal e inicia a música quando o botão é clicado
       document.getElementById("compreendo-btn").addEventListener("click", function() {
         document.getElementById("warning-modal").style.display = "none";
         if (!musicStarted) {
@@ -639,9 +636,15 @@
     })();
   </script>
   <script>
-    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
+    // Ao carregar o globo, remove o loading e anima as setas (se ainda não foram animadas)
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
+      // Se em 2 segundos o usuário não clicou, dispara a animação
+      setTimeout(function(){
+        if (typeof globeArrowsAnimated !== 'undefined' && !globeArrowsAnimated) {
+          $("#globeCanvas").trigger("click");
+        }
+      }, 2000);
     });
   </script>
 </body>
