@@ -94,7 +94,7 @@
       z-index: 100;
       pointer-events: none;
     }
-    /* Seta da capa – igual ao Veleywei */
+    /* Seta da capa – igual à do Veleywei */
     #setaBtn {
       position: absolute;
       top: 20px;
@@ -106,9 +106,9 @@
       animation: moveDiagonal 3s infinite;
     }
     @keyframes moveDiagonal {
-      0% { opacity: 0.3; transform: translate(0,0); }
-      50% { opacity: 1; transform: translate(-20px,20px); }
-      100% { opacity: 0.3; transform: translate(0,0); }
+      0% { opacity: 0.3; transform: translate(0, 0); }
+      50% { opacity: 1; transform: translate(-20px, 20px); }
+      100% { opacity: 0.3; transform: translate(0, 0); }
     }
     /* Setas do globo – duas setas inicialmente centralizadas */
     #globeSeta1, #globeSeta2 {
@@ -117,9 +117,27 @@
       height: 80px;
       top: 50%;
       left: 50%;
+      /* Inicia levemente separadas: 10px para cada lado */
+      /* As animações abaixo farão com que se afastem e deem fade */
       transform: translate(-50%, -50%);
       cursor: pointer;
       z-index: 101;
+    }
+    /* CSS Animation para as setas do globo */
+    @keyframes arrowMoveFadeLeft {
+      0% { transform: translate(-50%, -50%) translateX(-10px); opacity: 1; }
+      100% { transform: translate(-50%, -50%) translateX(-100px); opacity: 0; }
+    }
+    @keyframes arrowMoveFadeRight {
+      0% { transform: translate(-50%, -50%) translateX(10px); opacity: 1; }
+      100% { transform: translate(-50%, -50%) translateX(100px); opacity: 0; }
+    }
+    /* Aplicando as animações às setas do globo */
+    #globeSeta1 {
+      animation: arrowMoveFadeLeft 2s linear infinite;
+    }
+    #globeSeta2 {
+      animation: arrowMoveFadeRight 2s linear infinite;
     }
     /* Flipbook */
     #flipbook {
@@ -314,7 +332,7 @@
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <div id="globeLoading">CARREGANDO...</div>
-      <!-- Duas setas idênticas à do Veleywei, inicialmente centralizadas -->
+      <!-- Duas setas idênticas à do Veleywei, inicialmente centralizadas com animação CSS -->
       <img id="globeSeta1" src="imagens/seta.webp" alt="Seta para pinçar" draggable="false">
       <img id="globeSeta2" src="imagens/seta.webp" alt="Seta para pinçar" draggable="false">
     </div>
@@ -531,50 +549,14 @@
       });
     });
     
-    // --- Lógica para as setas do globo (Ciclo de afastamento, fade out e reinício) ---
-    let arrowDistance = 0;
-    const maxDistance = 100; // distância máxima em pixels
-    const speed = 60; // velocidade em pixels por segundo
-    const fadeOutDuration = 500; // duração do fade out em ms
-    let lastTimestamp = null;
-    let cycleRunning = true;
-    
-    function animateGlobeCycle(timestamp) {
-      if (!cycleRunning) return;
-      if (!lastTimestamp) lastTimestamp = timestamp;
-      const dt = (timestamp - lastTimestamp) / 1000;
-      lastTimestamp = timestamp;
-      arrowDistance += speed * dt;
-      
-      if (arrowDistance >= maxDistance) {
-        // Inicia fade out e reinicia o ciclo
-        $("#globeSeta1, #globeSeta2").animate({ opacity: 0 }, fadeOutDuration, function() {
-          // Reinicia: reseta distância e opacidade, reposiciona as setas no centro
-          $("#globeSeta1, #globeSeta2").css({ transform: "translate(-50%, -50%)", opacity: 1 });
-          arrowDistance = 0;
-          lastTimestamp = null;
-          if (cycleRunning) {
-            requestAnimationFrame(animateGlobeCycle);
-          }
-        });
-      } else {
-        // Atualiza posição das setas: uma para a esquerda e a outra para a direita
-        document.getElementById("globeSeta1").style.transform = "translate(-50%, -50%) translateX(-" + arrowDistance + "px)";
-        document.getElementById("globeSeta2").style.transform = "translate(-50%, -50%) translateX(" + arrowDistance + "px)";
-        requestAnimationFrame(animateGlobeCycle);
-      }
-    }
-    // Inicia o ciclo de animação das setas do globo
-    requestAnimationFrame(animateGlobeCycle);
-    
-    // Quando o usuário clicar no globo, interrompe o ciclo e esconde as setas
+    // --- Lógica para as setas do globo ---
+    // As setas estão animadas via CSS; quando o usuário clicar no globo, as setas serão removidas.
     document.getElementById("globeCanvas").addEventListener("click", function() {
-      cycleRunning = false;
-      $("#globeSeta1, #globeSeta2").fadeOut(300, function() {
+      // Remove as setas com fadeOut
+      $("#globeSeta1, #globeSeta2").stop(true,true).fadeOut(300, function() {
         $(this).remove();
       });
     });
-    
   </script>
   
   <script>
