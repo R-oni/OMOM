@@ -604,11 +604,11 @@
         
         $("#globeSeta2").animate({
           left: "65%"
-        }, 800, function() {
+        }, 400, function() {
           // Fade-out
           $("#globeSeta1, #globeSeta2").animate({
             opacity: 0
-          }, 400, function() {
+          }, 200, function() {
             // Resetar posições e reiniciar se o ciclo ainda estiver ativo
             if (cycleRunning) {
               setTimeout(animatePinchGesture, 500);
