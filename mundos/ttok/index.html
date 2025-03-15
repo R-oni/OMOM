@@ -123,17 +123,19 @@
       position: absolute;
       width: 80px;
       height: 80px;
-      top: 50%;
-      transform: translateY(-50%);
       cursor: pointer;
       z-index: 101;
       opacity: 1;
     }
     #globeSeta1 {
-      left: 35%;
+      bottom: 30%;
+      left: 30%;
+      transform: rotate(-45deg);
     }
     #globeSeta2 {
-      left: 65%;
+      top: 30%;
+      right: 30%;
+      transform: rotate(135deg);
     }
 
     /* Flipbook */
@@ -391,7 +393,7 @@
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10" draggable="false">
           <img id="cliquebatedor" src="imagens/cap1/cliquebatedor.webp" alt="Botão Cliquey Eroben" draggable="false">
-          <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
+<img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
           <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5" draggable="false"></div>
@@ -578,32 +580,33 @@
         }
       });
 
-      // --- LÓGICA CORRIGIDA PARA AS SETAS DO GLOBO ---
+      // --- LÓGICA MODIFICADA PARA AS SETAS DO GLOBO NA DIAGONAL ---
       let cycleRunning = true;
       
-      // Rotacionar a segunda seta 180 graus
-      $("#globeSeta2").css("transform", "translateY(-50%) rotate(180deg)");
-      
-      function animatePinchGesture() {
+      function animateDiagonalPinchGesture() {
         if (!cycleRunning) return;
         
-        // Começar com as setas mais afastadas (35% e 65%)
+        // Começar com as setas nas posições iniciais
         $("#globeSeta1").css({
           opacity: 1,
-          left: "42%"
+          bottom: "20%",
+          left: "20%"
         });
         $("#globeSeta2").css({
           opacity: 1,
-          left: "58%"
+          top: "20%",
+          right: "20%"
         });
         
-        // Mover as setas para perto uma da outra (simulando o gesto de pinch)
+        // Mover as setas na diagonal em direção ao centro
         $("#globeSeta1").animate({
-          left: "35%"
+          bottom: "30%",
+          left: "30%"
         }, 800);
         
         $("#globeSeta2").animate({
-          left: "65%"
+          top: "30%",
+          right: "30%"
         }, 800, function() {
           // Fade-out
           $("#globeSeta1, #globeSeta2").animate({
@@ -611,14 +614,14 @@
           }, 400, function() {
             // Resetar posições e reiniciar se o ciclo ainda estiver ativo
             if (cycleRunning) {
-              setTimeout(animatePinchGesture, 500);
+              setTimeout(animateDiagonalPinchGesture, 500);
             }
           });
         });
       }
       
       // Iniciar a animação das setas
-      animatePinchGesture();
+      animateDiagonalPinchGesture();
 
       // Ao clicar ou arrastar no globo, paramos o ciclo e removemos as setas
       $("#globeCanvas").on("click mousedown touchstart", function() {
