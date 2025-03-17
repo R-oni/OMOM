@@ -240,6 +240,9 @@
     .warning-btn:hover { background-color: #555; }
 
     /* Botões da Página 6 (tracking) */
+
+
+    
     #cliquemaior {
       position: absolute; top: 5%; left: 15%; width: 65%;
       animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
@@ -317,6 +320,16 @@
         height: 70vh;
         width: 90%;
         margin: 0 auto;
+        position: relative; /* Add this */
+        display: flex; /* Add this */
+        justify-content: center; /* Add this */
+        align-items: center; /* Add this */
+      }
+      #flipbook {
+      /* Keep positioning consistent */
+      position: relative;
+      height: auto !important; /* Important to override turn.js styles */
+      width: 100% !important; /* Important to override turn.js styles */
       }
 
       
