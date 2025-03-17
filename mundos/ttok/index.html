@@ -338,16 +338,18 @@
       }
       
       /* Correção para os botões interativos na versão desktop */
-      #flipbook .page {
-        transform-origin: center !important;
-        transform-style: preserve-3d !important;
-      }
-      
-      /* Garantir que os botões mantenham suas posições relativas nas páginas */
-      .page img[id^="clique"] {
-        position: absolute;
-        transform: translate(0, 0) !important;  
-      }
+      #flipbook.page {
+      position: relative;
+      touch-action: manipulation;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .page img {
+      width: 100%;
+      display: block;
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
       
       /* Corrigir setas do globo na versão desktop */
       .globe-section .seta-globo {
