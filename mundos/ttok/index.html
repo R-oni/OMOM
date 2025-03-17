@@ -318,6 +318,28 @@
         width: 90%;
         margin: 0 auto;
       }*/
+      #flipbook {
+      position: relative;
+      margin: auto;
+      cursor: grab;
+      user-select: none;
+      transform: translateZ(0);
+      width: 100%;
+      height: auto;
+    }
+    .page {
+      position: relative;
+      touch-action: manipulation;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .page img {
+      width: 100%;
+      display: block;
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
+      
       .globe-section {
         grid-column: 2;
         grid-row: 1 / span 2;
