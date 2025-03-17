@@ -239,10 +239,7 @@
     }
     .warning-btn:hover { background-color: #555; }
 
-    /* Botões da Página 6 (tracking) */
-
-
-    
+    /* Botões da Página 6 (tracking) – inalterados */
     #cliquemaior {
       position: absolute; top: 5%; left: 15%; width: 65%;
       animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
@@ -326,10 +323,9 @@
         align-items: center; /* Add this */
       }
       #flipbook {
-      /* Keep positioning consistent */
-      position: relative;
-      height: auto !important; /* Important to override turn.js styles */
-      width: 100% !important; /* Important to override turn.js styles */
+        position: relative;
+        height: auto !important; /* Important to override turn.js styles */
+        width: 100% !important; /* Important to override turn.js styles */
       }
 
       
@@ -341,28 +337,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden;      
+        overflow: hidden;
+        position: relative;
+        pointer-events: none;
       }
-      
       #globeCanvas {
         width: 100% !important;
         height: 100% !important;
         object-fit: contain;
         pointer-events: auto;
-      }
-      
-      /* Corrigir setas do globo na versão desktop */
-      .globe-section .seta-globo {
-        position: absolute;
-        z-index: 101;
-      }
-      #globeSeta1 {
-        bottom: 30%;
-        left: 30%;
-      }
-      #globeSeta2 {
-        top: 30%;
-        right: 30%;
       }
     }
   </style>
@@ -413,7 +396,7 @@
         <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 5" draggable="false"></div>
         <!-- Página 6 com botões para tracking -->
         <div class="page" style="position: relative;">
-<img src="imagens/cap1/pagina6.webp" alt="Página 6" draggable="false">
+          <img src="imagens/cap1/pagina6.webp" alt="Página 6" draggable="false">
           <img id="cliquemaior" src="imagens/cap1/cliquemaior.webp" alt="Botão Clique Maior" draggable="false">
           <img id="cliquemenor" src="imagens/cap1/cliquemenor.webp" alt="Botão Clique Menor" draggable="false">
         </div>
@@ -421,7 +404,7 @@
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10" draggable="false">
           <img id="cliquebatedor" src="imagens/cap1/cliquebatedor.webp" alt="Botão Cliquey Eroben" draggable="false">
-          <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
+<img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
           <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5" draggable="false"></div>
@@ -526,15 +509,6 @@
       resizeFlipbook();
       $(window).resize(function(){
         resizeFlipbook();
-      });
-      
-      // Corrigi a posição dos botões após o redimensionamento
-      $(window).resize(function(){
-        // Pequena pausa para garantir que o flipbook seja redimensionado primeiro
-        setTimeout(function(){
-          // Força a atualização das posições dos botões
-          $("#flipbook").turn('update');
-        }, 100);
       });
       
       // Previne arrasto das imagens (Chrome)
