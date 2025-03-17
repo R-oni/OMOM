@@ -276,7 +276,7 @@
       100% { transform: scale(1); }
     }
 
-    /* Versão para PC (landscape) 
+    /* Versão para PC (landscape) */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         display: grid;
@@ -311,13 +311,13 @@
         z-index: 2;
         text-shadow: 2px 2px 4px #000;
       }
-      #flipbook-wrapper {
+      /*#flipbook-wrapper {
         grid-column: 1;
         grid-row: 2;
         height: 70vh;
         width: 90%;
         margin: 0 auto;
-      }
+      }*/
       .globe-section {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -326,32 +326,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden;
-        position: relative;
-        pointer-events: none;
+        overflow: hidden;      
       }
+      
       #globeCanvas {
         width: 100% !important;
         height: 100% !important;
         object-fit: contain;
         pointer-events: auto;
-      }*/
+      }
       
-      /* Correção para os botões interativos na versão desktop 
-      #flipbook.page {
-      position: relative;
-      touch-action: manipulation;
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-    }
-    .page img {
-      width: 100%;
-      display: block;
-      -webkit-user-drag: none;
-      user-drag: none;
-    }
-      
-      /* Corrigir setas do globo na versão desktop 
+      /* Corrigir setas do globo na versão desktop */
       .globe-section .seta-globo {
         position: absolute;
         z-index: 101;
@@ -364,7 +349,7 @@
         top: 30%;
         right: 30%;
       }
-    }*/
+    }
   </style>
 </head>
 <body>
