@@ -294,7 +294,7 @@
       position: absolute; bottom: 38%; right: -3%; width: 28%;
       animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
     }
-    #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor {
+    #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
       position: absolute; cursor: pointer; bottom: 4px; right: 0%; width: 100%;height: 97%; z-index: 10; left: 0; top: 0;
       animation: fadeInOut 0.7s infinite;
     }
@@ -465,7 +465,10 @@
           <img src="imagens/cap1/pagina26.webp" alt="Página 10" draggable="false">
           <img id="cliquerefracao" src="imagens/cap1/cliquecapacitor.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina27.webp" alt="Página 4" draggable="false"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina27.webp" alt="Página 10" draggable="false">
+          <img id="cliquesanguedomundo" src="imagens/cap1/cliquesanguedomundo.webp" alt="Botão Cliquey Eroben" draggable="false">
+        </div>
         <div class="page"><img src="imagens/cap1/pagina28.webp" alt="Página 5" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina29.webp" alt="Página 4" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina30.webp" alt="Página 5" draggable="false"></div>
@@ -628,6 +631,13 @@
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+      $(document).on("click", "#cliquesanguedomundo", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cap1/sanguedomundo.png");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
 
 
 
