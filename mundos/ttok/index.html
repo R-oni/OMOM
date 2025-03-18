@@ -156,12 +156,12 @@
       z-index: 101;
       opacity: 1;
     }
-    #globeSeta1 {
+    #globeSeta2 {
       bottom: 30%;
       left: 30%;
       transform: rotate(-45deg);
     }
-    #globeSeta2 {
+    #globeSeta1 {
       top: 30%;
       right: 30%;
       transform: rotate(135deg);
@@ -294,8 +294,8 @@
       position: absolute; bottom: 38%; right: -3%; width: 28%;
       animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
     }
-    #cliqueinversao, #cliquetipog, #cliquerefracao, #cliquemorse {
-      position: absolute; bottom: 4px; right: 0%; width: 100%;
+    #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor {
+      position: absolute; cursor: pointer; bottom: 4px; right: 0%; width: 100%;height: 97%; z-index: 10; left: 0; top: 0;
       animation: fadeInOut 0.7s infinite;
     }
 
@@ -440,7 +440,7 @@
         <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 2" draggable="false"></div>
         <div class="page">
           <img src="imagens/cap1/pagina12.webp" alt="Página 10" draggable="false">
-          <img id="cliquetipog" src="imagens/cap1/cliquetipog.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img id="cliquetipog" src="imagens/cap1/cliqueg.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
         <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 4" draggable="false"></div>
         <div class="page">
@@ -458,7 +458,10 @@
         <div class="page"><img src="imagens/cap1/pagina23.webp" alt="Página 5" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina24.webp" alt="Página 4" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina25.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina26.webp" alt="Página 5" draggable="false"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina26.webp" alt="Página 10" draggable="false">
+          <img id="cliquerefracao" src="imagens/cap1/cliquecapacitor.webp" alt="Botão Cliquey Eroben" draggable="false">
+        </div>
         <div class="page"><img src="imagens/cap1/pagina27.webp" alt="Página 4" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina28.webp" alt="Página 5" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina29.webp" alt="Página 4" draggable="false"></div>
@@ -598,6 +601,34 @@
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+      $(document).on("click", "#cliqueg", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cap1/estrelag.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      $(document).on("click", "#cliquerefracao", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cap1/refracao.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      $(document).on("click", "#cliquemorse", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cap1/morse.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+      $(document).on("click", "#cliquecapacitor", function(e){
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "imagens/cap1/capacitor.webp");
+        $("#overlayContainer").fadeIn(500);
+        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+      });
+
+
+
+
       
       // Botões de tracking (Página 6): central/orbit
       $(document).on("click", "#cliquemaior", function(e){
