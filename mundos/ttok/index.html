@@ -156,12 +156,12 @@
       z-index: 101;
       opacity: 1;
     }
-    #globeSeta2 {
+    #globeSeta1 {
       bottom: 30%;
       left: 30%;
       transform: rotate(-45deg);
     }
-    #globeSeta1 {
+    #globeSeta2 {
       top: 30%;
       right: 30%;
       transform: rotate(135deg);
@@ -440,7 +440,7 @@
         <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 2" draggable="false"></div>
         <div class="page">
           <img src="imagens/cap1/pagina12.webp" alt="Página 10" draggable="false">
-          <img id="cliquetipog" src="imagens/cap1/cliqueg.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img id="cliqueg" src="imagens/cap1/cliqueg.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
         <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 4" draggable="false"></div>
         <div class="page">
@@ -449,7 +449,10 @@
         </div>
         <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 4" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina17.webp" alt="Página 4" draggable="false"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina17.webp" alt="Página 10" draggable="false">
+          <img id="cliquemorse" src="imagens/cap1/cliquemorse.webp" alt="Botão Cliquey Eroben" draggable="false">
+        </div>
         <div class="page"><img src="imagens/cap1/pagina18.webp" alt="Página 5" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina19.webp" alt="Página 4" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina20.webp" alt="Página 4" draggable="false"></div>
@@ -656,24 +659,24 @@
         // Começar com as setas nas posições iniciais
         $("#globeSeta1").css({
           opacity: 1,
-          bottom: "20%",
-          left: "20%"
+          bottom: "30%",
+          left: "30%"
         });
         $("#globeSeta2").css({
           opacity: 1,
-          top: "20%",
-          right: "20%"
+          top: "30%",
+          right: "30%"
         });
         
         // Mover as setas na diagonal em direção ao centro
         $("#globeSeta1").animate({
-          bottom: "30%",
-          left: "30%"
+          bottom: "20%",
+          left: "20%"
         }, 800);
         
         $("#globeSeta2").animate({
-          top: "30%",
-          right: "30%"
+          top: "20%",
+          right: "20%"
         }, 800, function() {
           // Fade-out
           $("#globeSeta1, #globeSeta2").animate({
