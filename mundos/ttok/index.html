@@ -373,6 +373,17 @@
         pointer-events: auto;
       }
     }
+
+    /* Vídeo de fundo */
+    #background-video {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 37.5vh;
+      object-fit: cover;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
@@ -429,7 +440,7 @@
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10" draggable="false">
           <img id="cliquebatedor" src="imagens/cap1/cliquebatedor.webp" alt="Botão Cliquey Eroben" draggable="false">
-<img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
           <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5" draggable="false"></div>
@@ -476,6 +487,11 @@
         <div class="page"><img src="imagens/cap1/pagina32.webp" alt="Página 4" draggable="false"></div>
       </div>
     </div>
+    <!-- Vídeo de fundo (abaixo do flipbook) -->
+    <video id="background-video" autoplay loop muted playsinline>
+      <source src="fundo.mp4" type="video/mp4">
+      Seu navegador não suporta vídeo.
+    </video>
   </div>
 
   <!-- Overlay -->
@@ -567,7 +583,7 @@
         }
       });
       
-      // Inicia a música de fundo no primeiro clique
+      // Inicia a música de fundo com o primeiro clique/touch
       $(document).one("click touchstart", function(){
         var bg = document.getElementById("bgMusic");
         bg.currentTime = 0;
@@ -575,26 +591,29 @@
         bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
       });
       
-      // Overlay (Botão Sair)
+      // Adicione este código dentro do $(document).ready()
       $("#btnSair").on("click", function(e) {
+        
         e.preventDefault();
         e.stopPropagation();
-        $("#overlayContainer").fadeOut(500);
+      $("#overlayContainer").fadeOut(500);
       });
       
-      // Eventos de clique em botões de tracking (Página 6)
+      // Corrige o problema de propagação dos cliques dos botões veleywei
       $(document).on("click", "#cliquebatedor", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "batedor.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+      
       $(document).on("click", "#cliquemergulhador", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "mergulhador.png");
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+
       $(document).on("click", "#cliquesangue", function(e){
         e.stopPropagation();
         $("#overlayImage").attr("src", "sanguedomundo.png");
@@ -607,144 +626,59 @@
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      $(document).on("click", "#cliqueg", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/cap1/estrelag.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      $(document).on("click", "#cliquerefracao", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/cap1/refracao.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      $(document).on("click", "#cliquemorse", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/cap1/morse.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      $(document).on("click", "#cliquecapacitor", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/cap1/capacitor.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      $(document).on("click", "#cliquesanguedomundo", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "imagens/cap1/sanguedomundo.png");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-
-
-
-
 
       
-      // Botões de tracking (Página 6): central/orbit
+      // Eventos dos botões de tracking na Página 6
       $(document).on("click", "#cliquemaior", function(e){
         e.stopPropagation();
         window.myGlobe.trackingMode = "central";
       });
+      
       $(document).on("click", "#cliquemenor", function(e){
         e.stopPropagation();
         window.myGlobe.trackingMode = "orbit";
       });
       
-      // Remove seta da capa ao virar a página
-      $("#flipbook").bind("turning", function(e, page) {
-        if (page > 1) {
-          $("#setaBtn").fadeOut(300, function() { $(this).remove(); });
-        }
-      });
-
-      // --- LÓGICA MODIFICADA PARA AS SETAS DO GLOBO NA DIAGONAL ---
-      let cycleRunning = true;
-      
-      function animateDiagonalPinchGesture() {
-        if (!cycleRunning) return;
-        
-        // Começar com as setas nas posições iniciais
-        $("#globeSeta1").css({
-          opacity: 1,
-          bottom: "30%",
-          left: "30%"
-        });
-        $("#globeSeta2").css({
-          opacity: 1,
-          top: "30%",
-          right: "30%"
-        });
-        
-        // Mover as setas na diagonal em direção ao centro
-        $("#globeSeta1").animate({
-          bottom: "20%",
-          left: "20%"
-        }, 800);
-        
-        $("#globeSeta2").animate({
-          top: "20%",
-          right: "20%"
-        }, 800, function() {
-          // Fade-out
-          $("#globeSeta1, #globeSeta2").animate({
-            opacity: 0
-          }, 400, function() {
-            // Resetar posições e reiniciar se o ciclo ainda estiver ativo
-            if (cycleRunning) {
-              setTimeout(animateDiagonalPinchGesture, 500);
-            }
-          });
-        });
-      }
-      
-      // Iniciar a animação das setas
-      animateDiagonalPinchGesture();
-
-      // Ao clicar ou arrastar no globo, paramos o ciclo e removemos as setas
-      $("#globeCanvas").on("click mousedown touchstart", function() {
-        cycleRunning = false;
-        $("#globeSeta1, #globeSeta2").stop(true).fadeOut(300, function(){
-          $(this).remove();
-        });
-      });
     });
   </script>
-  
+
   <script>
-    let musicStarted = false;
-    document.addEventListener('DOMContentLoaded', () => {
-      // Exibe o warning modal quando o loading screen desaparecer
-      document.getElementById("loading-screen").addEventListener("transitionend", function() {
-        if (this.style.display === "none") {
-          document.getElementById("warning-modal").style.display = "flex";
-        }
-      });
-      // Fecha o warning modal e inicia a música quando o botão é clicado
-      document.getElementById("compreendo-btn").addEventListener("click", function() {
-        document.getElementById("warning-modal").style.display = "none";
-        if (!musicStarted) {
-          var bg = document.getElementById("bgMusic");
-          bg.currentTime = 0;
-          bg.volume = 0.9;
-          bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
-          musicStarted = true;
-        }
-      });
-    });
-    window.addEventListener("load", function() {
-      setTimeout(function() {
-        document.getElementById("loading-screen").style.display = "none";
+  let musicStarted = false;
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    // Mostrar o warning modal quando o loading screen desaparecer
+    document.getElementById("loading-screen").addEventListener("transitionend", function() {
+      if (this.style.display === "none") {
         document.getElementById("warning-modal").style.display = "flex";
-      }, 1000);
+      }
     });
-  </script>
+    
+    // Fechar o warning modal e iniciar a música quando o botão for clicado
+    document.getElementById("compreendo-btn").addEventListener("click", function() {
+      document.getElementById("warning-modal").style.display = "none";
+      if (!musicStarted) {
+        var bg = document.getElementById("bgMusic");
+        bg.currentTime = 0;
+        bg.volume = 0.9;
+        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+        musicStarted = true;
+      }
+    });
+  });
+  
+  // Se você estiver usando uma tela de carregamento similar, adicione isso:
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.getElementById("loading-screen").style.display = "none";
+      document.getElementById("warning-modal").style.display = "flex";
+    }, 1000); // Pequeno atraso para garantir que tudo esteja carregado
+  });
+</script>
+
   
   <script src="./globo.js"></script>
   <script>
-    // Efeito warp/starfield
+    // Animação do canvas (efeito warp/starfield)
     (function() {
       const canvas = document.getElementById("warpCanvas");
       const ctx = canvas.getContext("2d");
@@ -752,10 +686,12 @@
       const numStars = 300;
       const speed = 2;
       let animationFrameId;
+      
       function setupCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
+      
       function createStars() {
         stars = [];
         for (let i = 0; i < numStars; i++) {
@@ -766,6 +702,7 @@
           });
         }
       }
+      
       function updateStars() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -787,23 +724,27 @@
         });
         animationFrameId = requestAnimationFrame(updateStars);
       }
+      
       setupCanvas();
       createStars();
       updateStars();
+      
       window.addEventListener("resize", function() {
         setupCanvas();
         createStars();
       });
+      
       window.addEventListener("load", function() {
         document.getElementById("loading-screen").style.display = "none";
         cancelAnimationFrame(animationFrameId);
       });
     })();
-
-    // Remove loading do globo ao carregá-lo
+  </script>
+  <script>
+    // Remove o loading do globo quando o evento "globoCarregado" ocorrer
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
     });
   </script>
 </body>
-</html>
+  </html>
