@@ -129,6 +129,18 @@
       z-index: 100;
       pointer-events: none;
     }
+    #background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('fundo.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+    }
 
     /* Seta da Capa (flipbook) */
     #setaBtn {
@@ -396,6 +408,9 @@
         <a href="omom.html" class="title-text">OS BATEDORES DE TT'TOK'TAK'TAK'T</a>
       </div>
     </div>
+
+    <div id="background-image"></div>
+    
     <!-- Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
