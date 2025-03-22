@@ -306,7 +306,7 @@
       z-index: 10;
       left: 0;
       top: 0;
-      animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
+      animation: pulseAndFade;
     }
 
     /*@keyframes pulse {
@@ -330,7 +330,7 @@
     /* ====================================
      * Animações
      * ==================================== */
-    /*@keyframes moveAndFade {
+     @keyframes moveAndFade {
       0% {
         opacity: 0.3;
         transform: translate(0, 0);
@@ -343,19 +343,33 @@
         opacity: 0.3;
         transform: translate(0, 0);
       }
-    }*/
+    }
     
     @keyframes fadeInOut {
       0% { opacity: 1; }
       50% { opacity: 0; }
       100% { opacity: 1; }
     }
+    @keyframes pulseAndFade {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
     
-    @keyframes pulse {
+    /*@keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
-    }
+    }*/
     
     .btn-overlay {
       position: absolute;
