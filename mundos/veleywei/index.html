@@ -306,7 +306,13 @@
       z-index: 10;
       left: 0;
       top: 0;
-      animation: fadeInOut 2s infinite and pulse 1s infinite;
+      animation: fadeInOut 2s infinite and pulse 1s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
     
     /* Botão de Seta Animado */
