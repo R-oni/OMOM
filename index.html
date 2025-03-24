@@ -754,15 +754,17 @@
 
   <audio id="clickSound" src="assets/sombotaomenu.mp3" preload="auto"></audio>
 <script>
-  const symbols = document.querySelectorAll('.symbol a');
-  const clickSound = document.getElementById('clickSound');
+  document.addEventListener("DOMContentLoaded", function() {
+    const clickSound = document.getElementById('clickSound');
+    const symbolLinks = document.querySelectorAll('.symbol a');
 
-  symbols.forEach(link => {
-    link.addEventListener('click', () => {
-      clickSound.currentTime = 0;
-      clickSound.play();
+    symbolLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      });
     });
   });
-</script>
+  </script>
 </body>
 </html>
