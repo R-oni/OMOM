@@ -751,5 +751,18 @@
       floatSymbols();
     });
   </script>
+
+  <audio id="clickSound" src="assets/sombotaomenu.mp3" preload="auto"></audio>
+<script>
+  const symbols = document.querySelectorAll('.symbol a');
+  const clickSound = document.getElementById('clickSound');
+
+  symbols.forEach(link => {
+    link.addEventListener('click', () => {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    });
+  });
+</script>
 </body>
 </html>
