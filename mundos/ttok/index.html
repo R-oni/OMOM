@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <title>OS BATEDORES DE TT'TOK'TAK'TAK'T</title>
 
-  <!-- Verificação de autenticação Firebase -->
+
+    <!-- Verificação de autenticação Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -30,9 +31,9 @@
     });
   </script>
 
+  
   <!-- Fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
   <style>
     /* Estilos globais */
     html, body {
@@ -111,11 +112,11 @@
       justify-content: center;
       align-items: center;
       /* Permite o clique no canvas */
-      pointer-events: none;
+      pointer-events: none; /* para a DIV */
     }
     #globeCanvas {
       height: 37.5vh;
-      pointer-events: auto;
+      pointer-events: auto; /* Canvas recebe o clique */
     }
     #globeLoading {
       position: absolute;
@@ -129,6 +130,8 @@
       pointer-events: none;
     }
     #background-image {
+      
+      
       position: fixed;
       top: 0;
       left: 0;
@@ -170,6 +173,7 @@
     #globeSeta1 {
       bottom: 30%;
       left: 30%;
+    
     }
     #globeSeta2 {
       top: 30%;
@@ -203,24 +207,6 @@
       width: 100%;
       height: auto;
       display: block;
-    }
-
-    /* CSS adicional para touch e flipbook */
-    #flipbook-wrapper {
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-    
-    #flipbook .page {
-      backface-visibility: hidden;
-      touch-action: none; /* Impede comportamentos padrão de touch */
-    }
-    
-    .turn-page {
-      background-color: transparent !important;
     }
 
     /* Overlay */
@@ -303,50 +289,27 @@
 
     /* Botões da Página 6 (tracking) – inalterados */
     #cliquemaior {
-      position: absolute;
-      top: 5%;
-      left: 15%;
-      width: 65%;
+      position: absolute; top: 5%; left: 15%; width: 65%;
       animation: fadeInOut 1s infinite, pulse 1s infinite ease-in-out;
     }
     #cliquemenor {
-      position: absolute;
-      bottom: 16%;
-      left: 37%;
-      width: 23%;
+      position: absolute; bottom: 16%; left: 37%; width: 23%;
       animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
     }
     #cliquebatedor {
-      position: absolute;
-      bottom: 17%;
-      left: 8%;
-      width: 61%;
+      position: absolute; bottom: 17%; left: 8%; width: 61%;
       animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
     }
     #cliquemergulhador {
-      position: absolute;
-      top: 11%;
-      right: 5%;
-      width: 48%;
+      position: absolute; top: 11%; right: 5%; width: 48%;
       animation: fadeInOut 0.6s infinite, pulse 0.6s infinite ease-in-out;
     }
     #cliquesangue {
-      position: absolute;
-      bottom: 38%;
-      right: -3%;
-      width: 28%;
+      position: absolute; bottom: 38%; right: -3%; width: 28%;
       animation: fadeInOut 2s infinite, pulse 2s infinite ease-in-out;
     }
     #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
-      position: absolute;
-      cursor: pointer;
-      bottom: 4px;
-      right: 0%;
-      width: 100%;
-      height: 97%;
-      z-index: 10;
-      left: 0;
-      top: 0;
+      position: absolute; cursor: pointer; bottom: 4px; right: 0%; width: 100%;height: 97%; z-index: 10; left: 0; top: 0;
       animation: fadeInOut 0.7s infinite;
     }
 
@@ -404,6 +367,7 @@
         margin: 0 auto;
         z-index: 1;
       }
+      
       .globe-section {
         grid-column: 2;
         grid-row: 1 / span 2;
@@ -424,62 +388,6 @@
       }
     }
   </style>
-  
-  <!-- Scripts de bibliotecas -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-  <!-- Versão atualizada do plugin touch-punch -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF9eK3a9duTk3fbD9X//F5bAx4XjYWJmkCwmgwqPP7A72sYcDSEsKzyrN5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-  <script src="turn.min.js"></script>
-  
-  <!-- Novo script de inicialização do flipbook -->
-  <script>
-    function resizeFlipbook() {
-      if ($(window).width() < 1024) {
-        var newWidth = $(window).width() * 0.9;
-        var newHeight = newWidth * (450/600);
-        $("#flipbook").turn("size", newWidth, newHeight);
-      } else {
-        var newWidth = $("#flipbook-wrapper").width();
-        var newHeight = $("#flipbook-wrapper").height();
-        $("#flipbook").turn("size", newWidth, newHeight);
-      }
-    }
-    
-    // Inicialização do flipbook com as novas configurações
-    $(window).on('load', function() {
-      $("#flipbook").turn({
-        autoCenter: false,
-        display: 'double',
-        acceleration: true,
-        gradients: false,
-        when: {
-          mouse: true,       // Força habilitar mouse
-          touched: function() {
-            return 'ontouchstart' in window; // Só usa touch se disponível
-          }
-        }
-      });
-      
-      // Chamada para ajuste responsivo
-      resizeFlipbook();
-      // Forçar redimensionamento após 100ms
-      setTimeout(resizeFlipbook, 100);
-      
-      // Habilitar controle por mouse
-      $('#flipbook').bind('start', function(event, object) {
-        if(object.hand === 'mouse') {
-          $(document).bind('mousemove.flip', function(event) {
-            $('#flipbook').turn('move', event.clientX);
-          }).bind('mouseup.flip', function() {
-            $(document).unbind('.flip');
-          });
-        }
-      });
-    });
-  </script>
 </head>
 <body>
   <div id="background-image"></div>
@@ -503,6 +411,8 @@
         <a href="omom.html" class="title-text">OS BATEDORES DE TT'TOK'TAK'TAK'T</a>
       </div>
     </div>
+
+    
     
     <!-- Globo -->
     <div class="globe-section">
@@ -512,7 +422,6 @@
       <img id="globeSeta1" class="seta-globo" src="imagens/seta.webp" alt="Seta" draggable="false">
       <img id="globeSeta2" class="seta-globo" src="imagens/seta.webp" alt="Seta" draggable="false">
     </div>
-    
     <!-- Flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
@@ -538,7 +447,7 @@
         <div class="page">
           <img src="imagens/cap1/pagina8.webp" alt="Página 10" draggable="false">
           <img id="cliquebatedor" src="imagens/cap1/cliquebatedor.webp" alt="Botão Cliquey Eroben" draggable="false">
-          <img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
+<img id="cliquemergulhador" src="imagens/cap1/cliquemergulhador.webp" alt="Botão Cliquey Eroben" draggable="false">
           <img id="cliquesangue" src="imagens/cap1/cliquesangue.webp" alt="Botão Cliquey Eroben" draggable="false">
         </div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5" draggable="false"></div>
@@ -585,6 +494,8 @@
         <div class="page"><img src="imagens/cap1/pagina32.webp" alt="Página 4" draggable="false"></div>
       </div>
     </div>
+  </div>
+
   <!-- Overlay -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
@@ -605,11 +516,10 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF9eK3a9duTk3fbD9X//F5bAx4XjYWJmkCwmgwqPP7A72sYcDSEsKzyrN5w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script src="turn.min.js"></script>
-  
   <script>
     // Áudio de virar página
     const flipAudioStart = 1;
@@ -630,6 +540,29 @@
     });
     
     $(document).ready(function(){
+      // Inicializa o flipbook
+      $("#flipbook").turn({
+        autoCenter: false,
+        display: 'double'
+      });
+      
+      // Ajuste responsivo do flipbook
+      function resizeFlipbook() {
+        if ($(window).width() < 1024) {
+          var newWidth = $(window).width() * 0.9;
+          var newHeight = newWidth * (450/600);
+          $("#flipbook").turn("size", newWidth, newHeight);
+        } else {
+          var newWidth = $("#flipbook-wrapper").width();
+          var newHeight = $("#flipbook-wrapper").height();
+          $("#flipbook").turn("size", newWidth, newHeight);
+        }
+      }
+      resizeFlipbook();
+      $(window).resize(function(){
+        resizeFlipbook();
+      });
+      
       // Previne arrasto das imagens (Chrome)
       $(".page img").on("dragstart", function(e) {
         e.preventDefault();
@@ -722,6 +655,11 @@
         $("#overlayContainer").fadeIn(500);
         $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
+
+
+
+
+
       
       // Botões de tracking (Página 6): central/orbit
       $(document).on("click", "#cliquemaior", function(e){
