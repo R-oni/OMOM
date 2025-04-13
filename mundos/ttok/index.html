@@ -436,8 +436,9 @@
 
   /* Quando .globe-section tiver a classe .no-arrow, remove a seta animada */
   .globe-section.no-arrow::after {
-    display: none !important;
-    animation: none !important;
+  content: none !important;
+  display: none !important;
+  animation: none !important;
   }
 
   /* Keyframes: fadeIn → mover diagonal inversa → fadeOut */
