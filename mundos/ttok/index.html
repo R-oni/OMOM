@@ -293,7 +293,7 @@
     .warning-btn:hover { background-color: #555; }
 
 
-    #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
+    #cliquemundo, #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
       position: absolute; cursor: pointer; bottom: 4px; right: 0%; width: 100%;height: 97%; z-index: 10; left: 0; top: 0;
       animation: fadeInOut 0.7s infinite;
     }
@@ -478,7 +478,10 @@
         <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 4" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina6.webp" alt="Página 6" draggable="false"></div>
+        <div class="page">
+          <img src="imagens/cap1/pagina6.webp" alt="Página 6" draggable="false">
+          <img id="cliquemorse" src="imagens/cap1/cliquemundo.webp" alt="Botão Cliquey Eroben" draggable="false">
+        </div>
         <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 7" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina8.webp" alt="Página 8" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5" draggable="false"></div>
@@ -697,7 +700,7 @@
         e.stopPropagation();
         window.myGlobe.trackingMode = "central";
       });
-      $(document).on("click", "#cliquemenor", function(e){
+      $(document).on("click", "#cliquemundo", function(e){
         e.stopPropagation();
         window.myGlobe.trackingMode = "orbit";
       });
