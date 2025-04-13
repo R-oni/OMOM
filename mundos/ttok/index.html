@@ -377,6 +377,7 @@
         text-shadow: 2px 2px 4px #000;
       }
       #flipbook-wrapper {
+        overflow: hidden;
         grid-column: 1;
         grid-row: 2;
         height: 70vh;
@@ -384,6 +385,21 @@
         margin: 5vh 5vh;
         z-index: 1;
       }
+
+        /* força cada página a preencher todo o wrapper */
+      #flipbook .page {
+      width: 100% !important;
+      height: 100% !important;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* faz a imagem se ajustar exatamente ao tamanho da página */
+    #flipbook .page img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
       
       .globe-section {
         grid-column: 2;
