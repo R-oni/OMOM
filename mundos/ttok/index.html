@@ -893,19 +893,30 @@
   </script>
 
   <script>
-  // Quando o usuário interagir com o globo, escondemos a seta animada
-  const globeSection = document.querySelector('.globe-section');
-  const globeCanvas = document.getElementById('globeCanvas');
-
-  function removeGlobeArrow() {
-    globeSection.classList.add('no-arrow');
-    globeCanvas.removeEventListener('mousedown', removeGlobeArrow);
-    globeCanvas.removeEventListener('touchstart', removeGlobeArrow);
-  }
-
-  globeCanvas.addEventListener('mousedown', removeGlobeArrow);
-  globeCanvas.addEventListener('touchstart', removeGlobeArrow);
+  window.addEventListener('DOMContentLoaded', function() {
+    const globeSection = document.querySelector('.globe-section');
+    const globeCanvas = document.getElementById('globeCanvas');
+    
+    function removeGlobeArrow() {
+      console.log('removeGlobeArrow fired');
+      if (globeSection) {
+        globeSection.classList.add('no-arrow');
+      }
+      if (globeCanvas) {
+        globeCanvas.removeEventListener('mousedown', removeGlobeArrow);
+        globeCanvas.removeEventListener('touchstart', removeGlobeArrow);
+      }
+    }
+    
+    if (globeCanvas) {
+      globeCanvas.addEventListener('mousedown', removeGlobeArrow);
+      globeCanvas.addEventListener('touchstart', removeGlobeArrow);
+    } else {
+      console.error('globeCanvas not found!');
+    }
+  });
 </script>
+
 
 </body>
 </html>
