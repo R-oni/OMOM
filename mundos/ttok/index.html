@@ -107,30 +107,18 @@
     }
 
     /* Seção do globo */
-  .globe-section {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    /* Remova quaisquer pseudo-elementos anteriores e use border-image: */
-    border: 20px solid transparent;
-    border-image: url("./imagens/borda_animada.gif") 20 round;
-    box-sizing: border-box;
-    overflow: visible;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-  #globeCanvas {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
-    pointer-events: auto;
-    position: relative;
-    z-index: 1;
-  }
+    .globe-section {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Permite o clique no canvas */
+      pointer-events: none; /* para a DIV */
+    }
+    #globeCanvas {
+      height: 37.5vh;
+      pointer-events: auto; /* Canvas recebe o clique */
+    }
     #globeLoading {
       position: absolute;
       top: 50%;
