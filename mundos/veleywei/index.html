@@ -400,64 +400,85 @@
       .page-container {
         display: grid;
         grid-template-columns: 50% 50%;
-        grid-template-rows: 20vh 80vh;
+        grid-template-rows: 30vh 70vh;
         height: 100vh;
         width: 100vw;
         position: relative;
       }
+    
       .header-container {
         grid-column: 1;
         position: relative;
         height: 30vh;
       }
+    
       .top-section img {
-        position: absolute;
-        top: 30%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-height: 100px;
-        z-index: 1;
-      }
-      .title-text {
         position: absolute;
         top: 50%;
         left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 150px;
+        z-index: 1;
+      }
+    
+      .title-text {
+        position: absolute;
+        top: 70%;
+        left: 50%;
         transform: translateX(-50%);
-        font-family: 'Press Start 2P', cursive;
-        color: #00FFE7;
         font-size: 16px;
         white-space: nowrap;
-        z-index: 2;
         text-shadow: 2px 2px 4px #000;
       }
+    
       #flipbook-wrapper {
         grid-column: 1;
         grid-row: 2;
         height: 70vh;
-        width: 80%;
-        margin: 5vh 5vh;
+        width: 90%;
+        margin: 0 auto;
         z-index: 1;
       }
-
-
     
       .globe-section {
         grid-column: 2;
         grid-row: 1 / span 2;
         width: 100%;
         height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-        pointer-events: none;
       }
+    
       #globeCanvas {
         width: 100% !important;
         height: 100% !important;
+        min-width: 100%;
+        min-height: 100%;
         object-fit: contain;
-        pointer-events: auto;
+      }
+    
+      /* Ajustes dos botões para desktop */
+      #veleyweiBtn,
+      #veleyweiBtn2,
+      #veleyweiBtn3,
+      #veleyweiBtn4,
+      #veleyweiBtn5,
+      #botaosapetyr {
+        height: 100%;
+        top: 0%;
+        transform: none;
+        width: 100%;
+        left: 0%;
+      }
+    
+      .page img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      
+      /* Ajuste do botão de seta para desktop */
+      #setaBtn {
+        width: 80px;
+        height: 80px;
       }
     }
   </style>
