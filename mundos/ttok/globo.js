@@ -1,28 +1,10 @@
 function initGlobe() {
   const canvas = document.getElementById('globeCanvas');
-  if (!canvas) return;
+  if (!canvas) return console.warn('Canvas #globeCanvas não encontrado');
 
-  // Controle de carregamento de texturas
+  // Carregamento de texturas
   let texturesLoaded = 0;
   const totalTextures = 2;
-
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
-  camera.position.set(0, 0, 4);
-
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setSize(width, height);
-  renderer.shadowMap.enabled = true; // Adicionado
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Adicionado
-
-  const controls = new THREE.OrbitControls(camera, canvas);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05; // Adicionado
-
-  const textureLoader = new THREE.TextureLoader();
-
   function checkTexturesLoaded() {
     texturesLoaded++;
     if (texturesLoaded === totalTextures) {
@@ -30,72 +12,67 @@ function initGlobe() {
     }
   }
 
-  // Globo Central
-  const centralGeometry = new THREE.SphereGeometry(1, 64, 64);
-  const centralTexture = textureLoader.load('mapatoktok.png', checkTexturesLoaded);
-  const centralMaterial = new THREE.MeshStandardMaterial({ map: centralTexture });
-  const centralSphere = new THREE.Mesh(centralGeometry, centralMaterial);
-  centralSphere.castShadow = true; // Adicionado
-  centralSphere.receiveShadow = true; // Adicionado
+  // Tamanhos
+  const width  = canvas.clientWidth;
+  const height = canvas.clientHeight;
+
+  // Cena, câmera, renderer
+  const scene    = new THREE.Scene();
+  const camera   = new THREE.PerspectiveCamera(60, width/height, 0.1, 1000);
+  camera.position.set(0, 0, 4);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(width, height);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+
+  // Controles
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping    = true;
+  controls.dampingFactor    = 0.05;
+
+  // Loader
+  const loader = new THREE.TextureLoader();
+
+  // Globo central
+  const centralSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 64, 64),
+    new THREE.MeshStandardMaterial({ map: loader.load('mapatoktok.png', checkTexturesLoaded) })
+  );
+  centralSphere.castShadow = centralSphere.receiveShadow = true;
   scene.add(centralSphere);
 
-  // Globo Orbitante
-  const orbitRadius = 3;
-  const orbitGeometry = new THREE.SphereGeometry(0.1, 64, 64);
-  const orbitTexture = textureLoader.load('mapattok.png', checkTexturesLoaded);
-  const orbitMaterial = new THREE.MeshStandardMaterial({ map: orbitTexture });
-  const orbitSphere = new THREE.Mesh(orbitGeometry, orbitMaterial);
-  orbitSphere.castShadow = true; // Adicionado
-  orbitSphere.receiveShadow = true; // Adicionado
+  // Globo orbitante
+  const orbitRadius  = 3;
+  const orbitSphere  = new THREE.Mesh(
+    new THREE.SphereGeometry(0.1, 64, 64),
+    new THREE.MeshStandardMaterial({ map: loader.load('mapattok.png', checkTexturesLoaded) })
+  );
+  orbitSphere.castShadow = orbitSphere.receiveShadow = true;
   orbitSphere.position.set(orbitRadius, 0, 0);
   scene.add(orbitSphere);
 
-  // Iluminação (Essencial para visualização)
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-  scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(3, 3, 5);
-  directionalLight.castShadow = true;
-  scene.add(directionalLight);
+  // Luzes
+  scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  dirLight.position.set(3,3,5);
+  dirLight.castShadow = true;
+  scene.add(dirLight);
 
-  // Animação e Controles
-  let orbitAngle = 0;
-  const orbitSpeed = -0.5;
-  const clock = new THREE.Clock();
-
-  window.myGlobe = {
-    camera: camera,
-    controls: controls,
-    centralSphere: centralSphere,
-    orbitSphere: orbitSphere,
-    trackingMode: "none"
-  };
-
-  //
-  // ─── INÍCIO ADIÇÕES PARA CLIQUE/ZOOM ───────────────────────────────────────────
-  //
-
-  // 1) Raycaster e mouse
+  // Raycaster e clique
   const raycaster = new THREE.Raycaster();
   const mouse     = new THREE.Vector2();
+  const clickable = [ centralSphere, orbitSphere ];
 
-  // 2) Objetos clicáveis
-  const clickableObjects = [ centralSphere, orbitSphere ];
-
-  // 3) Função de tween para centralizar e dar zoom
-  function focusOn(object, zoomDistance = 2, duration = 600) {
+  function focusOn(obj, zoomDist, duration=600) {
     const fromPos    = camera.position.clone();
-    const toPos      = object.position.clone().add(
-      object === orbitSphere
-        ? new THREE.Vector3(0,0,0.6)   // offset para o globo orbitante
-        : new THREE.Vector3(0,0,zoomDistance) // offset para o globo central
-    );
+    const toPos      = obj.position.clone().add(new THREE.Vector3(0,0,zoomDist));
     const fromTarget = controls.target.clone();
-    const toTarget   = object.position.clone();
-    const startTime  = performance.now();
+    const toTarget   = obj.position.clone();
+    const t0         = performance.now();
 
-    (function tween() {
-      const t = Math.min((performance.now() - startTime) / duration, 1);
+    (function tween(){
+      const t = Math.min((performance.now()-t0)/duration, 1);
       camera.position.lerpVectors(fromPos, toPos, t);
       controls.target.lerpVectors(fromTarget, toTarget, t);
       controls.update();
@@ -104,61 +81,55 @@ function initGlobe() {
     })();
   }
 
-  // 4) Listener de clique no canvas
-  canvas.addEventListener('mousedown', (event) => {
+  canvas.addEventListener('mousedown', e => {
     const rect = canvas.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
+    mouse.x = ((e.clientX-rect.left)/rect.width)*2 -1;
+    mouse.y = -((e.clientY-rect.top)/rect.height)*2 +1;
     raycaster.setFromCamera(mouse, camera);
-    const hits = raycaster.intersectObjects(clickableObjects, false);
-    if (hits.length > 0) {
-      const picked = hits[0].object;
-      if (picked === centralSphere) {
-        window.myGlobe.trackingMode = "central";
-        focusOn(centralSphere, 2);
-      } else {
-        window.myGlobe.trackingMode = "orbit";
-        focusOn(orbitSphere, 0.6);
-      }
+    const hit = raycaster.intersectObjects(clickable, false)[0];
+    if (!hit) return;
+    if (hit.object === centralSphere) {
+      window.myGlobe.trackingMode = 'central';
+      focusOn(centralSphere, 2);
+    } else {
+      window.myGlobe.trackingMode = 'orbit';
+      focusOn(orbitSphere, 0.6);
     }
   });
-  //
-  // ─── FIM ADIÇÕES PARA CLIQUE/ZOOM ──────────────────────────────────────────────
-  //
 
-  function animate() {
+  // Animar
+  let angle=0, speed=-0.5;
+  const clock = new THREE.Clock();
+  window.myGlobe = { camera, controls, centralSphere, orbitSphere, trackingMode:'none' };
+
+  (function animate(){
     requestAnimationFrame(animate);
-    const delta = clock.getDelta();
-
+    const d = clock.getDelta();
     centralSphere.rotation.y += 0.003;
-
-    orbitAngle += orbitSpeed * delta;
-    orbitSphere.position.x = centralSphere.position.x + orbitRadius * Math.cos(orbitAngle);
-    orbitSphere.position.z = centralSphere.position.z + orbitRadius * Math.sin(orbitAngle);
-
-    if (window.myGlobe.trackingMode === "orbit") {
-      const offset = new THREE.Vector3(0, 0, 0.6);
-      const desiredPos = orbitSphere.position.clone().add(offset);
-      camera.position.lerp(desiredPos, 0.1);
+    angle += speed*d;
+    orbitSphere.position.set(
+      orbitRadius*Math.cos(angle),
+      0,
+      orbitRadius*Math.sin(angle)
+    );
+    if (window.myGlobe.trackingMode==='orbit') {
+      const desired = orbitSphere.position.clone().add(new THREE.Vector3(0,0,0.6));
+      camera.position.lerp(desired, 0.1);
       controls.target.copy(orbitSphere.position);
-    } else if (window.myGlobe.trackingMode === "central") {
-      const offset = new THREE.Vector3(0, 0, 2);
-      const desiredPos = centralSphere.position.clone().add(offset);
-      camera.position.lerp(desiredPos, 0.1);
+    } else if (window.myGlobe.trackingMode==='central') {
+      const desired = centralSphere.position.clone().add(new THREE.Vector3(0,0,2));
+      camera.position.lerp(desired, 0.1);
       controls.target.copy(centralSphere.position);
     }
-
     controls.update();
     renderer.render(scene, camera);
-  }
-  animate();
+  })();
 
+  // Resize
   window.addEventListener('resize', () => {
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    renderer.setSize(w, h);
-    camera.aspect = w / h;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setSize(w,h);
+    camera.aspect = w/h;
     camera.updateProjectionMatrix();
   });
 }
