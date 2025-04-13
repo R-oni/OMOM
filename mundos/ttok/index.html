@@ -380,18 +380,44 @@
     height: 100%;
   }
 
+  /* topo */
   .globe-section::before {
     content: "";
     position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
-    pointer-events: none;
-    background-image: url("./imagens/borda_animada.gif");
-    background-repeat: repeat;           /* repete o tile por toda a área */
-    background-position: top left;       /* começa a repetir do canto */
-    background-size: 256px 256px;        /* tamanho original do seu GIF */
+    top: -20px; left: -20px; right: -20px;
+    height: 256px;
+    background: url("./imagens/borda_animada.gif") top center no-repeat;
+    background-size: 256px 256px;
+    z-index: 200;
+  }
+  /* base */
+  .globe-section::after {
+    content: "";
+    position: absolute;
+    bottom: -20px; left: -20px; right: -20px;
+    height: 256px;
+    background: url("./imagens/borda_animada.gif") bottom center no-repeat;
+    background-size: 256px 256px;
+    z-index: 200;
+  }
+  /* lado esquerdo */
+  .globe-section .border-left {
+    content: "";
+    position: absolute;
+    top: -20px; bottom: -20px; left: -20px;
+    width: 256px;
+    background: url("./imagens/borda_animada.gif") left center no-repeat;
+    background-size: 256px 256px;
+    z-index: 200;
+  }
+  /* lado direito */
+  .globe-section .border-right {
+    content: "";
+    position: absolute;
+    top: -20px; bottom: -20px; right: -20px;
+    width: 256px;
+    background: url("./imagens/borda_animada.gif") right center no-repeat;
+    background-size: 256px 256px;
     z-index: 200;
   }
 
