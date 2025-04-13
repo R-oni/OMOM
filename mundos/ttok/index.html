@@ -374,27 +374,26 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    overflow: visible;   /* <— permite o pseudo não ser cortado */
+    overflow: visible;
     pointer-events: none;
     width: 100%;
     height: 100%;
   }
 
-.globe-section::before {
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
-  pointer-events: none;
-  background-image: url("./imagens/borda_animada.gif");
-  background-repeat: no-repeat;
-  background-position: center;
-  /* força a moldura a preencher a área */
-  background-size: calc(100% + 40px) calc(100% + 40px);
-  z-index: 200;
-}
+  .globe-section::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    pointer-events: none;
+    background-image: url("./imagens/borda_animada.gif");
+    background-repeat: repeat;           /* repete o tile por toda a área */
+    background-position: top left;       /* começa a repetir do canto */
+    background-size: 256px 256px;        /* tamanho original do seu GIF */
+    z-index: 200;
+  }
 
   #globeCanvas {
     width: 100% !important;
