@@ -412,47 +412,49 @@
         height: 100%;
         object-fit: contain;
       }
-      /* Remove as duas setas originais na versão desktop */
-#setaBtn,
-#setaBtn ~ img.seta-globo { 
-  display: none !important; 
-}
+  /* 1) Esconde completamente as setas originais */
+  #setaBtn,
+  .seta-globo,
+  #globeSeta1,
+  #globeSeta2 {
+    display: none !important;
+  }
 
-/* Insere uma única seta para desktop */
-.globe-section::after {
-  content: "";
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  background: url("imagens/seta.webp") no-repeat center/contain;
-  top: 50%;
-  left: 10%;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 150;
-  animation: glideFade 2s ease-in-out infinite;
-}
+  /* 2) Cria uma única seta animada via pseudo-elemento */
+  .globe-section::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: url("imagens/seta.webp") no-repeat center/contain;
+    top: 20%;
+    right: 10%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 150;
+    animation: glideFadeInverse 2s ease-in-out infinite;
+  }
 
-/* Keyframes para fade in → mover → fade out */
-@keyframes glideFade {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0);
-  }
-  10% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 1;
-    transform: translate(200px, -200px); /* ajusta o deslocamento diagonal */
-  }
-  90% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-    transform: translate(200px, -200px);
-  }
+  /* 3) Keyframes: fadeIn → mover diagonal inversa → fadeOut */
+  @keyframes glideFadeInverse {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0);
+    }
+    10% {
+      opacity: 1;
+    }
+    60% {
+      opacity: 1;
+      transform: translate(-200px, 200px); /* move pra baixo e à esquerda */
+    }
+    90% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-200px, 200px);
+    }
 }
     }
   </style>
