@@ -365,40 +365,39 @@
         z-index: 1;
       }
     
-      .globe-section {
-        grid-column: 2;
-        grid-row: 1 / span 2;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-        pointer-events: none;
+        .globe-section {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+    /* Sem o ::before aqui dentro! */
+  }
 
-          /* Pseudo‑elemento que fica por cima, mas "fora" do conteúdo */
+  /* Pseudo‑elemento para a borda animada */
   .globe-section::before {
     content: "";
     position: absolute;
-    top: -10px;    /* ajusta para que a borda fique levemente “para fora” */
+    top: -10px;
     left: -10px;
     right: -10px;
     bottom: -10px;
-    pointer-events: none;          /* não bloqueia cliques */
+    pointer-events: none;
     background: url("imagens/borda_animada.gif") center/cover no-repeat;
-    z-index: 10;                    /* acima do fundo, mas abaixo do canvas */
+    z-index: 10;
   }
-          
-      }
-      #globeCanvas {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain;
-        pointer-events: auto;
-        position: relative;
-        z-index: 20;
-      }
+
+  #globeCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    pointer-events: auto;
+    position: relative;
+    z-index: 20;
+  }
       /* Ajustes dos botões para desktop */
       #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
         height: 100%;
