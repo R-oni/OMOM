@@ -71,6 +71,62 @@ function initGlobe() {
     trackingMode: "none"
   };
 
+  //
+  // ─── INÍCIO ADIÇÕES PARA CLIQUE/ZOOM ───────────────────────────────────────────
+  //
+
+  // 1) Raycaster e mouse
+  const raycaster = new THREE.Raycaster();
+  const mouse     = new THREE.Vector2();
+
+  // 2) Objetos clicáveis
+  const clickableObjects = [ centralSphere, orbitSphere ];
+
+  // 3) Função de tween para centralizar e dar zoom
+  function focusOn(object, zoomDistance = 2, duration = 600) {
+    const fromPos    = camera.position.clone();
+    const toPos      = object.position.clone().add(
+      object === orbitSphere
+        ? new THREE.Vector3(0,0,0.6)   // offset para o globo orbitante
+        : new THREE.Vector3(0,0,zoomDistance) // offset para o globo central
+    );
+    const fromTarget = controls.target.clone();
+    const toTarget   = object.position.clone();
+    const startTime  = performance.now();
+
+    (function tween() {
+      const t = Math.min((performance.now() - startTime) / duration, 1);
+      camera.position.lerpVectors(fromPos, toPos, t);
+      controls.target.lerpVectors(fromTarget, toTarget, t);
+      controls.update();
+      renderer.render(scene, camera);
+      if (t < 1) requestAnimationFrame(tween);
+    })();
+  }
+
+  // 4) Listener de clique no canvas
+  canvas.addEventListener('mousedown', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const hits = raycaster.intersectObjects(clickableObjects, false);
+    if (hits.length > 0) {
+      const picked = hits[0].object;
+      if (picked === centralSphere) {
+        window.myGlobe.trackingMode = "central";
+        focusOn(centralSphere, 2);
+      } else {
+        window.myGlobe.trackingMode = "orbit";
+        focusOn(orbitSphere, 0.6);
+      }
+    }
+  });
+  //
+  // ─── FIM ADIÇÕES PARA CLIQUE/ZOOM ──────────────────────────────────────────────
+  //
+
   function animate() {
     requestAnimationFrame(animate);
     const delta = clock.getDelta();
