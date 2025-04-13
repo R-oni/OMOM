@@ -42,10 +42,10 @@ function initGlobe() {
   centralSphere.castShadow = centralSphere.receiveShadow = true;
   scene.add(centralSphere);
 
-  // Globo orbitante
+  // Globo orbitante (aumentei o raio para 0.3)
   const orbitRadius  = 3;
   const orbitSphere  = new THREE.Mesh(
-    new THREE.SphereGeometry(0.1, 64, 64),
+    new THREE.SphereGeometry(0.3, 64, 64), // Tamanho ajustado
     new THREE.MeshStandardMaterial({ map: loader.load('mapattok.png', checkTexturesLoaded) })
   );
   orbitSphere.castShadow = orbitSphere.receiveShadow = true;
@@ -64,10 +64,12 @@ function initGlobe() {
   const mouse     = new THREE.Vector2();
   const clickable = [ centralSphere, orbitSphere ];
 
-  let isTweening = false; // Flag para indicar se o tween está ocorrendo
+  let isTweening = false;
 
   function focusOn(obj, zoomDist, duration = 600) {
     isTweening = true;
+    controls.enabled = false; // Desativa controles durante o zoom
+    
     const fromPos    = camera.position.clone();
     const toPos      = obj.position.clone().add(new THREE.Vector3(0, 0, zoomDist));
     const fromTarget = controls.target.clone();
@@ -83,9 +85,9 @@ function initGlobe() {
       if (t < 1) {
         requestAnimationFrame(tween);
       } else {
-        // Ao finalizar o tween, desativa o tracking para não interferir
         isTweening = false;
         window.myGlobe.trackingMode = 'none';
+        controls.enabled = true; // Reativa controles após o zoom
       }
     })();
   }
@@ -98,13 +100,15 @@ function initGlobe() {
     const hit = raycaster.intersectObjects(clickable, false)[0];
     if (!hit) return;
 
+    e.stopPropagation(); // Impede interferência das OrbitControls
+
     if (!isTweening) {
       if (hit.object === centralSphere) {
         window.myGlobe.trackingMode = 'central';
         focusOn(centralSphere, 2);
       } else {
         window.myGlobe.trackingMode = 'orbit';
-        focusOn(orbitSphere, 0.6);
+        focusOn(orbitSphere, 3); // Aumentei a distância do zoom
       }
     }
   });
@@ -126,11 +130,11 @@ function initGlobe() {
     );
     if (!isTweening) {
       if (window.myGlobe.trackingMode === 'orbit') {
-        const desired = orbitSphere.position.clone().add(new THREE.Vector3(0, 0, 0.6));
+        const desired = orbitSphere.position.clone().add(new THREE.Vector3(0, 0, 3));
         camera.position.lerp(desired, 0.1);
         controls.target.copy(orbitSphere.position);
       } else if (window.myGlobe.trackingMode === 'central') {
-        const desired = centralSphere.position.clone().add(new THREE.Vector3(0, 0, 2));
+        const desired = new THREE.Vector3(0, 0, 2);
         camera.position.lerp(desired, 0.1);
         controls.target.copy(centralSphere.position);
       }
