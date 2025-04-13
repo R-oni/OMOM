@@ -365,7 +365,7 @@
         z-index: 1;
       }
     
-        .globe-section {
+  .globe-section {
     grid-column: 2;
     grid-row: 1 / span 2;
     display: flex;
@@ -374,10 +374,8 @@
     position: relative;
     overflow: hidden;
     pointer-events: none;
-    /* Sem o ::before aqui dentro! */
   }
 
-  /* Pseudo‑elemento para a borda animada */
   .globe-section::before {
     content: "";
     position: absolute;
@@ -386,8 +384,10 @@
     right: -10px;
     bottom: -10px;
     pointer-events: none;
-    background: url("imagens/borda_animada.gif") center/cover no-repeat;
-    z-index: 10;
+    background: url("./imagens/borda_animada.gif") center/cover no-repeat;
+    z-index: 200;
+    min-width: 50px;
+    min-height: 50px;
   }
 
   #globeCanvas {
@@ -396,7 +396,7 @@
     object-fit: contain;
     pointer-events: auto;
     position: relative;
-    z-index: 20;
+    z-index: 100;
   }
       /* Ajustes dos botões para desktop */
       #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
