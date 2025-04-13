@@ -419,48 +419,7 @@
     display: none !important;
   }
 
-  /* Insere uma única seta animada via pseudo-elemento */
-  .globe-section::after {
-    content: "";
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: url("imagens/seta.webp") no-repeat center/contain;
-    top: 20%;
-    right: 10%;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 150;
-    animation: glideFadeInverse 2s ease-in-out infinite;
-  }
 
-  /* Quando .globe-section tiver a classe .no-arrow, remove a seta animada */
-  .globe-section.no-arrow::after {
-  content: none !important;
-  display: none !important;
-  animation: none !important;
-  }
-
-  /* Keyframes: fadeIn → mover diagonal inversa → fadeOut */
-  @keyframes glideFadeInverse {
-    0% {
-      opacity: 0;
-      transform: translate(0, 0);
-    }
-    10% {
-      opacity: 1;
-    }
-    60% {
-      opacity: 1;
-      transform: translate(-200px, 200px);
-    }
-    90% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-      transform: translate(-200px, 200px);
-    }
 }
     }
 
@@ -892,30 +851,7 @@
     });
   </script>
 
-  <script>
-  window.addEventListener('DOMContentLoaded', function() {
-    const globeSection = document.querySelector('.globe-section');
-    const globeCanvas = document.getElementById('globeCanvas');
-    
-    function removeGlobeArrow() {
-      console.log('removeGlobeArrow fired');
-      if (globeSection) {
-        globeSection.classList.add('no-arrow');
-      }
-      if (globeCanvas) {
-        globeCanvas.removeEventListener('mousedown', removeGlobeArrow);
-        globeCanvas.removeEventListener('touchstart', removeGlobeArrow);
-      }
-    }
-    
-    if (globeCanvas) {
-      globeCanvas.addEventListener('mousedown', removeGlobeArrow);
-      globeCanvas.addEventListener('touchstart', removeGlobeArrow);
-    } else {
-      console.error('globeCanvas not found!');
-    }
-  });
-</script>
+ 
 
 
 </body>
