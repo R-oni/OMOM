@@ -412,15 +412,14 @@
         height: 100%;
         object-fit: contain;
       }
-  /* 1) Esconde completamente as setas originais */
-  #setaBtn,
-  .seta-globo,
+   /* Esconde só as setas do globo originais, mantém #setaBtn */
   #globeSeta1,
-  #globeSeta2 {
+  #globeSeta2,
+  .seta-globo {
     display: none !important;
   }
 
-  /* 2) Cria uma única seta animada via pseudo-elemento */
+  /* Insere uma única seta animada via pseudo-elemento */
   .globe-section::after {
     content: "";
     position: absolute;
@@ -435,7 +434,13 @@
     animation: glideFadeInverse 2s ease-in-out infinite;
   }
 
-  /* 3) Keyframes: fadeIn → mover diagonal inversa → fadeOut */
+  /* Quando .globe-section tiver a classe .no-arrow, remove a seta animada */
+  .globe-section.no-arrow::after {
+    display: none !important;
+    animation: none !important;
+  }
+
+  /* Keyframes: fadeIn → mover diagonal inversa → fadeOut */
   @keyframes glideFadeInverse {
     0% {
       opacity: 0;
@@ -446,7 +451,7 @@
     }
     60% {
       opacity: 1;
-      transform: translate(-200px, 200px); /* move pra baixo e à esquerda */
+      transform: translate(-200px, 200px);
     }
     90% {
       opacity: 0;
@@ -457,6 +462,22 @@
     }
 }
     }
+
+    <script>
+  // Supondo que seu canvas tenha id="globeCanvas"
+  const globeSection = document.querySelector('.globe-section');
+  const globeCanvas = document.getElementById('globeCanvas');
+
+  function removeGlobeArrow() {
+    globeSection.classList.add('no-arrow');
+    // remove o listener para não repetir
+    globeCanvas.removeEventListener('mousedown', removeGlobeArrow);
+    globeCanvas.removeEventListener('touchstart', removeGlobeArrow);
+  }
+
+  globeCanvas.addEventListener('mousedown', removeGlobeArrow);
+  globeCanvas.addEventListener('touchstart', removeGlobeArrow);
+</script>
   </style>
 </head>
 <body>
