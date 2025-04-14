@@ -11,44 +11,40 @@
       padding: 0;
       box-sizing: border-box;
     }
-    body, html {
+    html, body {
       width: 100%;
       height: 100%;
       background-color: black;
       font-family: 'Press Start 2P', cursive;
       overflow: hidden;
-      position: relative;
     }
-    /* Container geral SPA */
     #spa-container {
       display: grid;
       grid-template-rows: 50% 50%;
-      width: 100vw;
       height: 100vh;
+      width: 100vw;
       position: relative;
       z-index: 1;
     }
-    /* Visor (Interface de cima) */
+    /* Visor - Parte de cima */
     #visor {
-      background: url('visor_off.png') center center no-repeat;
-      background-size: contain;
-      background-color: #000;
+      background-color: #111;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
     }
-    /* Flipbook (embaixo) */
+    /* Flipbook - Parte de baixo */
     #flipbook {
-      background: #111;
+      background-color: #222;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
     }
-    /* Overlay dos mundos */
+    /* Overlay do menu */
     #menu-overlay {
       display: none;
       position: fixed;
@@ -58,41 +54,36 @@
       height: 100vh;
       background: rgba(0,0,0,0.7);
       backdrop-filter: blur(10px);
-      z-index: 100;
+      z-index: 10;
       overflow-y: auto;
       padding: 30px 10px;
     }
     .symbols-container {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: center;
       align-items: center;
       gap: 20px;
+      padding-top: 50px;
     }
     .symbol {
       cursor: pointer;
       transition: transform 0.3s;
     }
     .symbol img {
-      width: 120px;
+      width: 100px;
       transition: transform 0.3s;
     }
     .symbol img:hover {
       transform: scale(1.2);
     }
-
-    /* Desktop ajuste */
-    @media (min-width: 1024px) {
+    /* Ajustes para PC */
+    @media (min-width: 768px) {
       #spa-container {
         grid-template-rows: 60% 40%;
       }
-      .symbols-container {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 40px;
-      }
       .symbol img {
-        width: 160px;
+        width: 140px;
       }
     }
   </style>
@@ -100,20 +91,21 @@
 
 <body>
 
-<!-- Container principal SPA -->
 <div id="spa-container">
-  <!-- Visor -->
+  <!-- VISOR -->
   <div id="visor">
-    <!-- Aqui no futuro entra globo, imagens etc -->
+    <!-- Espaço reservado para o GLOBO -->
+    <p style="color: #555;">Aguardando carregar o mundo...</p>
   </div>
-  <!-- Flipbook -->
+
+  <!-- FLIPBOOK -->
   <div id="flipbook">
-    <!-- Aqui no futuro entra o flipbook real -->
-    <button id="abrirMenu" style="padding:10px; background:#00FFE7; border:none; font-family:'Press Start 2P'; cursor:pointer;">ABRIR MUNDOS</button>
+    <!-- Espaço reservado para o FLIPBOOK -->
+    <p style="color: #666;">Flipbook será carregado aqui.</p>
   </div>
 </div>
 
-<!-- Overlay de Mundos -->
+<!-- MENU OVERLAY -->
 <div id="menu-overlay">
   <div class="symbols-container">
     <div class="symbol" onclick="selecionarMundo('velei')">
@@ -128,28 +120,22 @@
     <div class="symbol" onclick="selecionarMundo('ttok')">
       <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
     </div>
-    <!-- Adicione mais mundos aqui -->
+    <!-- Pode adicionar mais mundos -->
   </div>
 </div>
 
 <script>
-  // 3 segundos para abrir automaticamente o menu
+  // Mostrar overlay automático após 3 segundos
   window.addEventListener("load", () => {
     setTimeout(() => {
       document.getElementById('menu-overlay').style.display = 'flex';
     }, 3000);
   });
 
-  // Botão manual para abrir o menu
-  document.getElementById('abrirMenu').addEventListener('click', () => {
-    document.getElementById('menu-overlay').style.display = 'flex';
-  });
-
-  // Função quando clicar em um símbolo
+  // Quando o usuário clicar em um símbolo de mundo
   function selecionarMundo(mundo) {
     document.getElementById('menu-overlay').style.display = 'none';
 
-    // Lógica de carregar conteúdo
     if (mundo === 'velei') {
       document.getElementById('visor').innerHTML = `<img src="mundos/veleywei/globo.png" style="width:80%;height:auto;">`;
       document.getElementById('flipbook').innerHTML = `<p style="color:#00FFE7;">Flipbook de Velei'wey aqui</p>`;
