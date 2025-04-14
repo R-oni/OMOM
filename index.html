@@ -18,7 +18,8 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: 0;
+      object-position: center;
+      z-index: 2;
       pointer-events: none;
     }
 
@@ -41,7 +42,7 @@
       height: 80vh; /* 80% da altura da tela */
       margin-top: 20vh; /* empurra o container para baixo em 20% da tela */
       position: relative; 
-      z-index: 1; /* acima do painel */
+      /* Não definido z-index aqui para termos controle individual dos filhos */
     }
 
     /* loading */
@@ -71,17 +72,17 @@
       justify-content: center; 
       width: 100%; 
       height: 100%; 
-      z-index: 0; /* abaixo do painel (z‑index:0) */
     }
-    #globe-area canvas { 
-      width: 100%; 
-      height: 100%; 
+    /* Garante que o globo fique abaixo, com z-index menor */
+    #globe-area { 
+      z-index: 0; 
     }
-    /* Garantir que o flipbook ocupe todo o espaço da célula */
+    /* Garantir que o flipbook ocupe todo o espaço da célula e fique acima */
     #flipbook-area { 
       overflow: hidden; 
       width: 100%;
       height: 100%; 
+      z-index: 3;
     }
     #flipbookContainer {
       width: 100%;
@@ -95,7 +96,7 @@
       left: 0; 
       width: 100%; 
       height: 100%; 
-      background: rgba(0,0,0,0.8); 
+      background: rgba(255,255,255,0.2); 
       backdrop-filter: blur(5px); 
       display: none; 
       z-index: 100; 
