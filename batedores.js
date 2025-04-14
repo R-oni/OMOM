@@ -96,7 +96,7 @@ window.initGlobe = function(selector) {
   });
 };
 
-// 2) Inicialização do Flipbook com lazy‑load
+// 2) Inicialização do Flipbook com lazy‑load e lógica da seta e dos botões animados
 window.initFlipbook = function(selector) {
   const $container = $(selector);
   if (!$container.length) return console.warn('Container flipbook não encontrado:', selector);
@@ -166,7 +166,7 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
-  // ── AQUI: aplica o tamanho das páginas ──
+  // Aplica o tamanho das páginas e das imagens
   $container.find('#flipbook .page').css({
     width: '80%',
     height: '80%'
@@ -178,7 +178,7 @@ window.initFlipbook = function(selector) {
   });
 
   // ── Lazy‑load setup ──
-  // 1) marca data-page e move src → data-src
+  // 1) Marca data-page e move src → data-src
   $container.find('#flipbook .page').each(function(idx){
     const p = idx + 1;
     $(this).attr('data-page', p);
@@ -187,10 +187,10 @@ window.initFlipbook = function(selector) {
       $(this).attr('data-src', realSrc).removeAttr('src');
     });
   });
-  // 2) função de pré‑carregamento
+  // 2) Função de pré‑carregamento
   function preloadPages(startPage, count) {
     for (let i = startPage; i < startPage + count; i++) {
-      const pageDiv = $container.find('#flipbook .page[data-page="'+i+'"]');
+      const pageDiv = $container.find(`#flipbook .page[data-page="${i}"]`);
       if (!pageDiv.length) continue;
       pageDiv.find('img[data-src]').each(function(){
         const $img = $(this);
@@ -200,7 +200,7 @@ window.initFlipbook = function(selector) {
       });
     }
   }
-  // 3) carrega primeiras 3 páginas
+  // 3) Carrega as primeiras 3 páginas
   preloadPages(1, 3);
 
   // Áudio para virar páginas
@@ -208,18 +208,18 @@ window.initFlipbook = function(selector) {
   flipAudio.preload = 'auto';
   flipAudio.volume = 0.9;
 
-  // Inicializa o flipbook com evento turned
+  // Inicializa o flipbook com a configuração do turn.js
   $("#flipbook").turn({
     autoCenter: false,
     display: 'double',
     when: {
       turned: function(e, page) {
-        preloadPages(page+1, 3);
+        preloadPages(page + 1, 3);
       }
     }
   });
 
-  // Função de redimensionamento responsivo
+  // Função de redimensionamento responsivo do flipbook
   function resizeFlipbook(){
     let newWidth, newHeight;
     if ($(window).width() < 1024) {
@@ -237,35 +237,31 @@ window.initFlipbook = function(selector) {
   // Previne o arrasto das imagens
   $(".page img").on("dragstart", e => e.preventDefault());
 
-  // Toca áudio ao virar página
+  // Toca áudio ao iniciar o virar da página
   $("#flipbook").on("mousedown touchstart", () => {
     flipAudio.currentTime = 0;
-    flipAudio.play().catch(()=>{});
+    flipAudio.play().catch(() => {});
   });
 
-  // Remove seta da capa após virar
+  // Remove a seta da capa após virar a página
   $("#flipbook").bind("turning", (e, page) => {
-    if (page > 1) $("#setaBtn").fadeOut(300, function(){ $(this).remove(); });
+    if (page > 1) {
+      $("#setaBtn").fadeOut(300, function(){ $(this).remove(); });
+    }
   });
 
-  // Clique na seta para avançar
+  // Clique na seta para avançar para a próxima página
   $container.on("click", "#setaBtn", () => $("#flipbook").turn("next"));
 
-  // Botões de overlay
-  const overlayMap = {
-    '#cliquemundo': 'mundos/ttok/imagens/cap1/cliquemundo.webp',
-    '#cliqueinversao': 'mundos/ttok/imagens/cap1/inversao.webp',
-    '#cliqueg': 'mundos/ttok/imagens/cap1/estrelag.webp',
-    '#cliquerefracao': 'mundos/ttok/imagens/cap1/refracao.webp',
-    '#cliquemorse': 'mundos/ttok/imagens/cap1/morse.webp',
-    '#cliquecapacitor': 'mundos/ttok/imagens/cap1/cliquecapacitor.webp',
-    '#cliquesanguedomundo': 'mundos/ttok/imagens/cap1/sanguedomundo.webp'
-  };
-  $.each(overlayMap, (btn, src) => {
-    $container.on('click', btn, e => {
-      e.stopPropagation();
-      $("#overlayImage").attr("src", src);
-      $("#overlayContainer").fadeIn(500);
-    });
+  // ── (Opcional) Lógica dos botões de tracking ou de outros comportamentos animados
+  // Se você desejar implementar funções específicas para os botões (ex.: #cliquemundo, #cliqueinversao, etc.)
+  // que atualmente estão na estrutura do flipbook, pode fazê-lo abaixo.
+  // Por exemplo, para alterar o modo de tracking do globo:
+  $(document).on("click", "#cliquemundo", function(e) {
+    e.stopPropagation();
+    if (window.myGlobe) {
+      window.myGlobe.trackingMode = "orbit";
+    }
   });
+  // Caso deseje implementar outros botões, adicione lógicas semelhantes aqui.
 };
