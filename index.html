@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outros Mundos Outras Mentes</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
   <style>
-    /* Reset geral */
-    html, body {
+    /* ===== ESTILO GERAL ===== */
+    body, html {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -16,144 +15,158 @@
       background: black;
       overflow: hidden;
       font-family: 'Press Start 2P', cursive;
+      color: #00FFE7;
     }
 
-    /* Fundo da mesa */
-    #background-mesa {
+    #background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('imagens/painel.png') no-repeat center/cover;
+      z-index: -2;
+    }
+
+    /* ===== Visor do globo ===== */
+    #visor {
+      width: 100%;
+      height: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #visor canvas {
+      max-width: 80%;
+      max-height: 80%;
+    }
+
+    /* ===== Botão para abrir mundos ===== */
+    #abrirMundosBtn {
+      width: 220px;
+      padding: 15px;
+      background: #00FFE7;
+      color: black;
+      border: none;
+      cursor: pointer;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      margin: 30px auto;
+      display: block;
+      border-radius: 5px;
+    }
+
+    #abrirMundosBtn:hover {
+      background: #00ccbb;
+    }
+
+    /* ===== Overlay dos mundos ===== */
+    #mundosOverlay {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: url('painel.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: 1;
-      filter: blur(5px);
-    }
-
-    /* Área de visor (o espaço onde vai aparecer o globo depois) */
-    #visor {
-      position: absolute;
-      top: 5vh;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80vw;
-      height: 30vh;
-      background: rgba(0, 0, 0, 0.7);
-      border: 2px solid #00FFE7;
-      border-radius: 10px;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #00FFE7;
-      font-size: 10px;
-      text-align: center;
-    }
-
-    /* Área do flipbook (placeholder) */
-    #flipbook-area {
-      position: absolute;
-      bottom: 5vh;
-      right: 5vw;
-      width: 50vw;
-      height: 40vh;
-      background: rgba(0, 0, 0, 0.3);
-      border: 2px dashed #00FFE7;
-      border-radius: 10px;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #00FFE7;
-      font-size: 10px;
-      text-align: center;
-    }
-
-    /* Menu de mundos (scroll) */
-    #menu-mundos {
-      position: absolute;
-      top: 40vh;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      z-index: 9999;
       overflow-y: auto;
-      z-index: 5;
-      padding: 10px;
+    }
+
+    #fecharOverlayBtn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: 2px solid #00FFE7;
+      color: #00FFE7;
+      padding: 10px 20px;
+      font-family: 'Press Start 2P', cursive;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* ===== Estilo dos símbolos ===== */
+    .symbols-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
-      backdrop-filter: blur(8px);
+      padding: 60px 20px;
+      gap: 25px;
     }
 
-    .mundo-symbol {
-      width: 25vw;
-      cursor: pointer;
-      transition: transform 0.2s;
+    .symbol {
+      position: relative;
+      transition: transform 0.3s;
     }
-    .mundo-symbol:hover {
+
+    .symbol img {
+      width: 25vw;
+    }
+
+    .symbol img:hover {
       transform: scale(1.1);
     }
 
-    /* Animação de floating */
-    .float {
-      animation: floating 3s ease-in-out infinite;
-    }
-    @keyframes floating {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0px); }
+    .symbol.brither img {
+      filter: brightness(180%);
     }
 
-    /* Estilos para desktop */
-    @media (min-width: 1024px) {
-      #visor {
-        width: 40vw;
-        height: 35vh;
-      }
-      #flipbook-area {
-        width: 30vw;
-        height: 50vh;
-        bottom: 8vh;
-        right: 8vw;
-      }
-      #menu-mundos {
-        top: 50vh;
-        gap: 30px;
-      }
-      .mundo-symbol {
-        width: 10vw;
-      }
+    .symbol.locked img {
+      filter: brightness(50%);
     }
   </style>
 </head>
 
 <body>
+  <div id="background"></div>
 
-  <!-- Mesa de fundo -->
-  <div id="background-mesa"></div>
-
-  <!-- Visor desligado -->
+  <!-- Visor do globo -->
   <div id="visor">
-    TELA DESLIGADA
+    <!-- Canvas do globo será carregado aqui futuramente -->
+    <p style="color: gray;">Visor inativo...</p>
   </div>
 
-  <!-- Área do flipbook -->
-  <div id="flipbook-area">
-    FLIPBOOK AQUI
+  <!-- Botão para abrir o menu dos mundos -->
+  <button id="abrirMundosBtn">EXPLORAR MUNDOS</button>
+
+  <!-- Overlay dos mundos -->
+  <div id="mundosOverlay">
+    <button id="fecharOverlayBtn">FECHAR</button>
+    <div class="symbols-container">
+      <div class="symbol brither"><a href="#"><img src="assets/veleyweimenu.png" alt="Velei'wey"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></a></div>
+      <div class="symbol brither"><a href="#"><img src="mundos/ttok/ttokmenu.png" alt="T'Tok"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/denbou/denboumenu.png" alt="DenDenBouBou"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/sapador/sapador.png" alt="Sapador"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/mundo 1/mundo1.png" alt="Mundo 1"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/mundo 2/mundo2.png" alt="Mundo 2"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/mundo 3/mundo3menu.png" alt="Mundo 3"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/mundo 4/mundo4menu.png" alt="Mundo 4"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Mundo 5"></a></div>
+      <div class="symbol locked"><a href="#"><img src="mundos/mundo 6/criaturamenu.webp" alt="Mundo 6"></a></div>
+    </div>
   </div>
 
-  <!-- Menu de mundos flutuando -->
-  <div id="menu-mundos">
-    <img src="mundos/ttok/ttokmenu.png" class="mundo-symbol float" alt="T'Tok">
-    <img src="mundos/veleywei/veleyweimenu.png" class="mundo-symbol float" alt="Velei'wey">
-    <img src="mundos/himpis/himpismenu.png" class="mundo-symbol float" alt="Himpis">
-    <img src="mundos/botychera/botycheramenu.png" class="mundo-symbol float" alt="Botychera">
-    <!-- ... mais mundos que quiser -->
-  </div>
+  <script>
+    const abrirMundosBtn = document.getElementById('abrirMundosBtn');
+    const mundosOverlay = document.getElementById('mundosOverlay');
+    const fecharOverlayBtn = document.getElementById('fecharOverlayBtn');
 
+    abrirMundosBtn.addEventListener('click', () => {
+      mundosOverlay.style.display = 'block';
+    });
+
+    fecharOverlayBtn.addEventListener('click', () => {
+      mundosOverlay.style.display = 'none';
+    });
+  </script>
 </body>
 </html>
