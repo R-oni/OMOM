@@ -21,21 +21,21 @@ window.initGlobe = selector => {
   // sky
   (()=>{
     const geom = new THREE.BufferGeometry();
-    const pos=[], col=[];
-    for(let i=0;i<20000;i++){
-      const R=80, th=Math.random()*2*Math.PI, ph=Math.acos(Math.random()*2-1);
-      const x=R*Math.sin(ph)*Math.cos(th), y=R*Math.sin(ph)*Math.sin(th), z=R*Math.cos(ph);
-      pos.push(x,y,z);
-      const r=Math.random();
-      col.push(r<0.9?1:1, r<0.9?1:r<0.95?0.6:0.6, r<0.9?1:r<0.95?0.6:1);
+    const pos = [], col = [];
+    for(let i=0; i<20000; i++){
+      const R = 80, th = Math.random()*2*Math.PI, ph = Math.acos(Math.random()*2-1);
+      const x = R*Math.sin(ph)*Math.cos(th), y = R*Math.sin(ph)*Math.sin(th), z = R*Math.cos(ph);
+      pos.push(x, y, z);
+      const r = Math.random();
+      col.push(r<0.9 ? 1 : 1, r<0.9 ? 1 : r<0.95 ? 0.6 : 0.6, r<0.9 ? 1 : r<0.95 ? 0.6 : 1);
     }
-    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
-    geom.setAttribute('color',    new THREE.Float32BufferAttribute(col,3));
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geom.setAttribute('color',    new THREE.Float32BufferAttribute(col, 3));
     const mat = new THREE.PointsMaterial({ size:0.25, vertexColors:true });
     scene.add(new THREE.Points(geom,mat));
   })();
 
-  const controls = new THREE.OrbitControls(camera,canvas);
+  const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
 
@@ -63,26 +63,26 @@ window.initGlobe = selector => {
   dir.castShadow = true;
   scene.add(dir);
 
-  let angle=0, speed=-0.5;
+  let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
 
   (function animate(){
     requestAnimationFrame(animate);
     const d = clock.getDelta();
     central.rotation.y += 0.003;
-    angle += speed*d;
+    angle += speed * d;
     orbit.position.set(
-      orbitRadius*Math.cos(angle),
+      orbitRadius * Math.cos(angle),
       0,
-      orbitRadius*Math.sin(angle)
+      orbitRadius * Math.sin(angle)
     );
     controls.update();
-    renderer.render(scene,camera);
+    renderer.render(scene, camera);
   })();
 
   window.addEventListener('resize', () => {
     const ww = canvas.clientWidth, hh = canvas.clientHeight;
-    renderer.setSize(ww,hh);
+    renderer.setSize(ww, hh);
     camera.aspect = ww/hh;
     camera.updateProjectionMatrix();
   });
@@ -93,7 +93,7 @@ window.initFlipbook = selector => {
   const $c = $(selector);
   if (!$c.length) return console.warn('Container flipbook não encontrado:', selector);
 
-  // monta o flipbook
+  // monta o flipbook com template literal para injetar o HTML corretamente
   $c.html(`
     <div id="flipbook">
       <div class="page hard">
@@ -179,35 +179,35 @@ window.initFlipbook = selector => {
   resizeFB();
 
   // som ao virar
-  $('#flipbook').on('mousedown touchstart', ()=>{
+  $('#flipbook').on('mousedown touchstart', () => {
     flipAudio.currentTime = 0;
-    flipAudio.play().catch(()=>{});
+    flipAudio.play().catch(() => {});
   });
 
   // seta da capa some
-  $('#flipbook').bind('turning', (e, p)=>{
-    if(p>1) $('#setaBtn').fadeOut(300);
+  $('#flipbook').bind('turning', (e, p) => {
+    if(p > 1) $('#setaBtn').fadeOut(300);
   });
 
   // clique na seta avança
-  $(selector).on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
+  $(selector).on('click', '#setaBtn', () => $('#flipbook').turn('next'));
 
   // overlay imagens
-  $(selector).on('click','#btnSair', e=>{
+  $(selector).on('click', '#btnSair', e => {
     e.preventDefault();
     $('#overlayContainer').fadeOut(300);
   });
   const map = {
-    '#cliquemundo':'imagens/cap1/cliquemundo.webp',
-    '#cliqueinversao':'imagens/cap1/inversao.webp',
-    '#cliqueg':'imagens/cap1/estrelag.webp',
-    '#cliquerefracao':'imagens/cap1/refracao.webp',
-    '#cliquemorse':'imagens/cap1/morse.webp',
-    '#cliquecapacitor':'imagens/cap1/capacitor.webp',
-    '#cliquesanguedomundo':'imagens/cap1/sanguedomundo.png'
+    '#cliquemundo': 'imagens/cap1/cliquemundo.webp',
+    '#cliqueinversao': 'imagens/cap1/inversao.webp',
+    '#cliqueg': 'imagens/cap1/estrelag.webp',
+    '#cliquerefracao': 'imagens/cap1/refracao.webp',
+    '#cliquemorse': 'imagens/cap1/morse.webp',
+    '#cliquecapacitor': 'imagens/cap1/capacitor.webp',
+    '#cliquesanguedomundo': 'imagens/cap1/sanguedomundo.png'
   };
-  Object.entries(map).forEach(([btn,src])=>{
-    $(selector).on('click', btn, e=>{
+  Object.entries(map).forEach(([btn, src]) => {
+    $(selector).on('click', btn, e => {
       e.stopPropagation();
       $('#overlayImage').attr('src', src);
       $('#overlayContainer').fadeIn(500);
