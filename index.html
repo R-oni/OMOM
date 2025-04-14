@@ -101,29 +101,31 @@
       height: calc(100% - 7vh);
     }
 
-    /* seta animada no canto superior direito */
-    #flipbook-area #setaBtn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 15px;
-      height: auto;
-      cursor: pointer;
-      opacity: 0;
-      animation:
-       fadeInArrow 0.8s forwards 0.5s,
-       slideArrow 1.2s ease-in-out infinite 1s;
-      z-index: 5;
-    }
-    @keyframes fadeInArrow {
-      to { opacity: 1; }
-    }
-    @keyframes floatArrow {
-      0%   { transform: translateY(0); }
-      50%  { transform: translateY(-6px, 6px); }
-      100% { transform: translateY(0); }
-    }
+/* Seta menor, no canto, fade + movimento diagonal */
+#flipbook-area #setaBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 16px;      /* bem pequena */
+  height: auto;
+  cursor: pointer;
+  opacity: 0;
+  animation:
+    fadeInArrow 0.6s forwards 0.4s,
+    slideArrow 1.0s ease-in-out infinite 0.6s;
+  z-index: 5;
+}
 
+@keyframes fadeInArrow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideArrow {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-8px, 8px); }
+  100% { transform: translate(0, 0); }
+}
     /* overlay menu */
     #menu-overlay { 
       position: absolute; 
