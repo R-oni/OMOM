@@ -377,45 +377,33 @@
         z-index: 1;
       }
     
-    .globe-section {
+  .globe-section {
     grid-column: 2;
     grid-row: 1 / span 2;
+    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: visible;
+    justify-content: center;  /* centraliza horizontal */
+    align-items: center;      /* centraliza vertical */
+    width: 100%;              /* ocupa toda a coluna */
+    height: 100%;
     pointer-events: none;
-    width: 80%;
-    height: 80%;
   }
-  /* Elemento extra para a borda animada */
-  .globe-border {
-    position: absolute;
-    top: -15px;
-    left: -15px;
-    right: -15px;
-    bottom: -15px;
-    pointer-events: none;
-    background: url("./imagens/borda_glitch_loop_highdef.gif") no-repeat center;
-    background-size: 100% 100%;
-    z-index: 200;
-  }
+
+  /* Canvas menor, mas centralizado */
   #globeCanvas {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
+    width: 80%;   /* ajuste esse % pro tamanho que quiser */
+    height: auto; /* mantém proporção */
+    max-height: 90%; 
     pointer-events: auto;
-    position: relative;
     z-index: 100;
   }
 
-      /* Sobreposição de areia só no desktop */
+  /* Sobreposição de areia cobre toda a coluna */
   #globeOverlay {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100%;   /* agora cobre 100% da coluna */
     height: 100%;
     pointer-events: none;
     object-fit: cover;
