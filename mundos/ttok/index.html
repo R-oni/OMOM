@@ -431,11 +431,36 @@
 }
     }
 
-   
+  /* 2️⃣ Overlay absoluto do painel sobre o globo, mas abaixo do título/flipbook */
+#pnlOverlay {
+  position: fixed;       /* fixa na viewport, fora do grid */
+  top: 0;
+  left: 0;
+  width: 100vw;          /* cobre toda a tela */
+  height: 100vh;
+  object-fit: cover;     /* ajusta sem distorcer */
+  pointer-events: none;  /* não bloqueia cliques */
+  z-index: 50;           /* entre globo (por ex. z=10) e título/flipbook (por ex. z=200) */
+}
+
+/* 3️⃣ Garanta que o título e o flipbook fiquem acima do painel */
+.title-container,
+#flipbook-wrapper {
+  position: relative;
+  z-index: 200;
+}
+
+/* 4️⃣ (Opcional) Garanta que o globo fique abaixo do painel */
+#globeCanvas {
+  position: relative;
+  z-index: 10;
+}
+ 
   </style>
 </head>
 <body>
   <div id="background-image"></div>
+  <img id="pnlOverlay" src="imagens/painel.png" alt="Painel">
   <!-- Música de fundo -->
   <audio id="bgMusic" src="zumwohl.mp3" preload="auto" loop style="display: none;"></audio>
   
@@ -463,7 +488,7 @@
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
       <!-- Somente desktop: painel sobre o globo -->
-      <img id="pnlOverlay" src="imagens/painel.png" alt="Painel">
+     
 
       <div id="globeLoading">CARREGANDO...</div>
       <!-- Duas setas do globo -->
