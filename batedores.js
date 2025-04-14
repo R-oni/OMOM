@@ -162,6 +162,11 @@ window.initFlipbook = selector => {
     </div>
   `);
 
+  $('#flipbook').turn({
+  autoCenter: false,
+  display: 'double'
+});
+
   // áudio flip
   const flipAudio = new Audio('sompagina.mp3');
   flipAudio.preload = 'auto';
