@@ -30,7 +30,7 @@ function initGlobe() {
   let starField;
   (function createStarField() {
     const starGeometry = new THREE.BufferGeometry();
-    const starCount = 12000;      // ainda mais estrelas
+    const starCount = 20000;      // ainda mais estrelas
     const positions = [];
     const colors    = [];
 
@@ -59,7 +59,7 @@ function initGlobe() {
     starGeometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors,    3));
 
     const starMaterial = new THREE.PointsMaterial({
-      size: 0.2,               // ainda menores
+      size: 0.25,               // ainda menores
       vertexColors: true
     });
 
