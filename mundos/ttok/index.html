@@ -394,17 +394,19 @@
     z-index: 100;
   }
 
-  /* Sobreposição de areia cobre toda a coluna */
-  #globeOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;   /* agora cobre 100% da coluna */
-    height: 100%;
-    pointer-events: none;
-    object-fit: cover;
-    z-index: 101;
-  }
+  /* Somente desktop: overlay do painel sobre o globo, mas abaixo do título/flipbook */
+#pnlOverlay {
+  position: absolute;      /* dentro do grid desktop */
+  grid-column: 2;          /* coluna do globo */
+  grid-row: 1 / span 2;    /* ocupa as duas linhas */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 50;             /* abaixo do título/flipbook (z≥100) e acima do globo (z=100) */
+}
       /* Ajustes dos botões para desktop */
       #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
         height: 100%;
@@ -460,7 +462,9 @@
     <!-- Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
-      <img id="globeOverlay" src="imagens/fundoareia.png" alt="Fundo de Areia" />
+      <!-- Somente desktop: painel sobre o globo -->
+      <img id="pnlOverlay" src="imagens/painel.png" alt="Painel">
+
       <div id="globeLoading">CARREGANDO...</div>
       <!-- Duas setas do globo -->
       <img id="globeSeta1" class="seta-globo" src="imagens/seta.webp" alt="Seta" draggable="false">
