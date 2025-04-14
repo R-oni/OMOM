@@ -30,7 +30,7 @@ function initGlobe() {
   let starField;
   (function createStarField() {
     const starGeometry = new THREE.BufferGeometry();
-    const starCount = 6000;       // mais estrelas
+    const starCount = 12000;      // ainda mais estrelas
     const positions = [];
     const colors    = [];
 
@@ -59,7 +59,7 @@ function initGlobe() {
     starGeometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors,    3));
 
     const starMaterial = new THREE.PointsMaterial({
-      size: 0.3,               // estrelas menores
+      size: 0.2,               // ainda menores
       vertexColors: true
     });
 
@@ -179,7 +179,7 @@ function initGlobe() {
         controls.target.copy(centralSphere.position);
       }
     }
-    // Se quiser fundo fixo, cole o starField na câmera:
+    // Para manter o céu fixo: uncomment abaixo
     // starField.position.copy(camera.position);
 
     controls.update();
