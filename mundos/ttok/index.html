@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <title>OS BATEDORES DE TT'TOK'TAK'TAK'T</title>
 
-
-    <!-- Verificação de autenticação Firebase -->
+  <!-- Verificação de autenticação Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
@@ -31,9 +30,9 @@
     });
   </script>
 
-  
   <!-- Fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <style>
     /* Estilos globais */
     html, body {
@@ -77,7 +76,7 @@
 
     /* Layout mobile/vertical */
     .page-container {
-      overflow: visible;  /* permite que os filhos (pseudo) ultrapassem o container */
+      overflow: visible;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
@@ -85,6 +84,7 @@
       width: 100%;
       height: 100%;
     }
+
     .top-section {
       display: flex;
       justify-content: center;
@@ -94,6 +94,7 @@
     .top-section img {
       height: 10vh;
     }
+
     .title-container {
       text-align: center;
       height: 5vh;
@@ -112,12 +113,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Permite o clique no canvas */
-      pointer-events: none; /* para a DIV */
+      pointer-events: none;
     }
     #globeCanvas {
       height: 37.5vh;
-      pointer-events: auto; /* Canvas recebe o clique */
+      pointer-events: auto;
+      position: relative;
+      z-index: 10;
     }
     #globeLoading {
       position: absolute;
@@ -130,9 +132,8 @@
       z-index: 100;
       pointer-events: none;
     }
+
     #background-image {
-      
-      
       position: fixed;
       top: 0;
       left: 0;
@@ -157,8 +158,8 @@
       animation: moveDiagonal 3s infinite;
     }
     @keyframes moveDiagonal {
-      0% { opacity: 0.3; transform: translate(0,0); }
-      50% { opacity: 1; transform: translate(-20px,20px); }
+      0%   { opacity: 0.3; transform: translate(0,0); }
+      50%  { opacity: 1;   transform: translate(-20px,20px); }
       100% { opacity: 0.3; transform: translate(0,0); }
     }
 
@@ -174,7 +175,6 @@
     #globeSeta1 {
       bottom: 30%;
       left: 30%;
-    
     }
     #globeSeta2 {
       top: 30%;
@@ -182,9 +182,7 @@
       transform: rotate(180deg);
     }
 
-    /* ====================================
-     * Flipbook e Páginas
-     * ==================================== */
+    /* Flipbook e Páginas */
     #flipbook {
       position: relative;
       margin: auto;
@@ -196,21 +194,19 @@
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
     }
-    
     .page {
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       touch-action: manipulation;
       position: relative;
     }
-    
     .page img {
       width: 100%;
       height: auto;
       display: block;
     }
 
-    /* Overlay */
+    /* Overlay genérico */
     #overlayContainer {
       display: none;
       position: fixed;
@@ -290,55 +286,47 @@
       font-family: 'Press Start 2P', cursive;
       font-size: 14px;
     }
-    .warning-btn:hover { background-color: #555; }
+    .warning-btn:hover {
+      background-color: #555;
+    }
 
-
-    #cliquemundo, #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
-      position: absolute; cursor: pointer; bottom: 0px; right: 0%; width: 100%;height: 100%; z-index: 10; left: 0; top: 0;
+    #cliquemundo,
+    #cliqueinversao,
+    #cliqueg,
+    #cliquerefracao,
+    #cliquemorse,
+    #cliquecapacitor,
+    #cliquesanguedomundo {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 10;
       animation: fadeInOut 0.7s infinite;
     }
-
     @keyframes fadeInOut {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
+      0%   { opacity: 1; }
+      50%  { opacity: 0; }
       100% { opacity: 1; }
     }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /* Versão para PC (landscape) */
-
+    /* Desktop landscape */
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
         animation: breathe 10s infinite;
         display: grid;
         grid-template-columns: 50% 50%;
         grid-template-rows: 20vh 80vh;
-        height: 100vh;
         width: 100vw;
-        position: relative;
+        height: 100vh;
         overflow: visible;
       }
-
+      @keyframes breathe {
+        0%, 100% { transform: scale(1); }
+        50%      { transform: scale(1.01); }
+      }
       .header-container {
         grid-column: 1;
         position: relative;
@@ -350,7 +338,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         max-height: 100px;
-        z-index: 1;
+        z-index: 200;
       }
       .title-text {
         position: absolute;
@@ -361,119 +349,53 @@
         color: #00FFE7;
         font-size: 16px;
         white-space: nowrap;
-        z-index: 2;
         text-shadow: 2px 2px 4px #000;
+        z-index: 200;
       }
       #flipbook-wrapper {
         grid-column: 1;
         grid-row: 2;
-        height: 70vh;
-        width: 85%;
         margin: 5vh 8vh;
-        z-index: 1;
+        width: 85%;
+        height: 70vh;
+        z-index: 200;
       }
-    
-  .globe-section {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    position: relative;
-    display: flex;
-    justify-content: center;  /* centraliza horizontal */
-    align-items: center;      /* centraliza vertical */
-    width: 100%;              /* ocupa toda a coluna */
-    height: 100%;
-    pointer-events: none;
-  }
-
-  /* Canvas menor, mas centralizado */
-  #globeCanvas {
-    width: 80%;   /* ajuste esse % pro tamanho que quiser */
-    height: 80%; /* mantém proporção */
-    max-height: 90%; 
-    pointer-events: auto;
-    z-index: 100;
-  }
-
-  /* Somente desktop: overlay do painel sobre o globo, mas abaixo do título/flipbook */
-#pnlOverlay {
-  position: absolute;      /* dentro do grid desktop */
-  grid-column: 2;          /* coluna do globo */
-  grid-row: 1 / span 2;    /* ocupa as duas linhas */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 50;             /* abaixo do título/flipbook (z≥100) e acima do globo (z=100) */
-}
-      /* Ajustes dos botões para desktop */
-      #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
-        height: 100%;
-        top: 0%;
-        transform: none;
-        width: 100%;
-        left: 0%;
-      }
-      .page img {
+      .globe-section {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        pointer-events: none;
       }
-   /* Esconde só as setas do globo originais, mantém #setaBtn */
-  #globeSeta1,
-  #globeSeta2,
-  .seta-globo {
-    display: none !important;
-  }
-
-
-}
+      #globeCanvas {
+        width: 80%;
+        height: 80%;
+        max-height: 90%;
+        z-index: 10;
+      }
     }
-
-  /* 2️⃣ Overlay absoluto do painel sobre o globo, mas abaixo do título/flipbook */
-#pnlOverlay {
-  position: fixed;       /* fixa na viewport, fora do grid */
-  top: 0;
-  left: 0;
-  width: 100vw;          /* cobre toda a tela */
-  height: 100vh;
-  object-fit: cover;     /* ajusta sem distorcer */
-  pointer-events: none;  /* não bloqueia cliques */
-  z-index: 50;           /* entre globo (por ex. z=10) e título/flipbook (por ex. z=200) */
-}
-
-/* 3️⃣ Garanta que o título e o flipbook fiquem acima do painel */
-.header-container,
-.header-container .top-section img,
-.title-container,
-#flipbook-wrapper {
-  position: relative;
-  z-index: 200;
-}
-
-/* 4️⃣ (Opcional) Garanta que o globo fique abaixo do painel */
-#globeCanvas {
-  position: relative;
-  z-index: 10;
-}
- 
   </style>
 </head>
+
 <body>
   <div id="background-image"></div>
-  <img id="pnlOverlay" src="imagens/painel.png" alt="Painel">
+
   <!-- Música de fundo -->
   <audio id="bgMusic" src="zumwohl.mp3" preload="auto" loop style="display: none;"></audio>
-  
+
   <!-- Loading Screen -->
   <div id="loading-screen">
     <canvas id="warpCanvas"></canvas>
     <div id="loading-text">CARREGANDO...</div>
   </div>
-  
+
   <!-- Conteúdo Principal -->
   <div class="page-container">
+
     <!-- Header -->
     <div class="header-container">
       <div class="top-section">
@@ -484,23 +406,17 @@
       </div>
     </div>
 
-    
-    
     <!-- Globo -->
     <div class="globe-section">
       <canvas id="globeCanvas"></canvas>
-      <!-- Somente desktop: painel sobre o globo -->
-     
-
       <div id="globeLoading">CARREGANDO...</div>
-      <!-- Duas setas do globo -->
       <img id="globeSeta1" class="seta-globo" src="imagens/seta.webp" alt="Seta" draggable="false">
       <img id="globeSeta2" class="seta-globo" src="imagens/seta.webp" alt="Seta" draggable="false">
     </div>
+
     <!-- Flipbook -->
     <div id="flipbook-wrapper">
       <div id="flipbook">
-        <!-- Página de capa com a seta no canto superior direito -->
         <div class="page hard">
           <img src="imagens/cap1/capa.webp" alt="Capa" draggable="false">
           <img id="setaBtn" src="imagens/seta.webp" alt="Seta" draggable="false">
@@ -510,61 +426,62 @@
         <div class="page"><img src="imagens/cap1/pagina1.webp" alt="Página 3" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina2.webp" alt="Página 4" draggable="false"></div>
         <div class="page"><img src="imagens/cap1/pagina3.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina4.webp" alt="Página 6" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina5.webp" alt="Página 7" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina6.webp" alt="Página 6" draggable="false">
-          <img id="cliquemundo" src="imagens/cap1/cliquemundo.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img src="imagens/cap1/pagina6.webp" alt="Página 8" draggable="false">
+          <img id="cliquemundo" src="imagens/cap1/cliquemundo.webp" alt="Clique Mundo" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 7" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina8.webp" alt="Página 8" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina7.webp" alt="Página 9" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina8.webp" alt="Página 10" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina9.webp" alt="Página 11" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina10.webp" alt="Página 10" draggable="false">
-          <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img src="imagens/cap1/pagina10.webp" alt="Página 12" draggable="false">
+          <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" alt="Clique Inversão" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 2" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina11.webp" alt="Página 13" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina12.webp" alt="Página 10" draggable="false">
-          <img id="cliqueg" src="imagens/cap1/cliqueg.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img src="imagens/cap1/pagina12.webp" alt="Página 14" draggable="false">
+          <img id="cliqueg" src="imagens/cap1/cliqueg.webp" alt="Clique G" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina13.webp" alt="Página 15" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina14.webp" alt="Página 10" draggable="false">
-          <img id="cliquerefracao" src="imagens/cap1/cliquerefracao.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img src="imagens/cap1/pagina14.webp" alt="Página 16" draggable="false">
+          <img id="cliquerefracao" src="imagens/cap1/cliquerefracao.webp" alt="Clique Refração" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 5" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina15.webp" alt="Página 17" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina16.webp" alt="Página 18" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina17.webp" alt="Página 10" draggable="false">
-          <img id="cliquemorse" src="imagens/cap1/cliquemorse.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img src="imagens/cap1/pagina17.webp" alt="Página 19" draggable="false">
+          <img id="cliquemorse" src="imagens/cap1/cliquemorse.webp" alt="Clique Morse" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina18.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina19.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina20.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina21.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina22.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina23.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina24.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina25.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina18.webp" alt="Página 20" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina19.webp" alt="Página 21" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina20.webp" alt="Página 22" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina21.webp" alt="Página 23" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina22.webp" alt="Página 24" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina23.webp" alt="Página 25" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina24.webp" alt="Página 26" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina25.webp" alt="Página 27" draggable="false"></div>
         <div class="page">
-          <img src="imagens/cap1/pagina26.webp" alt="Página 10" draggable="false">
-          <img id="cliquecapacitor" src="imagens/cap1/cliquecapacitor.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img src="imagens/cap1/pagina26.webp" alt="Página 28" draggable="false">
+          <img id="cliquecapacitor" src="imagens/cap1/cliquecapacitor.webp" alt="Clique Capacitor" draggable="false">
         </div>
         <div class="page">
-          <img src="imagens/cap1/pagina27.webp" alt="Página 10" draggable="false">
-          <img id="cliquesanguedomundo" src="imagens/cap1/cliquesanguedomundo.webp" alt="Botão Cliquey Eroben" draggable="false">
+          <img src="imagens/cap1/pagina27.webp" alt="Página 29" draggable="false">
+          <img id="cliquesanguedomundo" src="imagens/cap1/cliquesanguedomundo.webp" alt="Clique Sangue do Mundo" draggable="false">
         </div>
-        <div class="page"><img src="imagens/cap1/pagina28.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina29.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina30.webp" alt="Página 5" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina31.webp" alt="Página 4" draggable="false"></div>
-        <div class="page"><img src="imagens/cap1/pagina32.webp" alt="Página 4" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina28.webp" alt="Página 30" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina29.webp" alt="Página 31" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina30.webp" alt="Página 32" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina31.webp" alt="Página 33" draggable="false"></div>
+        <div class="page"><img src="imagens/cap1/pagina32.webp" alt="Página 34" draggable="false"></div>
       </div>
     </div>
+
   </div>
 
-  <!-- Overlay -->
+  <!-- Overlay de imagem grande -->
   <div id="overlayContainer">
     <img id="overlayImage" src="" alt="Imagem Overlay">
     <button id="btnSair">Voltar</button>
@@ -580,7 +497,7 @@
       <button id="compreendo-btn" class="warning-btn">COMPREENDO</button>
     </div>
   </div>
-  
+
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -606,312 +523,196 @@
         document.removeEventListener('click', unlockAudio);
       });
     });
-    
-    $(document).ready(function(){
+
+    $(document).ready(function() {
       // Inicializa o flipbook
-      $("#flipbook").turn({
-        autoCenter: false,
-        display: 'double'
-      });
-      
+      $("#flipbook").turn({ autoCenter: false, display: 'double' });
+
       // Ajuste responsivo do flipbook
       function resizeFlipbook() {
         if ($(window).width() < 1024) {
-          var newWidth = $(window).width() * 0.9;
-          var newHeight = newWidth * (450/600);
-          $("#flipbook").turn("size", newWidth, newHeight);
+          const newW = $(window).width() * 0.9;
+          $("#flipbook").turn("size", newW, newW * (450/600));
         } else {
-          var newWidth = $("#flipbook-wrapper").width();
-          var newHeight = $("#flipbook-wrapper").height();
-          $("#flipbook").turn("size", newWidth, newHeight);
+          $("#flipbook").turn("size", $("#flipbook-wrapper").width(), $("#flipbook-wrapper").height());
         }
       }
       resizeFlipbook();
-      $(window).resize(function(){
-        resizeFlipbook();
-      });
-      
-      // Previne arrasto das imagens (Chrome)
-      $(".page img").on("dragstart", function(e) {
-        e.preventDefault();
-      });
-      
-      // Áudio de virar página no mousedown/touchstart
-      $("#flipbook").on("mousedown touchstart", function(){
+      $(window).resize(resizeFlipbook);
+
+      // Previne arrasto de imagens
+      $(".page img").on("dragstart", e => e.preventDefault());
+
+      // Áudio de virar página
+      $("#flipbook").on("mousedown touchstart", () => {
         if (flipAudio) {
           flipAudio.pause();
           flipAudio.currentTime = flipAudioStart;
           flipAudio.play().then(() => {
-            flipAudio.addEventListener('timeupdate', function onTimeUpdate() {
+            flipAudio.addEventListener('timeupdate', function onTime() {
               if (flipAudio.currentTime >= flipAudioEnd) {
                 flipAudio.pause();
                 flipAudio.currentTime = flipAudioStart;
-                flipAudio.removeEventListener('timeupdate', onTimeUpdate);
+                flipAudio.removeEventListener('timeupdate', onTime);
               }
             });
-          }).catch(err => console.error("Erro ao tocar flipAudio:", err));
+          }).catch(err => console.error(err));
         }
       });
-      
-      // Inicia a música de fundo no primeiro clique
-      $(document).one("click touchstart", function(){
-        var bg = document.getElementById("bgMusic");
+
+      // Inicia música de fundo no primeiro clique
+      $(document).one("click touchstart", () => {
+        const bg = document.getElementById("bgMusic");
         bg.currentTime = 0;
         bg.volume = 0.5;
-        bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
+        bg.play().catch(err => console.error(err));
       });
-      
-      // Overlay (Botão Sair)
-      $("#btnSair").on("click", function(e) {
+
+      // Overlay sair
+      $("#btnSair").on("click", e => {
         e.preventDefault();
         e.stopPropagation();
         $("#overlayContainer").fadeOut(500);
       });
-      
-      // Eventos de clique em botões de tracking (Página 6)
-      $(document).on("click", "#cliquebatedor", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "batedor.png");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      $(document).on("click", "#cliquemergulhador", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "mergulhador.png");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      $(document).on("click", "#cliquesangue", function(e){
-        e.stopPropagation();
-        $("#overlayImage").attr("src", "sanguedomundo.png");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-      });
-      $(document).on("click", "#cliqueinversao", function(e){
+
+      // Eventos de clique em botões de tracking
+      $(document).on("click", "#cliqueinversao", e => {
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cap1/inversao.webp");
         $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      $(document).on("click", "#cliqueg", function(e){
+      $(document).on("click", "#cliqueg", e => {
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cap1/estrelag.webp");
         $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      $(document).on("click", "#cliquerefracao", function(e){
+      $(document).on("click", "#cliquerefracao", e => {
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cap1/refracao.webp");
         $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      $(document).on("click", "#cliquemorse", function(e){
+      $(document).on("click", "#cliquemorse", e => {
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cap1/morse.webp");
         $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-      $(document).on("click", "#cliquecapacitor", function(e){
+      $(document).on("click", "#cliquecapacitor", e => {
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cap1/capacitor.webp");
-        $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+        $("#overlayContainer"].fadeIn(500);
       });
-      $(document).on("click", "#cliquesanguedomundo", function(e){
+      $(document).on("click", "#cliquesanguedomundo", e => {
         e.stopPropagation();
         $("#overlayImage").attr("src", "imagens/cap1/sanguedomundo.png");
         $("#overlayContainer").fadeIn(500);
-        $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
       });
-
-
-
-
-
-      
-      // Botões de tracking (Página 6): central/orbit
-      $(document).on("click", "#cliquemaior", function(e){
+      $(document).on("click", "#cliquebatedor", e => {
         e.stopPropagation();
-        window.myGlobe.trackingMode = "central";
+        $("#overlayImage").attr("src", "batedor.png");
+        $("#overlayContainer").fadeIn(500);
       });
-      $(document).on("click", "#cliquemundo", function(e){
+      $(document).on("click", "#cliquemergulhador", e => {
         e.stopPropagation();
-        window.myGlobe.trackingMode = "orbit";
+        $("#overlayImage").attr("src", "mergulhador.png");
+        $("#overlayContainer").fadeIn(500);
       });
-      
-      // Remove seta da capa ao virar a página
-      $("#flipbook").bind("turning", function(e, page) {
+      $(document).on("click", "#cliquesangue", e => {
+        e.stopPropagation();
+        $("#overlayImage").attr("src", "sanguedomundo.png");
+        $("#overlayContainer").fadeIn(500);
+      });
+
+      // Remove seta da capa ao virar página
+      $("#flipbook").bind("turning", (e, page) => {
         if (page > 1) {
           $("#setaBtn").fadeOut(300, function() { $(this).remove(); });
         }
       });
 
-      // --- LÓGICA MODIFICADA PARA AS SETAS DO GLOBO NA DIAGONAL ---
-      let cycleRunning = true;
-      
-      function animateDiagonalPinchGesture() {
-        if (!cycleRunning) return;
-        
-        // Começar com as setas nas posições iniciais
-        $("#globeSeta1").css({
-          opacity: 1,
-          bottom: "30%",
-          left: "30%"
-        });
-        $("#globeSeta2").css({
-          opacity: 1,
-          top: "30%",
-          right: "30%"
-        });
-        
-        // Mover as setas na diagonal em direção ao centro
-        $("#globeSeta1").animate({
-          bottom: "20%",
-          left: "20%"
-        }, 800);
-        
-        $("#globeSeta2").animate({
-          top: "20%",
-          right: "20%"
-        }, 800, function() {
-          // Fade-out
-          $("#globeSeta1, #globeSeta2").animate({
-            opacity: 0
-          }, 400, function() {
-            // Resetar posições e reiniciar se o ciclo ainda estiver ativo
-            if (cycleRunning) {
-              setTimeout(animateDiagonalPinchGesture, 500);
-            }
+      // Seta do globo diagonal
+      let cycle = true;
+      function animateSetas() {
+        if (!cycle) return;
+        $("#globeSeta1").css({ opacity:1, bottom:"30%", left:"30%" })
+          .animate({ bottom:"20%", left:"20%" }, 800);
+        $("#globeSeta2").css({ opacity:1, top:"30%", right:"30%" })
+          .animate({ top:"20%", right:"20%" }, 800, () => {
+            $("#globeSeta1, #globeSeta2").animate({ opacity:0 }, 400, () => {
+              if (cycle) setTimeout(animateSetas, 500);
+            });
           });
-        });
       }
-      
-      // Iniciar a animação das setas
-      animateDiagonalPinchGesture();
+      animateSetas();
+      $("#globeCanvas").on("mousedown touchstart click", () => {
+        cycle = false;
+        $("#globeSeta1, #globeSeta2").stop(true).fadeOut(300, function(){ $(this).remove(); });
+      });
+    });
+  </script>
 
-      // Ao clicar ou arrastar no globo, paramos o ciclo e removemos as setas
-      $("#globeCanvas").on("click mousedown touchstart", function() {
-        cycleRunning = false;
-        $("#globeSeta1, #globeSeta2").stop(true).fadeOut(300, function(){
-          $(this).remove();
-        });
-      });
-    });
-  </script>
-  
   <script>
-    let musicStarted = false;
-    document.addEventListener('DOMContentLoaded', () => {
-      // Exibe o warning modal quando o loading screen desaparecer
-      document.getElementById("loading-screen").addEventListener("transitionend", function() {
-        if (this.style.display === "none") {
-          document.getElementById("warning-modal").style.display = "flex";
-        }
-      });
-      // Fecha o warning modal e inicia a música quando o botão é clicado
-      document.getElementById("compreendo-btn").addEventListener("click", function() {
-        document.getElementById("warning-modal").style.display = "none";
-        if (!musicStarted) {
-          var bg = document.getElementById("bgMusic");
-          bg.currentTime = 0;
-          bg.volume = 0.9;
-          bg.play().catch(function(err){ console.error("Erro ao tocar bgMusic:", err); });
-          musicStarted = true;
-        }
-      });
-    });
-    window.addEventListener("load", function() {
-      setTimeout(function() {
-        document.getElementById("loading-screen").style.display = "none";
-        document.getElementById("warning-modal").style.display = "flex";
-      }, 1000);
-    });
-  </script>
-  
-  <script src="./globo.js"></script>
-  <script>
-    // Efeito warp/starfield
+    // Warp/starfield
     (function() {
-  const canvas = document.getElementById("warpCanvas");
-  const ctx = canvas.getContext("2d");
-  let stars = [];
-  const numStars = 300;
-  const speed = 2;
-  let animationFrameId;
+      const canvas = document.getElementById("warpCanvas");
+      const ctx = canvas.getContext("2d");
+      let stars = [];
+      const numStars = 300, speed = 2;
+      let animId;
 
-  function setupCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  function createStars() {
-    stars = [];
-    for (let i = 0; i < numStars; i++) {
-      // Escolhe cor de acordo com proporções reais aproximadas
-      // 0–0.90: branca; 0.90–0.95: avermelhada; 0.95–1.00: azulada
-      const r = Math.random();
-      let color;
-      if (r < 0.90) color = "white";
-      else if (r < 0.95) color = "#FF5555";  // vermelha suave
-      else color = "#AAAAFF";               // azul suave
-
-      stars.push({
-        x: Math.random() * canvas.width - canvas.width / 2,
-        y: Math.random() * canvas.height - canvas.height / 2,
-        z: Math.random() * canvas.width,
-        color
-      });
-    }
-  }
-
-  function updateStars() {
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    stars.forEach(star => {
-      star.z -= speed;
-      if (star.z <= 0) {
-        star.x = Math.random() * canvas.width - canvas.width / 2;
-        star.y = Math.random() * canvas.height - canvas.height / 2;
-        star.z = canvas.width;
+      function setup() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
       }
-      const perspective = 300 / star.z;
-      const sx = star.x * perspective + canvas.width / 2;
-      const sy = star.y * perspective + canvas.height / 2;
-      const size = Math.max(2 * perspective, 0.5);
+      function createStars() {
+        stars = [];
+        for (let i=0; i<numStars; i++) {
+          const r = Math.random(), color = r<0.9?"white":r<0.95?"#FF5555":"#AAAAFF";
+          stars.push({
+            x: Math.random()*canvas.width - canvas.width/2,
+            y: Math.random()*canvas.height - canvas.height/2,
+            z: Math.random()*canvas.width,
+            color
+          });
+        }
+      }
+      function update() {
+        ctx.fillStyle = "black";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        stars.forEach(s => {
+          s.z -= speed;
+          if (s.z <= 0) {
+            s.x = Math.random()*canvas.width - canvas.width/2;
+            s.y = Math.random()*canvas.height - canvas.height/2;
+            s.z = canvas.width;
+          }
+          const p = 300/s.z;
+          const sx = s.x*p + canvas.width/2;
+          const sy = s.y*p + canvas.height/2;
+          const size = Math.max(2*p,0.5);
+          ctx.fillStyle = s.color;
+          ctx.beginPath();
+          ctx.arc(sx,sy,size,0,2*Math.PI);
+          ctx.fill();
+        });
+        animId = requestAnimationFrame(update);
+      }
 
-      ctx.fillStyle = star.color;
-      ctx.beginPath();
-      ctx.arc(sx, sy, size, 0, 2 * Math.PI);
-      ctx.fill();
-    });
-
-    animationFrameId = requestAnimationFrame(updateStars);
-  }
-
-  setupCanvas();
-  createStars();
-  updateStars();
-
-  window.addEventListener("resize", function() {
-    setupCanvas();
-    createStars();
-  });
-
-  window.addEventListener("load", function() {
-    document.getElementById("loading-screen").style.display = "none";
-    cancelAnimationFrame(animationFrameId);
-  });
-})();
+      window.addEventListener("resize", () => { setup(); createStars(); });
+      window.addEventListener("load", () => {
+        setup();
+        createStars();
+        update();
+      });
+    })();
   </script>
- <!-- Script para remoção do indicador de carregamento do globo -->
+
   <script>
-    document.addEventListener("globoCarregado", function() {
+    // Remove loading do globo
+    document.addEventListener("globoCarregado", () => {
       document.getElementById("globeLoading").style.display = "none";
     });
   </script>
- 
 
-
+  <script src="./globo.js"></script>
 </body>
 </html>
