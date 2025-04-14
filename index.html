@@ -10,128 +10,128 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html { width:100%; height:100%; overflow:hidden; background:black; color:white; font-family:'Courier New', monospace; }
 
-    /* grid 40/60 */
+    /* grid 40/60 com margem no topo de 20% */
     #app { 
       display: grid; 
-      grid-template-rows:40% 60%; 
-      width:100vw; 
-      height:100vh; 
-      position:relative; 
+      grid-template-rows: 40% 60%; 
+      width: 100vw; 
+      height: 80vh; /* 80% da altura da tela */
+      margin-top: 20vh; /* empurra o container para baixo em 20% da tela */
+      position: relative; 
     }
 
     /* canvas pixelado atrás */
     #automatonCanvas { 
-      position:fixed; 
-      top:0; 
-      left:0; 
-      width:100vw; 
-      height:100vh; 
-      z-index:-1; 
-      image-rendering:pixelated; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      z-index: -1; 
+      image-rendering: pixelated; 
     }
 
     /* loading */
     #loading-screen { 
-      position:fixed; 
-      top:0; 
-      left:0; 
-      width:100vw; 
-      height:100vh; 
-      background:black; 
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      z-index:9999; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      background: black; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 9999; 
     }
     #loading-text { 
-      font-family:'Press Start 2P', cursive; 
-      color:#00FFE7; 
-      font-size:20px; 
+      font-family: 'Press Start 2P', cursive; 
+      color: #00FFE7; 
+      font-size: 20px; 
     }
 
     /* globo e flipbook */
     #globe-area, #flipbook-area { 
-      position:relative; 
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      width:100%; 
-      height:100%; 
+      position: relative; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      width: 100%; 
+      height: 100%; 
     }
     #globe-area canvas { 
-      width:100%; 
-      height:100%; 
+      width: 100%; 
+      height: 100%; 
     }
     /* Garantir que o flipbook ocupe todo o espaço da célula */
     #flipbook-area { 
-      overflow:hidden; 
-      width:100%;
-      height:100%; 
+      overflow: hidden; 
+      width: 100%;
+      height: 100%; 
     }
     #flipbookContainer {
       width: 100%;
       height: 100%;
     }
 
-
     /* overlay menu */
     #menu-overlay { 
-      position:absolute; 
-      top:0; 
-      left:0; 
-      width:100%; 
-      height:100%; 
-      background:rgba(0,0,0,0.8); 
-      backdrop-filter:blur(5px); 
-      display:none; 
-      z-index:100; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(0,0,0,0.8); 
+      backdrop-filter: blur(5px); 
+      display: none; 
+      z-index: 100; 
     }
-    #menu-overlay.visible { display:block; }
+    #menu-overlay.visible { display: block; }
     .symbols-wrapper { 
-      position:absolute; 
-      top:150px; 
-      left:0; 
-      right:0; 
-      bottom:0; 
-      overflow-y:auto; 
-      padding:20px; 
+      position: absolute; 
+      top: 150px; 
+      left: 0; 
+      right: 0; 
+      bottom: 0; 
+      overflow-y: auto; 
+      padding: 20px; 
     }
     .symbols-container { 
-      display:flex; 
-      flex-wrap:wrap; 
-      justify-content:center; 
-      gap:25px; 
+      display: flex; 
+      flex-wrap: wrap; 
+      justify-content: center; 
+      gap: 25px; 
     }
     .symbol { 
-      cursor:pointer; 
-      transition:transform .1s; 
+      cursor: pointer; 
+      transition: transform .1s; 
     }
     .symbol img { 
-      width:25vw; 
-      transition:transform .3s; 
+      width: 25vw; 
+      transition: transform .3s; 
     }
     .symbol img:hover { 
-      transform:scale(1.1); 
+      transform: scale(1.1); 
     }
     .symbol.brither img { 
-      filter:brightness(180%); 
+      filter: brightness(180%); 
     }
     .symbol.locked img  { 
-      filter:brightness(50%); 
+      filter: brightness(50%); 
     }
 
     /* título fixo */
     .title-container { 
-      position:absolute; 
-      top:20px; 
-      width:100%; 
-      text-align:center; 
-      z-index:200; 
+      position: absolute; 
+      top: 20px; 
+      width: 100%; 
+      text-align: center; 
+      z-index: 200; 
     }
     .title-text { 
-      font-family:'Press Start 2P', cursive; 
-      color:#fff; 
-      font-size:20px; 
+      font-family: 'Press Start 2P', cursive; 
+      color: #fff; 
+      font-size: 20px; 
     }
   </style>
 </head>
@@ -141,7 +141,8 @@
     <div id="globe-area">
       <!-- canvas para three.js será injetado em batedores.js -->
       <canvas id="globeCanvas"></canvas>
-      
+      <div id="globeLoading" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#0f0; font-family:'Press Start 2P'">CARREGANDO...</div>
+    </div>
     <div id="flipbook-area">
       <!-- flipbook será injetado em batedores.js -->
       <div id="flipbookContainer"></div>
