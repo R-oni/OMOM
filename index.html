@@ -101,6 +101,27 @@
       height: calc(100% - 7vh);
     }
 
+    /* seta animada no canto superior direito */
+    #flipbook-area #setaBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 40px;
+      height: auto;
+      cursor: pointer;
+      opacity: 0;
+      animation: fadeInArrow 1s forwards 1s, floatArrow 2s ease-in-out infinite 2s;
+      z-index: 5;
+    }
+    @keyframes fadeInArrow {
+      to { opacity: 1; }
+    }
+    @keyframes floatArrow {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
+    }
+
     /* overlay menu */
     #menu-overlay { 
       position: absolute; 
@@ -145,7 +166,6 @@
     .symbol.locked img  { 
       filter: brightness(50%); 
     }
-
 
   </style>
 </head>
@@ -223,7 +243,6 @@
       if (name === 'batedores') {
         const fb = document.getElementById('flipbook-area');
         fb.classList.remove('show');
-        // força reflow para resetar a animação
         void fb.offsetWidth;
         fb.classList.add('show');
       }
