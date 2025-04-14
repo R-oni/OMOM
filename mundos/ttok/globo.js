@@ -26,27 +26,71 @@ function initGlobe() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
 
+  // Sky – céu de estrelas gerado por código
+  (function createStarField() {
+    const starGeometry = new THREE.BufferGeometry();
+    const starCount = 3000;
+    const positions = [];
+    const colors    = [];
+
+    for (let i = 0; i < starCount; i++) {
+      const radius = 80;
+      const theta  = Math.random() * Math.PI * 2;
+      const phi    = Math.acos((Math.random() * 2) - 1);
+
+      const x = radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.sin(phi) * Math.sin(theta);
+      const z = radius * Math.cos(phi);
+
+      positions.push(x, y, z);
+
+      const r = Math.random();
+      if (r < 0.90) {
+        colors.push(1, 1, 1);       // branca
+      } else if (r < 0.95) {
+        colors.push(1, 0.6, 0.6);   // avermelhada
+      } else {
+        colors.push(0.6, 0.6, 1);   // azulada
+      }
+    }
+
+    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    starGeometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors,    3));
+
+    const starMaterial = new THREE.PointsMaterial({
+      size: 0.7,
+      vertexColors: true
+    });
+
+    const starField = new THREE.Points(starGeometry, starMaterial);
+    scene.add(starField);
+  })();
+
   // Controles
   const controls = new THREE.OrbitControls(camera, canvas);
-  controls.enableDamping    = true;
-  controls.dampingFactor    = 0.05;
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
 
-  // Loader
+  // Loader para mapas do globo
   const loader = new THREE.TextureLoader();
 
   // Globo central
   const centralSphere = new THREE.Mesh(
     new THREE.SphereGeometry(1, 64, 64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mapatoktok.png', checkTexturesLoaded) })
+    new THREE.MeshStandardMaterial({
+      map: loader.load('mapatoktok.png', checkTexturesLoaded)
+    })
   );
   centralSphere.castShadow = centralSphere.receiveShadow = true;
   scene.add(centralSphere);
 
   // Globo orbitante
-  const orbitRadius  = 3;
-  const orbitSphere  = new THREE.Mesh(
+  const orbitRadius = 3;
+  const orbitSphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.1, 64, 64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mapattok.png', checkTexturesLoaded) })
+    new THREE.MeshStandardMaterial({
+      map: loader.load('mapattok.png', checkTexturesLoaded)
+    })
   );
   orbitSphere.castShadow = orbitSphere.receiveShadow = true;
   orbitSphere.position.set(orbitRadius, 0, 0);
@@ -64,7 +108,7 @@ function initGlobe() {
   const mouse     = new THREE.Vector2();
   const clickable = [ centralSphere, orbitSphere ];
 
-  let isTweening = false; // Flag para indicar se o tween está ocorrendo
+  let isTweening = false;
 
   function focusOn(obj, zoomDist, duration = 600) {
     isTweening = true;
@@ -83,7 +127,6 @@ function initGlobe() {
       if (t < 1) {
         requestAnimationFrame(tween);
       } else {
-        // Ao finalizar o tween, desativa o tracking para não interferir
         isTweening = false;
         window.myGlobe.trackingMode = 'none';
       }
