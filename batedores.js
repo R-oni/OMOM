@@ -96,7 +96,7 @@ window.initGlobe = function(selector) {
   });
 };
 
-// 2) Inicialização do Flipbook com lazy‑load e lógica da seta e dos botões animados
+// 2) Inicialização do Flipbook com lazy‑load, seta mobile e botões de página
 window.initFlipbook = function(selector) {
   const $container = $(selector);
   if (!$container.length) return console.warn('Container flipbook não encontrado:', selector);
@@ -166,7 +166,7 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
-  // Aplica o tamanho das páginas e das imagens
+  // Ajuste de tamanho das páginas
   $container.find('#flipbook .page').css({
     width: '80%',
     height: '80%'
@@ -177,8 +177,7 @@ window.initFlipbook = function(selector) {
     'object-fit': 'contain'
   });
 
-  // ── Lazy‑load setup ──
-  // 1) Marca data-page e move src → data-src
+  // Lazy‑load setup
   $container.find('#flipbook .page').each(function(idx){
     const p = idx + 1;
     $(this).attr('data-page', p);
@@ -187,11 +186,9 @@ window.initFlipbook = function(selector) {
       $(this).attr('data-src', realSrc).removeAttr('src');
     });
   });
-  // 2) Função de pré‑carregamento
   function preloadPages(startPage, count) {
     for (let i = startPage; i < startPage + count; i++) {
       const pageDiv = $container.find(`#flipbook .page[data-page="${i}"]`);
-      if (!pageDiv.length) continue;
       pageDiv.find('img[data-src]').each(function(){
         const $img = $(this);
         if (!$img.attr('src')) {
@@ -200,15 +197,14 @@ window.initFlipbook = function(selector) {
       });
     }
   }
-  // 3) Carrega as primeiras 3 páginas
   preloadPages(1, 3);
 
-  // Áudio para virar páginas
+  // Áudio de virar página
   const flipAudio = new Audio('sompagina.mp3');
   flipAudio.preload = 'auto';
   flipAudio.volume = 0.9;
 
-  // Inicializa o flipbook com a configuração do turn.js
+  // Inicializa o turn.js
   $("#flipbook").turn({
     autoCenter: false,
     display: 'double',
@@ -219,49 +215,54 @@ window.initFlipbook = function(selector) {
     }
   });
 
-  // Função de redimensionamento responsivo do flipbook
+  // Responsivo
   function resizeFlipbook(){
-    let newWidth, newHeight;
+    let newW, newH;
     if ($(window).width() < 1024) {
-      newWidth = $(window).width() * 0.9;
-      newHeight = newWidth * (450 / 600);
+      newW = $(window).width() * 0.9;
+      newH = newW * (450/600);
     } else {
-      newWidth = $container.width();
-      newHeight = $container.height();
+      newW = $container.width();
+      newH = $container.height();
     }
-    $("#flipbook").turn("size", newWidth, newHeight);
+    $("#flipbook").turn("size", newW, newH);
   }
   resizeFlipbook();
   $(window).on('resize', resizeFlipbook);
 
-  // Previne o arrasto das imagens
+  // Evita drag
   $(".page img").on("dragstart", e => e.preventDefault());
 
-  // Toca áudio ao iniciar o virar da página
+  // Toca áudio no mousedown
   $("#flipbook").on("mousedown touchstart", () => {
     flipAudio.currentTime = 0;
-    flipAudio.play().catch(() => {});
+    flipAudio.play().catch(()=>{});
   });
 
-  // Remove a seta da capa após virar a página
+  // Setinha mobile: some após virar a primeira página
   $("#flipbook").bind("turning", (e, page) => {
     if (page > 1) {
-      $("#setaBtn").fadeOut(300, function(){ $(this).remove(); });
+      $("#setaBtn").fadeOut(300, () => $("#setaBtn").remove());
     }
   });
-
-  // Clique na seta para avançar para a próxima página
+  // Clique na setinha avança página
   $container.on("click", "#setaBtn", () => $("#flipbook").turn("next"));
 
-  // ── (Opcional) Lógica dos botões de tracking ou de outros comportamentos animados
-  // Se você desejar implementar funções específicas para os botões (ex.: #cliquemundo, #cliqueinversao, etc.)
-  // que atualmente estão na estrutura do flipbook, pode fazê-lo abaixo.
-  // Por exemplo, para alterar o modo de tracking do globo:
-  $(document).on("click", "#cliquemundo", function(e) {
-    e.stopPropagation();
-    if (window.myGlobe) {
-      window.myGlobe.trackingMode = "orbit";
-    }
+  // Botões de página (apenas visuais; implemente comportamento aqui)
+  const pageButtons = [
+    "cliquemundo",
+    "cliqueinversao",
+    "cliqueg",
+    "cliquerefracao",
+    "cliquemorse",
+    "cliquecapacitor",
+    "cliquesanguedomundo"
+  ];
+  pageButtons.forEach(id => {
+    $container.on("click", `#${id}`, e => {
+      e.stopPropagation();
+      // Aqui você pode chamar sua função, ex:
+      // console.log("Botão", id, "clicado");
+    });
   });
-  // Caso deseje implementar outros botões, adicione lógicas semelhantes aqui.
 };
