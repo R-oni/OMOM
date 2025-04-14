@@ -454,62 +454,77 @@
   <script>
     // Animação do canvas (efeito warp/starfield)
     (function() {
-      const canvas = document.getElementById("warpCanvas");
-      const ctx = canvas.getContext("2d");
+  const canvas = document.getElementById("warpCanvas");
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+  const numStars = 300;
+  const speed = 2;
+  let animationFrameId;
 
-      let stars = [];
-      const numStars = 300;
-      const speed = 2;
-      let animationFrameId;
+  function setupCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
 
-      function setupCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-      function createStars() {
-        stars = [];
-        for (let i = 0; i < numStars; i++) {
-          stars.push({
-            x: Math.random() * canvas.width - canvas.width / 2,
-            y: Math.random() * canvas.height - canvas.height / 2,
-            z: Math.random() * canvas.width
-          });
-        }
-      }
-      function updateStars() {
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
+  function createStars() {
+    stars = [];
+    for (let i = 0; i < numStars; i++) {
+      // Escolhe cor de acordo com proporções reais aproximadas
+      // 0–0.90: branca; 0.90–0.95: avermelhada; 0.95–1.00: azulada
+      const r = Math.random();
+      let color;
+      if (r < 0.90) color = "white";
+      else if (r < 0.95) color = "#FF5555";  // vermelha suave
+      else color = "#AAAAFF";               // azul suave
 
-        stars.forEach(star => {
-          star.z -= speed;
-          if (star.z <= 0) {
-            star.x = Math.random() * canvas.width - canvas.width / 2;
-            star.y = Math.random() * canvas.height - canvas.height / 2;
-            star.z = canvas.width;
-          }
-          let perspective = 300 / star.z;
-          let sx = star.x * perspective + canvas.width / 2;
-          let sy = star.y * perspective + canvas.height / 2;
-          let size = Math.max(2 * perspective, 0.5);
-          ctx.beginPath();
-          ctx.arc(sx, sy, size, 0, 2 * Math.PI);
-          ctx.fill();
-        });
-        animationFrameId = requestAnimationFrame(updateStars);
-      }
-      setupCanvas();
-      createStars();
-      updateStars();
-      window.addEventListener("resize", function() {
-        setupCanvas();
-        createStars();
+      stars.push({
+        x: Math.random() * canvas.width - canvas.width / 2,
+        y: Math.random() * canvas.height - canvas.height / 2,
+        z: Math.random() * canvas.width,
+        color
       });
-      window.addEventListener("load", function() {
-        document.getElementById("loading-screen").style.display = "none";
-        cancelAnimationFrame(animationFrameId);
-      });
-    })();
+    }
+  }
+
+  function updateStars() {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    stars.forEach(star => {
+      star.z -= speed;
+      if (star.z <= 0) {
+        star.x = Math.random() * canvas.width - canvas.width / 2;
+        star.y = Math.random() * canvas.height - canvas.height / 2;
+        star.z = canvas.width;
+      }
+      const perspective = 300 / star.z;
+      const sx = star.x * perspective + canvas.width / 2;
+      const sy = star.y * perspective + canvas.height / 2;
+      const size = Math.max(2 * perspective, 0.5);
+
+      ctx.fillStyle = star.color;
+      ctx.beginPath();
+      ctx.arc(sx, sy, size, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+
+    animationFrameId = requestAnimationFrame(updateStars);
+  }
+
+  setupCanvas();
+  createStars();
+  updateStars();
+
+  window.addEventListener("resize", function() {
+    setupCanvas();
+    createStars();
+  });
+
+  window.addEventListener("load", function() {
+    document.getElementById("loading-screen").style.display = "none";
+    cancelAnimationFrame(animationFrameId);
+  });
+})();
   </script>
   <script>
     // Remove o loading do globo quando o evento "globoCarregado" ocorrer
