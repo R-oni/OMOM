@@ -3,155 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OMOM - Outros Mundos Outras Mentes</title>
+  <title>OMOM SPA</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      width: 100%;
       height: 100%;
-      background-color: black;
+      background: black;
       font-family: 'Press Start 2P', cursive;
       overflow: hidden;
     }
-    #spa-container {
+
+    /* Layout geral */
+    .container {
       display: grid;
       grid-template-rows: 50% 50%;
       height: 100vh;
       width: 100vw;
-      position: relative;
-      z-index: 1;
     }
-    /* Visor - Parte de cima */
+
     #visor {
-      background-color: #111;
+      background: #111;
       display: flex;
-      justify-content: center;
       align-items: center;
-      position: relative;
+      justify-content: center;
       overflow: hidden;
+      position: relative;
     }
-    /* Flipbook - Parte de baixo */
+
     #flipbook {
-      background-color: #222;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+      background: #222;
       overflow: hidden;
+      position: relative;
     }
-    /* Overlay do menu */
+
+    /* Menu Overlay */
     #menu-overlay {
-      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
-      z-index: 10;
+      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
       overflow-y: auto;
-      padding: 30px 10px;
     }
+
     .symbols-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
       gap: 20px;
-      padding-top: 50px;
+      margin-top: 20px;
     }
+
     .symbol {
       cursor: pointer;
       transition: transform 0.3s;
     }
+
     .symbol img {
       width: 100px;
-      transition: transform 0.3s;
+      height: auto;
     }
-    .symbol img:hover {
+
+    .symbol:hover {
       transform: scale(1.2);
     }
-    /* Ajustes para PC */
-    @media (min-width: 768px) {
-      #spa-container {
-        grid-template-rows: 60% 40%;
-      }
-      .symbol img {
-        width: 140px;
-      }
+
+    /* Animação do Flipbook */
+    .flipbook-content {
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 0.8s ease;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #00FFE7;
+    }
+
+    .flipbook-content.slide-in {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* Globo no visor */
+    #visor img, #visor canvas {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
     }
   </style>
 </head>
-
 <body>
 
-<div id="spa-container">
-  <!-- VISOR -->
+<div class="container">
   <div id="visor">
-    <!-- Espaço reservado para o GLOBO -->
-    <p style="color: #555;">Aguardando carregar o mundo...</p>
+    <!-- Aqui aparecerá o globo -->
+    <span style="color: #00FFE7;">AGUARDANDO MUNDO...</span>
   </div>
-
-  <!-- FLIPBOOK -->
   <div id="flipbook">
-    <!-- Espaço reservado para o FLIPBOOK -->
-    <p style="color: #666;">Flipbook será carregado aqui.</p>
+    <!-- Aqui entrará o flipbook -->
   </div>
 </div>
 
-<!-- MENU OVERLAY -->
+<!-- Overlay de mundos -->
 <div id="menu-overlay">
+  <h2 style="color: #00FFE7;">ESCOLHA UM MUNDO</h2>
   <div class="symbols-container">
     <div class="symbol" onclick="selecionarMundo('velei')">
-      <img src="mundos/veleywei/veleyweimenu.png" alt="Velei'wey">
+      <img src="assets/veleyweimenu.png" alt="Velei'wey">
     </div>
     <div class="symbol" onclick="selecionarMundo('botychera')">
-      <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+      <img src="assets/botycheramenu.png" alt="Botychera">
     </div>
     <div class="symbol" onclick="selecionarMundo('himpis')">
-      <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+      <img src="assets/himpismenu.png" alt="Himpis">
     </div>
-    <div class="symbol" onclick="selecionarMundo('ttok')">
-      <img src="mundos/ttok/ttokmenu.png" alt="T'Tok">
-    </div>
-    <!-- Pode adicionar mais mundos -->
+    <!-- Adicione mais mundos aqui -->
   </div>
 </div>
 
 <script>
-  // Mostrar overlay automático após 3 segundos
-  window.addEventListener("load", () => {
+  // Exibe o menu 3 segundos depois de carregar a página
+  window.addEventListener('load', function() {
     setTimeout(() => {
       document.getElementById('menu-overlay').style.display = 'flex';
     }, 3000);
   });
 
-  // Quando o usuário clicar em um símbolo de mundo
+  // Função para selecionar o mundo
   function selecionarMundo(mundo) {
+    // Esconde o overlay
     document.getElementById('menu-overlay').style.display = 'none';
 
+    // Atualiza o visor
+    const visor = document.getElementById('visor');
     if (mundo === 'velei') {
-      document.getElementById('visor').innerHTML = `<img src="mundos/veleywei/globo.png" style="width:80%;height:auto;">`;
-      document.getElementById('flipbook').innerHTML = `<p style="color:#00FFE7;">Flipbook de Velei'wey aqui</p>`;
+      visor.innerHTML = `<img src="mundos/veleywei/globo.png" alt="Globo Velei'wey">`;
+    } else if (mundo === 'botychera') {
+      visor.innerHTML = `<img src="mundos/botychera/globo.png" alt="Globo Botychera">`;
+    } else if (mundo === 'himpis') {
+      visor.innerHTML = `<img src="mundos/himpis/globo.png" alt="Globo Himpis">`;
     }
-    if (mundo === 'botychera') {
-      document.getElementById('visor').innerHTML = `<img src="mundos/botychera/globo.png" style="width:80%;height:auto;">`;
-      document.getElementById('flipbook').innerHTML = `<p style="color:#00FFE7;">Flipbook de Botychera aqui</p>`;
-    }
-    if (mundo === 'himpis') {
-      document.getElementById('visor').innerHTML = `<img src="mundos/himpis/globo.png" style="width:80%;height:auto;">`;
-      document.getElementById('flipbook').innerHTML = `<p style="color:#00FFE7;">Flipbook dos Himpis aqui</p>`;
-    }
-    if (mundo === 'ttok') {
-      document.getElementById('visor').innerHTML = `<img src="mundos/ttok/globo.png" style="width:80%;height:auto;">`;
-      document.getElementById('flipbook').innerHTML = `<p style="color:#00FFE7;">Flipbook dos T'Tok aqui</p>`;
-    }
+
+    // Atualiza o flipbook com animação
+    const flipbook = document.getElementById('flipbook');
+    flipbook.innerHTML = `<div class="flipbook-content">Carregando livro do mundo ${mundo}...</div>`;
+    setTimeout(() => {
+      flipbook.querySelector('.flipbook-content').classList.add('slide-in');
+    }, 100);
   }
 </script>
 
