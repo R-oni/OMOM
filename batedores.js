@@ -165,7 +165,21 @@ window.initFlipbook = function(selector) {
       <button id="btnSair">Voltar</button>
     </div>
   `);
+  // ── AQUI: aplica o tamanho das páginas ──
+  // Cada página com 50% de largura e 50% de altura do flipbook
+  $container.find('#flipbook .page').css({
+    width: '50%',
+    height: '50%'
+  });
+  // Garante que as imagens preencham a página
+  $container.find('#flipbook .page img').css({
+    width: '100%',
+    height: '100%',
+    'object-fit': 'contain'
+  });
+  // ────────────────────────────────────────
 
+  
   // Áudio para virar páginas
   const flipAudio = new Audio('sompagina.mp3');
   flipAudio.preload = 'auto';
