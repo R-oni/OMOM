@@ -25,6 +25,10 @@
     #globe-area canvas { width:100%; height:100%; }
     #flipbook-area { overflow:hidden; }
 
+    /* CSS mínimo para Turn.js */
+    #flipbook { width:100%; height:100%; }
+    .page { background:transparent; }
+
     /* overlay menu */
     #menu-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); display:none; z-index:100; }
     #menu-overlay.visible { display:block; }
@@ -39,31 +43,23 @@
     /* título fixo */
     .title-container { position:absolute; top:20px; width:100%; text-align:center; z-index:200; }
     .title-text { font-family:'Press Start 2P', cursive; color:#fff; font-size:20px; }
-
-    /* botões nav/mobile omitidos para clareza; traga seu código aqui se precisar */
-
   </style>
 </head>
 <body>
   <div id="app">
     <div id="globe-area">
-      <!-- canvas para three.js será injetado em batedores.js -->
       <canvas id="globeCanvas"></canvas>
     </div>
     <div id="flipbook-area">
-      <!-- flipbook será injetado em batedores.js -->
       <div id="flipbookContainer"></div>
     </div>
   </div>
 
-  <!-- Loading Screen -->
   <div id="loading-screen"><div id="loading-text">CARREGANDO...</div></div>
 
-  <!-- Overlay do Menu Rolante -->
   <div id="menu-overlay">
     <div class="symbols-wrapper">
       <div class="symbols-container">
-        <!-- copie todos os símbolos, só troque <a href> por data-world -->
         <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
         <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
         <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
@@ -81,53 +77,43 @@
         <div class="symbol locked"  data-world="mundo4"><img src="mundos/mundo 4/mundo4menu.png" alt="Mundo 4"></div>
         <div class="symbol locked"  data-world="mundo5"><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Mundo 5"></div>
         <div class="symbol locked"  data-world="mundo6"><img src="mundos/mundo 6/criaturamenu.webp" alt="Mundo 6"></div>
+        <!-- ... demais símbolos ... -->
       </div>
     </div>
   </div>
 
-  <!-- scripts externos -->
+  <!-- scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-  <!-- Firebase/auth, modais, áudio etc. copie seu código completo aqui -->
+  <script src="three.min.js"></script>
+  <script src="OrbitControls.js"></script>
+  <script src="batedores.js"></script>
 
   <script>
-    // 1) Carrega canvas pixelado (starfield) se quiser, ou chame initAutomaton depois
     window.addEventListener('load', () => {
       document.getElementById('loading-screen').style.display = 'none';
-      setTimeout(() => {
-        document.getElementById('menu-overlay').classList.add('visible');
-      }, 3000);
+      setTimeout(() => document.getElementById('menu-overlay').classList.add('visible'), 3000);
     });
 
-    // 2) Clique em símbolo
     document.querySelector('.symbols-container').addEventListener('click', e => {
       const sym = e.target.closest('.symbol');
       if (!sym) return;
       const world = sym.dataset.world;
-      launchWorld(world);
-    });
-
-    function launchWorld(name) {
-      // fade‑out do overlay
       const ov = document.getElementById('menu-overlay');
       ov.classList.remove('visible');
       ov.style.transition = 'opacity .5s';
       ov.style.opacity = '0';
       setTimeout(() => ov.style.display = 'none', 500);
 
-      // injeta script do mundo
       const s = document.createElement('script');
-      s.src = name + '.js';
+      s.src = world + '.js';
       document.body.appendChild(s);
       s.onload = () => {
-        // executa inicializadores
-        if (window.initAutomaton)      window.initAutomaton('#automatonCanvas');
-        if (window.initGlobe)          window.initGlobe('#globeCanvas');
-        if (window.initFlipbook)       window.initFlipbook('#flipbookContainer');
+        if (window.initAutomaton) window.initAutomaton('#automatonCanvas');
+        if (window.initGlobe)     window.initGlobe('#globeCanvas');
+        if (window.initFlipbook)  window.initFlipbook('#flipbookContainer');
       };
-    }
+    });
   </script>
 </body>
 </html>
