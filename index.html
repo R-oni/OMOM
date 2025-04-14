@@ -10,14 +10,16 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html { width:100%; height:100%; overflow:hidden; background:black; color:white; font-family:'Courier New', monospace; }
 
-    /* grid 40/60 com margem no topo de 20% */
-    #app { 
-      display: grid; 
-      grid-template-rows: 40% 60%; 
-      width: 100vw; 
-      height: 80vh; /* 80% da altura da tela */
-      margin-top: 20vh; /* empurra o container para baixo em 20% da tela */
-      position: relative; 
+    /* painel sobre o globo e abaixo do flipbook */
+    #painel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
     }
 
     /* canvas pixelado atrás */
@@ -29,6 +31,17 @@
       height: 100vh; 
       z-index: -1; 
       image-rendering: pixelated; 
+    }
+
+    /* grid 40/60 com margem no topo de 20% */
+    #app { 
+      display: grid; 
+      grid-template-rows: 40% 60%; 
+      width: 100vw; 
+      height: 80vh; /* 80% da altura da tela */
+      margin-top: 20vh; /* empurra o container para baixo em 20% da tela */
+      position: relative; 
+      z-index: 1; /* acima do painel */
     }
 
     /* loading */
@@ -136,6 +149,12 @@
   </style>
 </head>
 <body>
+  <!-- painel sobre o globo e abaixo do flipbook -->
+  <img id="painel" src="painel.png" alt="Painel">
+
+  <!-- canvas pixelado de fundo -->
+  <canvas id="automatonCanvas"></canvas>
+
   <!-- App Grid -->
   <div id="app">
     <div id="globe-area">
