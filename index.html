@@ -2,93 +2,85 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>OMOM SPA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* RESET & básicos */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body, html { width:100%; height:100%; overflow:hidden; background:#000; color:#fff; font-family: sans-serif; }
-    #app { display:grid; grid-template-rows:50% 50%; width:100%; height:100vh; position:relative; }
-
-    /* área do globo e flipbook */
-    #globe-area, #flipbook-area {
-      position:relative;
-      background:#000;
-      display:flex; align-items:center; justify-content:center;
-    }
-    /* overlay do menu */
-    #menu-overlay {
-      position:absolute; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
-      display:flex; align-items:center; justify-content:center;
-      opacity:0; pointer-events:none; transition: opacity .3s;
-      z-index:10;
-    }
-    #menu-overlay.visible { opacity:1; pointer-events:auto; }
-    .symbols-container { display:flex; gap:20px; overflow-x:auto; }
-    .symbol { cursor:pointer; }
-    .symbol img { width:80px; height:auto; }
-
+    /* copia TODOS os estilos do seu primeiro HTML até ".symbols-container" */
+    /* ... */
+    /* Só adicione isto no final: */
+    #menu-overlay { display:none; /* id para controlar via JS */ }
+    #menu-overlay.visible { display:block; }
   </style>
 </head>
 <body>
-
-<div id="app">
-  <div id="globe-area">
-    <!-- aqui vai o canvas do globo -->
-    <canvas id="globe-canvas"></canvas>
+  <!-- Loading + canvas -->
+  <div id="loading-screen">
+    <div id="loading-text">CARREGANDO...</div>
   </div>
-  <div id="flipbook-area">
-    <!-- aqui vai o flipbook -->
-    <div id="flipbook"></div>
-  </div>
+  <canvas id="automatonCanvas"></canvas>
 
-  <!-- overlay do menu (inicialmente oculto) -->
+  <!-- Menu rolante (copie exatamente do seu primeiro HTML, mas envolva em #menu-overlay) -->
   <div id="menu-overlay">
-    <div class="symbols-container">
-      <!-- pegue este HTML do seu primeiro código -->
-      <div class="symbol" data-world="batedores"><img src="assets/ttokmenu.png" alt="Batedores"></div>
-      <!-- repita para cada símbolo que quiser no menu -->
+    <div class="symbols-wrapper">
+      <div class="symbols-container">
+        <!-- Exemplo: -->
+        <div class="symbol brither" data-world="batedores">
+          <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
+        </div>
+        <!-- demais símbolos... -->
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  // state
-  let overlayTimer;
+  <!-- Área onde o mundo será montado -->
+  <div id="world-container" style="width:100vw; height:100vh; position:absolute; top:0; left:0; display:none;">
+    <!-- batedores.js vai popular aqui -->
+  </div>
 
-  // 1) depois de 3s, mostra o menu
-  window.addEventListener('load', () => {
-    overlayTimer = setTimeout(() => {
-      document.getElementById('menu-overlay').classList.add('visible');
-    }, 3000);
-  });
+  <!-- scripts gerais (Firebase, modais, etc) copiados do primeiro HTML -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <!-- seu Firebase/auth e lógicas de modal aqui... -->
 
-  // 2) ao clicar num símbolo, carrega o mundo
-  document.querySelector('.symbols-container').addEventListener('click', e => {
-    const symbol = e.target.closest('.symbol');
-    if (!symbol) return;
-    const world = symbol.dataset.world;
-    loadWorld(world);
-  });
+  <script>
+    // 1) ao load, some loading-screen e agende menu-overlay
+    window.addEventListener('load', () => {
+      document.getElementById('loading-screen').style.display = 'none';
+      setTimeout(() => {
+        document.getElementById('menu-overlay').classList.add('visible');
+      }, 3000);
+    });
 
-  // 3) lógica de carregar o mundo "batedores"
-  function loadWorld(name) {
-    // esconde overlay
-    document.getElementById('menu-overlay').classList.remove('visible');
-    clearTimeout(overlayTimer);
+    // 2) clique em símbolo carrega batedores.js (ou outro) dinamicamente
+    document.querySelector('.symbols-container').addEventListener('click', e => {
+      const sym = e.target.closest('.symbol');
+      if (!sym) return;
+      const world = sym.dataset.world; // ex: "batedores"
+      loadWorld(world);
+    });
 
-    // importa dinamicamente o script do mundo
-    const script = document.createElement('script');
-    script.src = `${name}.js`;   // ex: batedores.js
-    script.onload = () => {
-      // espera o módulo executar: ele deve expor initFlipbook e initGlobe
-      if (window.initFlipbook) window.initFlipbook('#flipbook');
-      if (window.initGlobe) window.initGlobe('#globe-canvas');
-    };
-    document.body.appendChild(script);
-  }
-</script>
+    function loadWorld(name) {
+      // esconde menu
+      document.getElementById('menu-overlay').classList.remove('visible');
+      // mostra container do mundo
+      const wc = document.getElementById('world-container');
+      wc.style.display = 'block';
 
+      // injeta script
+      const s = document.createElement('script');
+      s.src = `${name}.js`;
+      document.body.appendChild(s);
+
+      // espera o script definir init functions
+      s.onload = () => {
+        if (window.initAutomaton) window.initAutomaton('#automatonCanvas');
+        if (window.initGlobe)     window.initGlobe('#globeCanvas');
+        if (window.initFlipbook)  window.initFlipbook('#flipbookContainer');
+      };
+    }
+  </script>
 </body>
 </html>
