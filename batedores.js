@@ -160,10 +160,7 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina31.webp" alt="Página 33" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina32.webp" alt="Página 34" draggable="false"></div>
     </div>
-    <div id="overlayContainer">
-      <img id="overlayImage" src="" alt="Overlay" draggable="false">
-      <button id="btnSair">Voltar</button>
-    </div>
+
   `);
   // ── AQUI: aplica o tamanho das páginas ──
   // Cada página com 50% de largura e 50% de altura do flipbook
@@ -229,11 +226,7 @@ window.initFlipbook = function(selector) {
     $("#flipbook").turn("next");
   });
 
-  // Evento para fechar o overlay
-  $container.on("click", "#btnSair", function(e){
-    e.preventDefault();
-    $("#overlayContainer").fadeOut(300);
-  });
+
 
   // Mapeia os botões que exibem o overlay com imagens
   const overlayMap = {
