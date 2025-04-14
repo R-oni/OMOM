@@ -39,9 +39,8 @@
       display: grid; 
       grid-template-rows: 50% 50%; 
       width: 100vw; 
-      height: 100vh; /* 80% da altura da tela */
+      height: 100vh; 
       position: relative; 
-      /* Não definido z-index aqui para termos controle individual dos filhos */
     }
 
     /* loading */
@@ -71,21 +70,29 @@
       justify-content: center; 
       width: 100%; 
     }
-    /* Garante que o globo fique abaixo, com z-index menor */
     #globe-area { 
       z-index: 0;
       width: 100%;
       height: 100%;
     }
-    /* Garantir que o flipbook ocupe todo o espaço da célula e fique acima */
+
+    /* flipbook posicionado e animável */
     #flipbook-area { 
       margin-left: 5%;
-      margin-top: 5vh;
+      margin-top: 7vh;
       overflow: hidden; 
       width: 100%;
       height: 100%; 
       z-index: 3;
+      /* estado inicial para animação */
+      transform: translateX(100%);
+      transition: transform 0.8s ease-out;
     }
+    /* quando a classe .show estiver presente, ele volta ao centro */
+    #flipbook-area.show {
+      transform: translateX(0);
+    }
+
     #flipbookContainer {
       width: 100%;
       height: 100%;
@@ -161,12 +168,9 @@
   <!-- App Grid -->
   <div id="app">
     <div id="globe-area">
-      <!-- canvas para three.js será injetado em batedores.js -->
       <canvas id="globeCanvas"></canvas>
-      
     </div>
     <div id="flipbook-area">
-      <!-- flipbook será injetado em batedores.js -->
       <div id="flipbookContainer"></div>
     </div>
   </div>
@@ -207,12 +211,8 @@
   <script src="turn.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-
   <script src="batedores.js"></script>
-  <!-- Aqui você inclui os scripts extras como Firebase, autenticação, áudio, etc. -->
-
   <script>
-    // 1) Ao carregar a página
     window.addEventListener('load', () => {
       document.getElementById('loading-screen').style.display = 'none';
       setTimeout(() => {
@@ -220,7 +220,6 @@
       }, 3000);
     });
 
-    // 2) Clique em um símbolo do menu
     document.querySelector('.symbols-container').addEventListener('click', e => {
       const sym = e.target.closest('.symbol');
       if (!sym) return;
@@ -229,6 +228,15 @@
     });
 
     function launchWorld(name) {
+      // animação de slide só para batedores
+      if (name === 'batedores') {
+        const fb = document.getElementById('flipbook-area');
+        fb.classList.remove('show');
+        // força reflow para resetar a animação
+        void fb.offsetWidth;
+        fb.classList.add('show');
+      }
+
       // Fade‑out do menu
       const ov = document.getElementById('menu-overlay');
       ov.classList.remove('visible');
@@ -236,25 +244,22 @@
       ov.style.opacity = '0';
       setTimeout(() => ov.style.display = 'none', 500);
 
-      // Injeta o script do mundo dinamicamente
+      // Injeta script do mundo
       const s = document.createElement('script');
       s.src = name + '.js';
       document.body.appendChild(s);
       s.onload = () => {
-        // Executa inicializadores, se existirem
-        if (window.initAutomaton)      window.initAutomaton('#automatonCanvas');
-        if (window.initGlobe)          window.initGlobe('#globeCanvas');
-        if (window.initFlipbook)       window.initFlipbook('#flipbookContainer');
+        if (window.initAutomaton)    window.initAutomaton('#automatonCanvas');
+        if (window.initGlobe)        window.initGlobe('#globeCanvas');
+        if (window.initFlipbook)     window.initFlipbook('#flipbookContainer');
       };
     }
 
-    // Esconde loading do globo, quando o evento é disparado
     document.addEventListener('globoCarregado', () => {
       $('#globeLoading').hide();
     });
 
-    // Fecha overlay de imagem
-    document.getElementById('btnSair').addEventListener('click', e => {
+    document.getElementById('btnSair')?.addEventListener('click', e => {
       e.preventDefault();
       $('#overlayContainer').fadeOut(300);
     });
