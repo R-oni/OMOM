@@ -329,6 +329,7 @@
 
     @media screen and (min-width: 1024px) and (orientation: landscape) {
       .page-container {
+        animation: breathe 10s infinite;
         display: grid;
         grid-template-columns: 50% 50%;
         grid-template-rows: 20vh 80vh;
@@ -337,6 +338,11 @@
         position: relative;
         overflow: visible;
       }
+
+      @keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+}
       .header-container {
         grid-column: 1;
         position: relative;
