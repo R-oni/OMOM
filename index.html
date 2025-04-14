@@ -34,7 +34,7 @@
       /* Não definido z-index aqui para termos controle individual dos filhos */
     }
 
-    /* loading */
+    /* loading
     #loading-screen { 
       position: fixed; 
       top: 0; 
@@ -46,12 +46,7 @@
       align-items: center; 
       justify-content: center; 
       z-index: 9999; 
-    }
-    #loading-text { 
-      font-family: 'Press Start 2P', cursive; 
-      color: #00FFE7; 
-      font-size: 20px; 
-    }
+    } */
 
     /* globo e flipbook */
     #globe-area, #flipbook-area { 
@@ -66,9 +61,9 @@
     #globe-area { 
       z-index: 0;
       width: 100%;      /* preenche 100% da largura do #globe-area */
-      height: auto;     /* preenche 100% da altura do #globe-area */
+      height: 100%;     /* preenche 100% da altura do #globe-area */
       display: block;   /* remove possíveis gaps inline */
-      aspect-ratio: 1 / 1;
+    
     }
     /* Garantir que o flipbook ocupe todo o espaço da célula e fique acima */
     #flipbook-area { 
