@@ -13,12 +13,12 @@
     /* grid 50/50 */
     #app { display:grid; grid-template-rows:50% 50%; width:100vw; height:100vh; position:relative; }
 
-    /* canvas pixelado atrás (opcional) */
+    /* canvas pixelado atrás */
     #automatonCanvas { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; image-rendering:pixelated; }
 
     /* loading */
-    #loading-screen { position:fixed; inset:0; background:black; display:flex; align-items:center; justify-content:center; z-index:9999; }
-    #loading-text { font-family:'Press Start 2P'; color:#00FFE7; font-size:20px; }
+    #loading-screen { position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; display:flex; align-items:center; justify-content:center; z-index:9999; }
+    #loading-text { font-family:'Press Start 2P', cursive; color:#00FFE7; font-size:20px; }
 
     /* globo e flipbook */
     #globe-area, #flipbook-area { position:relative; display:flex; align-items:center; justify-content:center; }
@@ -26,22 +26,36 @@
     #flipbook-area { overflow:hidden; }
 
     /* overlay menu */
-    #menu-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); display:none; z-index:100; }
+    #menu-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); display:none; z-index:100; }
     #menu-overlay.visible { display:block; }
-    .symbols-wrapper { position:absolute; inset:150px 0 0 0; overflow-y:auto; padding:20px; }
+    .symbols-wrapper { position:absolute; top:150px; left:0; right:0; bottom:0; overflow-y:auto; padding:20px; }
     .symbols-container { display:flex; flex-wrap:wrap; justify-content:center; gap:25px; }
-    .symbol { cursor:pointer; width:25vw; transition:transform .1s; text-align:center; }
-    .symbol img { width:100%; }
+    .symbol { cursor:pointer; transition:transform .1s; }
+    .symbol img { width:25vw; transition:transform .3s; }
     .symbol img:hover { transform:scale(1.1); }
     .symbol.brither img { filter:brightness(180%); }
     .symbol.locked img  { filter:brightness(50%); }
 
     /* título fixo */
     .title-container { position:absolute; top:20px; width:100%; text-align:center; z-index:200; }
-    .title-text { font-family:'Press Start 2P'; color:#fff; font-size:20px; }
+    .title-text { font-family:'Press Start 2P', cursive; color:#fff; font-size:20px; }
+
+    /* botões nav/mobile omitidos para clareza; traga seu código aqui se precisar */
+
   </style>
 </head>
 <body>
+  <div id="app">
+    <div id="globe-area">
+      <!-- canvas para three.js será injetado em batedores.js -->
+      <canvas id="globeCanvas"></canvas>
+    </div>
+    <div id="flipbook-area">
+      <!-- flipbook será injetado em batedores.js -->
+      <div id="flipbookContainer"></div>
+    </div>
+  </div>
+
   <!-- Loading Screen -->
   <div id="loading-screen"><div id="loading-text">CARREGANDO...</div></div>
 
@@ -49,69 +63,47 @@
   <div id="menu-overlay">
     <div class="symbols-wrapper">
       <div class="symbols-container">
-        <!-- Todos os mundos -->
-        <div class="symbol brither"   data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"><div>Velei'wey</div></div>
-        <div class="symbol locked"    data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"><div>Botychera</div></div>
-        <div class="symbol locked"    data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"><div>Himpis</div></div>
-        <div class="symbol brither"   data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"><div>Batedores</div></div>
-        <div class="symbol locked"    data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenDenBouBou"><div>DenDenBouBou</div></div>
-        <div class="symbol locked"    data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"><div>Araporu</div></div>
-        <div class="symbol locked"    data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"><div>Artesãos</div></div>
-        <div class="symbol locked"    data-world="sapador"><img src="mundos/sapador/sapadormenu.png" alt="Sapador"><div>Sapador</div></div>
-        <div class="symbol locked"    data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"><div>Dosirelala</div></div>
-        <div class="symbol locked"    data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"><div>Calindreno</div></div>
-        <div class="symbol locked"    data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"><div>Mundo Pulsante</div></div>
-        <div class="symbol locked"    data-world="mundo1"><img src="mundos/mundo 1/mundo1.png" alt="Mundo 1"><div>Mundo 1</div></div>
-        <div class="symbol locked"    data-world="mundo2"><img src="mundos/mundo 2/mundo2.png" alt="Mundo 2"><div>Mundo 2</div></div>
-        <div class="symbol locked"    data-world="mundo3"><img src="mundos/mundo 3/mundo3menu.png" alt="Mundo 3"><div>Mundo 3</div></div>
-        <div class="symbol locked"    data-world="mundo4"><img src="mundos/mundo 4/mundo4menu.png" alt="Mundo 4"><div>Mundo 4</div></div>
-        <div class="symbol locked"    data-world="mundo5"><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Mundo 5"><div>Mundo 5</div></div>
-        <div class="symbol locked"    data-world="mundo6"><img src="mundos/mundo 6/criaturamenu.webp" alt="Mundo 6"><div>Mundo 6</div></div>
+        <!-- copie todos os símbolos, só troque <a href> por data-world -->
+        <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+        <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+        <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
+        <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
+        <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenDenBouBou"></div>
+        <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
+        <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
+        <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
+        <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
+        <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
+        <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+        <div class="symbol locked"  data-world="mundo1"><img src="mundos/mundo 1/mundo1.png" alt="Mundo 1"></div>
+        <div class="symbol locked"  data-world="mundo2"><img src="mundos/mundo 2/mundo2.png" alt="Mundo 2"></div>
+        <div class="symbol locked"  data-world="mundo3"><img src="mundos/mundo 3/mundo3menu.png" alt="Mundo 3"></div>
+        <div class="symbol locked"  data-world="mundo4"><img src="mundos/mundo 4/mundo4menu.png" alt="Mundo 4"></div>
+        <div class="symbol locked"  data-world="mundo5"><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Mundo 5"></div>
+        <div class="symbol locked"  data-world="mundo6"><img src="mundos/mundo 6/criaturamenu.webp" alt="Mundo 6"></div>
       </div>
     </div>
   </div>
 
-  <!-- Título fixo -->
-  <div class="title-container">
-    <div class="title-text">Outros Mundos, Outras Mentes</div>
-  </div>
-
-  <!-- App Grid -->
-  <div id="app">
-    <div id="globe-area">
-      <canvas id="globeCanvas"></canvas>
-      <div id="globeLoading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#0f0;font-family:'Press Start 2P'">CARREGANDO...</div>
-    </div>
-    <div id="flipbook-area">
-      <div id="flipbookContainer"></div>
-    </div>
-  </div>
-
-  <!-- Overlay de Imagem -->
-  <div id="overlayContainer" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;">
-    <img id="overlayImage" src="" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:90vw;max-height:90vh;">
-    <button id="btnSair" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#0f0;font-family:'Press Start 2P';font-size:32px;cursor:pointer;">Voltar</button>
-  </div>
-
-  <!-- Scripts Externos -->
+  <!-- scripts externos -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- Mundo Batedores (e outros mundos terão seus próprios .js) -->
   <script src="batedores.js"></script>
-  <!-- Aqui você inclui os scripts de firebase, autenticação, som, etc. -->
+  <!-- Firebase/auth, modais, áudio etc. copie seu código completo aqui -->
 
   <script>
-    // Ao carregar a página
+    // 1) Carrega canvas pixelado (starfield) se quiser, ou chame initAutomaton depois
     window.addEventListener('load', () => {
-      $('#loading-screen').fadeOut(500, () => {
-        $('#menu-overlay').addClass('visible');
-      });
+      document.getElementById('loading-screen').style.display = 'none';
+      setTimeout(() => {
+        document.getElementById('menu-overlay').classList.add('visible');
+      }, 3000);
     });
 
-    // Ao clicar em um símbolo do menu
+    // 2) Clique em símbolo
     document.querySelector('.symbols-container').addEventListener('click', e => {
       const sym = e.target.closest('.symbol');
       if (!sym) return;
@@ -120,30 +112,26 @@
     });
 
     function launchWorld(name) {
-      // Esconde o menu
-      $('#menu-overlay').removeClass('visible').fadeOut(500);
+      // fade‑out do overlay
+      const ov = document.getElementById('menu-overlay');
+      ov.classList.remove('visible');
+      ov.style.transition = 'opacity .5s';
+      ov.style.opacity = '0';
+      setTimeout(() => ov.style.display = 'none', 500);
 
-      // Injeta o script do mundo dinamicamente
+      // injeta script do mundo
       const s = document.createElement('script');
-      s.src = `mundos/${name}/${name}.js`;
+      s.src = name + '.js';
       document.body.appendChild(s);
       s.onload = () => {
-        // Inicializa globo e flipbook
-        if (window.initGlobe)    window.initGlobe('#globeCanvas');
-        if (window.initFlipbook) window.initFlipbook('#flipbookContainer');
+        // executa inicializadores
+        if (window.initAutomaton)      window.initAutomaton('#automatonCanvas');
+        if (window.initGlobe)          window.initGlobe('#globeCanvas');
+        if (window.initFlipbook)       window.initFlipbook('#flipbookContainer');
       };
     }
-
-    // Esconde loading do globo
-    document.addEventListener('globoCarregado', () => {
-      $('#globeLoading').hide();
-    });
-
-    // Fecha overlay de imagem
-    $('#btnSair').click(e => {
-      e.preventDefault();
-      $('#overlayContainer').fadeOut(300);
-    });
   </script>
+
+  
 </body>
 </html>
