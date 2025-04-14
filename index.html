@@ -40,7 +40,7 @@
       grid-template-rows: 40% 60%; 
       width: 100vw; 
       height: 80vh; /* 80% da altura da tela */
-      margin-top: 20vh; /* empurra o container para baixo em 20% da tela */
+      margin-top: 5vh; /* empurra o container para baixo em 20% da tela */
       position: relative; 
       /* Não definido z-index aqui para termos controle individual dos filhos */
     }
@@ -70,12 +70,15 @@
       display: flex; 
       align-items: center; 
       justify-content: center; 
-      width: 100%; 
-      aspect-ratio: 1/1; /* força proporção 1:1 */
+      width: 100%;
+ 
     }
     /* Garante que o globo fique abaixo, com z-index menor */
     #globe-area { 
-      z-index: 0; 
+      z-index: 0;
+      width: 100%;      /* preenche 100% da largura do #globe-area */
+      height: 100%;     /* preenche 100% da altura do #globe-area */
+      display: block;   /* remove possíveis gaps inline */
     }
     /* Garantir que o flipbook ocupe todo o espaço da célula e fique acima */
     #flipbook-area { 
