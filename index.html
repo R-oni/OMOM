@@ -23,6 +23,16 @@
       pointer-events: none;
     }
 
+    /* canvas pixelado atrás */
+    #automatonCanvas { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      z-index: -1; 
+      image-rendering: pixelated; 
+    }
 
     /* grid 40/60 com margem no topo de 20% */
     #app { 
@@ -70,10 +80,10 @@
     #flipbook-area { 
       margin-left: 5%;
       margin-top: 7vh;
+      overflow: hidden; 
       width: 100%;
       height: 100%; 
       z-index: 3;
-      overflow: hidden;
       /* estado inicial para animação */
       transform: translateX(100%);
       transition: transform 0.8s ease-out;
@@ -86,7 +96,6 @@
     #flipbookContainer {
       width: 100%;
       height: 100%;
-      /*overflow: hidden;*/
     }
 
     /* overlay menu */
