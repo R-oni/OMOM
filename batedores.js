@@ -29,7 +29,11 @@ window.initGlobe = function(selector) {
       const z = R * Math.cos(ph);
       pos.push(x, y, z);
       const r = Math.random();
-      col.push(r < 0.9 ? 1 : 1, r < 0.9 ? 1 : r < 0.95 ? 0.6 : 0.6, r < 0.9 ? 1 : r < 0.95 ? 0.6 : 1);
+      col.push(
+        r < 0.9 ? 1 : 1,
+        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 0.6,
+        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 1
+      );
     }
     geom.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     geom.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
@@ -92,7 +96,7 @@ window.initGlobe = function(selector) {
   });
 };
 
-// 2) Inicialização do Flipbook com lógica completa
+// 2) Inicialização do Flipbook com lazy‑load
 window.initFlipbook = function(selector) {
   const $container = $(selector);
   if (!$container.length) return console.warn('Container flipbook não encontrado:', selector);
@@ -160,33 +164,59 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina31.webp" alt="Página 33" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina32.webp" alt="Página 34" draggable="false"></div>
     </div>
-
   `);
+
   // ── AQUI: aplica o tamanho das páginas ──
-  // Cada página com 50% de largura e 50% de altura do flipbook
   $container.find('#flipbook .page').css({
     width: '80%',
     height: '80%'
-     
   });
-  // Garante que as imagens preencham a página
   $container.find('#flipbook .page img').css({
     width: '100%',
     height: '100%',
     'object-fit': 'contain'
   });
-  // ────────────────────────────────────────
 
-  
+  // ── Lazy‑load setup ──
+  // 1) marca data-page e move src → data-src
+  $container.find('#flipbook .page').each(function(idx){
+    const p = idx + 1;
+    $(this).attr('data-page', p);
+    $(this).find('img').each(function(){
+      const realSrc = $(this).attr('src');
+      $(this).attr('data-src', realSrc).removeAttr('src');
+    });
+  });
+  // 2) função de pré‑carregamento
+  function preloadPages(startPage, count) {
+    for (let i = startPage; i < startPage + count; i++) {
+      const pageDiv = $container.find('#flipbook .page[data-page="'+i+'"]');
+      if (!pageDiv.length) continue;
+      pageDiv.find('img[data-src]').each(function(){
+        const $img = $(this);
+        if (!$img.attr('src')) {
+          $img.attr('src', $img.data('src'));
+        }
+      });
+    }
+  }
+  // 3) carrega primeiras 3 páginas
+  preloadPages(1, 3);
+
   // Áudio para virar páginas
   const flipAudio = new Audio('sompagina.mp3');
   flipAudio.preload = 'auto';
   flipAudio.volume = 0.9;
 
-  // Inicializa o flipbook com turn.js
+  // Inicializa o flipbook com evento turned
   $("#flipbook").turn({
     autoCenter: false,
-    display: 'double'
+    display: 'double',
+    when: {
+      turned: function(e, page) {
+        preloadPages(page+1, 3);
+      }
+    }
   });
 
   // Função de redimensionamento responsivo
@@ -205,31 +235,23 @@ window.initFlipbook = function(selector) {
   $(window).on('resize', resizeFlipbook);
 
   // Previne o arrasto das imagens
-  $(".page img").on("dragstart", function(e) {
-    e.preventDefault();
-  });
+  $(".page img").on("dragstart", e => e.preventDefault());
 
-  // Toca o áudio ao iniciar o giro da página
-  $("#flipbook").on("mousedown touchstart", function(){
+  // Toca áudio ao virar página
+  $("#flipbook").on("mousedown touchstart", () => {
     flipAudio.currentTime = 0;
-    flipAudio.play().catch(() => {});
+    flipAudio.play().catch(()=>{});
   });
 
-  // Ao virar a página, remove a seta da capa se a página for maior que 1
-  $("#flipbook").bind("turning", function(e, page){
-    if(page > 1){
-      $("#setaBtn").fadeOut(300, function(){ $(this).remove(); });
-    }
+  // Remove seta da capa após virar
+  $("#flipbook").bind("turning", (e, page) => {
+    if (page > 1) $("#setaBtn").fadeOut(300, function(){ $(this).remove(); });
   });
 
-  // Clique na seta para avançar a página
-  $container.on("click", "#setaBtn", function(){
-    $("#flipbook").turn("next");
-  });
+  // Clique na seta para avançar
+  $container.on("click", "#setaBtn", () => $("#flipbook").turn("next"));
 
-
-
-  // Mapeia os botões que exibem o overlay com imagens
+  // Botões de overlay
   const overlayMap = {
     '#cliquemundo': 'mundos/ttok/imagens/cap1/cliquemundo.webp',
     '#cliqueinversao': 'mundos/ttok/imagens/cap1/inversao.webp',
@@ -239,8 +261,8 @@ window.initFlipbook = function(selector) {
     '#cliquecapacitor': 'mundos/ttok/imagens/cap1/cliquecapacitor.webp',
     '#cliquesanguedomundo': 'mundos/ttok/imagens/cap1/sanguedomundo.webp'
   };
-  $.each(overlayMap, function(btn, src){
-    $container.on('click', btn, function(e){
+  $.each(overlayMap, (btn, src) => {
+    $container.on('click', btn, e => {
       e.stopPropagation();
       $("#overlayImage").attr("src", src);
       $("#overlayContainer").fadeIn(500);
