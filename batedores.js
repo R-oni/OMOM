@@ -167,6 +167,7 @@ window.initFlipbook = function(selector) {
   $container.find('#flipbook .page').css({
     width: '80%',
     height: '80%'
+    'margin-top': '5%'  
   });
   // Garante que as imagens preencham a página
   $container.find('#flipbook .page img').css({
