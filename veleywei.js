@@ -52,7 +52,7 @@ window.initGlobe = function(selector) {
   // Esfera central com textura para o globo – atualize o caminho conforme seus assets
   const central = new THREE.Mesh(
     new THREE.SphereGeometry(1, 64, 64),
-    new THREE.MeshStandardMaterial({ map: loader.load('imagens/veleywei/globe_central.jpg', check) })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
@@ -61,7 +61,7 @@ window.initGlobe = function(selector) {
   const orbitRadius = 3;
   const orbit = new THREE.Mesh(
     new THREE.SphereGeometry(0.1, 64, 64),
-    new THREE.MeshStandardMaterial({ map: loader.load('imagens/veleywei/globe_orbit.jpg', check) })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
   orbit.castShadow = orbit.receiveShadow = true;
   orbit.position.set(orbitRadius, 0, 0);
