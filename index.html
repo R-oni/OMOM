@@ -8,142 +8,160 @@
   <style>
     /* ===== ESTILOS GERAIS ===== */
     * { margin:0; padding:0; box-sizing:border-box; }
-    body, html { width:100%; height:100%; overflow:hidden; background:black; color:white; font-family:'Courier New', monospace; }
-
-    /* grid 40/60 */
-    #app { 
-      display: grid; 
-      grid-template-rows:40% 60%; 
-      width:100vw; 
-      height:100vh; 
-      position:relative; 
+    html, body {
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:black;
+      color:white;
+      font-family:'Courier New', monospace;
+      padding-top:20vh; /* 20% de margem no topo */
     }
 
-    /* canvas pixelado atrás */
-    #automatonCanvas { 
-      position:fixed; 
-      top:0; 
-      left:0; 
-      width:100vw; 
-      height:100vh; 
-      z-index:-1; 
-      image-rendering:pixelated; 
+    /* Grid para o conteúdo (80vh = 100vh - 20vh de padding-top) */
+    #app {
+      display: grid;
+      grid-template-rows:30% 50%;
+      width:100vw;
+      height:80vh;
+      position:relative;
+    }
+
+    /* canvas pixelado atrás (se for utilizado) */
+    #automatonCanvas {
+      position:fixed;
+      top:0;
+      left:0;
+      width:100vw;
+      height:100vh;
+      z-index:-1;
+      image-rendering:pixelated;
     }
 
     /* loading */
-    #loading-screen { 
-      position:fixed; 
-      top:0; 
-      left:0; 
-      width:100vw; 
-      height:100vh; 
-      background:black; 
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      z-index:9999; 
+    #loading-screen {
+      position:fixed;
+      top:0;
+      left:0;
+      width:100vw;
+      height:100vh;
+      background:black;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
     }
-    #loading-text { 
-      font-family:'Press Start 2P', cursive; 
-      color:#00FFE7; 
-      font-size:20px; 
+    #loading-text {
+      font-family:'Press Start 2P', cursive;
+      color:#00FFE7;
+      font-size:20px;
     }
 
-    /* globo e flipbook */
-    #globe-area, #flipbook-area { 
-      position:relative; 
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      width:100%; 
-      height:100%; 
-    }
-    #globe-area canvas { 
-      width:100%; 
-      height:100%; 
-    }
-    /* Garantir que o flipbook ocupe todo o espaço da célula */
-    #flipbook-area { 
-      overflow:hidden; 
+    /* Globo e Flipbook */
+    #globe-area,
+    #flipbook-area {
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       width:100%;
-      height:100%; 
+      height:100%;
+    }
+    /* Globo: o canvas ocupa 100% do espaço da célula */
+    #globe-area canvas {
+      width:100%;
+      height:100%;
+    }
+    /* Flipbook: garante que ocupe todo o espaço da célula */
+    #flipbook-area {
+      overflow:hidden;
+      width:100%;
+      height:100%;
+      padding-top:20px; /* desloca o flipbook um pouco para baixo */
     }
     #flipbookContainer {
-      width: 100%;
-      height: 100%;
+      width:100%;
+      height:calc(100% - 20px); /* subtrai o padding-top para não ultrapassar */
     }
 
-
-    /* overlay menu */
-    #menu-overlay { 
-      position:absolute; 
-      top:0; 
-      left:0; 
-      width:100%; 
-      height:100%; 
-      background:rgba(0,0,0,0.8); 
-      backdrop-filter:blur(5px); 
-      display:none; 
-      z-index:100; 
+    /* Overlay Menu */
+    #menu-overlay {
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.8);
+      backdrop-filter:blur(5px);
+      display:none;
+      z-index:100;
     }
     #menu-overlay.visible { display:block; }
-    .symbols-wrapper { 
-      position:absolute; 
-      top:150px; 
-      left:0; 
-      right:0; 
-      bottom:0; 
-      overflow-y:auto; 
-      padding:20px; 
+    .symbols-wrapper {
+      position:absolute;
+      top:150px;
+      left:0;
+      right:0;
+      bottom:0;
+      overflow-y:auto;
+      padding:20px;
     }
-    .symbols-container { 
-      display:flex; 
-      flex-wrap:wrap; 
-      justify-content:center; 
-      gap:25px; 
+    .symbols-container {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:25px;
     }
-    .symbol { 
-      cursor:pointer; 
-      transition:transform .1s; 
+    .symbol {
+      cursor:pointer;
+      transition:transform .1s;
+      text-align:center;
     }
-    .symbol img { 
-      width:25vw; 
-      transition:transform .3s; 
+    .symbol img {
+      width:25vw;
+      transition:transform .3s;
     }
-    .symbol img:hover { 
-      transform:scale(1.1); 
+    .symbol img:hover {
+      transform:scale(1.1);
     }
-    .symbol.brither img { 
-      filter:brightness(180%); 
+    .symbol.brither img {
+      filter:brightness(180%);
     }
-    .symbol.locked img  { 
-      filter:brightness(50%); 
+    .symbol.locked img  {
+      filter:brightness(50%);
     }
 
-    /* título fixo */
-    .title-container { 
-      position:absolute; 
-      top:20px; 
-      width:100%; 
-      text-align:center; 
-      z-index:200; 
+    /* Título fixo */
+    .title-container {
+      position:absolute;
+      top:20px;
+      width:100%;
+      text-align:center;
+      z-index:200;
     }
-    .title-text { 
-      font-family:'Press Start 2P', cursive; 
-      color:#fff; 
-      font-size:20px; 
+    .title-text {
+      font-family:'Press Start 2P', cursive;
+      color:#fff;
+      font-size:20px;
     }
   </style>
 </head>
 <body>
+  <!-- Título fixo -->
+  <div class="title-container">
+    <div class="title-text">Outros Mundos, Outras Mentes</div>
+  </div>
+
   <!-- App Grid -->
   <div id="app">
+    <!-- Globo: ocupa 30% do container app -->
     <div id="globe-area">
-      <!-- canvas para three.js será injetado em batedores.js -->
+      <!-- O canvas para three.js é injetado via batedores.js -->
       <canvas id="globeCanvas"></canvas>
-      
+    </div>
+    <!-- Flipbook: ocupa 50% do container app -->
     <div id="flipbook-area">
-      <!-- flipbook será injetado em batedores.js -->
+      <!-- O flipbook é injetado via batedores.js -->
       <div id="flipbookContainer"></div>
     </div>
   </div>
@@ -184,12 +202,11 @@
   <script src="turn.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-
   <script src="batedores.js"></script>
   <!-- Aqui você inclui os scripts extras como Firebase, autenticação, áudio, etc. -->
 
   <script>
-    // 1) Ao carregar a página
+    // 1) Ao carregar a página, esconde a tela de loading e exibe o menu após 3s
     window.addEventListener('load', () => {
       document.getElementById('loading-screen').style.display = 'none';
       setTimeout(() => {
@@ -206,7 +223,7 @@
     });
 
     function launchWorld(name) {
-      // Fade‑out do menu
+      // Fade-out do menu
       const ov = document.getElementById('menu-overlay');
       ov.classList.remove('visible');
       ov.style.transition = 'opacity .5s';
@@ -218,20 +235,18 @@
       s.src = name + '.js';
       document.body.appendChild(s);
       s.onload = () => {
-        // Executa inicializadores, se existirem
-        if (window.initAutomaton)      window.initAutomaton('#automatonCanvas');
-        if (window.initGlobe)          window.initGlobe('#globeCanvas');
-        if (window.initFlipbook)       window.initFlipbook('#flipbookContainer');
+        if (window.initGlobe) window.initGlobe('#globeCanvas');
+        if (window.initFlipbook) window.initFlipbook('#flipbookContainer');
       };
     }
 
-    // Esconde loading do globo, quando o evento é disparado
+    // Esconde o loading do globo quando o evento for disparado
     document.addEventListener('globoCarregado', () => {
       $('#globeLoading').hide();
     });
 
-    // Fecha overlay de imagem
-    document.getElementById('btnSair').addEventListener('click', e => {
+    // Se houver overlay de imagem (botão Voltar), trata do fechamento – caso queira remover esse recurso, remova a referência
+    document.getElementById('btnSair') && document.getElementById('btnSair').addEventListener('click', e => {
       e.preventDefault();
       $('#overlayContainer').fadeOut(300);
     });
