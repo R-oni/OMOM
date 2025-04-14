@@ -10,45 +10,148 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body, html { width:100%; height:100%; overflow:hidden; background:black; color:white; font-family:'Courier New', monospace; }
 
-    /* grid 50/50 */
-    #app { display:grid; grid-template-rows:50% 50%; width:100vw; height:100vh; position:relative; }
+    /* grid 40/60 */
+    #app { 
+      display: grid; 
+      grid-template-rows:40% 60%; 
+      width:100vw; 
+      height:100vh; 
+      position:relative; 
+    }
 
     /* canvas pixelado atrás */
-    #automatonCanvas { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; image-rendering:pixelated; }
+    #automatonCanvas { 
+      position:fixed; 
+      top:0; 
+      left:0; 
+      width:100vw; 
+      height:100vh; 
+      z-index:-1; 
+      image-rendering:pixelated; 
+    }
 
     /* loading */
-    #loading-screen { position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; display:flex; align-items:center; justify-content:center; z-index:9999; }
-    #loading-text { font-family:'Press Start 2P', cursive; color:#00FFE7; font-size:20px; }
+    #loading-screen { 
+      position:fixed; 
+      top:0; 
+      left:0; 
+      width:100vw; 
+      height:100vh; 
+      background:black; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      z-index:9999; 
+    }
+    #loading-text { 
+      font-family:'Press Start 2P', cursive; 
+      color:#00FFE7; 
+      font-size:20px; 
+    }
 
     /* globo e flipbook */
-    #globe-area, #flipbook-area { position:relative; display:flex; align-items:center; justify-content:center; }
-    #globe-area canvas { width:100%; height:100%; }
-    #flipbook-area { overflow:hidden; }
+    #globe-area, #flipbook-area { 
+      position:relative; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      width:100%; 
+      height:100%; 
+    }
+    #globe-area canvas { 
+      width:100%; 
+      height:100%; 
+    }
+    /* Garantir que o flipbook ocupe todo o espaço da célula */
+    #flipbook-area { 
+      overflow:hidden; 
+      width:100%;
+      height:100%; 
+    }
+    #flipbookContainer {
+      width: 100%;
+      height: 100%;
+    }
+    #flipbook .page {
+      
+      width: 50% !important;   /* cada página 50% da largura do flipbook */
+      height: 50% !important;  /* cada página 50% da altura do flipbook */
+    }
+    #flipbook .page img {
+      
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
     /* overlay menu */
-    #menu-overlay { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); display:none; z-index:100; }
+    #menu-overlay { 
+      position:absolute; 
+      top:0; 
+      left:0; 
+      width:100%; 
+      height:100%; 
+      background:rgba(0,0,0,0.8); 
+      backdrop-filter:blur(5px); 
+      display:none; 
+      z-index:100; 
+    }
     #menu-overlay.visible { display:block; }
-    .symbols-wrapper { position:absolute; top:150px; left:0; right:0; bottom:0; overflow-y:auto; padding:20px; }
-    .symbols-container { display:flex; flex-wrap:wrap; justify-content:center; gap:25px; }
-    .symbol { cursor:pointer; transition:transform .1s; }
-    .symbol img { width:25vw; transition:transform .3s; }
-    .symbol img:hover { transform:scale(1.1); }
-    .symbol.brither img { filter:brightness(180%); }
-    .symbol.locked img  { filter:brightness(50%); }
+    .symbols-wrapper { 
+      position:absolute; 
+      top:150px; 
+      left:0; 
+      right:0; 
+      bottom:0; 
+      overflow-y:auto; 
+      padding:20px; 
+    }
+    .symbols-container { 
+      display:flex; 
+      flex-wrap:wrap; 
+      justify-content:center; 
+      gap:25px; 
+    }
+    .symbol { 
+      cursor:pointer; 
+      transition:transform .1s; 
+    }
+    .symbol img { 
+      width:25vw; 
+      transition:transform .3s; 
+    }
+    .symbol img:hover { 
+      transform:scale(1.1); 
+    }
+    .symbol.brither img { 
+      filter:brightness(180%); 
+    }
+    .symbol.locked img  { 
+      filter:brightness(50%); 
+    }
 
     /* título fixo */
-    .title-container { position:absolute; top:20px; width:100%; text-align:center; z-index:200; }
-    .title-text { font-family:'Press Start 2P', cursive; color:#fff; font-size:20px; }
-
-    /* botões nav/mobile omitidos para clareza; traga seu código aqui se precisar */
-
+    .title-container { 
+      position:absolute; 
+      top:20px; 
+      width:100%; 
+      text-align:center; 
+      z-index:200; 
+    }
+    .title-text { 
+      font-family:'Press Start 2P', cursive; 
+      color:#fff; 
+      font-size:20px; 
+    }
   </style>
 </head>
 <body>
+  <!-- App Grid -->
   <div id="app">
     <div id="globe-area">
       <!-- canvas para three.js será injetado em batedores.js -->
       <canvas id="globeCanvas"></canvas>
+      <div id="globeLoading" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#0f0; font-family:'Press Start 2P'">CARREGANDO...</div>
     </div>
     <div id="flipbook-area">
       <!-- flipbook será injetado em batedores.js -->
@@ -57,13 +160,15 @@
   </div>
 
   <!-- Loading Screen -->
-  <div id="loading-screen"><div id="loading-text">CARREGANDO...</div></div>
+  <div id="loading-screen">
+    <div id="loading-text">CARREGANDO...</div>
+  </div>
 
   <!-- Overlay do Menu Rolante -->
   <div id="menu-overlay">
     <div class="symbols-wrapper">
       <div class="symbols-container">
-        <!-- copie todos os símbolos, só troque <a href> por data-world -->
+        <!-- TODOS OS MUNDOS -->
         <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
         <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
         <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
@@ -85,17 +190,17 @@
     </div>
   </div>
 
-  <!-- scripts externos -->
+  <!-- Scripts externos -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script src="batedores.js"></script>
-  <!-- Firebase/auth, modais, áudio etc. copie seu código completo aqui -->
+  <!-- Aqui você inclui os scripts extras como Firebase, autenticação, áudio, etc. -->
 
   <script>
-    // 1) Carrega canvas pixelado (starfield) se quiser, ou chame initAutomaton depois
+    // 1) Ao carregar a página
     window.addEventListener('load', () => {
       document.getElementById('loading-screen').style.display = 'none';
       setTimeout(() => {
@@ -103,7 +208,7 @@
       }, 3000);
     });
 
-    // 2) Clique em símbolo
+    // 2) Clique em um símbolo do menu
     document.querySelector('.symbols-container').addEventListener('click', e => {
       const sym = e.target.closest('.symbol');
       if (!sym) return;
@@ -112,26 +217,35 @@
     });
 
     function launchWorld(name) {
-      // fade‑out do overlay
+      // Fade‑out do menu
       const ov = document.getElementById('menu-overlay');
       ov.classList.remove('visible');
       ov.style.transition = 'opacity .5s';
       ov.style.opacity = '0';
       setTimeout(() => ov.style.display = 'none', 500);
 
-      // injeta script do mundo
+      // Injeta o script do mundo dinamicamente
       const s = document.createElement('script');
       s.src = name + '.js';
       document.body.appendChild(s);
       s.onload = () => {
-        // executa inicializadores
+        // Executa inicializadores, se existirem
         if (window.initAutomaton)      window.initAutomaton('#automatonCanvas');
         if (window.initGlobe)          window.initGlobe('#globeCanvas');
         if (window.initFlipbook)       window.initFlipbook('#flipbookContainer');
       };
     }
-  </script>
 
-  
+    // Esconde loading do globo, quando o evento é disparado
+    document.addEventListener('globoCarregado', () => {
+      $('#globeLoading').hide();
+    });
+
+    // Fecha overlay de imagem
+    document.getElementById('btnSair').addEventListener('click', e => {
+      e.preventDefault();
+      $('#overlayContainer').fadeOut(300);
+    });
+  </script>
 </body>
 </html>
