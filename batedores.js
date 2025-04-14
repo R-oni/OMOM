@@ -165,8 +165,8 @@ window.initFlipbook = function(selector) {
   // ── AQUI: aplica o tamanho das páginas ──
   // Cada página com 50% de largura e 50% de altura do flipbook
   $container.find('#flipbook .page').css({
-    width: '70%',
-    height: '70%'
+    width: '80%',
+    height: '80%'
   });
   // Garante que as imagens preencham a página
   $container.find('#flipbook .page img').css({
