@@ -97,64 +97,64 @@ window.initFlipbook = selector => {
   $c.html(`
     <div id="flipbook">
       <div class="page hard">
-        <img src="imagens/cap1/capa.webp" draggable="false">
-        <img id="setaBtn" src="imagens/seta.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/capa.webp" draggable="false">
+        <img id="setaBtn" src="mundos/ttok/imagens/seta.webp" draggable="false">
       </div>
-      <div class="page"><img src="imagens/cap1/capa2.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/contracapa.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina1.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina2.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina3.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina4.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina5.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/capa2.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/contracapa.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina1.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina2.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina3.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina4.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina5.webp" draggable="false"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina6.webp" draggable="false">
-        <img id="cliquemundo" src="imagens/cap1/cliquemundo.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina6.webp" draggable="false">
+        <img id="cliquemundo" src="mundos/ttok/imagens/cap1/cliquemundo.webp" draggable="false">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina7.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina8.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina9.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina7.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina8.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina9.webp" draggable="false"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina10.webp" draggable="false">
-        <img id="cliqueinversao" src="imagens/cap1/cliqueinversao.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina10.webp" draggable="false">
+        <img id="cliqueinversao" src="mundos/ttok/imagens/cap1/cliqueinversao.webp" draggable="false">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina11.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina11.webp" draggable="false"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina12.webp" draggable="false">
-        <img id="cliqueg" src="imagens/cap1/cliqueg.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina12.webp" draggable="false">
+        <img id="cliqueg" src="mundos/ttok/imagens/cap1/cliqueg.webp" draggable="false">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina13.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina13.webp" draggable="false"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina14.webp" draggable="false">
-        <img id="cliquerefracao" src="imagens/cap1/cliquerefracao.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina14.webp" draggable="false">
+        <img id="cliquerefracao" src="mundos/ttok/imagens/cap1/cliquerefracao.webp" draggable="false">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina15.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina16.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina15.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina16.webp" draggable="false"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina17.webp" draggable="false">
-        <img id="cliquemorse" src="imagens/cap1/cliquemorse.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina17.webp" draggable="false">
+        <img id="cliquemorse" src="mundos/ttok/imagens/cap1/cliquemorse.webp" draggable="false">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina18.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina19.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina20.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina21.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina22.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina23.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina24.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina25.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina18.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina19.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina20.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina21.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina22.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina23.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina24.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina25.webp" draggable="false"></div>
       <div class="page">
-        <img src="imagens/cap1/pagina26.webp" draggable="false">
-        <img id="cliquecapacitor" src="imagens/cap1/cliquecapacitor.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina26.webp" draggable="false">
+        <img id="cliquecapacitor" src="mundos/ttok/imagens/cap1/cliquecapacitor.webp" draggable="false">
       </div>
       <div class="page">
-        <img src="imagens/cap1/pagina27.webp" draggable="false">
-        <img id="cliquesanguedomundo" src="imagens/cap1/cliquesanguedomundo.webp" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina27.webp" draggable="false">
+        <img id="cliquesanguedomundo" src="mundos/ttok/imagens/cap1/cliquesanguedomundo.webp" draggable="false">
       </div>
-      <div class="page"><img src="imagens/cap1/pagina28.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina29.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina30.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina28.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina29.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina30.webp" draggable="false"></div>
       <div class="page"><img src="imagens/cap1/pagina31.webp" draggable="false"></div>
-      <div class="page"><img src="imagens/cap1/pagina32.webp" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina32.webp" draggable="false"></div>
     </div>
     <div id="overlayContainer">
       <img id="overlayImage" src="" draggable="false">
