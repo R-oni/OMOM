@@ -870,7 +870,12 @@
   });
 })();
   </script>
-
+ <!-- Script para remoção do indicador de carregamento do globo -->
+  <script>
+    document.addEventListener("globoCarregado", function() {
+      document.getElementById("globeLoading").style.display = "none";
+    });
+  </script>
  
 
 
