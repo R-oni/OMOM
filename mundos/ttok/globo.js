@@ -27,9 +27,10 @@ function initGlobe() {
   renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
 
   // Sky – céu de estrelas gerado por código
+  let starField;
   (function createStarField() {
     const starGeometry = new THREE.BufferGeometry();
-    const starCount = 3000;
+    const starCount = 6000;       // mais estrelas
     const positions = [];
     const colors    = [];
 
@@ -58,11 +59,11 @@ function initGlobe() {
     starGeometry.setAttribute('color',    new THREE.Float32BufferAttribute(colors,    3));
 
     const starMaterial = new THREE.PointsMaterial({
-      size: 0.7,
+      size: 0.3,               // estrelas menores
       vertexColors: true
     });
 
-    const starField = new THREE.Points(starGeometry, starMaterial);
+    starField = new THREE.Points(starGeometry, starMaterial);
     scene.add(starField);
   })();
 
@@ -178,6 +179,9 @@ function initGlobe() {
         controls.target.copy(centralSphere.position);
       }
     }
+    // Se quiser fundo fixo, cole o starField na câmera:
+    // starField.position.copy(camera.position);
+
     controls.update();
     renderer.render(scene, camera);
   })();
