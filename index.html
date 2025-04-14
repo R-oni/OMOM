@@ -190,6 +190,25 @@
     </div>
   </div>
 
+  <!-- Botão de reabrir o menu -->
+<button id="btnMenu" style="
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 999;
+  background: rgba(0,0,0,0.7);
+  color: #00FFE7;
+  border: 2px solid #00FFE7;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background .3s;
+">
+  MENU
+</button>
+
+
   <!-- Loading Screen -->
   <div id="loading-screen">
     <div id="loading-text">CARREGANDO...</div>
@@ -242,6 +261,14 @@
       const world = sym.dataset.world;
       launchWorld(world);
     });
+
+    document.getElementById('btnMenu')?.addEventListener('click', e => {
+  const ov = document.getElementById('menu-overlay');
+  ov.style.display = 'block';
+  ov.style.opacity = '1';
+  ov.classList.add('visible');
+});
+
 
     function launchWorld(name) {
       // animação de slide só para batedores
