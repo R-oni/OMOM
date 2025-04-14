@@ -43,7 +43,7 @@ window.initGlobe = selector => {
 
   const central = new THREE.Mesh(
     new THREE.SphereGeometry(1,64,64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mapatoktok.png', check) })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapatoktok.png', check) })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
