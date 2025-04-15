@@ -5,7 +5,6 @@ window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
 
-  // Variáveis para controle de carregamento de texturas
   let loaded = 0, total = 2;
   const check = () => { if (++loaded === total) document.dispatchEvent(new Event('globoCarregado')); };
 
@@ -19,37 +18,36 @@ window.initGlobe = function(selector) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-  // Criação de um céu estrelado (baseado na lógica do batedores.js)
+  // Céu estrelado
   (function(){
     const geom = new THREE.BufferGeometry();
     const pos = [], col = [];
     for (let i = 0; i < 20000; i++) {
       const R = 80, th = Math.random() * 2 * Math.PI, ph = Math.acos(Math.random() * 2 - 1);
-      const x = R * Math.sin(ph) * Math.cos(th);
-      const y = R * Math.sin(ph) * Math.sin(th);
-      const z = R * Math.cos(ph);
-      pos.push(x, y, z);
+      pos.push(
+        R * Math.sin(ph) * Math.cos(th),
+        R * Math.sin(ph) * Math.sin(th),
+        R * Math.cos(ph)
+      );
       const r = Math.random();
       col.push(
-        r < 0.9 ? 1 : 1,
-        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 0.6,
-        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 1
+        1, 
+        r < 0.95 ? 1 : 0.6,
+        r < 0.90 ? 1 : 0.6
       );
     }
     geom.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    geom.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.25, vertexColors: true });
-    scene.add(new THREE.Points(geom, mat));
+    geom.setAttribute('color',    new THREE.Float32BufferAttribute(col, 3));
+    scene.add(new THREE.Points(geom, new THREE.PointsMaterial({ size: 0.25, vertexColors: true })));
   })();
 
-  // Controles de câmera
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
 
   const loader = new THREE.TextureLoader();
 
-  // Esfera central com textura para o globo – atualize o caminho conforme seus assets
+  // Esfera central
   const central = new THREE.Mesh(
     new THREE.SphereGeometry(1, 64, 64),
     new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
@@ -57,7 +55,7 @@ window.initGlobe = function(selector) {
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
 
-  // Objeto em órbita – atualize o caminho da textura conforme necessário
+  // Objeto em órbita
   const orbitRadius = 3;
   const orbit = new THREE.Mesh(
     new THREE.SphereGeometry(0.1, 64, 64),
@@ -99,53 +97,65 @@ window.initGlobe = function(selector) {
   });
 };
 
-// 2) Inicialização do Flipbook para Veley'wey
+// 2) Inicialização do Flipbook para Veley'wey (cópia do batedores.js adaptada)
 window.initFlipbook = function(selector) {
   const $container = $(selector);
   if (!$container.length) return console.warn('Container flipbook não encontrado:', selector);
 
-  // Configura lazy‑load: remove o atributo src inicial e armazena em data-src
-  $container.find('.page').each(function(idx) {
+  // Injeta toda a estrutura do flipbook
+  $container.html(`
+    <div id="flipbook">
+      <div class="page hard">
+        <img src="mundos/veleywei/imagens/cap1/capa.webp" alt="Capa" draggable="false">
+        <img id="setaBtn" src="mundos/veleywei/imagens/seta.webp" alt="Seta" draggable="false">
+      </div>
+      <!-- repita para cada página -->
+      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina1.webp" alt="Página 1" draggable="false"></div>
+      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina2.webp" alt="Página 2" draggable="false"></div>
+      <!-- ... até a última página -->
+    </div>
+  `);
+
+  // Estilização inline das páginas (opcional)
+  $container.find('#flipbook .page').css({ width: '80%', height: '80%' });
+  $container.find('#flipbook .page img').css({ width: '100%', height: '100%', 'object-fit': 'contain' });
+
+  // Lazy‑load setup
+  $container.find('#flipbook .page').each(function(idx){
     const p = idx + 1;
     $(this).attr('data-page', p);
-    $(this).find('img').each(function() {
+    $(this).find('img').each(function(){
       const realSrc = $(this).attr('src');
       $(this).attr('data-src', realSrc).removeAttr('src');
     });
   });
-
-  // Função para pré-carregar páginas
   function preloadPages(startPage, count) {
     for (let i = startPage; i < startPage + count; i++) {
-      const pageDiv = $container.find(`.page[data-page="${i}"]`);
-      pageDiv.find('img[data-src]').each(function() {
+      const pageDiv = $container.find(`#flipbook .page[data-page="${i}"]`);
+      pageDiv.find('img[data-src]').each(function(){
         const $img = $(this);
-        if (!$img.attr('src')) {
-          $img.attr('src', $img.data('src'));
-        }
+        if (!$img.attr('src')) $img.attr('src', $img.data('src'));
       });
     }
   }
   preloadPages(1, 3);
 
-  // Áudio para virar página
-  const flipAudio = new Audio('sompagina.mp3');
+  // Áudio de virar página
+  const flipAudio = new Audio('mundos/veleywei/sompagina.mp3');
   flipAudio.preload = 'auto';
   flipAudio.volume = 0.9;
 
-  // Inicializa o turn.js (flipbook)
+  // Inicializa o turn.js
   $container.find("#flipbook").turn({
     autoCenter: false,
     display: 'double',
     when: {
-      turned: function(e, page) {
-        preloadPages(page + 1, 3);
-      }
+      turned: (e, page) => preloadPages(page + 1, 3)
     }
   });
 
-  // Ajusta o tamanho do flipbook conforme a tela
-  function resizeFlipbook() {
+  // Responsivo
+  function resizeFlipbook(){
     let newW, newH;
     if ($(window).width() < 1024) {
       newW = $(window).width() * 0.9;
@@ -159,68 +169,26 @@ window.initFlipbook = function(selector) {
   resizeFlipbook();
   $(window).on('resize', resizeFlipbook);
 
-  // Impede o drag das imagens
+  // Evita drag
   $container.find(".page img").on("dragstart", e => e.preventDefault());
 
-  // Toca áudio ao interagir com o flipbook
+  // Toca áudio no mousedown/touchstart
   $container.find("#flipbook").on("mousedown touchstart", () => {
     flipAudio.currentTime = 0;
-    flipAudio.play().catch(() => {});
+    flipAudio.play().catch(()=>{});
   });
 
-  // Remove a setinha mobile após virar a primeira página
+  // Setinha: some após virar a primeira página
   $container.find("#flipbook").bind("turning", (e, page) => {
-    if (page > 1) {
-      $container.find("#setaBtn").fadeOut(300, () => { $(this).remove(); });
-    }
+    if (page > 1) $container.find("#setaBtn").fadeOut(300, () => $("#setaBtn").remove());
   });
 
-  // Clique na setinha avança a página
+  // Clique na setinha avança página
   $container.on("click", "#setaBtn", () => $container.find("#flipbook").turn("next"));
-
-  // Handlers para os botões interativos do flipbook (contexto Veley'wey)
-  $container.on("click", "#veleyweiBtn", e => {
-    e.stopPropagation();
-    $("#overlayImage").attr("src", "imagens/corpoyeroben.png");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-  });
-  $container.on("click", "#veleyweiBtn2", e => {
-    e.stopPropagation();
-    $("#overlayImage").attr("src", "imagens/sazonalidade.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-  });
-  $container.on("click", "#veleyweiBtn3", e => {
-    e.stopPropagation();
-    $("#overlayImage").attr("src", "imagens/cliquevoreyabaron.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-  });
-  $container.on("click", "#veleyweiBtn4", e => {
-    e.stopPropagation();
-    $("#overlayImage").attr("src", "imagens/sketch1.png");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-  });
-  $container.on("click", "#veleyweiBtn5", e => {
-    e.stopPropagation();
-    $("#overlayImage").attr("src", "imagens/sketch2.png");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-  });
-  $container.on("click", "#botaosapetyr", e => {
-    e.stopPropagation();
-    $("#overlayImage").attr("src", "imagens/cap1/cliquesapetyr.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
-  });
 };
 
-// Inicialização automática (opcional)
+// 3) Auto‑inicialização quando injetado pelo SPA
 document.addEventListener("DOMContentLoaded", () => {
-  // Inicializa o globo no canvas com id "globeCanvas"
   window.initGlobe("#globeCanvas");
-  // Inicializa o flipbook dentro do container (pode ser "#flipbook-wrapper" ou outro que contenha o #flipbook)
-  window.initFlipbook("#flipbook-wrapper");
+  window.initFlipbook("#flipbookContainer");
 });
