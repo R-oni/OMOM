@@ -1,6 +1,7 @@
 // batedores.js
 
-// 1) Inicialização do Globo
+
+// Substituir a parte de inicialização do globo no batedores.js
 window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
@@ -8,7 +9,10 @@ window.initGlobe = function(selector) {
   let loaded = 0, total = 2;
   const check = () => { if (++loaded === total) document.dispatchEvent(new Event('globoCarregado')); };
 
-  const w = canvas.clientWidth, h = canvas.clientHeight;
+  // Dimensões iniciais - quadrado baseado na largura atual
+  let w = canvas.clientWidth;
+  let h = w; // Força altura igual à largura
+  
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 1000);
   camera.position.set(0, 0, 4);
@@ -17,6 +21,7 @@ window.initGlobe = function(selector) {
   renderer.setSize(w, h);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 
   // Criação de um céu estrelado
   (function(){
@@ -89,22 +94,30 @@ window.initGlobe = function(selector) {
   })();
 
 
-// Substitua o handler de resize por este
-window.addEventListener('resize', () => {
-  // Aguarda um momento para que o CSS seja aplicado
-  setTimeout(() => {
-    // Obtém as dimensões atuais do canvas
-    const newWidth = canvas.clientWidth;
-    const newHeight = canvas.clientHeight;
+  // Substitua o listener de resize por este:
+  window.addEventListener('resize', () => {
+    // Recalcula as dimensões para manter o aspecto quadrado
+    w = canvas.clientWidth;
+    h = w; // Força altura igual à largura
     
-    // Atualiza a câmera
-    camera.aspect = newWidth / newHeight;
+    // Se necessário, ajusta altura para não ultrapassar o contêiner
+    const container = canvas.parentElement;
+    const maxHeight = container.clientHeight * 0.9;
+    if (h > maxHeight) {
+      h = maxHeight;
+      w = h; // Mantém o aspecto quadrado
+    }
+    
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    
-    // Atualiza o renderer
-    renderer.setSize(newWidth, newHeight, false); // false mantém o tamanho do buffer
-  }, 100);
-});
+    renderer.setSize(w, h, false); // false preserva o buffer
+  });
+  
+  // Dispara um resize inicial para ajustar tudo
+  window.dispatchEvent(new Event('resize'));
+}
+
+
 };
 
 // 2) Inicialização do Flipbook com lazy‑load, seta mobile e botões de página
