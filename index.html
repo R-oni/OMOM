@@ -21,14 +21,6 @@
       pointer-events: none;
     }
 
-    /* canvas pixelado atrás */
-    #automatonCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-      image-rendering: pixelated;
-    }
 
     /* grid 50/50 dividindo a tela */
     #app {
@@ -67,6 +59,7 @@
       z-index: 0;
       width: 80%; height: 100%;
       margin: 0 auto;
+      margin-left: -1vh;
       display: flex; justify-content: center; align-items: center;
       position: relative; /* para menu-overlay */
     }
@@ -177,7 +170,7 @@
     #menu-title {
       display:none;
       position:absolute;
-      top:50%; left:50%;
+      top:40%; left:50%;
       transform:translate(-50%,-50%) scale(0.8);
       font-family:'Press Start 2P',cursive;
       color:#FFFFFF;
