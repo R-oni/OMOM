@@ -1,105 +1,110 @@
 // veleywei.js
 
-// 1) Inicialização do Globo com órbitas e texturas avançadas
+// 1) Inicialização do Globo
 window.initGlobe = function(selector) {
-  // Obtém o canvas e esconde até o carregamento das texturas
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
-  canvas.style.visibility = 'hidden';
 
-  // Cena e câmera
+  let loaded = 0, total = 2;
+  const check = () => { if (++loaded === total) document.dispatchEvent(new Event('globoCarregado')); };
+
+  const w = canvas.clientWidth, h = canvas.clientHeight;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
-  camera.position.z = 3;
+  const camera = new THREE.PerspectiveCamera(60, w/h, 0.1, 1000);
+  camera.position.set(0, 0, 4);
 
-  // Renderizador com sRGB e sombras
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(w, h);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.outputEncoding = THREE.sRGBEncoding;
-  resizeRenderer();
 
-  // Controles
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  // Geometria do globo
-  const geometry = new THREE.SphereGeometry(1, 64, 64);
-
-  // Carregamento de texturas
-  const loader = new THREE.TextureLoader();
-  let texturesLoaded = 0;
-  function checkLoaded() {
-    if (++texturesLoaded === 2) {
-      canvas.style.visibility = 'visible';
-      document.dispatchEvent(new Event('globoCarregado'));
+  // céu estrelado
+  (function(){
+    const geom = new THREE.BufferGeometry();
+    const pos = [], col = [];
+    for(let i=0; i<30000; i++){
+      const R=80, θ=Math.random()*2*Math.PI, φ=Math.acos(Math.random()*2-1);
+      const x=R*Math.sin(φ)*Math.cos(θ), y=R*Math.sin(φ)*Math.sin(θ), z=R*Math.cos(φ);
+      pos.push(x,y,z);
+      const r=Math.random();
+      col.push(
+        r<0.9?1:1,
+        r<0.9?1:r<0.95?0.6:0.6,
+        r<0.9?1:r<0.95?0.6:1
+      );
     }
-  }
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+    geom.setAttribute('color',    new THREE.Float32BufferAttribute(col,3));
+    scene.add(new THREE.Points(
+      geom,
+      new THREE.PointsMaterial({ size:0.08, vertexColors:true })
+    ));
+  })();
 
-  // Textura principal
-  const globeMap = loader.load(
-    './imagens/mapaveleywei.webp',
-    checkLoaded,
-    undefined,
-    err => console.error('Erro ao carregar mapaveleywei.webp', err)
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+
+  // guarda referências para destruição
+  window._Globe = window._Globe || {};
+  window._Globe.scene    = scene;
+  window._Globe.renderer = renderer;
+  window._Globe.controls = controls;
+
+  window.globeControls = controls;
+
+  const loader = new THREE.TextureLoader();
+
+  // globo principal
+  const central = new THREE.Mesh(
+    new THREE.SphereGeometry(1,64,64),
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.webp', check) })
   );
-  globeMap.encoding = THREE.sRGBEncoding;
-  globeMap.needsUpdate = true;
+  central.castShadow = central.receiveShadow = true;
+  scene.add(central);
 
-  // Mesh principal
-  const material = new THREE.MeshStandardMaterial({ map: globeMap });
-  const sphere = new THREE.Mesh(geometry, material);
-  sphere.castShadow = true;
-  sphere.receiveShadow = true;
-  scene.add(sphere);
-
-  // Camada de nuvens
-  const cloudMap = loader.load(
-    './imagens/nuvemveleywei.webp',
-    checkLoaded,
-    undefined,
-    err => console.error('Erro ao carregar nuvemveleywei.webp', err)
-  );
-  cloudMap.encoding = THREE.sRGBEncoding;
-  cloudMap.needsUpdate = true;
-
+  // camada de nuvens
   const cloudMat = new THREE.MeshPhongMaterial({
-    map: cloudMap,
+    map: loader.load('mundos/veleywei/imagens/nuvemveleywei.webp', check),
     transparent: true,
     opacity: 1,
     depthWrite: false
   });
   const cloudMesh = new THREE.Mesh(
-    new THREE.SphereGeometry(1.01, 64, 64),
+    new THREE.SphereGeometry(1.01,64,64),
     cloudMat
   );
   scene.add(cloudMesh);
 
-  // Iluminação
+  // iluminação
   scene.add(new THREE.AmbientLight(0xffffff, 0.2));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
   dir.position.set(3, 3, 5);
   dir.castShadow = true;
   scene.add(dir);
 
-  // Órbitas com 3 mini-globos
+  // pivôs e mini-globos orbitando
   const pivots = [new THREE.Object3D(), new THREE.Object3D(), new THREE.Object3D()];
   pivots.forEach(p => scene.add(p));
 
-  const miniGeo = new THREE.SphereGeometry(0.01, 32, 32);
-  const miniColors = [0xE0E0E0, 0xC0C0C0, 0xA0A0A0];
-  const distances = [1.3, 2.0, 2.5];
-  miniColors.forEach((color, i) => {
-    const mat = new THREE.MeshStandardMaterial({ color });
+  const miniGeo   = new THREE.SphereGeometry(0.01,32,32);
+  const miniCols  = [0xE0E0E0,0xC0C0C0,0xA0A0A0];
+  const distances = [1.3,2.0,2.5];
+  miniCols.forEach((col,i)=>{
+    const mat  = new THREE.MeshStandardMaterial({ color: col });
     const mini = new THREE.Mesh(miniGeo, mat);
     mini.position.x = distances[i];
     pivots[i].add(mini);
   });
 
-  // Animação
+  let angle = 0;
   const clock = new THREE.Clock();
-  function animate() {
+  function animate(){
     requestAnimationFrame(animate);
-    sphere.rotation.y += 0.003;
+    const delta = clock.getDelta();
+    central.rotation.y += 0.003;
     cloudMesh.rotation.y += 0.0039;
     pivots[0].rotation.y += 0.03;
     pivots[1].rotation.y += 0.015;
@@ -109,19 +114,12 @@ window.initGlobe = function(selector) {
   }
   animate();
 
-  // Resize
-  window.addEventListener('resize', resizeRenderer);
-  function resizeRenderer() {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    if (window.matchMedia('(orientation: landscape)').matches) {
-      camera.position.z = 2.5;
-    } else {
-      camera.position.z = 3;
-    }
+  window.addEventListener('resize', ()=>{
+    const ww = canvas.clientWidth, hh = canvas.clientHeight;
+    renderer.setSize(ww, hh);
+    camera.aspect = ww/ hh;
     camera.updateProjectionMatrix();
-  }
+  });
 };
 
 // 2) Inicialização do Flipbook com cliques customizados
@@ -129,12 +127,11 @@ window.initFlipbook = function(selector) {
   const $container = $(selector);
   if (!$container.length) return console.warn('Flipbook não encontrado:', selector);
 
-  // Injeta toda a estrutura do flipbook
   $container.html(`
     <div id="flipbook">
       <div class="page hard">
         <img src="mundos/veleywei/imagens/cap1/capa.webp" alt="Capa" draggable="false">
-        <img id="setaBtn" src="mundos/veleywei/imagens/seta.webp" alt="Seta" draggable="false">
+        <img id="setaBtn" src="mundos/veleywei/imagens/cap1/seta.webp" alt="Seta" draggable="false">
       </div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
@@ -321,4 +318,3 @@ window.initFlipbook = function(selector) {
       window.globeControls.update();
     }
   });
-};
