@@ -22,7 +22,7 @@ window.initGlobe = function(selector) {
   (function(){
     const geom = new THREE.BufferGeometry();
     const pos = [], col = [];
-    for(let i=0; i<20000; i++){
+    for(let i=0; i<30000; i++){
       const R=80, θ=Math.random()*2*Math.PI, φ=Math.acos(Math.random()*2-1);
       const x=R*Math.sin(φ)*Math.cos(θ), y=R*Math.sin(φ)*Math.sin(θ), z=R*Math.cos(φ);
       pos.push(x,y,z);
@@ -37,7 +37,7 @@ window.initGlobe = function(selector) {
     geom.setAttribute('color', new THREE.Float32BufferAttribute(col,3));
     scene.add(new THREE.Points(
       geom,
-      new THREE.PointsMaterial({ size:0.25, vertexColors:true })
+      new THREE.PointsMaterial({ size:0.13, vertexColors:true })
     ));
   })();
 
@@ -211,7 +211,7 @@ window.initFlipbook = function(selector) {
   preloadPages(1,3);
 
   // Áudio de página
-  const flipAudio = new Audio('sompagina.mp3');
+  const flipAudio = new Audio('mundos/ttok/sompagina.mp3');
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
 
   // Turn.js init
