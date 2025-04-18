@@ -23,18 +23,7 @@
       pointer-events: none;
     }
 
-    /* canvas pixelado atrás */
-    #automatonCanvas { 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      width: 100vw; 
-      height: 100vh; 
-      z-index: -1; 
-      image-rendering: pixelated; 
-    }
-
-    /* grid 40/60 com margem no topo de 20% */
+  
     #app { 
       display: grid; 
       grid-template-rows: 50% 50%; 
@@ -76,6 +65,8 @@
       width: 70vmin;
       height: 70vmin;
       margin: auto;
+        /* Adicionar para garantir aspecto quadrado */
+      aspect-ratio: 1/1;
     }
 
     /* flipbook posicionado e animável */
