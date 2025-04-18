@@ -386,9 +386,21 @@
     document.getElementById('overlayContainer')?.addEventListener('click', function(e) {
       if (e.target === this) $(this).fadeOut(300);
     });
+
+        // toca bgm só no primeiro clique em qualquer parte da página
+    (function(){
+      const bgm = document.getElementById('bgm');
+      function playOnFirstClick() {
+        bgm.volume = 0.2;            // ajuste o volume que quiser
+        bgm.play().catch(console.warn);
+        window.removeEventListener('click', playOnFirstClick);
+      }
+      window.addEventListener('click', playOnFirstClick);
+    })();
+
   
   </script>
-  <audio id="bgm" src="animus.mp3" autoplay loop></audio>
+  <audio id="bgm" src="animus.mp3" loop></audio>
 
 </body>
 </html>
