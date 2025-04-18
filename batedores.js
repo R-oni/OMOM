@@ -17,8 +17,8 @@ window.initGlobe = function(selector) {
   renderer.setSize(w, h);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
   renderer.setPixelRatio(window.devicePixelRatio);
+
   // céu estrelado
   (function(){
     const geom = new THREE.BufferGeometry();
@@ -45,6 +45,13 @@ window.initGlobe = function(selector) {
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
+
+  // guarda referências para destruição
+  window._Globe = window._Globe || {};
+  window._Globe.scene    = scene;
+  window._Globe.renderer = renderer;
+  window._Globe.controls = controls;
+
   window.globeControls = controls; // expõe controles
 
   const loader = new THREE.TextureLoader();
@@ -111,7 +118,7 @@ window.initFlipbook = function(selector) {
     <div id="flipbook">
       <div class="page hard">
         <img src="mundos/ttok/imagens/cap1/capa.webp" alt="Capa" draggable="false">
-        <img id="setaBtn" src="mundos/ttok/imagens/seta.webp" alt="Seta" draggable="false">
+        <img id="setaBtn" src="mundos/ttok/imagens/cap1/seta.webp" alt="Seta" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
