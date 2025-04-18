@@ -17,8 +17,8 @@ window.initGlobe = function(selector) {
   renderer.setSize(w, h);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
   renderer.setPixelRatio(window.devicePixelRatio);
+
   // céu estrelado
   (function(){
     const geom = new THREE.BufferGeometry();
@@ -45,6 +45,13 @@ window.initGlobe = function(selector) {
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
+
+  // guarda referências para destruição
+  window._Globe = window._Globe || {};
+  window._Globe.scene    = scene;
+  window._Globe.renderer = renderer;
+  window._Globe.controls = controls;
+
   window.globeControls = controls; // expõe controles
 
   const loader = new THREE.TextureLoader();
@@ -145,7 +152,7 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina16.webp" alt="Página 18" draggable="false"></div>
       <div class="page">
         <img src="mundos/veleywei/imagens/cap1/pagina17.webp" alt="Página 19" draggable="false">
-        <img id="cliquevitruviana" src="mundos/veleywei/imagens/cap1/cliquevitruviana.webp" alt="Clique Vitruviana" draggable="false">
+        <img id="cliquevitruviana" src="mundos/veleywei/imagens/cap1/vitruviana.webp" alt="Clique Vitruviana" draggable="false">
       </div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina18.webp" alt="Página 20" draggable="false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina19.webp" alt="Página 21" draggable="false"></div>
