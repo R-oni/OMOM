@@ -1,7 +1,6 @@
 // batedores.js
 
-
-// Substituir a parte de inicialização do globo no batedores.js
+// 1) Inicialização do Globo
 window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
@@ -9,19 +8,15 @@ window.initGlobe = function(selector) {
   let loaded = 0, total = 2;
   const check = () => { if (++loaded === total) document.dispatchEvent(new Event('globoCarregado')); };
 
-  // Dimensões iniciais - quadrado baseado na largura atual
-  let w = canvas.clientWidth;
-  let h = w; // Força altura igual à largura
-  
+  const w = canvas.clientWidth, h = canvas.clientHeight;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(60, w/h, 0.1, 1000);
   camera.position.set(0, 0, 4);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(w, h);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
 
   // Criação de um céu estrelado
   (function(){
@@ -93,31 +88,12 @@ window.initGlobe = function(selector) {
     renderer.render(scene, camera);
   })();
 
-
-  // Substitua o listener de resize por este:
   window.addEventListener('resize', () => {
-    // Recalcula as dimensões para manter o aspecto quadrado
-    w = canvas.clientWidth;
-    h = w; // Força altura igual à largura
-    
-    // Se necessário, ajusta altura para não ultrapassar o contêiner
-    const container = canvas.parentElement;
-    const maxHeight = container.clientHeight * 0.9;
-    if (h > maxHeight) {
-      h = maxHeight;
-      w = h; // Mantém o aspecto quadrado
-    }
-    
-    camera.aspect = w / h;
+    const ww = canvas.clientWidth, hh = canvas.clientHeight;
+    renderer.setSize(ww, hh);
+    camera.aspect = ww / hh;
     camera.updateProjectionMatrix();
-    renderer.setSize(w, h, false); // false preserva o buffer
   });
-  
-  // Dispara um resize inicial para ajustar tudo
-  window.dispatchEvent(new Event('resize'));
-}
-
-
 };
 
 // 2) Inicialização do Flipbook com lazy‑load, seta mobile e botões de página
