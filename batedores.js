@@ -73,6 +73,11 @@ window.initGlobe = function(selector) {
 
   let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
+  
+  // Armazena o modo de tracking atual
+  window.myGlobe = {
+    trackingMode: "central"
+  };
 
   (function animate(){
     requestAnimationFrame(animate);
@@ -166,11 +171,29 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
+  // Configuração dos estilos para as imagens clicáveis
+  // Importante: adiciona CSS específico para as imagens clicáveis sobrepostas
+  // Posicionamento e animação das imagens clicáveis
+  $container.find('#cliquemundo, #cliqueinversao, #cliqueg, #cliquerefracao, #cliquemorse, #cliquecapacitor, #cliquesanguedomundo').css({
+    position: 'absolute',
+    cursor: 'pointer',
+    bottom: '0',
+    right: '0',
+    width: '100%',
+    height: '100%',
+    zIndex: '10',
+    left: '0',
+    top: '0',
+    animation: 'fadeInOut 0.7s infinite'
+  });
+
   // Ajuste de tamanho das páginas
   $container.find('#flipbook .page').css({
     width: '80%',
-    height: '80%'
+    height: '80%',
+    position: 'relative'  // Importante para posicionamento absoluto dos elementos filhos
   });
+  
   $container.find('#flipbook .page img').css({
     width: '100%',
     height: '100%',
@@ -186,6 +209,7 @@ window.initFlipbook = function(selector) {
       $(this).attr('data-src', realSrc).removeAttr('src');
     });
   });
+  
   function preloadPages(startPage, count) {
     for (let i = startPage; i < startPage + count; i++) {
       const pageDiv = $container.find(`#flipbook .page[data-page="${i}"]`);
@@ -209,60 +233,174 @@ window.initFlipbook = function(selector) {
     autoCenter: false,
     display: 'double',
     when: {
-      turned: function(e, page) {
-        preloadPages(page + 1, 3);
+      turning: function(event, page, pageObject) {
+        flipAudio.currentTime = 0;
+        flipAudio.play().catch(e => console.log('Áudio bloqueado:', e));
+        
+        // Precarrega as próximas páginas para evitar delay
+        preloadPages(page, 4);
       }
     }
   });
 
-  // Responsivo
-  function resizeFlipbook(){
-    let newW, newH;
-    if ($(window).width() < 1024) {
-      newW = $(window).width() * 0.9;
-      newH = newW * (450/600);
-    } else {
-      newW = $container.width();
-      newH = $container.height();
+  // Configuração do botão de seta para virar página
+  $("#setaBtn").on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $("#flipbook").turn('next');
+  });
+
+  // Configuração das imagens clicáveis para abrir overlays
+  $("#cliquemundo").on('click', function() {
+    $('#overlayImage').attr('src', 'mundos/ttok/imagens/cap1/overlays/mundo.webp');
+    $('#overlayContainer').fadeIn(300);
+  });
+
+  $("#cliqueinversao").on('click', function() {
+    $('#overlayImage').attr('src', 'mundos/ttok/imagens/cap1/overlays/inversao.webp');
+    $('#overlayContainer').fadeIn(300);
+  });
+
+  $("#cliqueg").on('click', function() {
+    $('#overlayImage').attr('src', 'mundos/ttok/imagens/cap1/overlays/g.webp');
+    $('#overlayContainer').fadeIn(300);
+  });
+
+  $("#cliquerefracao").on('click', function() {
+    $('#overlayImage').attr('src', 'mundos/ttok/imagens/cap1/overlays/refracao.webp');
+    $('#overlayContainer').fadeIn(300);
+  });
+
+  $("#cliquemorse").on('click', function() {
+    $('#overlayImage').attr('src', 'mundos/ttok/imagens/cap1/overlays/morse.webp');
+    $('#overlayContainer').fadeIn(300);
+  });
+
+  $("#cliquecapacitor").on('click', function() {
+    $('#overlayImage').attr('src', 'mundos/ttok/imagens/cap1/overlays/capacitor.webp');
+    $('#overlayContainer').fadeIn(300);
+  });
+
+  $("#cliquesanguedomundo").on('click', function() {
+    $('#overlayImage').attr('src', 'mundos/ttok/imagens/cap1/overlays/sanguedomundo.webp');
+    $('#overlayContainer').fadeIn(300);
+  });
+
+  // Responsividade
+  $(window).on('resize', function() {
+    $("#flipbook").turn('size', $container.width(), $container.height());
+  });
+};
+
+// 3) Inicialização do autômato celular (fundo pixelado)
+window.initAutomaton = function(selector) {
+  const canvas = document.querySelector(selector);
+  if (!canvas) return console.warn('Canvas autômato não encontrado:', selector);
+
+  const ctx = canvas.getContext('2d');
+  
+  // Configurações do autômato celular
+  const cellSize = 8;
+  const cols = Math.ceil(window.innerWidth / cellSize);
+  const rows = Math.ceil(window.innerHeight / cellSize);
+  let grid = createGrid(cols, rows);
+  
+  // Ajusta o tamanho do canvas
+  canvas.width = cols * cellSize;
+  canvas.height = rows * cellSize;
+  
+  // Cria o grid inicial
+  function createGrid(cols, rows) {
+    const arr = new Array(cols);
+    for (let i = 0; i < cols; i++) {
+      arr[i] = new Array(rows);
+      for (let j = 0; j < rows; j++) {
+        arr[i][j] = Math.random() < 0.08 ? 1 : 0; // Inicialização esparsa
+      }
     }
-    $("#flipbook").turn("size", newW, newH);
+    return arr;
   }
-  resizeFlipbook();
-  $(window).on('resize', resizeFlipbook);
-
-  // Evita drag
-  $(".page img").on("dragstart", e => e.preventDefault());
-
-  // Toca áudio no mousedown
-  $("#flipbook").on("mousedown touchstart", () => {
-    flipAudio.currentTime = 0;
-    flipAudio.play().catch(()=>{});
-  });
-
-  // Setinha mobile: some após virar a primeira página
-  $("#flipbook").bind("turning", (e, page) => {
-    if (page > 1) {
-      $("#setaBtn").fadeOut(300, () => $("#setaBtn").remove());
+  
+  // Calcula a próxima geração do autômato
+  function computeNextGen(grid) {
+    const nextGen = createGrid(cols, rows);
+    
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        // Contagem de vizinhos vivos (regra de Moore)
+        let neighbors = 0;
+        for (let i = -1; i <= 1; i++) {
+          for (let j = -1; j <= 1; j++) {
+            if (i === 0 && j === 0) continue;
+            const col = (x + i + cols) % cols;
+            const row = (y + j + rows) % rows;
+            neighbors += grid[col][row];
+          }
+        }
+        
+        // Regras do Jogo da Vida de Conway
+        if (grid[x][y] === 1) {
+          if (neighbors < 2 || neighbors > 3) {
+            nextGen[x][y] = 0; // Morte: solidão ou superpopulação
+          } else {
+            nextGen[x][y] = 1; // Sobrevive
+          }
+        } else {
+          if (neighbors === 3) {
+            nextGen[x][y] = 1; // Nascimento
+          } else {
+            nextGen[x][y] = 0; // Continua morto
+          }
+        }
+      }
     }
-  });
-  // Clique na setinha avança página
-  $container.on("click", "#setaBtn", () => $("#flipbook").turn("next"));
-
-  // Botões de página (apenas visuais; implemente comportamento aqui)
-  const pageButtons = [
-    "cliquemundo",
-    "cliqueinversao",
-    "cliqueg",
-    "cliquerefracao",
-    "cliquemorse",
-    "cliquecapacitor",
-    "cliquesanguedomundo"
-  ];
-  pageButtons.forEach(id => {
-    $container.on("click", `#${id}`, e => {
-      e.stopPropagation();
-      // Aqui você pode chamar sua função, ex:
-      // console.log("Botão", id, "clicado");
-    });
+    
+    return nextGen;
+  }
+  
+  // Renderiza o grid
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        if (grid[x][y] === 1) {
+          // Células vivas em azul ciano com brilho
+          ctx.fillStyle = 'rgba(0, 255, 231, 0.7)';
+          ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+          
+          // Brilho interno
+          ctx.fillStyle = 'rgba(0, 255, 255, 0.9)';
+          ctx.fillRect(
+            x * cellSize + cellSize/4, 
+            y * cellSize + cellSize/4, 
+            cellSize/2, 
+            cellSize/2
+          );
+        }
+      }
+    }
+  }
+  
+  // Loop de animação
+  let frameCount = 0;
+  function animate() {
+    frameCount++;
+    
+    if (frameCount % 5 === 0) { // Atualiza a cada 5 frames para deixar mais lento
+      grid = computeNextGen(grid);
+    }
+    
+    render();
+    requestAnimationFrame(animate);
+  }
+  
+  // Inicia a animação
+  animate();
+  
+  // Responsividade
+  window.addEventListener('resize', function() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   });
 };
