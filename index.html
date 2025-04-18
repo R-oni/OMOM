@@ -13,7 +13,7 @@
     /* painel sobre o globo e abaixo do flipbook */
     #painel {
       position: fixed;
-      top: 0 !important;
+      top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
@@ -23,6 +23,16 @@
       pointer-events: none;
     }
 
+    /* canvas pixelado atrás */
+    #automatonCanvas { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      z-index: -1; 
+      image-rendering: pixelated; 
+    }
 
     /* grid 50/50 dividindo a tela */
     #app { 
@@ -151,7 +161,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 80%;
+      width: 100%;
       height: 50%;
       backdrop-filter: blur(6px);
       display: none;
