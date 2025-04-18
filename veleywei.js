@@ -1,4 +1,4 @@
-// veleywei.js
+// batedores.js
 
 // 1) Inicialização do Globo
 window.initGlobe = function(selector) {
@@ -117,58 +117,64 @@ window.initFlipbook = function(selector) {
   $container.html(`
     <div id="flipbook">
       <div class="page hard">
-        <img src="mundos/veleywei/imagens/cap1/capa.webp" alt="Capa" draggable="false">
-        <img id="setaBtn" src="mundos/veleywei/imagens/seta.webp" alt="Seta" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/capa.webp" alt="Capa" draggable="false">
+        <img id="setaBtn" src="mundos/ttok/imagens/cap1/seta.webp" alt="Seta" draggable="false">
       </div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina1.webp" alt="Página 3" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina2.webp" alt="Página 4" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina3.webp" alt="Página 5" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina4.webp" alt="Página 6" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina5.webp" alt="Página 7" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina1.webp" alt="Página 3" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina2.webp" alt="Página 4" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina3.webp" alt="Página 5" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina4.webp" alt="Página 6" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina5.webp" alt="Página 7" draggable="false"></div>
       <div class="page">
-        <img src="mundos/veleywei/imagens/cap1/pagina6.webp" alt="Página 8" draggable="false">
-        <img id="cliqueyeroben" src="mundos/veleywei/imagens/cap1/cliqueyeroben.webp" alt="Clique Yeroben" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina6.webp" alt="Página 8" draggable="false">
+        <img id="cliquemundo" src="mundos/ttok/imagens/cap1/cliquemundo.webp" alt="Clique Mundo" draggable="false">
       </div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina7.webp" alt="Página 9" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina8.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina7.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina8.webp" alt="Página 10" draggable="false"></div>
       <div class="page">
-        <img src="mundos/veleywei/imagens/cap1/pagina9.webp" alt="Página 11" draggable="false">
-        <img id="cliquevoreyabaron" src="mundos/veleywei/imagens/cap1/cliquevoreyabaron.webp" alt="Clique Voreyabaron" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina9.webp" alt="Página 11" draggable="false">
+        <img id="cliqueinversao" src="mundos/ttok/imagens/cap1/cliqueinversao.webp" alt="Clique Inversão" draggable="false">
       </div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina10.webp" alt="Página 12" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina10.webp" alt="Página 12" draggable="false"></div>
       <div class="page">
-        <img src="mundos/veleywei/imagens/cap1/pagina11.webp" alt="Página 13" draggable="false">
-        <img id="cliquesazonalidade" src="mundos/veleywei/imagens/cap1/cliquesazonalidade.webp" alt="Clique Sazonalidade" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina11.webp" alt="Página 13" draggable="false">
+        <img id="cliqueg" src="mundos/ttok/imagens/cap1/cliqueg.webp" alt="Clique G" draggable="false">
       </div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina12.webp" alt="Página 14" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina13.webp" alt="Página 15" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina12.webp" alt="Página 14" draggable="false"></div>
       <div class="page">
-        <img src="mundos/veleywei/imagens/cap1/pagina14.webp" alt="Página 16" draggable="false">
-        <img id="cliquepartenogenese" src="mundos/veleywei/imagens/cap1/cliquepartenogenese.webp" alt="Clique Partenogênese" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina13.webp" alt="Página 15" draggable="false">
+        <img id="cliquerefracao" src="mundos/ttok/imagens/cap1/cliquerefracao.webp" alt="Clique Refracão" draggable="false">
       </div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina15.webp" alt="Página 17" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina16.webp" alt="Página 18" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina14.webp" alt="Página 16" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina15.webp" alt="Página 17" draggable="false"></div>
       <div class="page">
-        <img src="mundos/veleywei/imagens/cap1/pagina17.webp" alt="Página 19" draggable="false">
-        <img id="cliquevitruviana" src="mundos/veleywei/imagens/cap1/vitruviana.webp" alt="Clique Vitruviana" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina16.webp" alt="Página 18" draggable="false">
+        <img id="cliquemorse" src="mundos/ttok/imagens/cap1/cliquemorse.webp" alt="Clique Morse" draggable="false">
       </div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina18.webp" alt="Página 20" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina19.webp" alt="Página 21" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina20.webp" alt="Página 22" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina21.webp" alt="Página 23" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina22.webp" alt="Página 24" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina23.webp" alt="Página 25" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina24.webp" alt="Página 26" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina25.webp" alt="Página 27" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina26.webp" alt="Página 28" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina17.webp" alt="Página 19" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina18.webp" alt="Página 20" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina19.webp" alt="Página 21" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina20.webp" alt="Página 22" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina21.webp" alt="Página 23" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina22.webp" alt="Página 24" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina23.webp" alt="Página 25" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina24.webp" alt="Página 26" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina25.webp" alt="Página 27" draggable="false"></div>
       <div class="page">
-        <img src="mundos/veleywei/imagens/cap1/pagina27.webp" alt="Página 29" draggable="false">
-        <img id="cliquesapetyr" src="mundos/veleywei/imagens/cap1/cliquesapetyr.webp" alt="Clique Sapetyr" draggable="false">
+        <img src="mundos/ttok/imagens/cap1/pagina26.webp" alt="Página 28" draggable="false">
+        <img id="cliquecapacitor" src="mundos/ttok/imagens/cap1/cliquecapacitor.webp" alt="Clique Capacitor" draggable="false">
       </div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina28.webp" alt="Página 30" draggable="false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina29.webp" alt="Página 31" draggable="false"></div>
+      <div class="page">
+        <img src="mundos/ttok/imagens/cap1/pagina27.webp" alt="Página 29" draggable="false">
+        <img id="cliquesanguedomundo" src="mundos/ttok/imagens/cap1/cliquesanguedomundo.webp" alt="Clique Sangue do Mundo" draggable="false">
+      </div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina28.webp" alt="Página 30" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina29.webp" alt="Página 31" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina30.webp" alt="Página 32" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina31.webp" alt="Página 33" draggable="false"></div>
+      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina32.webp" alt="Página 34" draggable="false"></div>
     </div>
   `);
 
@@ -213,7 +219,7 @@ window.initFlipbook = function(selector) {
   preloadPages(1,3);
 
   // Áudio de página
-  const flipAudio = new Audio('mundos/veleywei/sompagina.mp3');
+  const flipAudio = new Audio('mundos/ttok/sompagina.mp3');
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
 
   // Turn.js init
@@ -246,8 +252,8 @@ window.initFlipbook = function(selector) {
   });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Clique Yeroben: tracking do satélite
-  const focoYeroben = function(){
+  // Clique Mundo: tracking do satélite
+  const focoMundo = function(){
     window.trackOrbit = true;
     if(window.globeControls && window.globeOrbit){
       window.globeControls.target.copy(window.globeOrbit.position);
@@ -255,12 +261,12 @@ window.initFlipbook = function(selector) {
     }
   };
 
-  // Clique Sapetyr: substitui o globo pela imagem
-  const trocaSapetyr = function(){
-    if (!$('#sapetyrGloboImage').length) {
+  // Clique Sangue do Mundo: substitui o globo pela imagem
+  const trocaSangue = function(){
+    if (!$('#sangueGloboImage').length) {
       $('<img>',{
-        id: 'sapetyrGloboImage',
-        src: 'mundos/veleywei/imagens/cap1/sapetyr.png',
+        id: 'sangueGloboImage',
+        src: 'mundos/ttok/imagens/cap1/sanguedomundo.png',
         css: { width: '100%', height: '100%', objectFit: 'contain' }
       }).appendTo('#globe-area');
     }
@@ -268,37 +274,42 @@ window.initFlipbook = function(selector) {
   };
 
   // Mapeia handlers
-  const map = { cliqueyeroben: focoYeroben, cliquesapetyr: trocaSapetyr };
+  const map = { cliquemundo: focoMundo, cliquesanguedomundo: trocaSangue };
   Object.keys(map).forEach(id=>{
     $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
   });
 
   // Overlays centrais
-  $container.on('click','#cliquevoreyabaron', e=>{
+  $container.on('click','#cliqueinversao', e=>{
     e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/voreyabaron.webp');
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/inversao.webp');
     $('#overlayContainer').fadeIn(500);
   });
-  $container.on('click','#cliquesazonalidade', e=>{
+  $container.on('click','#cliqueg', e=>{
     e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/sazonalidade.webp');
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/estrelag.webp');
     $('#overlayContainer').fadeIn(500);
   });
-  $container.on('click','#cliquepartenogenese', e=>{
+  $container.on('click','#cliquerefracao', e=>{
     e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/partenogenese.webp');
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/refracao.webp');
     $('#overlayContainer').fadeIn(500);
   });
-  $container.on('click','#cliquevitruviana', e=>{
+  $container.on('click','#cliquemorse', e=>{
     e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/vitruviana.webp');
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/morse.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquecapacitor', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/capacitor.webp');
     $('#overlayContainer').fadeIn(500);
   });
 
   // Ao virar página, reseta globo, canvas e overlays
   $('#flipbook').bind('turning', ()=>{
     $('#globeCanvas').show();
-    $('#sapetyrGloboImage').remove();
+    $('#sangueGloboImage').remove();
     window.trackOrbit = false;
     if(window.globeControls){
       window.globeControls.target.set(0,0,0);
