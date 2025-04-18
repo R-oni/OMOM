@@ -88,13 +88,14 @@ window.initGlobe = function(selector) {
     renderer.render(scene, camera);
   })();
 
-  window.addEventListener('resize', () => {
-    const newWidth = container.clientWidth;
-    const newHeight = container.clientHeight;
-    camera.aspect = newWidth / newHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(newWidth, newHeight);
-  });
+
+    window.addEventListener('resize', () => {
+      const newWidth = canvas.clientWidth;
+      const newHeight = canvas.clientHeight;
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newWidth, newHeight);
+    });
 };
 
 // 2) Inicialização do Flipbook com lazy‑load, seta mobile e botões de página
