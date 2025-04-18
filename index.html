@@ -391,7 +391,7 @@
     (function(){
       const bgm = document.getElementById('bgm');
       function playOnFirstClick() {
-        bgm.volume = 0.2;            // ajuste o volume que quiser
+        bgm.volume = 1.0;            // ajuste o volume que quiser
         bgm.play().catch(console.warn);
         window.removeEventListener('click', playOnFirstClick);
       }
