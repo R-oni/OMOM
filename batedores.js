@@ -22,7 +22,7 @@ window.initGlobe = function(selector) {
   (function(){
     const geom = new THREE.BufferGeometry();
     const pos = [], col = [];
-    for(let i=0;i<20000;i++){
+    for(let i=0; i<20000; i++){
       const R=80, θ=Math.random()*2*Math.PI, φ=Math.acos(Math.random()*2-1);
       const x=R*Math.sin(φ)*Math.cos(θ), y=R*Math.sin(φ)*Math.sin(θ), z=R*Math.cos(φ);
       pos.push(x,y,z);
@@ -44,7 +44,7 @@ window.initGlobe = function(selector) {
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
-  window.globeControls = controls; // expondo para fora
+  window.globeControls = controls; // expõe controles
 
   const loader = new THREE.TextureLoader();
   const central = new THREE.Mesh(
@@ -60,13 +60,13 @@ window.initGlobe = function(selector) {
     new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapattok.png', check) })
   );
   orbit.castShadow = orbit.receiveShadow = true;
-  orbit.position.set(orbitRadius,0,0);
+  orbit.position.set(orbitRadius, 0, 0);
   scene.add(orbit);
-  window.globeOrbit = orbit; // expondo para fora
+  window.globeOrbit = orbit; // expõe satélite
 
-  scene.add(new THREE.AmbientLight(0xffffff,0.2));
-  const dir = new THREE.DirectionalLight(0xffffff,1);
-  dir.position.set(3,3,5);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+  const dir = new THREE.DirectionalLight(0xffffff, 1);
+  dir.position.set(3, 3, 5);
   dir.castShadow = true;
   scene.add(dir);
 
@@ -85,7 +85,7 @@ window.initGlobe = function(selector) {
       orbitRadius * Math.sin(angle)
     );
     controls.update();
-    if(window.trackOrbit){
+    if(window.trackOrbit) {
       controls.target.copy(orbit.position);
       controls.update();
     }
@@ -95,7 +95,7 @@ window.initGlobe = function(selector) {
   window.addEventListener('resize', ()=>{
     const ww = canvas.clientWidth, hh = canvas.clientHeight;
     renderer.setSize(ww, hh);
-    camera.aspect = ww/hh;
+    camera.aspect = ww / hh;
     camera.updateProjectionMatrix();
   });
 };
@@ -170,16 +170,25 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
+  // CSS do overlay centralizado
+  $('#overlayContainer').css({
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    'z-index': 9999,
+    display: 'none'
+  });
+  $('#overlayImage').css({
+    'max-width': '90vw',
+    'max-height': '90vh',
+    width: 'auto',
+    height: 'auto'
+  });
+
   // Ajuste de tamanho das páginas
-  $container.find('#flipbook .page').css({
-    width: '80%',
-    height: '80%'
-  });
-  $container.find('#flipbook .page img').css({
-    width: '100%',
-    height: '100%',
-    objectFit: 'contain'
-  });
+  $container.find('#flipbook .page').css({ width: '80%', height: '80%' });
+  $container.find('#flipbook .page img').css({ width: '100%', height: '100%', objectFit: 'contain' });
 
   // Lazy‑load
   $container.find('#flipbook .page').each(function(idx){
@@ -203,49 +212,39 @@ window.initFlipbook = function(selector) {
 
   // Áudio de página
   const flipAudio = new Audio('sompagina.mp3');
-  flipAudio.preload = 'auto';
-  flipAudio.volume = 0.9;
+  flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
 
-  // Turn.js
-  $("#flipbook").turn({
-    autoCenter: false,
-    display: 'double',
-    when: {
-      turned: (_, page) => preloadPages(page+1,3)
-    }
-  });
+  // Turn.js init
+  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turned: (_, page)=> preloadPages(page+1,3) } });
 
   // Responsivo
   function resizeFB(){
     let w, h;
-    if ($(window).width()<1024){
-      w = $(window).width()*0.9;
-      h = w*(450/600);
+    if ($(window).width() < 1024) {
+      w = $(window).width() * 0.9;
+      h = w * (450/600);
     } else {
-      w = $container.width();
-      h = $container.height();
+      w = $container.width(); h = $container.height();
     }
-    $("#flipbook").turn("size", w, h);
+    $('#flipbook').turn('size', w, h);
   }
-  resizeFB();
-  $(window).on('resize', resizeFB);
+  resizeFB(); $(window).on('resize', resizeFB);
 
   // Evita drag
-  $(".page img").on("dragstart", e=>e.preventDefault());
+  $('.page img').on('dragstart', e=>e.preventDefault());
 
   // Som no mousedown
-  $("#flipbook").on("mousedown touchstart", ()=>{
-    flipAudio.currentTime = 0;
-    flipAudio.play().catch(()=>{});
+  $('#flipbook').on('mousedown touchstart', ()=>{
+    flipAudio.currentTime = 0; flipAudio.play().catch(()=>{});
   });
 
   // Oculta seta ao virar
-  $("#flipbook").bind("turning", (e, page)=>{
-    if (page>1) $("#setaBtn").fadeOut(300, ()=>$("#setaBtn").remove());
+  $('#flipbook').bind('turning', (e, page)=>{
+    if (page>1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove());
   });
-  $container.on("click","#setaBtn", ()=>$("#flipbook").turn("next"));
+  $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Handlers customizados
+  // Clique Mundo: tracking do satélite
   const focoMundo = function(){
     window.trackOrbit = true;
     if(window.globeControls && window.globeOrbit){
@@ -253,65 +252,60 @@ window.initFlipbook = function(selector) {
       window.globeControls.update();
     }
   };
+
+  // Clique Sangue do Mundo: substitui o globo pela imagem
   const trocaSangue = function(){
-    $('#globe-area').hide();
-    if (!$('#sangueGloboImage').length){
+    if (!$('#sangueGloboImage').length) {
       $('<img>',{
         id: 'sangueGloboImage',
         src: 'mundos/ttok/imagens/cap1/sanguedomundo.png',
-        css: { width:'100%', height:'100%', objectFit:'contain' }
+        css: { width: '100%', height: '100%', objectFit: 'contain' }
       }).appendTo('#globe-area');
     }
+    $('#globeCanvas').hide();
   };
 
-  const map = {
-    cliquemundo: focoMundo,
-    cliquesanguedomundo: trocaSangue
-  };
+  // Mapeia handlers
+  const map = { cliquemundo: focoMundo, cliquesanguedomundo: trocaSangue };
   Object.keys(map).forEach(id=>{
-    $container.on('click', '#'+id, function(e){
-      e.stopPropagation();
-      map[id].call(this);
-    });
+    $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
   });
 
-  // Overlay handlers
-  $container.on("click", "#cliqueinversao", function(e){
+  // Overlays centrais
+  $container.on('click','#cliqueinversao', e=>{
     e.stopPropagation();
-    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/inversao.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/inversao.webp');
+    $('#overlayContainer').fadeIn(500);
   });
-  $container.on("click", "#cliqueg", function(e){
+  $container.on('click','#cliqueg', e=>{
     e.stopPropagation();
-    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/estrelag.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/estrelag.webp');
+    $('#overlayContainer').fadeIn(500);
   });
-  $container.on("click", "#cliquerefracao", function(e){
+  $container.on('click','#cliquerefracao', e=>{
     e.stopPropagation();
-    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/refracao.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/refracao.webp');
+    $('#overlayContainer').fadeIn(500);
   });
-  $container.on("click", "#cliquemorse", function(e){
+  $container.on('click','#cliquemorse', e=>{
     e.stopPropagation();
-    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/morse.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/morse.webp');
+    $('#overlayContainer').fadeIn(500);
   });
-  $container.on("click", "#cliquecapacitor", function(e){
+  $container.on('click','#cliquecapacitor', e=>{
     e.stopPropagation();
-    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/capacitor.webp");
-    $("#overlayContainer").fadeIn(500);
-    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/capacitor.webp');
+    $('#overlayContainer').fadeIn(500);
   });
 
-  // Ao virar página, reseta globo e overlay
-  $("#flipbook").bind("turning", ()=>{
-    $('#globe-area').show();
+  // Ao virar página, reseta globo, canvas e overlays
+  $('#flipbook').bind('turning', ()=>{
+    $('#globeCanvas').show();
     $('#sangueGloboImage').remove();
-    $('#globeCanvas').css('transform','');
     window.trackOrbit = false;
+    if(window.globeControls){
+      window.globeControls.target.set(0,0,0);
+      window.globeControls.update();
+    }
   });
 };
