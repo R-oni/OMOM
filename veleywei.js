@@ -99,14 +99,11 @@ window.initGlobe = function(selector) {
   const clock = new THREE.Clock();
   function animate() {
     requestAnimationFrame(animate);
-    const delta = clock.getDelta();
-
     sphere.rotation.y += 0.003;
     cloudMesh.rotation.y += 0.0039;
     pivots[0].rotation.y += 0.03;
     pivots[1].rotation.y += 0.015;
     pivots[2].rotation.y += 0.01;
-
     controls.update();
     renderer.render(scene, camera);
   }
@@ -127,11 +124,12 @@ window.initGlobe = function(selector) {
   }
 };
 
-// 2) Inicialização do Flipbook com cliques customizados (idem ao original)
+// 2) Inicialização do Flipbook com cliques customizados
 window.initFlipbook = function(selector) {
   const $container = $(selector);
   if (!$container.length) return console.warn('Flipbook não encontrado:', selector);
 
+  // Injeta toda a estrutura do flipbook
   $container.html(`
     <div id="flipbook">
       <div class="page hard">
@@ -190,5 +188,137 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
-  // ... (o restante do initFlipbook: CSS overlay, lazy-load, áudio, Turn.js, handlers) ...
+  // CSS do overlay centralizado
+  $('#overlayContainer').css({
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    'z-index': 9999,
+    display: 'none'
+  });
+  $('#overlayImage').css({
+    'max-width': '90vw',
+    'max-height': '90vh',
+    width: 'auto',
+    height: 'auto'
+  });
+
+  // Ajuste de tamanho das páginas
+  $container.find('#flipbook .page').css({ width: '80%', height: '80%' });
+  $container.find('#flipbook .page img').css({ width: '100%', height: '100%', objectFit: 'contain' });
+
+  // Lazy‑load
+  $container.find('#flipbook .page').each(function(idx){
+    const p = idx + 1;
+    $(this).attr('data-page', p);
+    $(this).find('img').each(function(){
+      const realSrc = $(this).attr('src');
+      $(this).attr('data-src', realSrc).removeAttr('src');
+    });
+  });
+  function preloadPages(start, count) {
+    for (let i = start; i < start + count; i++){
+      const pg = $container.find(`#flipbook .page[data-page="${i}"]`);
+      pg.find('img[data-src]').each(function(){
+        const $img = $(this);
+        if (!$img.attr('src')) $img.attr('src', $img.data('src'));
+      });
+    }
+  }
+  preloadPages(1,3);
+
+  // Áudio de página
+  const flipAudio = new Audio('mundos/veleywei/sompagina.mp3');
+  flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
+
+  // Turn.js init
+  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turned: (_, page)=> preloadPages(page+1,3) } });
+
+  // Responsivo
+  function resizeFB(){
+    let w, h;
+    if ($(window).width() < 1024) {
+      w = $(window).width() * 0.9;
+      h = w * (450/600);
+    } else {
+      w = $container.width(); h = $container.height();
+    }
+    $('#flipbook').turn('size', w, h);
+  }
+  resizeFB(); $(window).on('resize', resizeFB);
+
+  // Evita drag
+  $('.page img').on('dragstart', e=>e.preventDefault());
+
+  // Som no mousedown
+  $('#flipbook').on('mousedown touchstart', ()=>{
+    flipAudio.currentTime = 0; flipAudio.play().catch(()=>{});
+  });
+
+  // Oculta seta ao virar
+  $('#flipbook').bind('turning', (e, page)=>{
+    if (page>1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove());
+  });
+  $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
+
+  // Clique Yeroben: tracking do satélite
+  const focoYeroben = function(){
+    window.trackOrbit = true;
+    if(window.globeControls && window.globeOrbit){
+      window.globeControls.target.copy(window.globeOrbit.position);
+      window.globeControls.update();
+    }
+  };
+
+  // Clique Sapetyr: substitui o globo pela imagem
+  const trocaSapetyr = function(){
+    if (!$('#sapetyrGloboImage').length) {
+      $('<img>',{
+        id: 'sapetyrGloboImage',
+        src: 'mundos/veleywei/imagens/cap1/sapetyr.png',
+        css: { width: '100%', height: '100%', objectFit: 'contain' }
+      }).appendTo('#globe-area');
+    }
+    $('#globeCanvas').hide();
+  };
+
+  // Mapeia handlers
+  const map = { cliqueyeroben: focoYeroben, cliquesapetyr: trocaSapetyr };
+  Object.keys(map).forEach(id=>{
+    $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
+  });
+
+  // Overlays centrais
+  $container.on('click','#cliquevoreyabaron', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/voreyabaron.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquesazonalidade', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/sazonalidade.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquepartenogenese', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/partenogenese.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquevitruviana', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/vitruviana.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+
+  // Ao virar página, reseta globo, canvas e overlays
+  $('#flipbook').bind('turning', ()=>{
+    $('#globeCanvas').show();
+    $('#sapetyrGloboImage').remove();
+    window.trackOrbit = false;
+    if(window.globeControls){
+      window.globeControls.target.set(0,0,0);
+      window.globeControls.update();
+    }
+  });
 };
