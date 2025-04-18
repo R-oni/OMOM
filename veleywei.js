@@ -50,7 +50,7 @@ window.initGlobe = function(selector) {
   const loader = new THREE.TextureLoader();
   const central = new THREE.Mesh(
     new THREE.SphereGeometry(1,64,64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/mapaveleywei.png', check) })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
@@ -58,7 +58,7 @@ window.initGlobe = function(selector) {
   const orbitRadius = 3;
   const orbit = new THREE.Mesh(
     new THREE.SphereGeometry(0.1,64,64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/mapaveleywei.png', check) })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
   orbit.castShadow = orbit.receiveShadow = true;
   orbit.position.set(orbitRadius, 0, 0);
