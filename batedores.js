@@ -18,6 +18,7 @@ window.initGlobe = function(selector) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+  renderer.setPixelRatio(window.devicePixelRatio);
   // céu estrelado
   (function(){
     const geom = new THREE.BufferGeometry();
@@ -37,7 +38,7 @@ window.initGlobe = function(selector) {
     geom.setAttribute('color', new THREE.Float32BufferAttribute(col,3));
     scene.add(new THREE.Points(
       geom,
-      new THREE.PointsMaterial({ size:0.13, vertexColors:true })
+      new THREE.PointsMaterial({ size:0.08, vertexColors:true })
     ));
   })();
 
