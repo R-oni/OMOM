@@ -21,15 +21,7 @@
       pointer-events: none;
     }
 
-    /* canvas pixelado atrás */
-    #automatonCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-      image-rendering: pixelated;
-    }
-
+    
     /* grid 50/50 dividindo a tela */
     #app {
       display: grid;
@@ -177,7 +169,7 @@
     #menu-title {
       display:none;
       position:absolute;
-      top:40%; left:50%;
+      top:45%; left:50%;
       transform:translate(-50%,-50%) scale(0.8);
       font-family:'Press Start 2P',cursive;
       color:#FFFFFF;
@@ -211,7 +203,6 @@
 </head>
 <body>
   <img id="painel" src="painel.png" alt="Painel">
-  <canvas id="automatonCanvas"></canvas>
 
   <div id="app">
     <div id="globe-area">
@@ -319,7 +310,7 @@
         s.src = worldName + '.js';
         document.body.appendChild(s);
         s.onload = () => {
-          if (window.initAutomaton) window.initAutomaton('#automatonCanvas');
+        
           if (window.initGlobe)     window.initGlobe('#globeCanvas');
           if (window.initFlipbook)  window.initFlipbook('#flipbookContainer');
           void fb.offsetWidth;
