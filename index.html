@@ -60,14 +60,22 @@
       width: 100%; 
     }
     /* Atualizado para que o globo seja quadrado e ocupe 70% da tela (vmin) */
-    #globe-area { 
-      z-index: 0;
-      width: 70vmin;
-      height: 70vmin;
-      margin: auto;
-
-    }
-
+      #globe-area { 
+        z-index: 0;
+        width: 80%; /* 80% da largura disponível da linha */
+        height: 100%; /* 100% da altura da linha superior (que é 50% da tela) */
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Assegura que o canvas dentro do globe-area seja quadrado */
+      #globeCanvas {
+        width: min(80%, 40vw); /* Limita a largura a 80% do contêiner ou 40% da viewport width */
+        height: min(80%, 40vw); /* Mesma medida da largura para manter quadrado */
+        aspect-ratio: 1 / 1; /* Garante proporção quadrada */
+        display: block;
+      }
     /* flipbook posicionado e animável */
     #flipbook-area { 
       margin-left: 5%;
