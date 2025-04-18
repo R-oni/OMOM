@@ -23,7 +23,18 @@
       pointer-events: none;
     }
 
-  
+    /* canvas pixelado atrás */
+    #automatonCanvas { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      z-index: -1; 
+      image-rendering: pixelated; 
+    }
+
+    /* grid 40/60 com margem no topo de 20% */
     #app { 
       display: grid; 
       grid-template-rows: 50% 50%; 
@@ -51,49 +62,45 @@
       font-size: 20px; 
     }
 
-/* globo e flipbook */
-#globe-area, #flipbook-area { 
-  position: relative;
-  width: 100%; 
-  height: 100%;
-  overflow: hidden;
-}
+    /* globo e flipbook */
+    #globe-area, #flipbook-area { 
+      position: relative; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      width: 100%; 
+    }
+    /* Atualizado para que o globo seja quadrado e ocupe 70% da tela (vmin) */
+    #globe-area { 
+      z-index: 0;
+      width: 70vmin;
+      height: 70vmin;
+      margin: auto;
+    }
 
-/* Globo definido como quadrado no centro da metade superior */
-#globe-area {
-  z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    /* flipbook posicionado e animável */
+    #flipbook-area { 
+      margin-left: 5%;
+      padding-top: 2vh;
+      box-sizing: border-box; 
+      overflow: hidden; 
+      width: 100%;
+      height: 100%; 
+      z-index: 3;
+      /* estado inicial para animação */
+      transform: translateX(100%);
+      transition: transform 1.5s ease-out;
+    }
+    /* quando a classe .show estiver presente, ele volta ao centro */
+    #flipbook-area.show {
+      transform: translateX(0);
+    }
 
-#globeCanvas {
-  width: 50%;  /* 50% da largura do contêiner */
-  height: auto; /* Altura se ajusta automaticamente */
-  aspect-ratio: 1 / 1; /* Força formato quadrado */
-  max-height: 90%; /* Evita que ultrapasse os limites verticais */
-}
+    #flipbookContainer {
+      width: 100%;
+      height: calc(100% - 7vh);
+    }
 
-/* Flipbook na metade inferior */
-#flipbook-area { 
-  margin-left: 5%;
-  padding-top: 2vh;
-  z-index: 3;
-  /* estado inicial para animação */
-  transform: translateX(100%);
-  transition: transform 1.5s ease-out;
-}
-
-#flipbook-area.show {
-  transform: translateX(0);
-}
-
-#flipbookContainer {
-  width: 100%;
-  height: 90%; /* Reduzido para evitar overflow */
-}
-
-    
 /* Seta menor, no canto, fade + movimento diagonal */
 #flipbook-area #setaBtn {
   position: absolute;
