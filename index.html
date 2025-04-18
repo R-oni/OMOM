@@ -21,14 +21,6 @@
       pointer-events: none;
     }
 
-    /* canvas pixelado atrás */
-    #automatonCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: -1;
-      image-rendering: pixelated;
-    }
 
     /* grid 50/50 dividindo a tela */
     #app {
@@ -319,7 +311,7 @@
         s.src = worldName + '.js';
         document.body.appendChild(s);
         s.onload = () => {
-          if (window.initAutomaton) window.initAutomaton('#automatonCanvas');
+          
           if (window.initGlobe)     window.initGlobe('#globeCanvas');
           if (window.initFlipbook)  window.initFlipbook('#flipbookContainer');
           void fb.offsetWidth;
