@@ -18,61 +18,61 @@ window.initGlobe = function(selector) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-  // Criação de um céu estrelado
+  // céu estrelado
   (function(){
     const geom = new THREE.BufferGeometry();
     const pos = [], col = [];
-    for(let i = 0; i < 20000; i++){
-      const R = 80, th = Math.random()*2*Math.PI, ph = Math.acos(Math.random()*2-1);
-      const x = R * Math.sin(ph) * Math.cos(th);
-      const y = R * Math.sin(ph) * Math.sin(th);
-      const z = R * Math.cos(ph);
-      pos.push(x, y, z);
-      const r = Math.random();
+    for(let i=0;i<20000;i++){
+      const R=80, θ=Math.random()*2*Math.PI, φ=Math.acos(Math.random()*2-1);
+      const x=R*Math.sin(φ)*Math.cos(θ), y=R*Math.sin(φ)*Math.sin(θ), z=R*Math.cos(φ);
+      pos.push(x,y,z);
+      const r=Math.random();
       col.push(
-        r < 0.9 ? 1 : 1,
-        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 0.6,
-        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 1
+        r<0.9?1:1,
+        r<0.9?1:r<0.95?0.6:0.6,
+        r<0.9?1:r<0.95?0.6:1
       );
     }
-    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    geom.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
-    const mat = new THREE.PointsMaterial({ size: 0.25, vertexColors: true });
-    scene.add(new THREE.Points(geom, mat));
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+    geom.setAttribute('color', new THREE.Float32BufferAttribute(col,3));
+    scene.add(new THREE.Points(
+      geom,
+      new THREE.PointsMaterial({ size:0.25, vertexColors:true })
+    ));
   })();
 
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
+  window.globeControls = controls; // expondo para fora
 
   const loader = new THREE.TextureLoader();
-
-  // Esfera central
   const central = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 64, 64),
+    new THREE.SphereGeometry(1,64,64),
     new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapatoktok.png', check) })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
 
-  // Objeto em órbita
   const orbitRadius = 3;
   const orbit = new THREE.Mesh(
-    new THREE.SphereGeometry(0.1, 64, 64),
+    new THREE.SphereGeometry(0.1,64,64),
     new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapattok.png', check) })
   );
   orbit.castShadow = orbit.receiveShadow = true;
-  orbit.position.set(orbitRadius, 0, 0);
+  orbit.position.set(orbitRadius,0,0);
   scene.add(orbit);
+  window.globeOrbit = orbit; // expondo para fora
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-  const dir = new THREE.DirectionalLight(0xffffff, 1);
-  dir.position.set(3, 3, 5);
+  scene.add(new THREE.AmbientLight(0xffffff,0.2));
+  const dir = new THREE.DirectionalLight(0xffffff,1);
+  dir.position.set(3,3,5);
   dir.castShadow = true;
   scene.add(dir);
 
   let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
+  window.trackOrbit = false; // flag de tracking
 
   (function animate(){
     requestAnimationFrame(animate);
@@ -85,21 +85,25 @@ window.initGlobe = function(selector) {
       orbitRadius * Math.sin(angle)
     );
     controls.update();
+    if(window.trackOrbit){
+      controls.target.copy(orbit.position);
+      controls.update();
+    }
     renderer.render(scene, camera);
   })();
 
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', ()=>{
     const ww = canvas.clientWidth, hh = canvas.clientHeight;
     renderer.setSize(ww, hh);
-    camera.aspect = ww / hh;
+    camera.aspect = ww/hh;
     camera.updateProjectionMatrix();
   });
 };
 
-// 2) Inicialização do Flipbook com lazy‑load, seta mobile e botões de página
+// 2) Inicialização do Flipbook com cliques customizados
 window.initFlipbook = function(selector) {
   const $container = $(selector);
-  if (!$container.length) return console.warn('Container flipbook não encontrado:', selector);
+  if (!$container.length) return console.warn('Flipbook não encontrado:', selector);
 
   // Injeta toda a estrutura do flipbook
   $container.html(`
@@ -174,10 +178,10 @@ window.initFlipbook = function(selector) {
   $container.find('#flipbook .page img').css({
     width: '100%',
     height: '100%',
-    'object-fit': 'contain'
+    objectFit: 'contain'
   });
 
-  // Lazy‑load setup
+  // Lazy‑load
   $container.find('#flipbook .page').each(function(idx){
     const p = idx + 1;
     $(this).attr('data-page', p);
@@ -186,83 +190,128 @@ window.initFlipbook = function(selector) {
       $(this).attr('data-src', realSrc).removeAttr('src');
     });
   });
-  function preloadPages(startPage, count) {
-    for (let i = startPage; i < startPage + count; i++) {
-      const pageDiv = $container.find(`#flipbook .page[data-page="${i}"]`);
-      pageDiv.find('img[data-src]').each(function(){
+  function preloadPages(start, count) {
+    for (let i = start; i < start + count; i++){
+      const pg = $container.find(`#flipbook .page[data-page="${i}"]`);
+      pg.find('img[data-src]').each(function(){
         const $img = $(this);
-        if (!$img.attr('src')) {
-          $img.attr('src', $img.data('src'));
-        }
+        if (!$img.attr('src')) $img.attr('src', $img.data('src'));
       });
     }
   }
-  preloadPages(1, 3);
+  preloadPages(1,3);
 
-  // Áudio de virar página
+  // Áudio de página
   const flipAudio = new Audio('sompagina.mp3');
   flipAudio.preload = 'auto';
   flipAudio.volume = 0.9;
 
-  // Inicializa o turn.js
+  // Turn.js
   $("#flipbook").turn({
     autoCenter: false,
     display: 'double',
     when: {
-      turned: function(e, page) {
-        preloadPages(page + 1, 3);
-      }
+      turned: (_, page) => preloadPages(page+1,3)
     }
   });
 
   // Responsivo
-  function resizeFlipbook(){
-    let newW, newH;
-    if ($(window).width() < 1024) {
-      newW = $(window).width() * 0.9;
-      newH = newW * (450/600);
+  function resizeFB(){
+    let w, h;
+    if ($(window).width()<1024){
+      w = $(window).width()*0.9;
+      h = w*(450/600);
     } else {
-      newW = $container.width();
-      newH = $container.height();
+      w = $container.width();
+      h = $container.height();
     }
-    $("#flipbook").turn("size", newW, newH);
+    $("#flipbook").turn("size", w, h);
   }
-  resizeFlipbook();
-  $(window).on('resize', resizeFlipbook);
+  resizeFB();
+  $(window).on('resize', resizeFB);
 
   // Evita drag
-  $(".page img").on("dragstart", e => e.preventDefault());
+  $(".page img").on("dragstart", e=>e.preventDefault());
 
-  // Toca áudio no mousedown
-  $("#flipbook").on("mousedown touchstart", () => {
+  // Som no mousedown
+  $("#flipbook").on("mousedown touchstart", ()=>{
     flipAudio.currentTime = 0;
     flipAudio.play().catch(()=>{});
   });
 
-  // Setinha mobile: some após virar a primeira página
-  $("#flipbook").bind("turning", (e, page) => {
-    if (page > 1) {
-      $("#setaBtn").fadeOut(300, () => $("#setaBtn").remove());
-    }
+  // Oculta seta ao virar
+  $("#flipbook").bind("turning", (e, page)=>{
+    if (page>1) $("#setaBtn").fadeOut(300, ()=>$("#setaBtn").remove());
   });
-  // Clique na setinha avança página
-  $container.on("click", "#setaBtn", () => $("#flipbook").turn("next"));
+  $container.on("click","#setaBtn", ()=>$("#flipbook").turn("next"));
 
-  // Botões de página (apenas visuais; implemente comportamento aqui)
-  const pageButtons = [
-    "cliquemundo",
-    "cliqueinversao",
-    "cliqueg",
-    "cliquerefracao",
-    "cliquemorse",
-    "cliquecapacitor",
-    "cliquesanguedomundo"
-  ];
-  pageButtons.forEach(id => {
-    $container.on("click", `#${id}`, e => {
+  // Handlers customizados
+  const focoMundo = function(){
+    window.trackOrbit = true;
+    if(window.globeControls && window.globeOrbit){
+      window.globeControls.target.copy(window.globeOrbit.position);
+      window.globeControls.update();
+    }
+  };
+  const trocaSangue = function(){
+    $('#globe-area').hide();
+    if (!$('#sangueGloboImage').length){
+      $('<img>',{
+        id: 'sangueGloboImage',
+        src: 'mundos/ttok/imagens/cap1/sanguedomundo.png',
+        css: { width:'100%', height:'100%', objectFit:'contain' }
+      }).appendTo('#globe-area');
+    }
+  };
+
+  const map = {
+    cliquemundo: focoMundo,
+    cliquesanguedomundo: trocaSangue
+  };
+  Object.keys(map).forEach(id=>{
+    $container.on('click', '#'+id, function(e){
       e.stopPropagation();
-      // Aqui você pode chamar sua função, ex:
-      // console.log("Botão", id, "clicado");
+      map[id].call(this);
     });
+  });
+
+  // Overlay handlers
+  $container.on("click", "#cliqueinversao", function(e){
+    e.stopPropagation();
+    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/inversao.webp");
+    $("#overlayContainer").fadeIn(500);
+    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+  });
+  $container.on("click", "#cliqueg", function(e){
+    e.stopPropagation();
+    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/estrelag.webp");
+    $("#overlayContainer").fadeIn(500);
+    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+  });
+  $container.on("click", "#cliquerefracao", function(e){
+    e.stopPropagation();
+    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/refracao.webp");
+    $("#overlayContainer").fadeIn(500);
+    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+  });
+  $container.on("click", "#cliquemorse", function(e){
+    e.stopPropagation();
+    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/morse.webp");
+    $("#overlayContainer").fadeIn(500);
+    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+  });
+  $container.on("click", "#cliquecapacitor", function(e){
+    e.stopPropagation();
+    $("#overlayImage").attr("src", "mundos/ttok/imagens/cap1/capacitor.webp");
+    $("#overlayContainer").fadeIn(500);
+    $("#overlayImage").css("transform", "translate(-50%, -50%) scale(1)");
+  });
+
+  // Ao virar página, reseta globo e overlay
+  $("#flipbook").bind("turning", ()=>{
+    $('#globe-area').show();
+    $('#sangueGloboImage').remove();
+    $('#globeCanvas').css('transform','');
+    window.trackOrbit = false;
   });
 };
