@@ -6,9 +6,7 @@ window.initGlobe = function(selector) {
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
 
   let loaded = 0, total = 2;
-  const check = () => {
-    if (++loaded === total) document.dispatchEvent(new Event('globoCarregado'));
-  };
+  const check = () => { if (++loaded === total) document.dispatchEvent(new Event('globoCarregado')); };
 
   const w = canvas.clientWidth, h = canvas.clientHeight;
   const scene = new THREE.Scene();
@@ -57,39 +55,20 @@ window.initGlobe = function(selector) {
   window.globeControls = controls; // expõe controles
 
   const loader = new THREE.TextureLoader();
-
-  // === CENTRAL ===
-  const centralTexture = loader.load(
-    'mundos/veleywei/imagens/mapaveleywei.png',
-    () => { console.log('✓ mapaveleywei.png carregado'); check(); },
-    undefined,
-    err => console.error('✗ Erro ao carregar mapaveleywei.png:', err)
-  );
-  // força o encoding que o StandardMaterial espera
-  centralTexture.encoding = THREE.sRGBEncoding;
-
   const central = new THREE.Mesh(
     new THREE.SphereGeometry(1,64,64),
-    new THREE.MeshStandardMaterial({ map: centralTexture })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
 
-  // === ORBIT ===
-  const orbitTexture = loader.load(
-    'mundos/veleywei/imagens/mapaveleywei.png',
-    () => { console.log('✓ mapaveleywei.png (satélite) carregado'); check(); },
-    undefined,
-    err => console.error('✗ Erro ao carregar mapaveleywei.png (satélite):', err)
-  );
-  orbitTexture.encoding = THREE.sRGBEncoding;
-
+  const orbitRadius = 3;
   const orbit = new THREE.Mesh(
     new THREE.SphereGeometry(0.1,64,64),
-    new THREE.MeshStandardMaterial({ map: orbitTexture })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
   orbit.castShadow = orbit.receiveShadow = true;
-  orbit.position.set(3, 0, 0);
+  orbit.position.set(orbitRadius, 0, 0);
   scene.add(orbit);
   window.globeOrbit = orbit; // expõe satélite
 
@@ -101,7 +80,7 @@ window.initGlobe = function(selector) {
 
   let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
-  window.trackOrbit = false;
+  window.trackOrbit = false; // flag de tracking
 
   (function animate(){
     requestAnimationFrame(animate);
@@ -109,9 +88,9 @@ window.initGlobe = function(selector) {
     central.rotation.y += 0.003;
     angle += speed * delta;
     orbit.position.set(
-      3 * Math.cos(angle),
+      orbitRadius * Math.cos(angle),
       0,
-      3 * Math.sin(angle)
+      orbitRadius * Math.sin(angle)
     );
     controls.update();
     if(window.trackOrbit) {
