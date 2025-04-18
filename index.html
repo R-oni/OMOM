@@ -1,754 +1,379 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outros Mundos Outras Mentes</title>
+  <title>OMOM SPA</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* ===== ESTILOS PARA MOBILE (Vertical) ===== */
+    /* ===== ESTILOS GERAIS ===== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body, html { width:100%; height:100%; overflow:hidden; background:black; color:white; font-family:'Courier New', monospace; }
+
+    /* painel sobre o globo e abaixo do flipbook */
+    #painel {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover;
+      object-position: center;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* grid 50/50 dividindo a tela */
+    #app {
+      display: grid;
+      grid-template-rows: 50% 50%;
+      width: 100vw; height: 100vh;
+      position: relative;
+    }
+
+    /* loading */
     #loading-screen {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: black;
+      display: flex; align-items: center; justify-content: center;
       z-index: 9999;
     }
     #loading-text {
       font-family: 'Press Start 2P', cursive;
       color: #00FFE7;
       font-size: 20px;
-      text-align: center;
     }
-    #automatonCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      image-rendering: pixelated;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: black;
-      overflow: hidden;
-      color: white;
-    }
-    .title-container {
-      text-align: center;
-      margin: 5vh auto 0 auto;
-      width: 100%;
+
+    /* globo e flipbook */
+    #globe-area, #flipbook-area {
       position: relative;
-      z-index: 2;
-    }
-    .title-text {
-      font-family: 'Press Start 2P', cursive;
-      color: #FFFFFF;
-      text-align: center;
-      line-height: 1.2;
-      font-size: 20px;
-      text-decoration: none;
-      display: block;
-    }
-    .line {
-      white-space: nowrap;
-    }
-    /* ===== Botão Hamburger e Mobile Menu ===== */
-    .hamburger-menu {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: transparent;
-      border: none;
-      font-size: 30px;
-      color: #00FFE7;
-      cursor: pointer;
-      z-index: 10001;
-    }
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 60px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.8);
-      border: 2px solid #00FFE7;
-      padding: 10px;
-      border-radius: 5px;
-      z-index: 10000;
-    }
-    .mobile-menu button {
-      display: block;
-      background: #00FFE7;
-      color: black;
-      border: none;
-      margin: 5px 0;
-      padding: 10px;
-      font-family: 'Press Start 2P', cursive;
-      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
     }
-    .mobile-menu button:hover {
-      filter: brightness(1.2);
+
+    /* Globo centralizado ocupando 80% do espaço superior */
+    #globe-area {
+      z-index: 0;
+      width: 80%; height: 100%;
+      margin: 0 auto;
+      display: flex; justify-content: center; align-items: center;
+      position: relative; /* para menu-overlay */
     }
-    /* ===== ESTILOS PARA OS SÍMBOLOS ===== */
+    #globeCanvas {
+      width: 100%; height: 100%; max-height: 100%;
+      object-fit: contain;
+    }
+
+    /* flipbook posicionado e animável */
+    #flipbook-area {
+      margin-left: 5%; padding-top: 2vh;
+      box-sizing: border-box; overflow: hidden;
+      width: 100%; height: 100%;
+      z-index: 3;
+      transform: translateX(100%);
+      transition: transform 1.5s ease-out;
+    }
+    #flipbook-area.show { transform: translateX(0); }
+    #flipbook-area.slide-out-left { transform: translateX(-100%); }
+
+    #flipbookContainer {
+      width: 100%; height: calc(100% - 7vh);
+    }
+
+    /* Seta menor no flipbook */
+    #flipbook-area #setaBtn {
+      position: absolute;
+      top: 5px !important; right: 5px;
+      width: 35px !important; height: auto !important;
+      cursor: pointer; opacity: 0;
+      animation:
+        fadeInArrow 0.6s forwards 0.4s,
+        slideArrow 1.0s ease-in-out infinite 0.6s;
+      z-index: 5;
+    }
+    @keyframes fadeInArrow { from{opacity:0}to{opacity:1} }
+    @keyframes slideArrow {
+      0%{transform:translate(0,0)}50%{transform:translate(-8px,8px)}100%{transform:translate(0,0)}
+    }
+
+    /* Imagens clicáveis no flipbook */
+    #cliquemundo, #cliqueinversao, #cliqueg, #cliquerefracao,
+    #cliquemorse, #cliquecapacitor, #cliquesanguedomundo {
+      position: absolute; top:0; left:0; right:0; bottom:0;
+      cursor: pointer; width:100%; height:100%; z-index:10;
+      animation: fadeInOut 0.7s infinite;
+    }
+    @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
+
+    /* Overlay do Menu Rolante: dentro de #globe-area */
+    #menu-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;      /* volta a 100% */
+      height: 100%;      /* volta a 50% */
+      backdrop-filter: blur(6px);
+      display: none;
+      z-index: 1;       /* abaixo do painel */
+    }
+    #menu-overlay.visible { display: block; }
+
     .symbols-wrapper {
       position: absolute;
-      top: 150px;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 40px;       /* volta a 150px */
+      left: 0; right: 0; bottom: 0;
       overflow-y: auto;
       padding: 20px;
-      z-index: 2;
     }
     .symbols-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 25px;
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 25px;
     }
-    .symbol {
-      position: relative;
-      transform-origin: center;
-      transition: transform 0.1s linear;
-    }
+    .symbol { cursor: pointer; transition: transform .1s; }
     .symbol img {
-      width: 25vw;
-      transition: transform 0.3s;
+      width: 18vw; transition: transform .3s;
     }
-    .symbol img:hover {
-      transform: scale(1.1);
-    }
-    .symbol.brither img {
-      filter: brightness(180%);
-    }
-    .symbol.locked img {
-      filter: brightness(50%);
-    }
-    /* Estilos para o Modal de Login */
-    #loginModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+    .symbol img:hover { transform: scale(1.1); }
+    .symbol.brither img { filter: brightness(180%); }
+    .symbol.locked img  { filter: brightness(50%); }
+
+    /* Overlay para imagens interativas */
+    #overlayContainer {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
       background: rgba(0,0,0,0.8);
-      z-index: 10000;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Press Start 2P', cursive;
+      display:none;
+      justify-content:center;
+      align-items:center;
+      z-index:1000;
     }
-    #loginModal div {
-      background: #000;
-      padding: 20px;
-      border: 2px solid #00FFE7;
-      text-align: center;
+    #overlayImage {
+      max-width:80%; max-height:80%;
+      transition:transform .3s ease;
     }
-    #loginModal input {
-      background: #000;
-      color: #00FFE7;
-      border: 1px solid #00FFE7;
-      font-size: 14px;
-      margin: 10px;
-      padding: 5px;
-      font-family: 'Courier New';
+    #btnSair {
+      position:absolute; top:20px; right:20px;
+      background:rgba(0,0,0,0.7);
+      color:#00FFE7;
+      border:2px solid #00FFE7;
+      font-family:'Press Start 2P',cursive;
+      font-size:12px;
+      padding:10px;
+      cursor:pointer;
+      z-index:1001;
     }
-    #loginModal button {
-      font-family: 'Press Start 2P', cursive;
-      transition: all 0.3s;
-      margin: 10px;
-      cursor: pointer;
+
+    /* --- TÍTULO OMOM --- */
+    #menu-title {
+      display:none;
+      position:absolute;
+      top:45%; left:50%;
+      transform:translate(-50%,-50%) scale(0.8);
+      font-family:'Press Start 2P',cursive;
+      color:#FFFFFF;
+      font-size:min(5vw,30px);
+      opacity:0;
+      z-index:1;
     }
-    #loginModal button:hover {
-      filter: brightness(1.2);
+    #menu-title.animate {
+      display:block;
+      animation: fadeScaleTitle 0.8s ease-out forwards;
     }
-    /* Estilos para o Modal de Cadastro */
-    #signupModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.8);
-      z-index: 10000;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Press Start 2P', cursive;
+    @keyframes fadeScaleTitle {
+      from{opacity:0;transform:translate(-50%,-50%) scale(0.8)}
+      to{opacity:1;transform:translate(-50%,-50%) scale(1)}
     }
-    #signupModal div {
-      background: #000;
-      padding: 20px;
-      border: 2px solid #00FFE7;
-      text-align: center;
+
+    /* --- FADE+SCALE PARA OS ÍCONES --- */
+    .animate-symbols .symbol {
+      opacity:0; transform:scale(0.8);
+      animation: fadeScaleIn 0.6s ease-out forwards;
     }
-    #signupModal input {
-      background: #000;
-      color: #00FFE7;
-      border: 1px solid #00FFE7;
-      font-size: 14px;
-      margin: 10px;
-      padding: 5px;
-      font-family: 'Courier New';
-    }
-    #signupModal button {
-      font-family: 'Press Start 2P', cursive;
-      transition: all 0.3s;
-      margin: 10px;
-      cursor: pointer;
-    }
-    #signupModal button:hover {
-      filter: brightness(1.2);
-    }
-    /* ===== ESTILOS DO MODAL DE MÚSICA ===== */
-    #musicModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      font-family: 'Press Start 2P', cursive;
-      color: #00FFE7;
-    }
-    #musicModal .modal-content {
-      background: transparent;
-      text-align: center;
-    }
-    #musicModal p {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    #musicModal button {
-      font-family: 'Press Start 2P', cursive;
-      background-color: transparent;
-      color: #00FFE7;
-      border: 2px solid #00FFE7;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-    #musicModal button:hover {
-      background-color: #00FFE7;
-      color: black;
-    }
-    /* Estilo para o botão de login com Google */
-    .google-btn {
-      background-color: white;
-      color: #444;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 220px;
-      height: 42px;
-      border-radius: 2px;
-      box-shadow: 0 3px 4px 0 rgba(0,0,0,.25);
-      cursor: pointer;
-      margin: 15px auto;
-    }
-    .google-btn:hover {
-      box-shadow: 0 0 6px #00FFE7;
-    }
-    .google-btn img {
-      width: 18px;
-      height: 18px;
-      margin-right: 10px;
-    }
-    .google-btn-text {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 9px;
-      letter-spacing: 0.2px;
-    }
-    .g-blue { color: #4285F4; }
-    .g-red { color: #DB4437; }
-    .g-yellow { color: #F4B400; }
-    .g-green { color: #0F9D58; }
-    /* Estilo para botões de navegação */
-    .nav-button {
-      font-family: 'Press Start 2P', cursive;
-      background: #00FFE7;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      font-size: 10px;
-      position: absolute;
-      top: 20px;
-    }
-    /* Container para Desktop */
-    .header-container {
-      width: 100%;
-      position: relative;
-    }
-    @media screen and (min-width: 1024px) and (orientation: landscape) {
-      .title-container {
-        grid-area: title;
-        margin: 60px auto 0 auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 50%;
-      }
-      .title-container .title-text {
-        font-size: 36px;
-      }
-      .symbols-wrapper {
-        padding: 30px;
-        overflow-y: auto;
-      }
-      .symbols-container {
-        gap: 30px;
-        justify-content: center;
-      }
-      .symbol img {
-        width: 180px;
-        height: auto;
-      }
-      .nav-button { 
-        display: block;
-      }
-      .hamburger-menu { 
-        display: none; 
-      }
-      /* Ajuste para posicionar os botões mais à direita */
-      #loginBtn {
-        right: 20px;
-      }
-      #signupBtn {
-        right: 130px;
-      }
-      #logoutBtn {
-        right: 20px;
-      }
-    }
-    @media screen and (max-width: 1023px) {
-      .nav-button { 
-        display: none !important; 
-      }
-      .hamburger-menu { 
-        display: block; 
-      }
+    .animate-symbols .symbol:nth-child(1){animation-delay:0.3s}
+    .animate-symbols .symbol:nth-child(2){animation-delay:0.4s}
+    .animate-symbols .symbol:nth-child(3){animation-delay:0.5s}
+    /* continue incrementando para os demais */
+    @keyframes fadeScaleIn {
+      from{opacity:0;transform:scale(0.8)}
+      to{opacity:1;transform:scale(1)}
     }
   </style>
 </head>
 <body>
-  <!-- Tela de Loading -->
+  <img id="painel" src="painel.png" alt="Painel">
+
+  <div id="app">
+    <div id="globe-area">
+      <canvas id="globeCanvas"></canvas>
+      <div id="menu-title">OMOM</div>
+      <div id="menu-overlay">
+        <div class="symbols-wrapper">
+          <div class="symbols-container">
+            <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+            <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+            <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
+            <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
+            <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenDenBouBou"></div>
+            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
+            <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
+            <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
+            <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
+            <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
+            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+            <!-- continue aqui -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="flipbook-area">
+      <div id="flipbookContainer"></div>
+    </div>
+  </div>
+
+  <button id="btnMenu" style="
+    position:fixed;top:45px;left:30px;z-index:999;
+    background:rgba(0,0,0,0.7);color:#00FFE7;
+    border:2px solid #00FFE7;font-family:'Press Start 2P',cursive;
+    font-size:6px;padding:10px;cursor:pointer;
+    transition:background .3s;
+  ">MENU</button>
+
+  <div id="overlayContainer">
+    <button id="btnSair">FECHAR</button>
+    <img id="overlayImage" src="" alt="Imagem em destaque">
+  </div>
+
   <div id="loading-screen">
     <div id="loading-text">CARREGANDO...</div>
   </div>
-  <canvas id="automatonCanvas"></canvas>
-  
-  <!-- Modal de Login -->
-  <div id="loginModal">
-    <div>
-      <h2 style="color: #00FFE7;">LOGIN</h2>
-      <form id="loginForm">
-        <input type="email" id="email" placeholder="E-mail"><br>
-        <input type="password" id="password" placeholder="Senha"><br>
-        <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">ENTRAR</button>
-      </form>
-      <!-- Botão de Login com Google -->
-      <div id="googleLogin" class="google-btn">
-        <span class="google-text">LOGIN COM <span class="g-blue">G</span><span class="g-red">O</span><span class="g-yellow">O</span><span class="g-blue">G</span><span class="g-green">L</span><span class="g-red">E</span></span>
-      </div>
-      <p style="color: white; font-size: 10px; margin-top: 10px;">
-        Não tem conta? <a href="#" onclick="toggleSignupModal(); toggleLoginModal();" style="color: #00FFE7; text-decoration: none;">Cadastre-se</a>
-      </p>
-      <button onclick="toggleLoginModal()" style="background: #ff0000; border: none; padding: 10px 20px;">FECHAR</button>
-      <p id="loginError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
-    </div>
-  </div>
-  
-  <!-- Modal de Cadastro -->
-  <div id="signupModal">
-    <div>
-      <h2 style="color: #00FFE7;">CADASTRO</h2>
-      <form id="signupForm">
-        <input type="text" id="newName" placeholder="Nome"><br>
-        <input type="email" id="newEmail" placeholder="E-mail"><br>
-        <input type="password" id="newPassword" placeholder="Senha"><br>
-        <input type="password" id="confirmPassword" placeholder="Confirmar Senha"><br>
-        <button type="submit" style="background: #00FFE7; border: none; padding: 10px 20px;">CADASTRAR</button>
-      </form>
-      <p style="color: white; font-size: 10px; margin-top: 10px;">
-        Já tem conta? <a href="#" onclick="toggleLoginModal(); toggleSignupModal();" style="color: #00FFE7; text-decoration: none;">Faça login</a>
-      </p>
-      <button onclick="toggleSignupModal()" style="background: #ff0000; border: none; padding: 10px 20px;">FECHAR</button>
-      <p id="signupError" style="color: #ff0000; font-size: 12px; margin-top: 10px;"></p>
-      <p id="signupSuccess" style="color: #00FFE7; font-size: 12px; margin-top: 10px; display: none;">Cadastro realizado com sucesso! Você já pode fazer login.</p>
-    </div>
-  </div>
-  
-  <!-- Modal de Música -->
-  <div id="musicModal">
-    <div class="modal-content">
-      <p>música?</p>
-      <div class="modal-buttons">
-        <button id="yesBtn">Sim</button>
-        <button id="noBtn">Não</button>
-      </div>
-    </div>
-  </div>
-  
-  <audio id="bgm" loop style="display:none;">
-    <source src="memories.mp3" type="audio/mpeg">
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
-  
-  <!-- Header Container -->
-  <div class="header-container">
-    <!-- Title Container -->
-    <div class="title-container">
-      <a href="omom.html" class="title-text">
-        <span class="line"> OUTROS MUNDOS™</span><br>
-        <span class="line">OUTRAS MENTES&nbsp;</span>
-      </a>
-    </div>
-    
-    <!-- Botões de navegação para desktop -->
-    <button id="loginBtn" onclick="toggleLoginModal()" class="nav-button">LOGIN</button>
-    <button id="signupBtn" onclick="toggleSignupModal()" class="nav-button">CADASTRO</button>
-    <button id="logoutBtn" class="nav-button" style="display: none;">LOGOUT</button>
-    
-    <!-- Botão Hamburger para mobile -->
-    <button id="hamburgerBtn" class="hamburger-menu">☰</button>
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="mobile-menu">
-      <button id="loginBtnMobile" onclick="toggleLoginModal(); toggleMobileMenu();">LOGIN</button>
-      <button id="signupBtnMobile" onclick="toggleSignupModal(); toggleMobileMenu();">CADASTRO</button>
-      <button id="logoutBtnMobile" style="display: none;">LOGOUT</button>
-    </div>
-  </div>
-  
-  <!-- Symbols -->
-  <div class="symbols-wrapper">
-    <div class="symbols-container">
-      <!-- Símbolos dos mundos -->
-      <div class="symbol locked" id="symbol1" data-href="mundos/veleywei/index.html">
-        <a><img src="assets/veleyweimenu.png" alt="Velei'wey"></a>
-      </div>
-      <div class="symbol locked" id="symbol2" data-href="mundos/botychera/index.html">
-        <a><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></a>
-      </div>
-      <div class="symbol locked" id="symbol3" data-href="mundos/himpis/index.html">
-        <a><img src="mundos/himpis/himpismenu.png" alt="Himpis"></a>
-      </div>
-      <!-- T'Tok permanece desbloqueado -->
-      <div class="symbol brither" id="symbol4">
-        <a href="mundos/ttok/index.html"><img src="mundos/ttok/ttokmenu.png" alt="T'Tok"></a>
-      </div>
-      <div class="symbol locked" id="symbol5" data-href="mundos/denbou/index.html">
-        <a><img src="mundos/denbou/denboumenu.png" alt="dendenboubou"></a>
-      </div>
-      <div class="symbol locked" id="symbol6" data-href="mundos/araporu/index.html">
-        <a><img src="mundos/araporu/araporumenu.png" alt="araporu"></a>
-      </div>
-      <div class="symbol locked" id="symbol7" data-href="mundos/os artesaos/index.html">
-        <a><img src="mundos/os artesaos/artesaosmenu.png" alt="rtesaos"></a>
-      </div>
-      <div class="symbol locked" id="symbol8" data-href="mundos/sapador/index.html">
-        <a><img src="mundos/sapador/sapador.png" alt="sapador"></a>
-      </div>
-      <div class="symbol locked" id="symbol11" data-href="mundos/dosirelala/index.html">
-        <a><img src="mundos/dosirelala/dosirelalamenu.png" alt="dosirelala"></a>
-      </div>
-      <div class="symbol locked" id="symbol9" data-href="mundos/calindreno/index.html">
-        <a><img src="mundos/calindreno/calindreno.png" alt="cal8ndreno"></a>
-      </div>
-      <div class="symbol locked" id="symbol10" data-href="mundos/mundo pulsante/index.html">
-        <a><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></a>
-      </div>
-      <div class="symbol locked" id="symbol12" data-href="mundos/mundo 1/index.html">
-        <a><img src="mundos/mundo 1/mundo1.png" alt="Mundo 1"></a>
-      </div>
-      <div class="symbol locked" id="symbol13" data-href="mundos/mundo 2/index.html">
-        <a><img src="mundos/mundo 2/mundo2.png" alt="Mundo 2"></a>
-      </div>
-      <div class="symbol locked" id="symbol14" data-href="mundos/mundo 3/index.html">
-        <a><img src="mundos/mundo 3/mundo3menu.png" alt="Mundo 3"></a>
-      </div>
-      <div class="symbol locked" id="symbol15" data-href="mundos/mundo 4/index.html">
-        <a><img src="mundos/mundo 4/mundo4menu.png" alt="Mundo 4"></a>
-      </div>
-      <div class="symbol locked" id="symbol16" data-href="mundos/mundo 5/index.html">
-        <a><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Mundo 5"></a>
-      </div>
-      <div class="symbol locked" id="symbol17" data-href="mundos/mundo 6/index.html">
-        <a><img src="mundos/mundo 6/criaturamenu.webp" alt="Mundo 6"></a>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Scripts de autenticação e modais -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      updateProfile,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-  
-    const firebaseConfig = {
-      apiKey: "AIzaSyB-WI_nUBDmk5wljZWoLPx3ChFLT5jUt2U",
-      authDomain: "fundamentos-omom.firebaseapp.com",
-      databaseURL: "https://fundamentos-omom-default-rtdb.firebaseio.com",
-      projectId: "fundamentos-omom",
-      storageBucket: "fundamentos-omom.appspot.com",
-      messagingSenderId: "402132741780",
-      appId: "1:402132741780:web:3f78aa356a12ef4ea64e81"
-    };
-  
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const googleProvider = new GoogleAuthProvider();
-  
-    // Funções para abrir/fechar modais
-    window.toggleLoginModal = function() {
-      const modal = document.getElementById('loginModal');
-      modal.style.display = (modal.style.display === 'none' || modal.style.display === '') ? 'flex' : 'none';
-    };
-  
-    window.toggleSignupModal = function() {
-      const modal = document.getElementById('signupModal');
-      modal.style.display = (modal.style.display === 'none' || modal.style.display === '') ? 'flex' : 'none';
-    };
-  
-    window.toggleMobileMenu = function() {
-      const mobileMenu = document.getElementById("mobileMenu");
-      mobileMenu.style.display = mobileMenu.style.display === "block" ? "none" : "block";
-    };
-  
-    function closeModals() {
-      document.getElementById('loginModal').style.display = 'none';
-      document.getElementById('signupModal').style.display = 'none';
-    }
-  
-    window.logoutUser = function() {
-      signOut(auth)
-        .then(() => {
-          console.log("Usuário deslogado com sucesso.");
-          // Recarrega a página após o logout
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error("Erro ao deslogar:", error);
-        });
-    };
-  
-    document.getElementById("logoutBtn").addEventListener("click", logoutUser);
-    document.getElementById("logoutBtnMobile").addEventListener("click", logoutUser);
-  
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // Esconder botões de login e cadastro no desktop
-        document.getElementById("loginBtn").style.display = "none";
-        document.getElementById("signupBtn").style.display = "none";
-        document.getElementById("logoutBtn").style.display = "block";
-        
-        // Esconder botões de login e cadastro no mobile
-        document.getElementById("loginBtnMobile").style.display = "none";
-        document.getElementById("signupBtnMobile").style.display = "none";
-        document.getElementById("logoutBtnMobile").style.display = "block";
-  
-        // Desbloquear símbolos
-        const lockedSymbols = document.querySelectorAll('.symbol.locked');
-        lockedSymbols.forEach(symbol => {
-          symbol.classList.remove('locked');
-          symbol.classList.add('brither');
-          const link = symbol.querySelector('a');
-          link.setAttribute('href', symbol.getAttribute('data-href'));
-          link.onclick = null;
-        });
-      } else {
-        // Mostrar botões de login e cadastro no desktop
-        document.getElementById("loginBtn").style.display = "block";
-        document.getElementById("signupBtn").style.display = "block";
-        document.getElementById("logoutBtn").style.display = "none";
-        
-        // Mostrar botões de login e cadastro no mobile
-        document.getElementById("loginBtnMobile").style.display = "block";
-        document.getElementById("signupBtnMobile").style.display = "block";
-        document.getElementById("logoutBtnMobile").style.display = "none";
-  
-        // Bloquear símbolos
-        const lockedLinks = document.querySelectorAll('.symbol.locked a');
-        lockedLinks.forEach(link => {
-          link.removeAttribute('href');
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert("Você precisa estar logado para acessar este mundo.");
-          });
-        });
-      }
-    });
-  
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorElement = document.getElementById('loginError');
-      errorElement.textContent = "";
-      if (!email || !password) {
-        errorElement.textContent = "Preencha todos os campos";
-        return;
-      }
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          console.log("Usuário logado com sucesso");
-          closeModals();
-        })
-        .catch((error) => {
-          errorElement.textContent = error.message;
-        });
-    });
-  
-    document.getElementById('signupForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('newName').value;
-      const email = document.getElementById('newEmail').value;
-      const password = document.getElementById('newPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const errorElement = document.getElementById('signupError');
-      const successElement = document.getElementById('signupSuccess');
-      errorElement.textContent = "";
-      successElement.style.display = "none";
-      if (!name || !email || !password || !confirmPassword) {
-        errorElement.textContent = "Preencha todos os campos";
-        return;
-      }
-      if (password !== confirmPassword) {
-        errorElement.textContent = "As senhas não coincidem";
-        return;
-      }
-      if (password.length < 6) {
-        errorElement.textContent = "A senha deve ter pelo menos 6 caracteres";
-        return;
-      }
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          return updateProfile(userCredential.user, { displayName: name });
-        })
-        .then(() => {
-          successElement.style.display = "block";
-          setTimeout(() => {
-            closeModals();
-          }, 2000);
-        })
-        .catch((error) => {
-          errorElement.textContent = error.message;
-        });
-    });
-  
-    document.getElementById("googleLogin").addEventListener("click", () => {
-      const errorElement = document.getElementById("loginError");
-      errorElement.textContent = "";
-      signInWithPopup(auth, googleProvider)
-        .then(() => {
-          closeModals();
-        })
-        .catch((error) => {
-          errorElement.textContent = "Erro no login com Google: " + error.message;
-        });
-    });
-  </script>
-  
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="turn.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <script src="batedores.js"></script>
+  <script src="veleywei.js"></script>
   <script>
-    window.addEventListener("load", function() {
-      document.getElementById("loading-screen").style.display = "none";
-    });
-  
-    document.addEventListener("DOMContentLoaded", function() {
-      const musicModal = document.getElementById("musicModal");
-      const bgm = document.getElementById("bgm");
-      const hamburgerBtn = document.getElementById("hamburgerBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
-  
-      document.getElementById("yesBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.volume = 0.9;
-        bgm.play();
-      });
-  
-      document.getElementById("noBtn").addEventListener("click", function() {
-        musicModal.style.display = "none";
-        bgm.pause();
-      });
-  
-      document.querySelectorAll('.symbols-container a').forEach(link => {
-        link.addEventListener('click', function(e) {
-          if (!this.hasAttribute('href')) return;
-          
-          e.preventDefault();
-          if (!bgm.paused) {
-            fadeOutAudio(bgm, 2000);
-            setTimeout(() => {
-              window.location.href = this.href;
-            }, 2000);
-          } else {
-            window.location.href = this.href;
+    // --- Limpeza do globo atual ---
+    function destroyGlobe() {
+      const G = window._Globe;
+      if (G) {
+        // 1) descarta geometria e materiais
+        if (G.scene) {
+          G.scene.traverse(obj => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+              if (Array.isArray(obj.material)) obj.material.forEach(m=>m.dispose());
+              else obj.material.dispose();
+            }
+          });
+          G.scene = null;
+        }
+        // 2) descarta renderer
+        if (G.renderer) {
+          G.renderer.dispose();
+          G.renderer.forceContextLoss && G.renderer.forceContextLoss();
+          if (G.renderer.domElement && G.renderer.domElement.parentNode) {
+            G.renderer.domElement.parentNode.removeChild(G.renderer.domElement);
           }
-        });
-      });
-  
-      hamburgerBtn.addEventListener("click", function(e) {
-        e.stopPropagation();
-        toggleMobileMenu();
-      });
-  
-      document.addEventListener("click", function(e) {
-        if (mobileMenu.style.display === "block" && !mobileMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-          mobileMenu.style.display = "none";
+          G.renderer = null;
         }
-      });
-    });
-  
-    function fadeOutAudio(audio, duration) {
-      const fadeOutInterval = 50;
-      const fadeOutStep = audio.volume / (duration / fadeOutInterval);
-      const fadeOutTimer = setInterval(() => {
-        if (audio.volume > fadeOutStep) {
-          audio.volume -= fadeOutStep;
-        } else {
-          audio.volume = 0;
-          audio.pause();
-          clearInterval(fadeOutTimer);
+        // 3) descarta controls
+        if (G.controls) {
+          G.controls.dispose();
+          G.controls = null;
         }
-      }, fadeOutInterval);
-    }
-  
-    let symbols = [];
-    let time = 0;
-    document.addEventListener("DOMContentLoaded", function() {
-      symbols = document.querySelectorAll('.symbol');
-      function floatSymbols() {
-        time += 0.02;
-        symbols.forEach((symbol, index) => {
-          let amplitude = 6;
-          let speed = 0.1 + (index * 0.01);
-          let y = Math.sin(time * speed * 10) * amplitude;
-          symbol.style.transform = `translateY(${y}px)`;
-        });
-        requestAnimationFrame(floatSymbols);
       }
-      floatSymbols();
+      // remove canvas e imagens extras
+      const area = document.getElementById('globe-area');
+      const oldCanvas = area.querySelector('canvas');
+      if (oldCanvas) oldCanvas.remove();
+      ['sapetyrGloboImage','sangueGloboImage'].forEach(id=>{
+        const img = document.getElementById(id);
+        if (img) img.remove();
+      });
+      // recria canvas limpo
+      const newCanvas = document.createElement('canvas');
+      newCanvas.id = 'globeCanvas';
+      area.prepend(newCanvas);
+    }
+
+    window.addEventListener('load', () => {
+      document.getElementById('loading-screen').style.display = 'none';
+      setTimeout(showMenuTitle, 3000);
+    });
+    function showMenuTitle() {
+      const title = document.getElementById('menu-title');
+      title.classList.add('animate');
+      title.addEventListener('animationend', () => {
+        title.style.display = 'none';
+        showOverlayMenu();
+      }, { once: true });
+    }
+    function showOverlayMenu() {
+      const ov = document.getElementById('menu-overlay');
+      ov.classList.add('visible');
+      document.querySelector('.symbols-container').classList.add('animate-symbols');
+    }
+    document.querySelector('.symbols-container').addEventListener('click', e => {
+      const sym = e.target.closest('.symbol');
+      if (!sym) return;
+      launchWorld(sym.dataset.world);
+    });
+    document.getElementById('btnMenu')?.addEventListener('click', () => {
+      const ov = document.getElementById('menu-overlay');
+      ov.style.display = 'block';
+      ov.style.opacity = '1';
+      ov.classList.add('visible');
+      document.querySelector('.symbols-container').classList.add('animate-symbols');
+    });
+
+    function launchWorld(name) {
+      const fb = document.getElementById('flipbook-area');
+      if (fb.classList.contains('show')) {
+        fb.classList.remove('show');
+        fb.classList.add('slide-out-left');
+        fb.addEventListener('transitionend', onSlideOut);
+      } else {
+        loadWorld(name);
+      }
+      function onSlideOut() {
+        fb.classList.remove('slide-out-left');
+        fb.removeEventListener('transitionend', onSlideOut);
+        loadWorld(name);
+      }
+    }
+
+    function loadWorld(worldName) {
+      // destrói o globo atual
+      destroyGlobe();
+
+      const ov = document.getElementById('menu-overlay');
+      ov.classList.remove('visible');
+      ov.style.transition = 'opacity .5s';
+      ov.style.opacity = '0';
+      setTimeout(() => ov.style.display = 'none', 500);
+      document.getElementById('flipbookContainer').innerHTML = '';
+      const s = document.createElement('script');
+      s.src = worldName + '.js';
+      document.body.appendChild(s);
+      s.onload = () => {
+        if (window.initGlobe)     window.initGlobe('#globeCanvas');
+        if (window.initFlipbook)  window.initFlipbook('#flipbookContainer');
+        const fb = document.getElementById('flipbook-area');
+        void fb.offsetWidth;
+        fb.classList.add('show');
+      };
+    }
+
+    document.getElementById('btnSair')?.addEventListener('click', e => {
+      e.preventDefault();
+      $('#overlayContainer').fadeOut(300);
+    });
+    document.getElementById('overlayContainer')?.addEventListener('click', function(e) {
+      if (e.target === this) $(this).fadeOut(300);
     });
   </script>
 </body>
