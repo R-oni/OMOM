@@ -238,6 +238,37 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
+    // funções de fade para memories
+    function fadeIn(audio, duration) {
+      audio.volume = 0;
+      audio.play().catch(() => {});
+      const step = 50;
+      const volStep = step / duration;
+      const fadeInterval = setInterval(() => {
+        if (audio.volume + volStep >= 1) {
+          audio.volume = 1;
+          clearInterval(fadeInterval);
+        } else {
+          audio.volume += volStep;
+        }
+      }, step);
+    }
+
+    function fadeOut(audio, duration) {
+      const step = 50;
+      const volStep = step / duration;
+      const fadeInterval = setInterval(() => {
+        if (audio.volume - volStep <= 0) {
+          audio.volume = 0;
+          clearInterval(fadeInterval);
+          audio.pause();
+          audio.currentTime = 0;
+        } else {
+          audio.volume -= volStep;
+        }
+      }, step);
+    }
+
     // --- Limpeza do globo atual ---
     function destroyGlobe() {
       const G = window._Globe;
@@ -303,7 +334,7 @@
       const ov = document.getElementById('menu-overlay');
       ov.classList.add('visible');
       document.querySelector('.symbols-container').classList.add('animate-symbols');
-      if (memories) memories.play().catch(() => {});
+      if (memories) fadeIn(memories, 1000);
     }
 
     document.querySelector('.symbols-container').addEventListener('click', e => {
@@ -333,11 +364,8 @@
     }
 
     function loadWorld(worldName) {
-      // para o tema do menu ao escolher o mundo
-      if (memories) {
-        memories.pause();
-        memories.currentTime = 0;
-      }
+      // fade out do tema do menu ao escolher o mundo
+      if (memories) fadeOut(memories, 1000);
 
       // destrói o globo atual
       destroyGlobe();
