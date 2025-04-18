@@ -273,7 +273,6 @@
     function destroyGlobe() {
       const G = window._Globe;
       if (G) {
-        // 1) descarta geometria e materiais
         if (G.scene) {
           G.scene.traverse(obj => {
             if (obj.geometry) obj.geometry.dispose();
@@ -284,7 +283,6 @@
           });
           G.scene = null;
         }
-        // 2) descarta renderer
         if (G.renderer) {
           G.renderer.dispose();
           G.renderer.forceContextLoss && G.renderer.forceContextLoss();
@@ -293,13 +291,11 @@
           }
           G.renderer = null;
         }
-        // 3) descarta controls
         if (G.controls) {
           G.controls.dispose();
           G.controls = null;
         }
       }
-      // remove canvas e imagens extras
       const area = document.getElementById('globe-area');
       const oldCanvas = area.querySelector('canvas');
       if (oldCanvas) oldCanvas.remove();
@@ -307,7 +303,6 @@
         const img = document.getElementById(id);
         if (img) img.remove();
       });
-      // recria canvas limpo
       const newCanvas = document.createElement('canvas');
       newCanvas.id = 'globeCanvas';
       area.prepend(newCanvas);
@@ -332,6 +327,8 @@
 
     function showOverlayMenu() {
       const ov = document.getElementById('menu-overlay');
+      ov.style.display = 'block';
+      ov.style.opacity = '1';
       ov.classList.add('visible');
       document.querySelector('.symbols-container').classList.add('animate-symbols');
       if (memories) fadeIn(memories, 1000);
@@ -364,24 +361,17 @@
     }
 
     function loadWorld(worldName) {
-      // fade out do tema do menu ao escolher o mundo
       if (memories) fadeOut(memories, 1000);
 
-      // destrói o globo atual
       destroyGlobe();
 
-      // fecha overlay do menu
       const ov = document.getElementById('menu-overlay');
       ov.classList.remove('visible');
-      ov.style.transition = 'opacity .5s';
-      ov.style.opacity = '0';
-      setTimeout(() => {
-        ov.style.display = 'none';
-        // agora que o overlay foi fechado, exibe o botão de menu
-        document.getElementById('btnMenu').style.display = 'block';
-      }, 500);
+      ov.style.display = 'none';
+      ov.style.opacity = '';
 
-      // carrega flipbook
+      document.getElementById('btnMenu').style.display = 'block';
+
       document.getElementById('flipbookContainer').innerHTML = '';
       const s = document.createElement('script');
       s.src = worldName + '.js';
