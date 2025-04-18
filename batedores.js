@@ -10,7 +10,7 @@ window.initGlobe = function(selector) {
 
   const w = canvas.clientWidth, h = canvas.clientHeight;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, w/h, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 1000);
   camera.position.set(0, 0, 4);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -89,10 +89,11 @@ window.initGlobe = function(selector) {
   })();
 
   window.addEventListener('resize', () => {
-    const ww = canvas.clientWidth, hh = canvas.clientHeight;
-    renderer.setSize(ww, hh);
-    camera.aspect = ww / hh;
+    const newWidth = container.clientWidth;
+    const newHeight = container.clientHeight;
+    camera.aspect = newWidth / newHeight;
     camera.updateProjectionMatrix();
+    renderer.setSize(newWidth, newHeight);
   });
 };
 
