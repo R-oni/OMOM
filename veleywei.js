@@ -17,9 +17,8 @@ window.initGlobe = function(selector) {
   renderer.setSize(w, h);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.outputEncoding = THREE.sRGBEncoding;
 
+  renderer.setPixelRatio(window.devicePixelRatio);
   // céu estrelado
   (function(){
     const geom = new THREE.BufferGeometry();
@@ -36,7 +35,7 @@ window.initGlobe = function(selector) {
       );
     }
     geom.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
-    geom.setAttribute('color',    new THREE.Float32BufferAttribute(col,3));
+    geom.setAttribute('color', new THREE.Float32BufferAttribute(col,3));
     scene.add(new THREE.Points(
       geom,
       new THREE.PointsMaterial({ size:0.08, vertexColors:true })
@@ -46,78 +45,58 @@ window.initGlobe = function(selector) {
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
-
-  // guarda referências para destruição
-  window._Globe = window._Globe || {};
-  window._Globe.scene    = scene;
-  window._Globe.renderer = renderer;
-  window._Globe.controls = controls;
-
-  window.globeControls = controls;
+  window.globeControls = controls; // expõe controles
 
   const loader = new THREE.TextureLoader();
-
-  // globo principal
   const central = new THREE.Mesh(
     new THREE.SphereGeometry(1,64,64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.webp', check) })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
 
-  // camada de nuvens
-  const cloudMat = new THREE.MeshPhongMaterial({
-    map: loader.load('mundos/veleywei/imagens/nuvemveleywei.webp', check),
-    transparent: true,
-    opacity: 1,
-    depthWrite: false
-  });
-  const cloudMesh = new THREE.Mesh(
-    new THREE.SphereGeometry(1.01,64,64),
-    cloudMat
+  const orbitRadius = 3;
+  const orbit = new THREE.Mesh(
+    new THREE.SphereGeometry(0.1,64,64),
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/veleywei/imagens/mapaveleywei.png', check) })
   );
-  scene.add(cloudMesh);
+  orbit.castShadow = orbit.receiveShadow = true;
+  orbit.position.set(orbitRadius, 0, 0);
+  scene.add(orbit);
+  window.globeOrbit = orbit; // expõe satélite
 
-  // iluminação
   scene.add(new THREE.AmbientLight(0xffffff, 0.2));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
   dir.position.set(3, 3, 5);
   dir.castShadow = true;
   scene.add(dir);
 
-  // pivôs e mini-globos orbitando
-  const pivots = [new THREE.Object3D(), new THREE.Object3D(), new THREE.Object3D()];
-  pivots.forEach(p => scene.add(p));
-
-  const miniGeo   = new THREE.SphereGeometry(0.01,32,32);
-  const miniCols  = [0xE0E0E0,0xC0C0C0,0xA0A0A0];
-  const distances = [1.3,2.0,2.5];
-  miniCols.forEach((col,i)=>{
-    const mat  = new THREE.MeshStandardMaterial({ color: col });
-    const mini = new THREE.Mesh(miniGeo, mat);
-    mini.position.x = distances[i];
-    pivots[i].add(mini);
-  });
-
-  let angle = 0;
+  let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
-  function animate(){
+  window.trackOrbit = false; // flag de tracking
+
+  (function animate(){
     requestAnimationFrame(animate);
     const delta = clock.getDelta();
     central.rotation.y += 0.003;
-    cloudMesh.rotation.y += 0.0039;
-    pivots[0].rotation.y += 0.03;
-    pivots[1].rotation.y += 0.015;
-    pivots[2].rotation.y += 0.01;
+    angle += speed * delta;
+    orbit.position.set(
+      orbitRadius * Math.cos(angle),
+      0,
+      orbitRadius * Math.sin(angle)
+    );
     controls.update();
+    if(window.trackOrbit) {
+      controls.target.copy(orbit.position);
+      controls.update();
+    }
     renderer.render(scene, camera);
-  }
-  animate();
+  })();
 
   window.addEventListener('resize', ()=>{
     const ww = canvas.clientWidth, hh = canvas.clientHeight;
     renderer.setSize(ww, hh);
-    camera.aspect = ww/ hh;
+    camera.aspect = ww / hh;
     camera.updateProjectionMatrix();
   });
 };
@@ -127,11 +106,12 @@ window.initFlipbook = function(selector) {
   const $container = $(selector);
   if (!$container.length) return console.warn('Flipbook não encontrado:', selector);
 
+  // Injeta toda a estrutura do flipbook
   $container.html(`
     <div id="flipbook">
       <div class="page hard">
         <img src="mundos/veleywei/imagens/cap1/capa.webp" alt="Capa" draggable="false">
-        <img id="setaBtn" src="mundos/veleywei/imagens/cap1/seta.webp" alt="Seta" draggable="false">
+        <img id="setaBtn" src="mundos/veleywei/imagens/seta.webp" alt="Seta" draggable="false">
       </div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
@@ -318,3 +298,4 @@ window.initFlipbook = function(selector) {
       window.globeControls.update();
     }
   });
+};
