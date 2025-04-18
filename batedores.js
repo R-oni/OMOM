@@ -89,13 +89,22 @@ window.initGlobe = function(selector) {
   })();
 
 
-    window.addEventListener('resize', () => {
-      const newWidth = canvas.clientWidth;
-      const newHeight = canvas.clientHeight;
-      camera.aspect = newWidth / newHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(newWidth, newHeight);
-    });
+// Substitua o handler de resize por este
+window.addEventListener('resize', () => {
+  // Aguarda um momento para que o CSS seja aplicado
+  setTimeout(() => {
+    // Obtém as dimensões atuais do canvas
+    const newWidth = canvas.clientWidth;
+    const newHeight = canvas.clientHeight;
+    
+    // Atualiza a câmera
+    camera.aspect = newWidth / newHeight;
+    camera.updateProjectionMatrix();
+    
+    // Atualiza o renderer
+    renderer.setSize(newWidth, newHeight, false); // false mantém o tamanho do buffer
+  }, 100);
+});
 };
 
 // 2) Inicialização do Flipbook com lazy‑load, seta mobile e botões de página
