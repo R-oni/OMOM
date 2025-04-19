@@ -5,48 +5,31 @@ window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
 
-  // overlay de carregamento
   const globeArea = document.querySelector('#globe-area');
   if (globeArea) {
-    // estilo para animação pulsante
-    const style = document.createElement('style');
-    style.textContent = `
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-#loadingOverlay img, #loadingOverlay div {
-  animation: pulse 2s infinite;
-}
-`;
-    document.head.appendChild(style);
-
-    // container do overlay
+    // cria container do overlay (escondido inicialmente)
     const overlay = document.createElement('div');
-    overlay.id = 'loadingOverlay';
+    overlay.id = 'titleOverlay';
     Object.assign(overlay.style, {
       position: 'absolute',
       top: '0',
       left: '0',
       width: '100%',
       height: '100%',
-      background: 'black',
-      display: 'flex',
+      background: 'rgba(0,0,0,0.9)',
+      display: 'none',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000
     });
 
-    // imagem 50% menor
     const img = document.createElement('img');
     img.src = 'mundos/ttok/imagens/titulottok.webp';
     img.style.width = '50%';
     img.style.marginBottom = '10px';
     overlay.appendChild(img);
 
-    // título em 8px
     const title = document.createElement('div');
     title.textContent = "os batedores de tt'tok'tak'tak't";
     title.style.fontFamily = "'Press Start 2P', monospace";
@@ -55,11 +38,6 @@ window.initGlobe = function(selector) {
     overlay.appendChild(title);
 
     globeArea.appendChild(overlay);
-
-    // remove overlay quando todas as texturas carregarem
-    window.addEventListener('globoCarregado', () => {
-      overlay.style.display = 'none';
-    });
   }
 
   let loaded = 0, total = 2;
@@ -109,13 +87,11 @@ window.initGlobe = function(selector) {
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
 
-  // guarda referências para destruição
   window._Globe = window._Globe || {};
   window._Globe.scene    = scene;
   window._Globe.renderer = renderer;
   window._Globe.controls = controls;
-
-  window.globeControls = controls; // expõe controles
+  window.globeControls   = controls;
 
   const loader = new THREE.TextureLoader();
   const central = new THREE.Mesh(
@@ -137,7 +113,7 @@ window.initGlobe = function(selector) {
   orbit.castShadow = orbit.receiveShadow = true;
   orbit.position.set(orbitRadius, 0, 0);
   scene.add(orbit);
-  window.globeOrbit = orbit; // expõe satélite
+  window.globeOrbit = orbit;
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.2));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
@@ -147,7 +123,6 @@ window.initGlobe = function(selector) {
 
   let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
-  window.trackOrbit = false; // flag de tracking
 
   (function animate(){
     requestAnimationFrame(animate);
@@ -160,10 +135,6 @@ window.initGlobe = function(selector) {
       orbitRadius * Math.sin(angle)
     );
     controls.update();
-    if (window.trackOrbit) {
-      controls.target.copy(orbit.position);
-      controls.update();
-    }
     renderer.render(scene, camera);
   })();
 
@@ -245,27 +216,9 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
-  // CSS do overlay centralizado
-  $('#overlayContainer').css({
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    'z-index': 9999,
-    display: 'none'
-  });
-  $('#overlayImage').css({
-    'max-width': '90vw',
-    'max-height': '90vh',
-    width: 'auto',
-    height: 'auto'
-  });
-
-  // Ajuste de tamanho das páginas
+  // Ajuste de tamanho e lazy-load
   $container.find('#flipbook .page').css({ width: '80%', height: '80%' });
   $container.find('#flipbook .page img').css({ width: '100%', height: '100%', objectFit: 'contain' });
-
-  // Lazy‑load
   $container.find('#flipbook .page').each(function(idx){
     const p = idx + 1;
     $(this).attr('data-page', p);
@@ -285,103 +238,78 @@ window.initFlipbook = function(selector) {
   }
   preloadPages(1,3);
 
-  // Áudio de página
+  // Turn.js init e responsivo
+  $('#flipbook').turn({
+    autoCenter: false,
+    display: 'double',
+    when: { turned: (_, page) => preloadPages(page+1,3) }
+  });
+  $(window).on('resize', ()=>$('#flipbook').turn('size',$container.width(),$container.height()));
+
+  // Som de página
   const flipAudio = new Audio('mundos/ttok/sompagina.mp3');
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
-
-  // Turn.js init
-  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turned: (_, page)=> preloadPages(page+1,3) } });
-
-  // Responsivo
-  function resizeFB(){
-    let w, h;
-    if ($(window).width() < 1024) {
-      w = $(window).width() * 0.9;
-      h = w * (450/600);
-    } else {
-      w = $container.width(); h = $container.height();
-    }
-    $('#flipbook').turn('size', w, h);
-  }
-  resizeFB(); $(window).on('resize', resizeFB);
-
-  // Evita drag
-  $('.page img').on('dragstart', e=>e.preventDefault());
-
-  // Som no mousedown
   $('#flipbook').on('mousedown touchstart', ()=>{
     flipAudio.currentTime = 0; flipAudio.play().catch(()=>{});
   });
 
-  // Oculta seta ao virar
+  // Oculta seta inicial
   $('#flipbook').bind('turning', (e, page)=>{
-    if (page>1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove());
+    if (page > 1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove());
   });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Clique Mundo: tracking do satélite
-  const focoMundo = function(){
-    window.trackOrbit = true;
-    if (window.globeControls && window.globeOrbit){
-      window.globeControls.target.copy(window.globeOrbit.position);
-      window.globeControls.update();
+  // Clique Mundo: exibe título + imagem por 3s
+  $container.on('click','#cliquemundo', function(e){
+    e.stopPropagation();
+    const overlay = document.getElementById('titleOverlay');
+    const globeCanvas = document.querySelector('#globe-area canvas');
+    if (overlay && globeCanvas) {
+      overlay.style.display = 'flex';
+      globeCanvas.style.display = 'none';
+      setTimeout(()=>{
+        overlay.style.display = 'none';
+        globeCanvas.style.display = '';
+      }, 3000);
     }
-  };
+  });
 
-  // Clique Sangue do Mundo: substitui o globo pela imagem
-  const trocaSangue = function(){
+  // Mapeia demais handlers originais (sangue, inversão, etc.)
+  $container.on('click','#cliquesanguedomundo', function(e){
+    e.stopPropagation();
     if (!$('#sangueGloboImage').length) {
       $('<img>',{
         id: 'sangueGloboImage',
-        src: 'mundos/ttok/imagens/cap1/sanguedomundo.png',
+        src: 'mundos/ttok/imagens/cap1/sanguedomundo.webp',
         css: { width: '100%', height: '100%', objectFit: 'contain' }
       }).appendTo('#globe-area');
     }
-    $('#globeCanvas').hide();
-  };
-
-  // Mapeia handlers
-  const map = { cliquemundo: focoMundo, cliquesanguedomundo: trocaSangue };
-  Object.keys(map).forEach(id=>{
-    $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
+    $('#globe-area canvas').hide();
+    setTimeout(()=>{
+      $('#sangueGloboImage').remove();
+      $('#globe-area canvas').show();
+    }, 3000);
   });
-
-  // Overlays centrais
   $container.on('click','#cliqueinversao', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/inversao.webp');
-    $('#overlayContainer').fadeIn(500);
+    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/inversao.webp'); $('#overlayContainer').fadeIn(500);
   });
   $container.on('click','#cliqueg', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/estrelag.webp');
-    $('#overlayContainer').fadeIn(500);
+    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/estrelag.webp'); $('#overlayContainer').fadeIn(500);
   });
   $container.on('click','#cliquerefracao', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/refracao.webp');
-    $('#overlayContainer').fadeIn(500);
+    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/refracao.webp'); $('#overlayContainer').fadeIn(500);
   });
   $container.on('click','#cliquemorse', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/morse.webp');
-    $('#overlayContainer').fadeIn(500);
+    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/morse.webp'); $('#overlayContainer').fadeIn(500);
   });
   $container.on('click','#cliquecapacitor', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/capacitor.webp');
-    $('#overlayContainer').fadeIn(500);
+    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/capacitor.webp'); $('#overlayContainer').fadeIn(500);
   });
 
-  // Ao virar página, reseta globo, canvas e overlays
+  // Ao virar página, reseta globo e overlays
   $('#flipbook').bind('turning', ()=>{
-    $('#globeCanvas').show();
+    $('#globe-area canvas').show();
     $('#sangueGloboImage').remove();
-    window.trackOrbit = false;
-    if (window.globeControls){
-      window.globeControls.target.set(0, 0, 0);
-      window.globeControls.update();
-    }
     $('#overlayContainer').fadeOut(200);
   });
 };
