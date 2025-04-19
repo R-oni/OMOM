@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -64,15 +65,6 @@
       width: 100%; height: 100%; max-height: 100%;
       object-fit: contain;
     }
-    /* Canvas para o starfield dentro do globe-area, inicialmente oculto */
-    #warpCanvas {
-      display: none;
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 1;
-      pointer-events: none;
-    }
     /* botão menu escondido inicialmente */
     #btnMenu {
       display: none;
@@ -130,7 +122,7 @@
       top:0; left:0;
       width:100%; height:100%;
       backdrop-filter: blur(6px);
-      display: none; z-index: 2;
+      display: none; z-index: 1;
     }
     #menu-overlay.visible { display: block; }
 
@@ -177,7 +169,7 @@
       font-family:'Press Start 2P',cursive;
       color: #FFFFFF;
       font-size: min(5vw,30px);
-      opacity:0; z-index:3;
+      opacity:0; z-index:1;
     }
     #menu-title.animate {
       display:block;
@@ -205,7 +197,6 @@
   <div id="app">
     <div id="globe-area">
       <canvas id="globeCanvas"></canvas>
-      <canvas id="warpCanvas"></canvas>
       <div id="menu-title">OMOM</div>
       <button id="btnMenu">MENU</button>
       <div id="menu-overlay">
@@ -216,8 +207,7 @@
             <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
             <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
             <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenDenBouBou"></div>
-            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.
-png" alt="Araporu"></div>
+            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
             <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
             <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
             <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
@@ -316,8 +306,6 @@ png" alt="Araporu"></div>
       const newCanvas = document.createElement('canvas');
       newCanvas.id = 'globeCanvas';
       area.prepend(newCanvas);
-      // parar starfield
-      if (window.stopStarfield) window.stopStarfield();
     }
 
     window.addEventListener('load', () => {
@@ -334,6 +322,7 @@ png" alt="Araporu"></div>
       }, { once: true });
     }
 
+    // controla o tema do menu (memories.mp3)
     const memories = document.getElementById('memories');
 
     function showOverlayMenu() {
@@ -372,10 +361,6 @@ png" alt="Araporu"></div>
     }
 
     function loadWorld(worldName) {
-      // exibe starfield
-      document.getElementById('warpCanvas').style.display = 'block';
-      if (window.startStarfield) window.startStarfield();
-
       if (memories) fadeOut(memories, 1000);
 
       destroyGlobe();
@@ -408,6 +393,7 @@ png" alt="Araporu"></div>
       if (e.target === this) $(this).fadeOut(300);
     });
 
+    // toca bgm só no primeiro clique em qualquer parte da página
     (function() {
       const bgm = document.getElementById('bgm');
       function playOnFirstClick() {
@@ -417,78 +403,6 @@ png" alt="Araporu"></div>
       }
       window.addEventListener('click', playOnFirstClick);
     })();
-  </script>
-
-  <script>
-    // starfield logic
-    (function(){
-      const canvas = document.getElementById("warpCanvas");
-      const ctx = canvas.getContext("2d");
-      let stars = [], numStars = 300, speed = 2, animationFrameId;
-
-      function setupCanvas() {
-        canvas.width = canvas.parentElement.clientWidth;
-        canvas.height = canvas.parentElement.clientHeight;
-      }
-
-      function createStars() {
-        stars = [];
-        for (let i = 0; i < numStars; i++) {
-          const r = Math.random();
-          let color = r < 0.90 ? "white" : r < 0.95 ? "#FF5555" : "#AAAAFF";
-          stars.push({
-            x: Math.random() * canvas.width - canvas.width/2,
-            y: Math.random() * canvas.height - canvas.height/2,
-            z: Math.random() * canvas.width,
-            color
-          });
-        }
-      }
-
-      function updateStars() {
-        ctx.fillStyle = "black";
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        stars.forEach(star => {
-          star.z -= speed;
-          if (star.z <= 0) {
-            star.x = Math.random() * canvas.width - canvas.width/2;
-            star.y = Math.random() * canvas.height - canvas.height/2;
-            star.z = canvas.width;
-          }
-          const perspective = 300 / star.z;
-          const sx = star.x * perspective + canvas.width/2;
-          const sy = star.y * perspective + canvas.height/2;
-          const size = Math.max(2 * perspective, 0.5);
-          ctx.fillStyle = star.color;
-          ctx.beginPath();
-          ctx.arc(sx, sy, size, 0, 2*Math.PI);
-          ctx.fill();
-        });
-        animationFrameId = requestAnimationFrame(updateStars);
-      }
-
-      window.startStarfield = function() {
-        setupCanvas();
-        createStars();
-        updateStars();
-        window.addEventListener("resize", () => {
-          setupCanvas();
-          createStars();
-        });
-      };
-      window.stopStarfield = function() {
-        cancelAnimationFrame(animationFrameId);
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        canvas.style.display = "none";
-      };
-    })();
-  </script>
-
-  <script>
-    document.addEventListener("globoCarregado", function() {
-      document.getElementById("globeLoading").style.display = "none";
-      if (window.stopStarfield) window.stopStarfield();
-    });
   </script>
 </body>
 </html>
