@@ -5,8 +5,65 @@ window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
 
+  // Esconde o canvas até as texturas carregarem
+  canvas.style.display = 'none';
+
+  // Cria overlay de carregamento
+  const globeArea = document.querySelector('#globe-area');
+  const loaderOverlay = document.createElement('div');
+  loaderOverlay.id = 'globeLoader';
+  Object.assign(loaderOverlay.style, {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    width: '100%',
+    height: '100%',
+    background: 'black',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    zIndex: '999'
+  });
+
+  // Animação pulsante
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }`;
+  document.head.appendChild(styleEl);
+  loaderOverlay.style.animation = 'pulse 2s infinite';
+
+  // Imagem de título
+  const titleImg = document.createElement('img');
+  titleImg.src = 'mundos/ttok/imagens/titulottok.webp';
+  titleImg.style.maxWidth = '80%';
+  titleImg.style.height = 'auto';
+  titleImg.style.marginBottom = '20px';
+  loaderOverlay.appendChild(titleImg);
+
+  // Texto em Press Start 2P
+  const titleText = document.createElement('div');
+  titleText.textContent = "os batedores de tt'tok'tak'tak't";
+  Object.assign(titleText.style, {
+    fontFamily: "'Press Start 2P', monospace",
+    fontSize: '4px',
+    color: '#00ffe7',
+    letterSpacing: '1px'
+  });
+  loaderOverlay.appendChild(titleText);
+
+  if (globeArea) globeArea.appendChild(loaderOverlay);
+
   let loaded = 0, total = 2;
-  const check = () => { if (++loaded === total) document.dispatchEvent(new Event('globoCarregado')); };
+  const check = () => {
+    if (++loaded === total) document.dispatchEvent(new Event('globoCarregado'));
+  };
+
+  // Remove overlay e mostra canvas ao carregar
+  window.addEventListener('globoCarregado', () => {
+    const ov = document.getElementById('globeLoader');
+    if (ov) ov.remove();
+    canvas.style.display = 'block';
+  });
 
   const w = canvas.clientWidth, h = canvas.clientHeight;
   const scene = new THREE.Scene();
@@ -52,7 +109,7 @@ window.initGlobe = function(selector) {
   window._Globe.renderer = renderer;
   window._Globe.controls = controls;
 
-  window.globeControls = controls; // expõe controles
+  window.globeControls = controls;
 
   const loader = new THREE.TextureLoader();
   const central = new THREE.Mesh(
@@ -70,7 +127,7 @@ window.initGlobe = function(selector) {
   orbit.castShadow = orbit.receiveShadow = true;
   orbit.position.set(orbitRadius, 0, 0);
   scene.add(orbit);
-  window.globeOrbit = orbit; // expõe satélite
+  window.globeOrbit = orbit;
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.2));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
@@ -80,7 +137,7 @@ window.initGlobe = function(selector) {
 
   let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
-  window.trackOrbit = false; // flag de tracking
+  window.trackOrbit = false;
 
   (function animate(){
     requestAnimationFrame(animate);
