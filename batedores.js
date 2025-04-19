@@ -5,65 +5,67 @@ window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
 
-  // Esconde o canvas até as texturas carregarem
-  canvas.style.display = 'none';
-
-  // Cria overlay de carregamento
+  // overlay de carregamento
   const globeArea = document.querySelector('#globe-area');
-  const loaderOverlay = document.createElement('div');
-  loaderOverlay.id = 'globeLoader';
-  Object.assign(loaderOverlay.style, {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-    background: 'black',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    zIndex: '999'
-  });
+  if (globeArea) {
+    // estilo para animação pulsante
+    const style = document.createElement('style');
+    style.textContent = `
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+#loadingOverlay img, #loadingOverlay div {
+  animation: pulse 2s infinite;
+}
+`;
+    document.head.appendChild(style);
 
-  // Animação pulsante
-  const styleEl = document.createElement('style');
-  styleEl.textContent = `@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }`;
-  document.head.appendChild(styleEl);
-  loaderOverlay.style.animation = 'pulse 2s infinite';
+    // container do overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'loadingOverlay';
+    Object.assign(overlay.style, {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      background: 'black',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000
+    });
 
-  // Imagem de título
-  const titleImg = document.createElement('img');
-  titleImg.src = 'mundos/ttok/imagens/titulottok.webp';
-  titleImg.style.maxWidth = '80%';
-  titleImg.style.height = 'auto';
-  titleImg.style.marginBottom = '20px';
-  loaderOverlay.appendChild(titleImg);
+    // imagem 50% menor
+    const img = document.createElement('img');
+    img.src = 'mundos/ttok/imagens/titulottok.webp';
+    img.style.width = '50%';
+    img.style.marginBottom = '10px';
+    overlay.appendChild(img);
 
-  // Texto em Press Start 2P
-  const titleText = document.createElement('div');
-  titleText.textContent = "os batedores de tt'tok'tak'tak't";
-  Object.assign(titleText.style, {
-    fontFamily: "'Press Start 2P', monospace",
-    fontSize: '4px',
-    color: '#00ffe7',
-    letterSpacing: '1px'
-  });
-  loaderOverlay.appendChild(titleText);
+    // título em 8px
+    const title = document.createElement('div');
+    title.textContent = "os batedores de tt'tok'tak'tak't";
+    title.style.fontFamily = "'Press Start 2P', monospace";
+    title.style.color = '#00ffe7';
+    title.style.fontSize = '8px';
+    overlay.appendChild(title);
 
-  if (globeArea) globeArea.appendChild(loaderOverlay);
+    globeArea.appendChild(overlay);
+
+    // remove overlay quando todas as texturas carregarem
+    window.addEventListener('globoCarregado', () => {
+      overlay.style.display = 'none';
+    });
+  }
 
   let loaded = 0, total = 2;
   const check = () => {
     if (++loaded === total) document.dispatchEvent(new Event('globoCarregado'));
   };
-
-  // Remove overlay e mostra canvas ao carregar
-  window.addEventListener('globoCarregado', () => {
-    const ov = document.getElementById('globeLoader');
-    if (ov) ov.remove();
-    canvas.style.display = 'block';
-  });
 
   const w = canvas.clientWidth, h = canvas.clientHeight;
   const scene = new THREE.Scene();
@@ -80,22 +82,26 @@ window.initGlobe = function(selector) {
   (function(){
     const geom = new THREE.BufferGeometry();
     const pos = [], col = [];
-    for(let i=0; i<30000; i++){
-      const R=80, θ=Math.random()*2*Math.PI, φ=Math.acos(Math.random()*2-1);
-      const x=R*Math.sin(φ)*Math.cos(θ), y=R*Math.sin(φ)*Math.sin(θ), z=R*Math.cos(φ);
-      pos.push(x,y,z);
-      const r=Math.random();
+    for (let i = 0; i < 30000; i++) {
+      const R = 80,
+            θ = Math.random() * 2 * Math.PI,
+            φ = Math.acos(Math.random() * 2 - 1);
+      const x = R * Math.sin(φ) * Math.cos(θ),
+            y = R * Math.sin(φ) * Math.sin(θ),
+            z = R * Math.cos(φ);
+      pos.push(x, y, z);
+      const r = Math.random();
       col.push(
-        r<0.9?1:1,
-        r<0.9?1:r<0.95?0.6:0.6,
-        r<0.9?1:r<0.95?0.6:1
+        r < 0.9 ? 1 : 1,
+        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 0.6,
+        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 1
       );
     }
-    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
-    geom.setAttribute('color', new THREE.Float32BufferAttribute(col,3));
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geom.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
     scene.add(new THREE.Points(
       geom,
-      new THREE.PointsMaterial({ size:0.08, vertexColors:true })
+      new THREE.PointsMaterial({ size: 0.08, vertexColors: true })
     ));
   })();
 
@@ -109,25 +115,29 @@ window.initGlobe = function(selector) {
   window._Globe.renderer = renderer;
   window._Globe.controls = controls;
 
-  window.globeControls = controls;
+  window.globeControls = controls; // expõe controles
 
   const loader = new THREE.TextureLoader();
   const central = new THREE.Mesh(
-    new THREE.SphereGeometry(1,64,64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapatoktok.png', check) })
+    new THREE.SphereGeometry(1, 64, 64),
+    new THREE.MeshStandardMaterial({
+      map: loader.load('mundos/ttok/mapatoktok.png', check)
+    })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
 
   const orbitRadius = 3;
   const orbit = new THREE.Mesh(
-    new THREE.SphereGeometry(0.1,64,64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapattok.png', check) })
+    new THREE.SphereGeometry(0.1, 64, 64),
+    new THREE.MeshStandardMaterial({
+      map: loader.load('mundos/ttok/mapattok.png', check)
+    })
   );
   orbit.castShadow = orbit.receiveShadow = true;
   orbit.position.set(orbitRadius, 0, 0);
   scene.add(orbit);
-  window.globeOrbit = orbit;
+  window.globeOrbit = orbit; // expõe satélite
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.2));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
@@ -137,7 +147,7 @@ window.initGlobe = function(selector) {
 
   let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
-  window.trackOrbit = false;
+  window.trackOrbit = false; // flag de tracking
 
   (function animate(){
     requestAnimationFrame(animate);
@@ -150,14 +160,14 @@ window.initGlobe = function(selector) {
       orbitRadius * Math.sin(angle)
     );
     controls.update();
-    if(window.trackOrbit) {
+    if (window.trackOrbit) {
       controls.target.copy(orbit.position);
       controls.update();
     }
     renderer.render(scene, camera);
   })();
 
-  window.addEventListener('resize', ()=>{
+  window.addEventListener('resize', () => {
     const ww = canvas.clientWidth, hh = canvas.clientHeight;
     renderer.setSize(ww, hh);
     camera.aspect = ww / hh;
@@ -192,23 +202,23 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina8.webp" alt="Página 10" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina9.webp" alt="Página 11" draggable="false">
-        <img id="cliqueinversao" src="mundos/ttok/imagens/cap1/cliqueinversao.webp" alt="Clique Inversão" draggable="false">
+        <img id="cliqueinversao" src="mundos/ttok/imagens/cap1/inversao.webp" alt="Clique Inversão" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina10.webp" alt="Página 12" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina11.webp" alt="Página 13" draggable="false">
-        <img id="cliqueg" src="mundos/ttok/imagens/cap1/cliqueg.webp" alt="Clique G" draggable="false">
+        <img id="cliqueg" src="mundos/ttok/imagens/cap1/estrelag.webp" alt="Clique G" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina12.webp" alt="Página 14" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina13.webp" alt="Página 15" draggable="false">
-        <img id="cliquerefracao" src="mundos/ttok/imagens/cap1/cliquerefracao.webp" alt="Clique Refracão" draggable="false">
+        <img id="cliquerefracao" src="mundos/ttok/imagens/cap1/refracao.webp" alt="Clique Refracão" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina14.webp" alt="Página 16" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina15.webp" alt="Página 17" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina16.webp" alt="Página 18" draggable="false">
-        <img id="cliquemorse" src="mundos/ttok/imagens/cap1/cliquemorse.webp" alt="Clique Morse" draggable="false">
+        <img id="cliquemorse" src="mundos/ttok/imagens/cap1/morse.webp" alt="Clique Morse" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina17.webp" alt="Página 19" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina18.webp" alt="Página 20" draggable="false"></div>
@@ -221,11 +231,11 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina25.webp" alt="Página 27" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina26.webp" alt="Página 28" draggable="false">
-        <img id="cliquecapacitor" src="mundos/ttok/imagens/cap1/cliquecapacitor.webp" alt="Clique Capacitor" draggable="false">
+        <img id="cliquecapacitor" src="mundos/ttok/imagens/cap1/capacitor.webp" alt="Clique Capacitor" draggable="false">
       </div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina27.webp" alt="Página 29" draggable="false">
-        <img id="cliquesanguedomundo" src="mundos/ttok/imagens/cap1/cliquesanguedomundo.webp" alt="Clique Sangue do Mundo" draggable="false">
+        <img id="cliquesanguedomundo" src="mundos/ttok/imagens/cap1/sanguedomundo.webp" alt="Clique Sangue do Mundo" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina28.webp" alt="Página 30" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina29.webp" alt="Página 31" draggable="false"></div>
@@ -312,7 +322,7 @@ window.initFlipbook = function(selector) {
   // Clique Mundo: tracking do satélite
   const focoMundo = function(){
     window.trackOrbit = true;
-    if(window.globeControls && window.globeOrbit){
+    if (window.globeControls && window.globeOrbit){
       window.globeControls.target.copy(window.globeOrbit.position);
       window.globeControls.update();
     }
@@ -368,9 +378,10 @@ window.initFlipbook = function(selector) {
     $('#globeCanvas').show();
     $('#sangueGloboImage').remove();
     window.trackOrbit = false;
-    if(window.globeControls){
-      window.globeControls.target.set(0,0,0);
+    if (window.globeControls){
+      window.globeControls.target.set(0, 0, 0);
       window.globeControls.update();
     }
+    $('#overlayContainer').fadeOut(200);
   });
 };
