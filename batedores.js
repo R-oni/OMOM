@@ -5,45 +5,8 @@ window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return console.warn('Canvas não encontrado:', selector);
 
-  const globeArea = document.querySelector('#globe-area');
-  if (globeArea) {
-    // cria container do overlay (escondido inicialmente)
-    const overlay = document.createElement('div');
-    overlay.id = 'titleOverlay';
-    Object.assign(overlay.style, {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      width: '100%',
-      height: '100%',
-      background: 'rgba(0,0,0,0.9)',
-      display: 'none',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000
-    });
-
-    const img = document.createElement('img');
-    img.src = 'mundos/ttok/imagens/titulottok.webp';
-    img.style.width = '50%';
-    img.style.marginBottom = '10px';
-    overlay.appendChild(img);
-
-    const title = document.createElement('div');
-    title.textContent = "os batedores de tt'tok'tak'tak't";
-    title.style.fontFamily = "'Press Start 2P', monospace";
-    title.style.color = '#00ffe7';
-    title.style.fontSize = '8px';
-    overlay.appendChild(title);
-
-    globeArea.appendChild(overlay);
-  }
-
   let loaded = 0, total = 2;
-  const check = () => {
-    if (++loaded === total) document.dispatchEvent(new Event('globoCarregado'));
-  };
+  const check = () => { if (++loaded === total) document.dispatchEvent(new Event('globoCarregado')); };
 
   const w = canvas.clientWidth, h = canvas.clientHeight;
   const scene = new THREE.Scene();
@@ -60,26 +23,22 @@ window.initGlobe = function(selector) {
   (function(){
     const geom = new THREE.BufferGeometry();
     const pos = [], col = [];
-    for (let i = 0; i < 30000; i++) {
-      const R = 80,
-            θ = Math.random() * 2 * Math.PI,
-            φ = Math.acos(Math.random() * 2 - 1);
-      const x = R * Math.sin(φ) * Math.cos(θ),
-            y = R * Math.sin(φ) * Math.sin(θ),
-            z = R * Math.cos(φ);
-      pos.push(x, y, z);
-      const r = Math.random();
+    for(let i=0; i<30000; i++){
+      const R=80, θ=Math.random()*2*Math.PI, φ=Math.acos(Math.random()*2-1);
+      const x=R*Math.sin(φ)*Math.cos(θ), y=R*Math.sin(φ)*Math.sin(θ), z=R*Math.cos(φ);
+      pos.push(x,y,z);
+      const r=Math.random();
       col.push(
-        r < 0.9 ? 1 : 1,
-        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 0.6,
-        r < 0.9 ? 1 : r < 0.95 ? 0.6 : 1
+        r<0.9?1:1,
+        r<0.9?1:r<0.95?0.6:0.6,
+        r<0.9?1:r<0.95?0.6:1
       );
     }
-    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    geom.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+    geom.setAttribute('color', new THREE.Float32BufferAttribute(col,3));
     scene.add(new THREE.Points(
       geom,
-      new THREE.PointsMaterial({ size: 0.08, vertexColors: true })
+      new THREE.PointsMaterial({ size:0.08, vertexColors:true })
     ));
   })();
 
@@ -87,33 +46,31 @@ window.initGlobe = function(selector) {
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
 
+  // guarda referências para destruição
   window._Globe = window._Globe || {};
   window._Globe.scene    = scene;
   window._Globe.renderer = renderer;
   window._Globe.controls = controls;
-  window.globeControls   = controls;
+
+  window.globeControls = controls; // expõe controles
 
   const loader = new THREE.TextureLoader();
   const central = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 64, 64),
-    new THREE.MeshStandardMaterial({
-      map: loader.load('mundos/ttok/mapatoktok.png', check)
-    })
+    new THREE.SphereGeometry(1,64,64),
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapatoktok.png', check) })
   );
   central.castShadow = central.receiveShadow = true;
   scene.add(central);
 
   const orbitRadius = 3;
   const orbit = new THREE.Mesh(
-    new THREE.SphereGeometry(0.1, 64, 64),
-    new THREE.MeshStandardMaterial({
-      map: loader.load('mundos/ttok/mapattok.png', check)
-    })
+    new THREE.SphereGeometry(0.1,64,64),
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapattok.png', check) })
   );
   orbit.castShadow = orbit.receiveShadow = true;
   orbit.position.set(orbitRadius, 0, 0);
   scene.add(orbit);
-  window.globeOrbit = orbit;
+  window.globeOrbit = orbit; // expõe satélite
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.2));
   const dir = new THREE.DirectionalLight(0xffffff, 1);
@@ -123,6 +80,7 @@ window.initGlobe = function(selector) {
 
   let angle = 0, speed = -0.5;
   const clock = new THREE.Clock();
+  window.trackOrbit = false; // flag de tracking
 
   (function animate(){
     requestAnimationFrame(animate);
@@ -135,10 +93,14 @@ window.initGlobe = function(selector) {
       orbitRadius * Math.sin(angle)
     );
     controls.update();
+    if(window.trackOrbit) {
+      controls.target.copy(orbit.position);
+      controls.update();
+    }
     renderer.render(scene, camera);
   })();
 
-  window.addEventListener('resize', () => {
+  window.addEventListener('resize', ()=>{
     const ww = canvas.clientWidth, hh = canvas.clientHeight;
     renderer.setSize(ww, hh);
     camera.aspect = ww / hh;
@@ -173,23 +135,23 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina8.webp" alt="Página 10" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina9.webp" alt="Página 11" draggable="false">
-        <img id="cliqueinversao" src="mundos/ttok/imagens/cap1/inversao.webp" alt="Clique Inversão" draggable="false">
+        <img id="cliqueinversao" src="mundos/ttok/imagens/cap1/cliqueinversao.webp" alt="Clique Inversão" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina10.webp" alt="Página 12" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina11.webp" alt="Página 13" draggable="false">
-        <img id="cliqueg" src="mundos/ttok/imagens/cap1/estrelag.webp" alt="Clique G" draggable="false">
+        <img id="cliqueg" src="mundos/ttok/imagens/cap1/cliqueg.webp" alt="Clique G" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina12.webp" alt="Página 14" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina13.webp" alt="Página 15" draggable="false">
-        <img id="cliquerefracao" src="mundos/ttok/imagens/cap1/refracao.webp" alt="Clique Refracão" draggable="false">
+        <img id="cliquerefracao" src="mundos/ttok/imagens/cap1/cliquerefracao.webp" alt="Clique Refracão" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina14.webp" alt="Página 16" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina15.webp" alt="Página 17" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina16.webp" alt="Página 18" draggable="false">
-        <img id="cliquemorse" src="mundos/ttok/imagens/cap1/morse.webp" alt="Clique Morse" draggable="false">
+        <img id="cliquemorse" src="mundos/ttok/imagens/cap1/cliquemorse.webp" alt="Clique Morse" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina17.webp" alt="Página 19" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina18.webp" alt="Página 20" draggable="false"></div>
@@ -202,11 +164,11 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina25.webp" alt="Página 27" draggable="false"></div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina26.webp" alt="Página 28" draggable="false">
-        <img id="cliquecapacitor" src="mundos/ttok/imagens/cap1/capacitor.webp" alt="Clique Capacitor" draggable="false">
+        <img id="cliquecapacitor" src="mundos/ttok/imagens/cap1/cliquecapacitor.webp" alt="Clique Capacitor" draggable="false">
       </div>
       <div class="page">
         <img src="mundos/ttok/imagens/cap1/pagina27.webp" alt="Página 29" draggable="false">
-        <img id="cliquesanguedomundo" src="mundos/ttok/imagens/cap1/sanguedomundo.webp" alt="Clique Sangue do Mundo" draggable="false">
+        <img id="cliquesanguedomundo" src="mundos/ttok/imagens/cap1/cliquesanguedomundo.webp" alt="Clique Sangue do Mundo" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina28.webp" alt="Página 30" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/pagina29.webp" alt="Página 31" draggable="false"></div>
@@ -216,9 +178,27 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
-  // Ajuste de tamanho e lazy-load
+  // CSS do overlay centralizado
+  $('#overlayContainer').css({
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    'z-index': 9999,
+    display: 'none'
+  });
+  $('#overlayImage').css({
+    'max-width': '90vw',
+    'max-height': '90vh',
+    width: 'auto',
+    height: 'auto'
+  });
+
+  // Ajuste de tamanho das páginas
   $container.find('#flipbook .page').css({ width: '80%', height: '80%' });
   $container.find('#flipbook .page img').css({ width: '100%', height: '100%', objectFit: 'contain' });
+
+  // Lazy‑load
   $container.find('#flipbook .page').each(function(idx){
     const p = idx + 1;
     $(this).attr('data-page', p);
@@ -238,78 +218,102 @@ window.initFlipbook = function(selector) {
   }
   preloadPages(1,3);
 
-  // Turn.js init e responsivo
-  $('#flipbook').turn({
-    autoCenter: false,
-    display: 'double',
-    when: { turned: (_, page) => preloadPages(page+1,3) }
-  });
-  $(window).on('resize', ()=>$('#flipbook').turn('size',$container.width(),$container.height()));
-
-  // Som de página
+  // Áudio de página
   const flipAudio = new Audio('mundos/ttok/sompagina.mp3');
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
+
+  // Turn.js init
+  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turned: (_, page)=> preloadPages(page+1,3) } });
+
+  // Responsivo
+  function resizeFB(){
+    let w, h;
+    if ($(window).width() < 1024) {
+      w = $(window).width() * 0.9;
+      h = w * (450/600);
+    } else {
+      w = $container.width(); h = $container.height();
+    }
+    $('#flipbook').turn('size', w, h);
+  }
+  resizeFB(); $(window).on('resize', resizeFB);
+
+  // Evita drag
+  $('.page img').on('dragstart', e=>e.preventDefault());
+
+  // Som no mousedown
   $('#flipbook').on('mousedown touchstart', ()=>{
     flipAudio.currentTime = 0; flipAudio.play().catch(()=>{});
   });
 
-  // Oculta seta inicial
+  // Oculta seta ao virar
   $('#flipbook').bind('turning', (e, page)=>{
-    if (page > 1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove());
+    if (page>1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove());
   });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Clique Mundo: exibe título + imagem por 3s
-  $container.on('click','#cliquemundo', function(e){
-    e.stopPropagation();
-    const overlay = document.getElementById('titleOverlay');
-    const globeCanvas = document.querySelector('#globe-area canvas');
-    if (overlay && globeCanvas) {
-      overlay.style.display = 'flex';
-      globeCanvas.style.display = 'none';
-      setTimeout(()=>{
-        overlay.style.display = 'none';
-        globeCanvas.style.display = '';
-      }, 3000);
+  // Clique Mundo: tracking do satélite
+  const focoMundo = function(){
+    window.trackOrbit = true;
+    if(window.globeControls && window.globeOrbit){
+      window.globeControls.target.copy(window.globeOrbit.position);
+      window.globeControls.update();
     }
-  });
+  };
 
-  // Mapeia demais handlers originais (sangue, inversão, etc.)
-  $container.on('click','#cliquesanguedomundo', function(e){
-    e.stopPropagation();
+  // Clique Sangue do Mundo: substitui o globo pela imagem
+  const trocaSangue = function(){
     if (!$('#sangueGloboImage').length) {
       $('<img>',{
         id: 'sangueGloboImage',
-        src: 'mundos/ttok/imagens/cap1/sanguedomundo.webp',
+        src: 'mundos/ttok/imagens/cap1/sanguedomundo.png',
         css: { width: '100%', height: '100%', objectFit: 'contain' }
       }).appendTo('#globe-area');
     }
-    $('#globe-area canvas').hide();
-    setTimeout(()=>{
-      $('#sangueGloboImage').remove();
-      $('#globe-area canvas').show();
-    }, 3000);
-  });
-  $container.on('click','#cliqueinversao', e=>{
-    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/inversao.webp'); $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliqueg', e=>{
-    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/estrelag.webp'); $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquerefracao', e=>{
-    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/refracao.webp'); $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquemorse', e=>{
-    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/morse.webp'); $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquecapacitor', e=>{
-    e.stopPropagation(); $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/capacitor.webp'); $('#overlayContainer').fadeIn(500);
+    $('#globeCanvas').hide();
+  };
+
+  // Mapeia handlers
+  const map = { cliquemundo: focoMundo, cliquesanguedomundo: trocaSangue };
+  Object.keys(map).forEach(id=>{
+    $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
   });
 
-  // Ao virar página, reseta globo e overlays
+  // Overlays centrais
+  $container.on('click','#cliqueinversao', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/inversao.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliqueg', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/estrelag.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquerefracao', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/refracao.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquemorse', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/morse.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquecapacitor', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/ttok/imagens/cap1/capacitor.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+
+  // Ao virar página, reseta globo, canvas e overlays
   $('#flipbook').bind('turning', ()=>{
-    $('#globe-area canvas').show();
+    $('#globeCanvas').show();
     $('#sangueGloboImage').remove();
-    $('#overlayContainer').fadeOut(200);
+    window.trackOrbit = false;
+    if(window.globeControls){
+      window.globeControls.target.set(0,0,0);
+      window.globeControls.update();
+    }
   });
 };
