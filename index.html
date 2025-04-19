@@ -64,6 +64,15 @@
       width: 100%; height: 100%; max-height: 100%;
       object-fit: contain;
     }
+    /* Canvas para o starfield dentro do globe-area, inicialmente oculto */
+    #warpCanvas {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
     /* botão menu escondido inicialmente */
     #btnMenu {
       display: none;
@@ -121,7 +130,7 @@
       top:0; left:0;
       width:100%; height:100%;
       backdrop-filter: blur(6px);
-      display: none; z-index: 1;
+      display: none; z-index: 2;
     }
     #menu-overlay.visible { display: block; }
 
@@ -168,7 +177,7 @@
       font-family:'Press Start 2P',cursive;
       color: #FFFFFF;
       font-size: min(5vw,30px);
-      opacity:0; z-index:1;
+      opacity:0; z-index:3;
     }
     #menu-title.animate {
       display:block;
@@ -185,20 +194,9 @@
     .animate-symbols .symbol:nth-child(2){animation-delay:0.4s}
     .animate-symbols .symbol:nth-child(3){animation-delay:0.5s}
     @keyframes fadeScaleIn { from { opacity:0; transform: scale(0.8) } to { opacity:1; transform: scale(1) } }
-
-    /* Canvas para o starfield, inicialmente oculto */
-    #warpCanvas {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
   </style>
 </head>
 <body>
-  <canvas id="warpCanvas"></canvas>
   <audio id="bgm"       src="animus.mp3"    loop preload="auto"></audio>
   <audio id="memories"  src="memories.mp3" loop preload="auto"></audio>
 
@@ -207,6 +205,7 @@
   <div id="app">
     <div id="globe-area">
       <canvas id="globeCanvas"></canvas>
+      <canvas id="warpCanvas"></canvas>
       <div id="menu-title">OMOM</div>
       <button id="btnMenu">MENU</button>
       <div id="menu-overlay">
@@ -217,7 +216,8 @@
             <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
             <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
             <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenDenBouBou"></div>
-            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
+            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.
+png" alt="Araporu"></div>
             <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
             <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
             <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
@@ -316,6 +316,8 @@
       const newCanvas = document.createElement('canvas');
       newCanvas.id = 'globeCanvas';
       area.prepend(newCanvas);
+      // parar starfield
+      if (window.stopStarfield) window.stopStarfield();
     }
 
     window.addEventListener('load', () => {
@@ -332,7 +334,6 @@
       }, { once: true });
     }
 
-    // controla o tema do menu (memories.mp3)
     const memories = document.getElementById('memories');
 
     function showOverlayMenu() {
@@ -371,10 +372,9 @@
     }
 
     function loadWorld(worldName) {
-      // ao iniciar carregamento de um mundo, exiba o starfield
-      const warp = document.getElementById('warpCanvas');
-      warp.style.display = 'block';
-      startStarfield();
+      // exibe starfield
+      document.getElementById('warpCanvas').style.display = 'block';
+      if (window.startStarfield) window.startStarfield();
 
       if (memories) fadeOut(memories, 1000);
 
@@ -408,7 +408,6 @@
       if (e.target === this) $(this).fadeOut(300);
     });
 
-    // toca bgm só no primeiro clique em qualquer parte da página
     (function() {
       const bgm = document.getElementById('bgm');
       function playOnFirstClick() {
@@ -428,8 +427,8 @@
       let stars = [], numStars = 300, speed = 2, animationFrameId;
 
       function setupCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
       }
 
       function createStars() {
@@ -488,8 +487,7 @@
   <script>
     document.addEventListener("globoCarregado", function() {
       document.getElementById("globeLoading").style.display = "none";
-      // opcional: parar starfield quando globo carregado
-      // stopStarfield();
+      if (window.stopStarfield) window.stopStarfield();
     });
   </script>
 </body>
