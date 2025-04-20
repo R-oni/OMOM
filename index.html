@@ -65,6 +65,17 @@
       width: 100%; height: 100%; max-height: 100%;
       object-fit: contain;
     }
+
+    /* vídeo de abertura OMOM */
+    #intro-video{
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:60vw; height:auto;
+      z-index:1;
+      pointer-events:none;
+    }
+
     /* botão menu escondido inicialmente */
     #btnMenu {
       display: none;
@@ -159,33 +170,6 @@
       font-size:12px; padding:10px;
       cursor:pointer; z-index:1001;
     }
-
-    /* --- TÍTULO OMOM --- */
-    #menu-title {
-      display: none;
-      position: absolute;
-      top:45%; left:50%;
-      transform: translate(-50%,-50%) scale(0.8);
-      font-family:'Press Start 2P',cursive;
-      color: #FFFFFF;
-      font-size: min(5vw,30px);
-      opacity:0; z-index:1;
-    }
-    #menu-title.animate {
-      display:block;
-      animation: fadeScaleTitle 0.8s ease-out forwards;
-    }
-    @keyframes fadeScaleTitle { from { opacity:0; transform: translate(-50%,-50%) scale(0.8) } to { opacity:1; transform: translate(-50%,-50%) scale(1) } }
-
-    /* --- FADE+SCALE PARA OS ÍCONES --- */
-    .animate-symbols .symbol {
-      opacity:0; transform: scale(0.8);
-      animation: fadeScaleIn 0.6s ease-out forwards;
-    }
-    .animate-symbols .symbol:nth-child(1){animation-delay:0.3s}
-    .animate-symbols .symbol:nth-child(2){animation-delay:0.4s}
-    .animate-symbols .symbol:nth-child(3){animation-delay:0.5s}
-    @keyframes fadeScaleIn { from { opacity:0; transform: scale(0.8) } to { opacity:1; transform: scale(1) } }
   </style>
 </head>
 <body>
@@ -197,7 +181,7 @@
   <div id="app">
     <div id="globe-area">
       <canvas id="globeCanvas"></canvas>
-      <div id="menu-title">OMOM</div>
+      <video id="intro-video" src="omom.mp4" autoplay muted playsinline></video>
       <button id="btnMenu">MENU</button>
       <div id="menu-overlay">
         <div class="symbols-wrapper">
@@ -310,17 +294,13 @@
 
     window.addEventListener('load', () => {
       document.getElementById('loading-screen').style.display = 'none';
-      setTimeout(showMenuTitle, 3000);
-    });
-
-    function showMenuTitle() {
-      const title = document.getElementById('menu-title');
-      title.classList.add('animate');
-      title.addEventListener('animationend', () => {
-        title.style.display = 'none';
+      const intro = document.getElementById('intro-video');
+      intro.play().catch(()=>{});
+      intro.addEventListener('ended', () => {
+        intro.style.display = 'none';
         showOverlayMenu();
-      }, { once: true });
-    }
+      });
+    });
 
     // controla o tema do menu (memories.mp3)
     const memories = document.getElementById('memories');
