@@ -56,15 +56,8 @@
     const worlds = [
       { id: 'himpis', path: 'mundos/himpis', img: 'apresentacaohimpis.png' },
       { id: 'botychera', path: 'mundos/botychera', img: 'apresentacaobotychera.png' },
-      { id: 'sapador', path: 'mundos/sapador', img: 'apresentacaobotychera.png' },
-      //{ id: 'denbou', path: 'mundos/denbou', img: 'apresentacaodenbou.png' },
-      //{ id: 'araporu', path: 'mundos/araporu', img: 'apresentacaoaraporu.png' },
-      // próximos mundos comentados
-      // { id: 'alouepoura', path: 'mundos/alouepoura', img: 'apresentacaoalouepoura.png' },
-      // { id: 'bondooga', path: 'mundos/bondooga', img: 'apresentacaobondooga.png' },
-      // { id: 'boramu', path: 'mundos/boramu', img: 'apresentacaoboramu.png' },
-      // { id: 'macaribo', path: 'mundos/macaribo', img: 'apresentacaomacaribo.png' },
-      // { id: 'saboe', path: 'mundos/saboe', img: 'apresentacaosaboe.png' }
+      { id: 'sapador', path: 'mundos/sapador', img: 'apresentacaobotychera.png' }
+      // outros mundos comentados até ter globo.js
     ];
 
     let loadedCount = 0;
@@ -81,12 +74,13 @@
       const section = document.createElement('div');
       section.className = 'world';
 
-      // canvas com id genérico 'globeCanvas'
+      // Canvas genérico para globo.js
       const canvas = document.createElement('canvas');
       canvas.id = 'globeCanvas';
       section.appendChild(canvas);
       section.appendChild(Object.assign(document.createElement('div'), { className: 'spacer' }));
 
+      // Imagem de apresentação
       const img = new Image();
       img.src = `${w.path}/${w.img}`;
       img.onload = hideLoading;
@@ -96,18 +90,18 @@
 
       container.appendChild(section);
 
-      // antes de injetar script, guardamos o canvasSelector
+      // Selecionador do canvas recém-adicionado
       const canvasSelector = `#worlds .world:last-child canvas`;
 
-      // monkey-patch document.getElementById
+      // Monkey-patch temporário de getElementById
       const originalGet = document.getElementById.bind(document);
       const patchGet = id => id === 'globeCanvas' ? document.querySelector(canvasSelector) : originalGet(id);
 
+      // Injeção do script do globo
       const script = document.createElement('script');
       script.src = `${w.path}/globo.js`;
       script.defer = true;
       script.onload = () => {
-        // override temporário
         document.getElementById = patchGet;
         if (typeof initGlobe === 'function') initGlobe();
         document.getElementById = originalGet;
@@ -116,6 +110,14 @@
       script.onerror = hideLoading;
       document.body.appendChild(script);
     });
+
+    // Fallback: caso algum globo.js ou imagem demore, esconde loader após 8s
+    setTimeout(() => {
+      const loader = document.getElementById('loading');
+      if (loader && loader.style.display !== 'none') {
+        loader.style.display = 'none';
+      }
+    }, 8000);
   </script>
 </body>
 </html>
