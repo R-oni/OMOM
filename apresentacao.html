@@ -57,7 +57,6 @@
       { id: 'himpis', path: 'mundos/himpis', img: 'apresentacaohimpis.png' },
       { id: 'botychera', path: 'mundos/botychera', img: 'apresentacaobotychera.png' },
       { id: 'sapador', path: 'mundos/sapador', img: 'apresentacaobotychera.png' }
-      // outros mundos comentados até ter globo.js
     ];
 
     let loadedCount = 0;
@@ -71,16 +70,17 @@
     const container = document.getElementById('worlds');
 
     worlds.forEach(w => {
+      // Cria seção
       const section = document.createElement('div');
       section.className = 'world';
 
-      // Canvas genérico para globo.js
+      // Cria canvas genérico para globo
       const canvas = document.createElement('canvas');
       canvas.id = 'globeCanvas';
       section.appendChild(canvas);
       section.appendChild(Object.assign(document.createElement('div'), { className: 'spacer' }));
 
-      // Imagem de apresentação
+      // Cria imagem de apresentação
       const img = new Image();
       img.src = `${w.path}/${w.img}`;
       img.onload = hideLoading;
@@ -90,20 +90,40 @@
 
       container.appendChild(section);
 
-      // Selecionador do canvas recém-adicionado
-      const canvasSelector = `#worlds .world:last-child canvas`;
+      // Patch para carregar texturas do globo a partir de sua pasta
+      const patchTexture = document.createElement('script');
+      patchTexture.textContent = `
+        (function(basePath) {
+          if (window.THREE && THREE.TextureLoader) {
+            const orig = THREE.TextureLoader.prototype.load;
+            THREE.TextureLoader.prototype.load = function(url, onLoad, onProgress, onError) {
+              const src = url.startsWith('http') || url.startsWith('data:')
+                ? url
+                : basePath + '/' + url;
+              return orig.call(this, src, onLoad, onProgress, onError);
+            };
+          }
+        })('${w.path}');
+      `;
+      document.body.appendChild(patchTexture);
 
-      // Monkey-patch temporário de getElementById
+      // Selecionador para patch de canvas
+      const canvasSelector = `#worlds .world:last-child canvas`;
       const originalGet = document.getElementById.bind(document);
-      const patchGet = id => id === 'globeCanvas' ? document.querySelector(canvasSelector) : originalGet(id);
+      const patchGet = id =>
+        id === 'globeCanvas'
+          ? document.querySelector(canvasSelector)
+          : originalGet(id);
 
       // Injeção do script do globo
       const script = document.createElement('script');
       script.src = `${w.path}/globo.js`;
       script.defer = true;
       script.onload = () => {
+        // Monkey-patch getElementById antes de init
         document.getElementById = patchGet;
         if (typeof initGlobe === 'function') initGlobe();
+        // Restaura getElementById
         document.getElementById = originalGet;
         hideLoading();
       };
@@ -111,12 +131,10 @@
       document.body.appendChild(script);
     });
 
-    // Fallback: caso algum globo.js ou imagem demore, esconde loader após 8s
+    // Fallback: esconde loader após 8s
     setTimeout(() => {
       const loader = document.getElementById('loading');
-      if (loader && loader.style.display !== 'none') {
-        loader.style.display = 'none';
-      }
+      if (loader && loader.style.display !== 'none') loader.style.display = 'none';
     }, 8000);
   </script>
 </body>
