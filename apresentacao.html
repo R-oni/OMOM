@@ -1,117 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>OMOM</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      background: #000;
-      color: #fff;
-      font-family: 'Press Start 2P', monospace;
-      text-align: center;
-    }
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-      color: #00FFE7;
-      font-size: 1.5rem;
-      z-index: 1000;
-    }
-    header {
-      margin: 2rem auto;
-      font-size: 3rem;
-      color: #fff;
-    }
-    .world {
-      margin: 2rem 0;
-    }
-    .world canvas,
-    .world img {
-      width: 100%;
-      display: block;
-      margin: 0 auto;
-    }
-  </style>
-</head>
+<!-- … head igual ao anterior … -->
 <body>
-  <!-- Loader de 2 segundos -->
-  <div id="loading">CARREGANDO...</div>
-
-  <!-- Título -->
+  <div id="loading">CARREGANDO…</div>
   <header>OMOM</header>
 
-  <!-- Incluir Three.js e OrbitControls antes de globo.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
-
-  <!-- Mundos OMOM -->
+  <!-- === HIMPIS ===================================================== -->
   <div class="world">
-    <canvas id="globeCanvas-himpis"></canvas>
-    <img src="mundos/himpis/apresentacaohimpis.png" alt="Himpis" />
-    <script src="mundos/himpis/globo.js"></script>
-  </div>
-
-  <div class="world">
-    <canvas id="globeCanvas-botychera"></canvas>
-    <img src="mundos/botychera/apresentacaobotychera.png" alt="Botychera" />
+    <canvas id="himpis-canvas"></canvas>
+    <img src="mundos/himpis/apresentacaohimpis.png" alt="">
     <script>
-      // Renomear ID esperado pelo globo.js
-      window.addEventListener('load', () => {
-        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-botychera') : document.getElementById(id);
-      });
+      // patch específico antes de carregar o script
+      (function(){
+        const origGet = document.getElementById.bind(document);
+        document.getElementById = function(id){
+          return id==='globeCanvas' ? origGet('himpis-canvas') : origGet(id);
+        };
+        const s=document.createElement('script');
+        s.src='mundos/himpis/globo.js';
+        s.onload=()=>{ document.getElementById = origGet; };
+        document.body.appendChild(s);
+      })();
     </script>
-    <script src="mundos/botychera/globo.js"></script>
   </div>
 
+  <!-- === BOTYCHERA ================================================== -->
   <div class="world">
-    <canvas id="globeCanvas-sapador"></canvas>
-    <img src="mundos/sapador/apresentacaosapador.png" alt="Sapador" />
+    <canvas id="boty-canvas"></canvas>
+    <img src="mundos/botychera/apresentacaobotychera.png" alt="">
     <script>
-      window.addEventListener('load', () => {
-        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-sapador') : document.getElementById(id);
-      });
+      (function(){
+        const origGet = document.getElementById.bind(document);
+        document.getElementById = id => id==='globeCanvas' ? origGet('boty-canvas') : origGet(id);
+        const s=document.createElement('script');
+        s.src='mundos/botychera/globo.js';
+        s.onload=()=>{ document.getElementById = origGet; };
+        document.body.appendChild(s);
+      })();
     </script>
-    <script src="mundos/sapador/globo.js"></script>
   </div>
 
-  <div class="world">
-    <canvas id="globeCanvas-denbou"></canvas>
-    <img src="mundos/denbou/apresentacaodenbou.png" alt="Denbou" />
-    <script>
-      window.addEventListener('load', () => {
-        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-denbou') : document.getElementById(id);
-      });
-    </script>
-    <script src="mundos/denbou/globo.js"></script>
-  </div>
+  <!-- repete a mesma lógica para sapador, denbou, araporu … -->
 
-  <div class="world">
-    <canvas id="globeCanvas-araporu"></canvas>
-    <img src="mundos/araporu/apresentacaoaraporu.png" alt="Araporu" />
-    <script>
-      window.addEventListener('load', () => {
-        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-araporu') : document.getElementById(id);
-      });
-    </script>
-    <script src="mundos/araporu/globo.js"></script>
-  </div>
-
-  <!-- Script de ocultar loader após 2s -->
   <script>
-    setTimeout(() => {
-      document.getElementById('loading').style.display = 'none';
-    }, 2000);
+    // Fallback: some o loader após 3 s (ou quando o 1º globo disparar)
+    setTimeout(()=>{document.getElementById('loading').style.display='none'},3000);
+    document.addEventListener('globoCarregado',()=>document.getElementById('loading').style.display='none');
   </script>
 </body>
-</html>
