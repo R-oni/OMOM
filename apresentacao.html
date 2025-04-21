@@ -1,54 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OMOM – Vários Globos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMOM – Múltiplos Globos</title>
   <style>
-    body { margin: 0; background: #000; color: #fff; font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; }
-    h1 { margin: 20px; }
-    .globe-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-    canvas { background: #111; width: 300px; height: 300px; }
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    canvas {
+      width: 90vw;
+      max-width: 600px;
+      height: 40vh;
+      margin: 20px 0;
+      background: #111;
+    }
   </style>
 </head>
 <body>
-  <h1>OMOM – Vários Globos</h1>
-  <div class="globe-container">
-    <canvas id="globe1"></canvas>
-    <canvas id="globe2"></canvas>
-  </div>
+  <!-- Globo Himpis -->
+  <canvas id="globeCanvasHimpis"></canvas>
+
+  <!-- Globo Botychera -->
+  <canvas id="globeCanvasBotychera"></canvas>
 
   <!-- Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script>
-    function makeGlobe(canvasId, textureUrl, rotationSpeed) {
-      const canvas = document.getElementById(canvasId);
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-      camera.position.z = 2;
-
-      const loader = new THREE.TextureLoader();
-      loader.load(textureUrl, (texture) => {
-        const geometry = new THREE.SphereGeometry(1, 32, 32);
-        const material = new THREE.MeshBasicMaterial({ map: texture });
-        const globe = new THREE.Mesh(geometry, material);
-        scene.add(globe);
-
-        function animate() {
-          requestAnimationFrame(animate);
-          globe.rotation.y += rotationSpeed;
-          renderer.render(scene, camera);
-        }
-        animate();
-      });
-    }
-
-    // Cria dois globos com texturas diferentes e velocidades
-    makeGlobe('globe1', 'mundos/himpis/textura_himpis.jpg', 0.005);
-    makeGlobe('globe2', 'mundos/botychera/textura_botychera.jpg', 0.003);
-  </script>
+  <!-- Scripts dos globos -->
+  <script src="mundos/himpis/globo.js" type="application/javascript"></script>
+  <script src="mundos/botychera/globo.js" type="application/javascript"></script>
 </body>
 </html>
