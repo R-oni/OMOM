@@ -1,5 +1,6 @@
-<!-- index.html – tablet 1:1 usando apenas painel.png
-     flipbook volta a deslizar lateralmente (lógica original preservada) -->
+<!-- index.html – tela 1:1 com painel.png,
+     globo centralizado em 90 % da área
+     e menu de símbolos aparece abaixo do painel -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -19,26 +20,32 @@
     #app{
       width:100%;height:100%;
       display:grid;
-      grid-template-rows:50% 50%;
-      background:url(fundo.png) center/cover no-repeat fixed;   /* madeira */
+      grid-template-rows:50% 50%;         /* 50% tablet | 50% flipbook */
+      background:url(fundo.png) center/cover no-repeat fixed;
       position:relative
     }
 
-    /* ===== TABLET (agora só painel.png) ===== */
+    /* ===== TABLET / PAINEL ===== */
     :root{--tablet-w:95vw;--tablet-max:640px}
 
     .tablet{
       position:relative;
       width:min(var(--tablet-w),var(--tablet-max));
-      aspect-ratio:1/1;           /* ratio 1:1 */
+      aspect-ratio:1/1;                   /* quadrado */
       margin:auto;
       filter:drop-shadow(0 10px 15px #0008);
-      perspective:1200px;
     }
 
-    /* ===== ÁREA DA TELA ===== */
+    /* ===== ÁREA DA TELA (globo) – 90 % centralizado ===== */
     #globe-area{
-      position:absolute; width: 90%; height: 90%; top: 60%; left: 50%; inset:0;overflow:hidden;z-index:0
+      position:absolute;
+      width:90%;
+      height:90%;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      overflow:hidden;
+      z-index:0;
     }
     #globeCanvas{width:100%;height:100%;background:#000;object-fit:contain}
     #intro-video{
@@ -59,6 +66,27 @@
     }
     #btnMenu:hover{background:rgba(0,0,0,.9)}
 
+    /* ===== MENU DE SÍMBOLOS – agora ABAIXO do painel ===== */
+    #menu-overlay{
+      position:relative;
+      width:min(var(--tablet-w),var(--tablet-max));
+      margin:1rem auto 0;
+      background:rgba(0,0,0,.6);
+      backdrop-filter:blur(6px);
+      padding:20px 0;
+      display:none;
+      z-index:1;        /* abaixo do painel, acima do fundo */
+    }
+    #menu-overlay.visible{display:block}
+    .symbols-wrapper{max-height:50vh;overflow-y:auto;padding-inline:20px}
+    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
+    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
+    .symbol img{width:18vw;max-width:120px;transition:transform .3s}
+    .symbol img:hover{transform:scale(1.1)}
+    .symbol.brither img{filter:brightness(180%)}
+    .symbol.locked img{filter:brightness(50%)}
+
     /* ===== FLIPBOOK (desliza lateralmente) ===== */
     #flipbook-area{
       position:relative;margin-left:5%;padding-top:2vh;
@@ -76,18 +104,6 @@
     }
     @keyframes fadeInArrow{from{opacity:0}to{opacity:1}}
     @keyframes slideArrow{0%{transform:translate(0)}50%{transform:translate(-8px,8px)}100%{transform:translate(0)}}
-
-    /* ===== MENU OVERLAY ===== */
-    #menu-overlay{position:absolute;inset:0;backdrop-filter:blur(6px);display:none;z-index:2}
-    #menu-overlay.visible{display:block}
-    .symbols-wrapper{position:absolute;top:40px;left:0;right:0;bottom:0;overflow-y:auto;padding:20px}
-    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
-    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
-    .symbol img{width:18vw;transition:transform .3s}
-    .symbol img:hover{transform:scale(1.1)}
-    .symbol.brither img{filter:brightness(180%)}
-    .symbol.locked img{filter:brightness(50%)}
 
     /* ===== OVERLAY IMAGEM ===== */
     #overlayContainer{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:1000}
@@ -140,27 +156,26 @@
         <img id="painel" src="painel.png" alt="Painel">
         <button id="btnMenu">MENU</button>
       </div>
+    </section>
 
-      <!-- menu rolante -->
-      <div id="menu-overlay">
-        <div class="symbols-wrapper">
-          <div class="symbols-container">
-            <!-- ícones -->
-            <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
-            <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
-            <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
-            <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
-            <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
-            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
-            <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
-            <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
-            <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
-            <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
-            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
-          </div>
+    <!-- ========== MENU DE SÍMBOLOS (ABAIXO DO TABLET) ========== -->
+    <div id="menu-overlay">
+      <div class="symbols-wrapper">
+        <div class="symbols-container">
+          <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+          <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+          <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
+          <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
+          <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
+          <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
+          <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
+          <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
+          <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
+          <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
+          <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- =================== PARTE INFERIOR (FLIPBOOK) ================= -->
     <section id="flipbook-area">
