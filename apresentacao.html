@@ -51,45 +51,61 @@
   <!-- Título -->
   <header>OMOM</header>
 
+  <!-- Incluir Three.js e OrbitControls antes de globo.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
+
   <!-- Mundos OMOM -->
   <div class="world">
-    <canvas id="globeCanvas"></canvas>
+    <canvas id="globeCanvas-himpis"></canvas>
     <img src="mundos/himpis/apresentacaohimpis.png" alt="Himpis" />
     <script src="mundos/himpis/globo.js"></script>
   </div>
 
   <div class="world">
-    <canvas id="globeCanvas"></canvas>
+    <canvas id="globeCanvas-botychera"></canvas>
     <img src="mundos/botychera/apresentacaobotychera.png" alt="Botychera" />
+    <script>
+      // Renomear ID esperado pelo globo.js
+      window.addEventListener('load', () => {
+        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-botychera') : document.getElementById(id);
+      });
+    </script>
     <script src="mundos/botychera/globo.js"></script>
   </div>
 
   <div class="world">
-    <canvas id="globeCanvas"></canvas>
+    <canvas id="globeCanvas-sapador"></canvas>
     <img src="mundos/sapador/apresentacaosapador.png" alt="Sapador" />
+    <script>
+      window.addEventListener('load', () => {
+        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-sapador') : document.getElementById(id);
+      });
+    </script>
     <script src="mundos/sapador/globo.js"></script>
   </div>
 
   <div class="world">
-    <canvas id="globeCanvas"></canvas>
+    <canvas id="globeCanvas-denbou"></canvas>
     <img src="mundos/denbou/apresentacaodenbou.png" alt="Denbou" />
+    <script>
+      window.addEventListener('load', () => {
+        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-denbou') : document.getElementById(id);
+      });
+    </script>
     <script src="mundos/denbou/globo.js"></script>
   </div>
 
   <div class="world">
-    <canvas id="globeCanvas"></canvas>
+    <canvas id="globeCanvas-araporu"></canvas>
     <img src="mundos/araporu/apresentacaoaraporu.png" alt="Araporu" />
+    <script>
+      window.addEventListener('load', () => {
+        document.getElementById = (id) => id === 'globeCanvas' ? document.getElementById('globeCanvas-araporu') : document.getElementById(id);
+      });
+    </script>
     <script src="mundos/araporu/globo.js"></script>
   </div>
-
-  <!-- Próximos mundos comentados -->
-  <!--
-  <div class="world">
-    <canvas id="globeCanvas"></canvas>
-    <img src="mundos/alouepoura/apresentacaoalouepoura.png" alt="Alouepoura" />
-    <script src="mundos/alouepoura/globo.js"></script>
-  </div>
-  -->
 
   <!-- Script de ocultar loader após 2s -->
   <script>
