@@ -15,7 +15,8 @@
     body, html {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: black; color: white;
+      background: none;       /* fundo none */
+      color: white;
       font-family: 'Courier New', monospace;
     }
 
@@ -26,12 +27,12 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: -2;
+      z-index: -2;            /* fica atrás de tudo */
     }
 
     /* painel translúcido sobre o globo */
     #painel {
-      position: absolute;
+      position: absolute;     /* grudado ao container (#globe-area) */
       top: 0;
       left: 50%;
       transform: translateX(-50%);
@@ -43,7 +44,7 @@
       pointer-events: none;
     }
 
-    /* grid 50/50 (globo / flipbook) */
+    /* grid (globo / flipbook) */
     #app{
       display: grid;
       grid-template-rows: 50% 50%;
@@ -108,7 +109,7 @@
       display: none;
     }
 
-    /* botão MENU (15px mais baixo) */
+    /* botão MENU */
     #btnMenu{
       display: none;
       position: absolute; top: 40px; left: 10px;
@@ -133,7 +134,7 @@
     #flipbook-area.slide-out-left{ transform: translateX(-100%); }
     #flipbookContainer{ width: 100%; height: calc(100% - 7vh); }
 
-    /* seta menor no flipbook */
+    /* seta no flipbook */
     #flipbook-area #setaBtn{
       position: absolute; top: 5px !important; right: 5px;
       width: 35px !important; height: auto !important;
@@ -176,8 +177,6 @@
       display: flex; flex-wrap: wrap;
       justify-content: center; gap: 25px;
     }
-
-    /* animação de onda sutil nos ícones */
     @keyframes floatWave{
       0%{ transform: translateY(0); }
       50%{ transform: translateY(-4px); }
@@ -191,7 +190,7 @@
     .symbol img{ width: 18vw; transition: transform .3s; }
     .symbol img:hover{ transform: scale(1.1); }
     .symbol.brither img{ filter: brightness(180%); }
-    .symbol.locked  img{ filter: brightness(50%); }
+    .symbol.locked img{ filter: brightness(50%); }
 
     /* ---------- OVERLAY DE IMAGEM ---------- */
     #overlayContainer{
@@ -217,10 +216,8 @@
   <img id="fundo" src="fundo.png" alt="Fundo">
 
   <!-- áudios originais -->
-  <audio id="bgm"      src="animus.mp3"   loop preload="auto"></audio>
+  <audio id="bgm" src="animus.mp3" loop preload="auto"></audio>
   <audio id="memories" src="memories.mp3" loop preload="auto"></audio>
-
-  
 
   <!-- Prompt de som -->
   <div id="soundPrompt">
@@ -245,7 +242,7 @@
       <div id="menu-overlay">
         <div class="symbols-wrapper">
           <div class="symbols-container">
-            <!-- LISTA DE ÍCONES -->
+            <!-- ícones -->
             <div class="symbol brither" data-world="veleywei">
               <img src="assets/veleyweimenu.png" alt="Velei'wey">
             </div>
@@ -330,7 +327,7 @@
 
     let allowSound = false;
 
-    /* ========== DESTRÓI GLOBO (sem alterações) ========== */
+    /* ========== DESTRÓI GLOBO ========== */
     function destroyGlobe(){
       const G = window._Globe;
       if(G){
@@ -338,7 +335,9 @@
           G.scene.traverse(o=>{
             o.geometry?.dispose();
             if(o.material){
-              Array.isArray(o.material) ? o.material.forEach(m=>m.dispose()) : o.material.dispose();
+              Array.isArray(o.material)
+                ? o.material.forEach(m=>m.dispose())
+                : o.material.dispose();
             }
           });
           G.scene = null;
@@ -353,12 +352,15 @@
       }
       const area = document.getElementById('globe-area');
       area.querySelector('canvas')?.remove();
-      ['sapetyrGloboImage','sangueGloboImage'].forEach(id=>document.getElementById(id)?.remove());
-      const c=document.createElement('canvas'); c.id='globeCanvas'; area.prepend(c);
+      ['sapetyrGloboImage','sangueGloboImage']
+        .forEach(id=>document.getElementById(id)?.remove());
+      const c = document.createElement('canvas');
+      c.id = 'globeCanvas';
+      area.prepend(c);
     }
 
     /* ========== BOOT ========== */
-    window.addEventListener('load',()=>{
+    window.addEventListener('load', ()=>{
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('soundPrompt').style.display  = 'flex';
     });
@@ -375,7 +377,7 @@
         document.getElementById('bgm').play().catch(()=>{});
       }
 
-      intro.addEventListener('ended',()=>{
+      intro.addEventListener('ended', ()=>{
         intro.style.display='none';
         showOverlayMenu();
       });
@@ -388,25 +390,34 @@
 
     function showOverlayMenu(){
       const ov = document.getElementById('menu-overlay');
-      ov.style.display='block'; ov.style.opacity='1'; ov.classList.add('visible');
-      document.querySelector('.symbols-container').classList.add('animate-symbols');
+      ov.style.display = 'block';
+      ov.style.opacity = '1';
+      ov.classList.add('visible');
+      document.querySelector('.symbols-container')
+        .classList.add('animate-symbols');
       if(allowSound) fadeIn(memories, 1000);
     }
 
-    document.querySelector('.symbols-container').addEventListener('click',e=>{
-      const sym=e.target.closest('.symbol'); if(!sym) return;
-      launchWorld(sym.dataset.world);
-    });
+    document.querySelector('.symbols-container')
+      .addEventListener('click', e => {
+        const sym = e.target.closest('.symbol');
+        if(!sym) return;
+        launchWorld(sym.dataset.world);
+      });
     document.getElementById('btnMenu').onclick = showOverlayMenu;
 
     function launchWorld(name){
-      const fb=document.getElementById('flipbook-area');
+      const fb = document.getElementById('flipbook-area');
       if(fb.classList.contains('show')){
-        fb.classList.remove('show'); fb.classList.add('slide-out-left');
+        fb.classList.remove('show');
+        fb.classList.add('slide-out-left');
         fb.addEventListener('transitionend', onOut);
-      }else{ loadWorld(name); }
+      } else {
+        loadWorld(name);
+      }
       function onOut(){
-        fb.classList.remove('slide-out-left'); fb.removeEventListener('transitionend', onOut);
+        fb.classList.remove('slide-out-left');
+        fb.removeEventListener('transitionend', onOut);
         loadWorld(name);
       }
     }
@@ -416,26 +427,34 @@
 
       destroyGlobe();
 
-      const ov=document.getElementById('menu-overlay');
-      ov.classList.remove('visible'); ov.style.display='none'; ov.style.opacity='';
+      const ov = document.getElementById('menu-overlay');
+      ov.classList.remove('visible');
+      ov.style.display = 'none';
+      ov.style.opacity = '';
 
       document.getElementById('btnMenu').style.display='block';
 
-      document.getElementById('flipbookContainer').innerHTML='';
-      const s=document.createElement('script'); s.src=worldName+'.js'; document.body.appendChild(s);
-      s.onload=()=>{
+      document.getElementById('flipbookContainer').innerHTML = '';
+      const s = document.createElement('script');
+      s.src = worldName + '.js';
+      document.body.appendChild(s);
+      s.onload = ()=>{
         window.initGlobe?.('#globeCanvas');
         window.initFlipbook?.('#flipbookContainer');
-        const fb=document.getElementById('flipbook-area'); void fb.offsetWidth; fb.classList.add('show');
+        const fb = document.getElementById('flipbook-area');
+        void fb.offsetWidth;
+        fb.classList.add('show');
       };
     }
 
     /* ========== OVERLAY DE IMAGEM ========== */
-    document.getElementById('btnSair').onclick=e=>{
-      e.preventDefault(); $('#overlayContainer').fadeOut(300);
+    document.getElementById('btnSair').onclick = e => {
+      e.preventDefault();
+      $('#overlayContainer').fadeOut(300);
     };
-    document.getElementById('overlayContainer').onclick=e=>{
-      if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300);
+    document.getElementById('overlayContainer').onclick = e => {
+      if(e.target === e.currentTarget)
+        $('#overlayContainer').fadeOut(300);
     };
   </script>
 </body>
