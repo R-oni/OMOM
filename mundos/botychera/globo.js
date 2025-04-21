@@ -138,6 +138,6 @@ function initGlobe() {
 }
 
 // Inicia o globo quando a página carrega
-window.onload = () => {
-  initGlobe();
+/*window.onload = () => {
+  initGlobe();*/
 };
