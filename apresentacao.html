@@ -1,36 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>OMOM – Teste 2 Globos</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>OMOM – Himpis + Botychera</title>
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+  <!-- Three.js + OrbitControls (versão que expõe THREE.OrbitControls) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
   <style>
-    html,body{margin:0;background:#000;color:#fff;font-family:'Press Start 2P',monospace;text-align:center}
-    #loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:#00ffe7;font-size:1.3rem;z-index:1000}
+    html,body{margin:0;background:#000;color:#fff;
+      font-family:'Press Start 2P',monospace;text-align:center}
+    #loading{position:fixed;inset:0;display:flex;align-items:center;
+      justify-content:center;background:#000;color:#00ffe7;font-size:1.3rem;z-index:1000}
     header{margin:2rem auto;font-size:3rem}
     .world{margin:2rem 0;width:100%}
     .world canvas,.world img{width:100%;display:block}
   </style>
 </head>
+
 <body>
   <div id="loading">CARREGANDO…</div>
   <header>OMOM</header>
-
-  <!-- Three.js & OrbitControls antes dos globos -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
 
   <!-- ===== HIMPIS ===== -->
   <div class="world">
     <canvas id="himpis-canvas"></canvas>
     <img src="mundos/himpis/apresentacaohimpis.png" alt="Himpis">
     <script>
-      (function(){
-        const orig=document.getElementById.bind(document);
-        document.getElementById=id=>id==='globeCanvas'?orig('himpis-canvas'):orig(id);
-        const s=document.createElement('script');
-        s.src='mundos/himpis/globo.js';
-        s.onload=()=>{document.getElementById=orig;};
+      (function(){                       // patch local
+        const orig = document.getElementById.bind(document);
+        document.getElementById = id => id==='globeCanvas'
+          ? orig('himpis-canvas') : orig(id);
+
+        const s = document.createElement('script');
+        s.src = 'mundos/himpis/globo.js';
+        s.onload = () => { document.getElementById = orig; };
         document.body.appendChild(s);
       })();
     </script>
@@ -42,20 +50,23 @@
     <img src="mundos/botychera/apresentacaobotychera.png" alt="Botychera">
     <script>
       (function(){
-        const orig=document.getElementById.bind(document);
-        document.getElementById=id=>id==='globeCanvas'?orig('boty-canvas'):orig(id);
-        const s=document.createElement('script');
-        s.src='mundos/botychera/globo.js';
-        s.onload=()=>{document.getElementById=orig;};
+        const orig = document.getElementById.bind(document);
+        document.getElementById = id => id==='globeCanvas'
+          ? orig('boty-canvas') : orig(id);
+
+        const s = document.createElement('script');
+        s.src = 'mundos/botychera/globo.js';
+        s.onload = () => { document.getElementById = orig; };
         document.body.appendChild(s);
       })();
     </script>
   </div>
 
+  <!-- esconde loader quando qualquer globo dispara ou após 3 s -->
   <script>
-    const hide=()=>document.getElementById('loading').style.display='none';
-    setTimeout(hide,3000);
-    document.addEventListener('globoCarregado',hide);
+    const hide = () => document.getElementById('loading').style.display='none';
+    setTimeout(hide, 3000);
+    document.addEventListener('globoCarregado', hide);
   </script>
 </body>
 </html>
