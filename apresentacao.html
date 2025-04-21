@@ -1,128 +1,44 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OMOM Worlds</title>
+  <title>Teste Globo Himpis</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <!-- Import Three.js e OrbitControls -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/controls/OrbitControls.js"></script>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      color: #fff;
-      font-family: 'Press Start 2P', monospace;
-      text-align: center;
-    }
-    #loading {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      background: #000;
-      color: #00ffe7;
-      font-size: 1.5rem;
-      z-index: 1000;
-    }
-    header {
-      width: 50%;
-      margin: 2rem auto;
-      font-size: 2vw;
-      color: #fff;
-    }
-    #worlds {
-      max-width: 800px;
-      margin: 0 auto 4rem;
-    }
-    .world {
-      margin-bottom: 3rem;
-    }
-    .world canvas,
-    .world img {
-      width: 100%;
-      display: block;
-    }
-    .spacer { height: 2rem; }
+    body { margin:0; background:#000; text-align:center; color:#00ffe7; font-family:'Press Start 2P'; }
+    #loading { position:fixed; inset:0; display:flex;align-items:center;justify-content:center; }
+    canvas { width:100%; height:400px; display:block; margin:1rem auto; }
   </style>
 </head>
 <body>
-  <div id="loading">carregando...</div>
-  <header>OMOM</header>
-  <div id="worlds"></div>  <script>
-    const worlds = [
-      { id: 'himpis', path: 'mundos/himpis', img: 'apresentacaohimpis.png' },
-      { id: 'botychera', path: 'mundos/botychera', img: 'apresentacaobotychera.png' },
-      { id: 'sapador', path: 'mundos/sapador', img: 'apresentacaobotychera.png' }
-    ];
+  <div id="loading">carregando globo himpis…</div>
 
-    let loadedCount = 0;
-    const totalToLoad = worlds.length * 2;
-    const hideLoading = () => {
-      if (++loadedCount >= totalToLoad) {
-        document.getElementById('loading').style.display = 'none';
-      }
-    };
+  <!-- Canvas com o mesmo id que o globo.js espera -->
+  <canvas id="globeCanvas"></canvas>
 
-    const container = document.getElementById('worlds');
+  <!-- Three.js + OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/controls/OrbitControls.js"></script>
 
-    worlds.forEach(w => {
-      const section = document.createElement('div');
-      section.className = 'world';
+  <!-- Script do globo dos himpis -->
+  <script src="mundos/himpis/globo.js"></script>
 
-      const canvas = document.createElement('canvas');
-      canvas.id = 'globeCanvas';
-      section.appendChild(canvas);
-      section.appendChild(Object.assign(document.createElement('div'), { className: 'spacer' }));
-
-      const img = new Image();
-      img.src = `${w.path}/${w.img}`;
-      img.onload = hideLoading;
-      img.onerror = hideLoading;
-      section.appendChild(img);
-      section.appendChild(Object.assign(document.createElement('div'), { className: 'spacer' }));
-
-      container.appendChild(section);
-
-      // Patch TextureLoader para apontar à pasta do mundo
-      const patchTexture = document.createElement('script');
-      patchTexture.textContent = `
-        (function(basePath) {
-          const TexProto = THREE.TextureLoader.prototype;
-          const origLoad = TexProto.load;
-          TexProto.load = function(url, onLoad, onProgress, onError) {
-            const src = url.startsWith('http') || url.startsWith('data:')
-              ? url
-              : basePath + '/' + url;
-            return origLoad.call(this, src, onLoad, onProgress, onError);
-          };
-        })('${w.path}');
-      `;
-      document.body.appendChild(patchTexture);
-
-      const canvasSelector = `#worlds .world:last-child canvas`;
-      const originalGet = document.getElementById.bind(document);
-      const patchGet = id => id === 'globeCanvas' ? document.querySelector(canvasSelector) : originalGet(id);
-
-      const script = document.createElement('script');
-      script.src = `${w.path}/globo.js`;
-      script.defer = true;
-      script.onload = () => {
-        document.getElementById = patchGet;
-        if (typeof initGlobe === 'function') initGlobe();
-        document.getElementById = originalGet;
-        hideLoading();
-      };
-      script.onerror = hideLoading;
-      document.body.appendChild(script);
+  <script>
+    // Quando o globo terminar de carregar (ele dispara este evento)
+    document.addEventListener('globoCarregado', () => {
+      document.getElementById('loading').style.display = 'none';
     });
+    // Se não disparar em 8s, escondemos mesmo assim
+    setTimeout(() => document.getElementById('loading').style.display='none', 8000);
 
-    setTimeout(() => {
-      const loader = document.getElementById('loading');
-      if (loader && loader.style.display !== 'none') loader.style.display = 'none';
-    }, 8000);
-  </script></body>
+    // Chama a inicialização
+    if (typeof initGlobe === 'function') {
+      initGlobe();
+    } else {
+      console.error('initGlobe() NÃO está definido — verifique mundos/himpis/globo.js');
+      document.getElementById('loading').textContent = 'erro: initGlobe() não encontrado';
+    }
+  </script>
+</body>
 </html>
