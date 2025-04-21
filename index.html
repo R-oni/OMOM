@@ -19,12 +19,28 @@
       font-family: 'Courier New', monospace;
     }
 
+    /* imagem de fundo */
+    #fundo {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
     /* painel translúcido sobre o globo */
-    #painel{
-      position: fixed; inset: 0;
-      width: 100vw; height: 100vh;
-      object-fit: cover; object-position: center;
-      z-index: 2; pointer-events: none;
+    #painel {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95vw;
+      height: auto;
+      object-fit: cover;
+      object-position: center;
+      z-index: 2;
+      pointer-events: none;
     }
 
     /* grid 50/50 (globo / flipbook) */
@@ -95,7 +111,7 @@
     /* botão MENU (15px mais baixo) */
     #btnMenu{
       display: none;
-      position: absolute; top: 40px; left: 10px;      /* ← antes 25px */
+      position: absolute; top: 40px; left: 10px;
       background: rgba(0,0,0,0.7);
       color: #00FFE7; border: 2px solid #00FFE7;
       font-family: 'Press Start 2P', cursive;
@@ -197,6 +213,9 @@
 </head>
 
 <body>
+  <!-- fundo responsivo -->
+  <img id="fundo" src="fundo.png" alt="Fundo">
+
   <!-- áudios originais -->
   <audio id="bgm"      src="animus.mp3"   loop preload="auto"></audio>
   <audio id="memories" src="memories.mp3" loop preload="auto"></audio>
