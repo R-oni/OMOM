@@ -1,6 +1,4 @@
-<!-- index.html – tela 1:1 com painel.png,
-     globo centralizado em 90 % da área
-     e menu de símbolos aparece abaixo do painel -->
+<!-- index.html – overlay reposicionado logo abaixo do painel -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -20,9 +18,9 @@
     #app{
       width:100%;height:100%;
       display:grid;
-      grid-template-rows:50% 50%;         /* 50% tablet | 50% flipbook */
+      grid-template-rows:50% 50%;           /* 1ª linha = tablet  | 2ª linha = flipbook */
       background:url(fundo.png) center/cover no-repeat fixed;
-      position:relative
+      position:relative;                    /* base para posicionar overlay absoluto */
     }
 
     /* ===== TABLET / PAINEL ===== */
@@ -31,29 +29,21 @@
     .tablet{
       position:relative;
       width:min(var(--tablet-w),var(--tablet-max));
-      aspect-ratio:1/1;                   /* quadrado */
+      aspect-ratio:1/1;
       margin:auto;
       filter:drop-shadow(0 10px 15px #0008);
     }
 
     /* ===== ÁREA DA TELA (globo) – 90 % centralizado ===== */
     #globe-area{
-      position:absolute;
-      width:90%;
-      height:90%;
-      top:50%;
-      left:50%;
-      transform:translate(-50%,-50%);
-      overflow:hidden;
-      z-index:0;
+      position:absolute;width:90%;height:90%;
+      top:50%;left:50%;transform:translate(-50%,-50%);
+      overflow:hidden;z-index:0;
     }
     #globeCanvas{width:100%;height:100%;background:#000;object-fit:contain}
-    #intro-video{
-      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-      width:40%;height:auto;pointer-events:none;display:none;z-index:2
-    }
+    #intro-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40%;pointer-events:none;display:none;z-index:2}
 
-    /* painel.png cobre toda a frente (overlay visual) */
+    /* painel.png cobre a frente toda */
     #ui-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
     #painel{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 
@@ -62,23 +52,21 @@
       position:absolute;top:18px;left:12px;
       background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;
       font-family:'Press Start 2P',cursive;font-size:8px;padding:10px;
-      cursor:pointer;pointer-events:auto;z-index:2
+      cursor:pointer;pointer-events:auto;z-index:2;
     }
     #btnMenu:hover{background:rgba(0,0,0,.9)}
 
-    /* ===== MENU DE SÍMBOLOS – agora ABAIXO do painel ===== */
+    /* ===== MENU DE SÍMBOLOS (ABAIXO DO PAINEL) ===== */
     #menu-overlay{
-      position:relative;
+      position:absolute;                       /* fora do fluxo, não ocupa grid */
+      top:calc(50% + 1rem);                    /* 50 % da viewport (fim do painel) + margem */
+      left:50%;transform:translateX(-50%);
       width:min(var(--tablet-w),var(--tablet-max));
-      margin:1rem auto 0;
-      background:rgba(0,0,0,.6);
-      backdrop-filter:blur(6px);
-      padding:20px 0;
-      display:none;
-      z-index:1;        /* abaixo do painel, acima do fundo */
+      background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
+      padding:20px 0;display:none;z-index:2;   /* z‑index 2 = abaixo do flipbook (3) */
     }
     #menu-overlay.visible{display:block}
-    .symbols-wrapper{max-height:50vh;overflow-y:auto;padding-inline:20px}
+    .symbols-wrapper{max-height:45vh;overflow-y:auto;padding-inline:20px}
     .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
     @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
     .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
@@ -91,7 +79,7 @@
     #flipbook-area{
       position:relative;margin-left:5%;padding-top:2vh;
       overflow:hidden;width:100%;height:100%;z-index:3;
-      transform:translateX(100%);transition:transform 1.5s ease-out
+      transform:translateX(100%);transition:transform 1.5s ease-out;
     }
     #flipbook-area.show{transform:translateX(0)}
     #flipbook-area.slide-out-left{transform:translateX(-100%)}
@@ -119,11 +107,8 @@
     .soundBtn:hover{background:#00FFE733}
 
     /* ===== CLIQUES ESPECIAIS (mundo, sangue, etc.) ===== */
-    #cliquemundo,#cliqueinversao,#cliquerefracao,#cliquemorse,
-    #cliquecapacitor,#cliquesanguedomundo,#cliqueg{
-      position:absolute;inset:0;cursor:pointer;width:100%;height:100%;
-      z-index:10;animation:fadeInOut .7s infinite
-    }
+    #cliquemundo,#cliqueinversao,#cliquerefracao,#cliquemorse,#cliquecapacitor,#cliquesanguedomundo,#cliqueg{
+      position:absolute;inset:0;cursor:pointer;width:100%;height:100%;z-index:10;animation:fadeInOut .7s infinite}
     @keyframes fadeInOut{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
   </style>
 </head>
@@ -144,21 +129,21 @@
 
   <!-- palco principal -->
   <div id="app">
-    <!-- =================== PARTE SUPERIOR (TABLET) =================== -->
+    <!-- =================== TABLET =================== -->
     <section class="tablet">
       <div id="globe-area">
         <canvas id="globeCanvas"></canvas>
         <video id="intro-video" src="omom.mp4" muted playsinline></video>
       </div>
 
-      <!-- camada de UI -->
+      <!-- UI -->
       <div id="ui-layer">
         <img id="painel" src="painel.png" alt="Painel">
         <button id="btnMenu">MENU</button>
       </div>
     </section>
 
-    <!-- ========== MENU DE SÍMBOLOS (ABAIXO DO TABLET) ========== -->
+    <!-- ========== MENU SÍMBOLOS ========== -->
     <div id="menu-overlay">
       <div class="symbols-wrapper">
         <div class="symbols-container">
@@ -177,7 +162,7 @@
       </div>
     </div>
 
-    <!-- =================== PARTE INFERIOR (FLIPBOOK) ================= -->
+    <!-- =================== FLIPBOOK ================= -->
     <section id="flipbook-area">
       <div id="flipbookContainer"></div>
     </section>
@@ -199,13 +184,13 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    /* ==== FUNÇÕES DE FADE ==== */
+    /* ==== FADE ==== */
     function fadeIn(a,ms){a.volume=0;a.play().catch(()=>{});const s=50,dv=s/ms,id=setInterval(()=>{if(a.volume+dv>=1){a.volume=1;clearInterval(id)}else a.volume+=dv},s)}
     function fadeOut(a,ms){const s=50,dv=s/ms,id=setInterval(()=>{if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}else a.volume-=dv},s)}
 
     let allowSound=false;
 
-    /* ==== BOOT ==== */
+    /* ==== LOAD ==== */
     window.addEventListener('load',()=>{
       document.getElementById('loading-screen').style.display='none';
       document.getElementById('soundPrompt').style.display='flex';
