@@ -203,7 +203,7 @@
   </div>
 
   <div id="app">
-    <!--‑‑‑ Globo ‑‑‑>
+    <!-- Globo -->
     <div id="globe-area">
       <canvas id="globeCanvas"></canvas>
 
@@ -211,10 +211,11 @@
 
       <button id="btnMenu">MENU</button>
 
-  
+      <!-- Menu rolante -->
       <div id="menu-overlay">
         <div class="symbols-wrapper">
           <div class="symbols-container">
+            <!-- LISTA DE ÍCONES -->
             <div class="symbol brither" data-world="veleywei">
               <img src="assets/veleyweimenu.png" alt="Velei'wey">
             </div>
@@ -248,13 +249,12 @@
             <div class="symbol locked" data-world="mundoPulsante">
               <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
             </div>
-        
           </div>
         </div>
       </div>
     </div>
 
-  
+    <!-- Flipbook -->
     <div id="flipbook-area">
       <div id="flipbookContainer"></div>
     </div>
@@ -278,7 +278,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    /* ========== FUNÇÕES DE FADE (já existiam) ========== */
+    /* ========== FUNÇÕES DE FADE (originais) ========== */
     function fadeIn(audio, ms){
       audio.volume = 0;
       audio.play().catch(()=>{});
@@ -298,7 +298,6 @@
       }, step);
     }
 
-    /* ========== VARIÁVEL DE CONTROLE ========== */
     let allowSound = false;
 
     /* ========== DESTRÓI GLOBO (sem alterações) ========== */
@@ -328,13 +327,12 @@
       const c=document.createElement('canvas'); c.id='globeCanvas'; area.prepend(c);
     }
 
-    /* ========== BOOT (loading + prompt) ========== */
+    /* ========== BOOT ========== */
     window.addEventListener('load',()=>{
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('soundPrompt').style.display  = 'flex';
     });
 
-    /* ========== START SITE APÓS ESCOLHA ========== */
     function startSite(sound){
       allowSound = sound;
       document.getElementById('soundPrompt').style.display = 'none';
@@ -343,7 +341,6 @@
       intro.style.display = 'block';
       intro.play().catch(()=>{});
 
-      /* se escolheu SIM, toca ambos */
       if(allowSound){
         document.getElementById('bgm').play().catch(()=>{});
         document.getElementById('memories').play().catch(()=>{});
@@ -358,7 +355,6 @@
     document.getElementById('btnYes').onclick = ()=>startSite(true);
     document.getElementById('btnNo').onclick  = ()=>startSite(false);
 
-    /* ========== MENU E FLIPBOOK (código original) ========== */
     const memories = document.getElementById('memories');
 
     function showOverlayMenu(){
