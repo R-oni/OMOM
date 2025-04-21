@@ -15,7 +15,7 @@
     body, html {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: none; color: white;
+      background: black; color: white;
       font-family: 'Courier New', monospace;
     }
 
@@ -31,7 +31,7 @@
 
     /* painel translúcido sobre o globo */
     #painel {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 50%;
       transform: translateX(-50%);
@@ -220,7 +220,7 @@
   <audio id="bgm"      src="animus.mp3"   loop preload="auto"></audio>
   <audio id="memories" src="memories.mp3" loop preload="auto"></audio>
 
-  <img id="painel" src="painel.png" alt="Painel">
+  
 
   <!-- Prompt de som -->
   <div id="soundPrompt">
@@ -234,6 +234,7 @@
   <div id="app">
     <!-- Globo -->
     <div id="globe-area">
+      <img id="painel" src="painel.png" alt="Painel">
       <canvas id="globeCanvas"></canvas>
 
       <video id="intro-video" src="omom.mp4" muted playsinline></video>
