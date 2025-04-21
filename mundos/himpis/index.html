@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <title>OMOM — Himpis</title>
+  <title>OMOM — Himpis & Botychera</title>
   <!-- Fonte Press Start 2P -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
@@ -28,42 +28,51 @@
       letter-spacing: 2px;
     }
 
-    /* Container do globo */
-    #globeWrapper {
-      flex: 1;
+    /* Container genérico para globos */
+    .globe-wrapper {
       width: 100%;
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* Canvas do globo ocupa o espaço disponível */
-    #globeCanvas {
+    /* Canvas de cada globo ocupa todo espaço do wrapper */
+    canvas.globe-canvas {
       width: 100%;
       height: 100%;
     }
 
-    /* Imagem de apresentação */
-    #presentation {
+    /* Imagens de apresentação */
+    .presentation {
       width: 90vw;
       max-width: 600px;
       height: auto;
-      margin: 20px 0 40px;
+      margin: 20px 0 60px;
     }
   </style>
 </head>
 <body>
   <h1>OMOM</h1>
 
-  <div id="globeWrapper">
-    <canvas id="globeCanvas"></canvas>
+  <!-- Seção Himpis -->
+  <div class="globe-wrapper" style="height:40vh;">
+    <canvas id="globeCanvasHimpis" class="globe-canvas"></canvas>
   </div>
+  <img class="presentation" src="apresentacaohimpis.png" alt="Apresentação Himpis">
 
-  <img id="presentation" src="apresentacaohimpis.png" alt="Apresentação Himpis">
+  <!-- Espaço adicional entre as seções -->
+  <div style="height:40px;"></div>
 
-  <!-- Dependências mínimas para o globo -->
+  <!-- Seção Botychera -->
+  <div class="globe-wrapper" style="height:40vh;">
+    <canvas id="globeCanvasBotychera" class="globe-canvas"></canvas>
+  </div>
+  <img class="presentation" src="mundos/botychera/apresentacaobotychera.png" alt="Apresentação Botychera">
+
+  <!-- Scripts globos -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <!-- Himpis globo -->
   <script src="./globo.js"></script>
-</body>
-</html>
+  <!-- Botychera glob
