@@ -1,18 +1,14 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OMOM Worlds</title>
+  <title>OMOM</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <!-- Import Three.js e OrbitControls -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/controls/OrbitControls.js"></script>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
       background: #000;
       color: #fff;
       font-family: 'Press Start 2P', monospace;
@@ -20,106 +16,86 @@
     }
     #loading {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #000;
-      color: #00ffe7;
+      color: #00FFE7;
       font-size: 1.5rem;
       z-index: 1000;
     }
     header {
-      width: 50%;
       margin: 2rem auto;
-      font-size: 2vw;
+      font-size: 3rem;
       color: #fff;
     }
-    #worlds {
-      max-width: 800px;
-      margin: 0 auto 4rem;
-    }
     .world {
-      margin-bottom: 3rem;
+      margin: 2rem 0;
     }
     .world canvas,
     .world img {
       width: 100%;
       display: block;
+      margin: 0 auto;
     }
-    .spacer { height: 2rem; }
   </style>
 </head>
 <body>
-  <div id="loading">carregando...</div>
+  <!-- Loader de 2 segundos -->
+  <div id="loading">CARREGANDO...</div>
+
+  <!-- Título -->
   <header>OMOM</header>
-  <div id="worlds"></div>  <script>
-    const worlds = [
-      { id: 'himpis', path: 'mundos/himpis', img: 'apresentacaohimpis.png' },
-      { id: 'botychera', path: 'mundos/botychera', img: 'apresentacaobotychera.png' },
-      { id: 'sapador', path: 'mundos/sapador', img: 'apresentacaobotychera.png' }
-    ];
 
-    let loadedCount = 0;
-    const totalToLoad = worlds.length * 2;
-    const hideLoading = () => {
-      if (++loadedCount >= totalToLoad) {
-        document.getElementById('loading').style.display = 'none';
-      }
-    };
+  <!-- Mundos OMOM -->
+  <div class="world">
+    <canvas id="globeCanvas"></canvas>
+    <img src="mundos/himpis/apresentacaohimpis.png" alt="Himpis" />
+    <script src="mundos/himpis/globo.js"></script>
+  </div>
 
-    const container = document.getElementById('worlds');
+  <div class="world">
+    <canvas id="globeCanvas"></canvas>
+    <img src="mundos/botychera/apresentacaobotychera.png" alt="Botychera" />
+    <script src="mundos/botychera/globo.js"></script>
+  </div>
 
-    worlds.forEach(w => {
-      const section = document.createElement('div');
-      section.className = 'world';
+  <div class="world">
+    <canvas id="globeCanvas"></canvas>
+    <img src="mundos/sapador/apresentacaosapador.png" alt="Sapador" />
+    <script src="mundos/sapador/globo.js"></script>
+  </div>
 
-      const canvas = document.createElement('canvas');
-      canvas.id = 'globeCanvas';
-      section.appendChild(canvas);
-      section.appendChild(Object.assign(document.createElement('div'), { className: 'spacer' }));
+  <div class="world">
+    <canvas id="globeCanvas"></canvas>
+    <img src="mundos/denbou/apresentacaodenbou.png" alt="Denbou" />
+    <script src="mundos/denbou/globo.js"></script>
+  </div>
 
-      const img = new Image();
-      img.src = `${w.path}/${w.img}`;
-      img.onload = hideLoading;
-      img.onerror = hideLoading;
-      section.appendChild(img);
-      section.appendChild(Object.assign(document.createElement('div'), { className: 'spacer' }));
+  <div class="world">
+    <canvas id="globeCanvas"></canvas>
+    <img src="mundos/araporu/apresentacaoaraporu.png" alt="Araporu" />
+    <script src="mundos/araporu/globo.js"></script>
+  </div>
 
-      container.appendChild(section);
+  <!-- Próximos mundos comentados -->
+  <!--
+  <div class="world">
+    <canvas id="globeCanvas"></canvas>
+    <img src="mundos/alouepoura/apresentacaoalouepoura.png" alt="Alouepoura" />
+    <script src="mundos/alouepoura/globo.js"></script>
+  </div>
+  -->
 
-      const originalGet = document.getElementById.bind(document);
-      const canvasSelector = `#worlds .world:last-child canvas`;
-      const patchGet = id => id === 'globeCanvas' ? document.querySelector(canvasSelector) : originalGet(id);
-
-      // Patch TextureLoader
-      (function(basePath) {
-        const TexProto = THREE.TextureLoader.prototype;
-        const origLoad = TexProto.load;
-        TexProto.load = function(url, onLoad, onProgress, onError) {
-          const src = url.startsWith('http') || url.startsWith('data:')
-            ? url
-            : basePath + '/' + url;
-          return origLoad.call(this, src, onLoad, onProgress, onError);
-        };
-      })(w.path);
-
-      const script = document.createElement('script');
-      script.src = `${w.path}/globo.js`;
-      script.defer = true;
-      script.onload = () => {
-        document.getElementById = patchGet;
-        if (typeof initGlobe === 'function') initGlobe();
-        document.getElementById = originalGet;
-        hideLoading();
-      };
-      script.onerror = hideLoading;
-      document.body.appendChild(script);
-    });
-
-    // Fallback: esconder loader após 2000ms
+  <!-- Script de ocultar loader após 2s -->
+  <script>
     setTimeout(() => {
-      const loader = document.getElementById('loading');
-      if (loader && loader.style.display !== 'none') loader.style.display = 'none';
+      document.getElementById('loading').style.display = 'none';
     }, 2000);
-  </script></body>
+  </script>
+</body>
 </html>
