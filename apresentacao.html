@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OMOM – Múltiplos Globos</title>
   <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: 'Press Start 2P', cursive;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    canvas {
-      width: 90vw;
-      max-width: 600px;
-      height: 40vh;
-      margin: 20px 0;
-      background: #111;
-    }
+    body { margin:0; background:#000; color:#fff; font-family:'Press Start 2P', cursive; display:flex; flex-direction:column; align-items:center; }
+    h1 { margin:24px 0; font-size:22px; }
+    canvas { width:90vw; max-width:600px; height:40vh; margin:16px 0; background:#111; }
   </style>
 </head>
 <body>
-  <!-- Globo Himpis -->
-  <canvas id="globeCanvasHimpis"></canvas>
+  <h1>OMOM – Globos</h1>
 
-  <!-- Globo Botychera -->
+  <!-- Canvas para cada globo -->
+  <canvas id="globeCanvasHimpis"></canvas>
   <canvas id="globeCanvasBotychera"></canvas>
 
   <!-- Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- Scripts dos globos -->
+  <!-- Script globo Himpis e inicialização -->
   <script src="mundos/himpis/globo.js" type="application/javascript"></script>
+  <script>
+    // Ao carregar o script, chamamos initGlobe com o seletor do canvas correto
+    if (typeof initGlobe === 'function') {
+      initGlobe('#globeCanvasHimpis');
+    }
+  </script>
+
+  <!-- Script globo Botychera e inicialização -->
   <script src="mundos/botychera/globo.js" type="application/javascript"></script>
+  <script>
+    if (typeof initGlobe === 'function') {
+      initGlobe('#globeCanvasBotychera');
+    }
+  </script>
 </body>
 </html>
