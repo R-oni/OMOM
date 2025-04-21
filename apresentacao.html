@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OMOM – Múltiplos Globos</title>
   <style>
-    body { margin:0; background:#000; color:#fff; font-family:'Press Start 2P', cursive; display:flex; flex-direction:column; align-items:center; }
-    h1 { margin:24px 0; font-size:22px; }
+    body { margin:0; background:#000; color:#fff; font-family:'Press Start 2P',cursive; display:flex; flex-direction:column; align-items:center; }
+    h1 { margin:24px 0; font-size:24px; }
     canvas { width:90vw; max-width:600px; height:40vh; margin:16px 0; background:#111; }
   </style>
 </head>
 <body>
-  <h1>OMOM – Globos</h1>
+  <h1>OMOM – Diversos Globos</h1>
 
   <!-- Canvas para cada globo -->
   <canvas id="globeCanvasHimpis"></canvas>
@@ -21,17 +21,17 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- Script globo Himpis e inicialização -->
-  <script src="mundos/himpis/globo.js" type="application/javascript"></script>
+  <!-- Himpis Globe -->
+  <script src="mundos/himpis/globo.js"></script>
   <script>
-    // Ao carregar o script, chamamos initGlobe com o seletor do canvas correto
+    // Chama initGlobe no canvas correto
     if (typeof initGlobe === 'function') {
       initGlobe('#globeCanvasHimpis');
     }
   </script>
 
-  <!-- Script globo Botychera e inicialização -->
-  <script src="mundos/botychera/globo.js" type="application/javascript"></script>
+  <!-- Botychera Globe -->
+  <script src="mundos/botychera/globo.js"></script>
   <script>
     if (typeof initGlobe === 'function') {
       initGlobe('#globeCanvasBotychera');
