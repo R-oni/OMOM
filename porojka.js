@@ -274,7 +274,7 @@ window.initFlipbook = function(selector) {
   };
 
   // Mapeia handlers
-  const map = { cliquemundo: focoMundo, cliquesanguedomundo: trocaSangue };
+  const map = { cliqueporojka: focoMundo, cliquesanguedomundo: trocaSangue };
   Object.keys(map).forEach(id=>{
     $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
   });
