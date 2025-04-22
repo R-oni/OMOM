@@ -65,7 +65,7 @@ window.initGlobe = function(selector) {
   const orbitRadius = 3;
   const orbit = new THREE.Mesh(
     new THREE.SphereGeometry(0.1,64,64),
-    new THREE.MeshStandardMaterial({ map: loader.load('mundos/ttok/mapaporojka.png', check) })
+    new THREE.MeshStandardMaterial({ map: loader.load('mundos/os artesaos/mapaporojka.png', check) })
   );
   orbit.castShadow = orbit.receiveShadow = true;
   orbit.position.set(orbitRadius, 0, 0);
