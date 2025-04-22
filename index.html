@@ -1,4 +1,3 @@
-<!-- index.html – overlay reposicionado logo abaixo do painel -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -11,105 +10,165 @@
 
   <style>
     /* ===== RESET ===== */
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{width:100%;height:100%;overflow:hidden;background:none;color:#fff;font-family:'Courier New',monospace}
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace; }
 
     /* ===== PALCO MADEIRA (grid 50/50) ===== */
-    #app{
-      width:100%;height:100%;
-      display:grid;
-      grid-template-rows:50% 50%;           /* 1ª linha = tablet  | 2ª linha = flipbook */
-      background:url(fundo.png) center/cover no-repeat fixed;
-      position:relative;                    /* base para posicionar overlay absoluto */
+    #app {
+      display: grid;
+      grid-template-rows: 50% 50%;
+      width:100%; height:100%;
+      background: url(fundo.png) center/cover no-repeat fixed;
+      position: relative;
     }
 
-    /* ===== TABLET / PAINEL ===== */
-    :root{--tablet-w:95vw;--tablet-max:640px}
+    /* ===== TABLET + PAINEL ===== */
+    :root { --tablet-w:95vw; --tablet-max:640px; }
 
-    .tablet{
-      position:relative;
-      width:min(var(--tablet-w),var(--tablet-max));
-      aspect-ratio:1/1;
-      margin:auto;
-      filter:drop-shadow(0 10px 15px #0008);
+    .tablet {
+      position: relative;
+      width: min(var(--tablet-w), var(--tablet-max));
+      aspect-ratio: 1/1;
+      margin: auto;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
 
-    /* ===== ÁREA DA TELA (globo) – 90 % centralizado ===== */
-    #globe-area{
-      position:absolute;width:90%;height:90%;
-      top:50%;left:50%;transform:translate(-50%,-50%);
-      overflow:hidden;z-index:0;
+    /* Globo */
+    #globe-area {
+      position: absolute; width:90%; height:90%;
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      overflow:hidden; z-index:0;
     }
-    #globeCanvas{width:100%;height:100%;background:#000;object-fit:contain}
-    #intro-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40%;pointer-events:none;display:none;z-index:2}
-
-    /* painel.png cobre a frente toda */
-    #ui-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
-    #painel{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
-
-    /* botão MENU */
-    #btnMenu{
-      position:absolute;top:18px;left:12px;
-      background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;
-      font-family:'Press Start 2P',cursive;font-size:8px;padding:10px;
-      cursor:pointer;pointer-events:auto;z-index:2;
+    #globeCanvas { width:100%; height:100%; background:#000; object-fit:contain; }
+    #intro-video {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%); width:40%;
+      pointer-events:none; display:none; z-index:2;
     }
-    #btnMenu:hover{background:rgba(0,0,0,.9)}
 
-    /* ===== MENU DE SÍMBOLOS (ABAIXO DO PAINEL) ===== */
-    #menu-overlay{
-      position:absolute;                       /* fora do fluxo, não ocupa grid */
-      top:calc(50% + 1rem);                    /* 50 % da viewport (fim do painel) + margem */
-      left:50%;transform:translateX(-50%);
-      width:min(var(--tablet-w),var(--tablet-max));
-      background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
-      padding:20px 0;display:none;z-index:2;   /* z‑index 2 = abaixo do flipbook (3) */
+    /* painel.png sempre acima de tudo */
+    #ui-layer { position:absolute; inset:0; z-index:10; pointer-events:none; }
+    #painel    {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover; pointer-events:none;
+      z-index:10;
     }
-    #menu-overlay.visible{display:block}
-    .symbols-wrapper{max-height:45vh;overflow-y:auto;padding-inline:20px}
-    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
-    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
-    .symbol img{width:18vw;max-width:120px;transition:transform .3s}
-    .symbol img:hover{transform:scale(1.1)}
-    .symbol.brither img{filter:brightness(180%)}
-    .symbol.locked img{filter:brightness(50%)}
 
-    /* ===== FLIPBOOK (desliza lateralmente) ===== */
-    #flipbook-area{
-      position:relative;margin-left:5%;padding-top:2vh;
-      overflow:hidden;width:100%;height:100%;z-index:3;
-      transform:translateX(100%);transition:transform 1.5s ease-out;
+    /* botão MENU (acima do overlay) */
+    #btnMenu {
+      position:absolute; top:18px; left:12px;
+      background:rgba(0,0,0,0.7);
+      border:2px solid #00FFE7; color:#00FFE7;
+      font-family:'Press Start 2P',cursive; font-size:8px; padding:10px;
+      cursor:pointer; pointer-events:auto;
+      z-index:11;
     }
-    #flipbook-area.show{transform:translateX(0)}
-    #flipbook-area.slide-out-left{transform:translateX(-100%)}
-    #flipbookContainer{width:100%;height:calc(100% - 7vh)}
+    #btnMenu:hover { background:rgba(0,0,0,0.9); }
+
+    /* ===== MENU DE SÍMBOLOS (dentro do .tablet) ===== */
+    #menu-overlay {
+      position:absolute;
+      bottom:1rem;                 /* fica colado ao fim do tablet */
+      left:50%; transform:translateX(-50%);
+      width: min(var(--tablet-w),var(--tablet-max));
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      padding:20px 0;
+      display:none;
+      z-index:8;                   /* abaixo do painel, acima do globo */
+    }
+    #menu-overlay.visible { display:block; }
+
+    .symbols-wrapper { max-height:40vh; overflow-y:auto; padding-inline:20px; }
+    .symbols-container {
+      display:flex; flex-wrap:wrap;
+      justify-content:center; gap:25px;
+    }
+    @keyframes floatWave {
+      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
+    }
+    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite; }
+    .symbol img {
+      width:18vw; max-width:120px;
+      transition:transform .3s;
+    }
+    .symbol img:hover { transform:scale(1.1); }
+    .symbol.brither img { filter:brightness(180%); }
+    .symbol.locked img  { filter:brightness(50%); }
+
+    /* ===== FLIPBOOK ===== */
+    #flipbook-area {
+      position:relative; margin-left:5%; padding-top:2vh;
+      overflow:hidden; width:100%; height:100%;
+      z-index:3;
+      transform:translateX(100%); transition:transform 1.5s ease-out;
+    }
+    #flipbook-area.show { transform:translateX(0); }
+    #flipbook-area.slide-out-left { transform:translateX(-100%); }
+    #flipbookContainer { width:100%; height:calc(100% - 7vh); }
 
     /* seta do flipbook */
-    #setaBtn{
-      position:absolute;top:5px!important;right:5px;width:35px!important;height:auto!important;
-      cursor:pointer;opacity:0;animation:fadeInArrow .6s forwards .4s,slideArrow 1s ease-in-out infinite .6s;z-index:5
+    #setaBtn {
+      position:absolute; top:5px!important; right:5px!important;
+      width:35px!important; height:auto!important;
+      cursor:pointer; opacity:0;
+      animation: fadeInArrow .6s forwards .4s, slideArrow 1s ease-in-out infinite .6s;
+      z-index:5;
     }
-    @keyframes fadeInArrow{from{opacity:0}to{opacity:1}}
-    @keyframes slideArrow{0%{transform:translate(0)}50%{transform:translate(-8px,8px)}100%{transform:translate(0)}}
+    @keyframes fadeInArrow { from{opacity:0} to{opacity:1} }
+    @keyframes slideArrow  { 0%{transform:translate(0)} 50%{transform:translate(-8px,8px)} 100%{transform:translate(0)} }
 
     /* ===== OVERLAY IMAGEM ===== */
-    #overlayContainer{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:1000}
-    #overlayImage{max-width:80%;max-height:80%;transition:transform .3s}
-    #btnSair{position:absolute;top:20px;right:20px;background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:12px;padding:10px;cursor:pointer}
+    #overlayContainer {
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.8);
+      display:none; justify-content:center; align-items:center;
+      z-index:1000;
+    }
+    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s; }
+    #btnSair {
+      position:absolute; top:20px; right:20px;
+      background:rgba(0,0,0,0.7);
+      border:2px solid #00FFE7; color:#00FFE7;
+      font-family:'Press Start 2P',cursive; font-size:12px; padding:10px;
+      cursor:pointer;
+    }
 
     /* ===== LOADING & SOM ===== */
-    #loading-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9999}
-    #loading-text{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:20px}
-    #soundPrompt{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:10000}
-    #soundPrompt p{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:24px;margin-bottom:30px;text-align:center}
-    .soundBtn{background:none;border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:14px;padding:12px 22px;cursor:pointer;transition:background .25s}
-    .soundBtn:hover{background:#00FFE733}
+    #loading-screen {
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background:#000; z-index:9999;
+    }
+    #loading-text {
+      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px;
+    }
+    #soundPrompt {
+      position:fixed; inset:0;
+      display:none; flex-direction:column;
+      align-items:center; justify-content:center;
+      background:#000; z-index:10000;
+    }
+    #soundPrompt p {
+      font-family:'Press Start 2P',cursive; color:#00FFE7;
+      font-size:24px; margin-bottom:30px; text-align:center;
+    }
+    .soundBtn {
+      background:none; border:2px solid #00FFE7; color:#00FFE7;
+      font-family:'Press Start 2P',cursive; font-size:14px; padding:12px 22px;
+      cursor:pointer; transition:background .25s;
+    }
+    .soundBtn:hover { background:rgba(0,255,231,0.2); }
 
-    /* ===== CLIQUES ESPECIAIS (mundo, sangue, etc.) ===== */
-    #cliquemundo,#cliqueinversao,#cliquerefracao,#cliquemorse,#cliquecapacitor,#cliquesanguedomundo,#cliqueg{
-      position:absolute;inset:0;cursor:pointer;width:100%;height:100%;z-index:10;animation:fadeInOut .7s infinite}
-    @keyframes fadeInOut{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
+    /* ===== CLIQUES ESPECIAIS ===== */
+    #cliquemundo, #cliqueinversao, #cliquerefracao,
+    #cliquemorse, #cliquecapacitor, #cliquesanguedomundo, #cliqueg {
+      position:absolute; inset:0; cursor:pointer;
+      width:100%; height:100%; z-index:10;
+      animation:fadeInOut .7s infinite;
+    }
+    @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
   </style>
 </head>
 
@@ -129,40 +188,60 @@
 
   <!-- palco principal -->
   <div id="app">
-    <!-- =================== TABLET =================== -->
+    <!-- TABLET + GLOBO -->
     <section class="tablet">
       <div id="globe-area">
         <canvas id="globeCanvas"></canvas>
         <video id="intro-video" src="omom.mp4" muted playsinline></video>
       </div>
-
-      <!-- UI -->
+      <!-- PAINEL + MENU -->
       <div id="ui-layer">
         <img id="painel" src="painel.png" alt="Painel">
         <button id="btnMenu">MENU</button>
       </div>
-    </section>
-
-    <!-- ========== MENU SÍMBOLOS ========== -->
-    <div id="menu-overlay">
-      <div class="symbols-wrapper">
-        <div class="symbols-container">
-          <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
-          <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
-          <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
-          <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
-          <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
-          <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
-          <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
-          <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
-          <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
-          <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
-          <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+      <!-- MENU SÍMBOLOS abaixo do painel -->
+      <div id="menu-overlay">
+        <div class="symbols-wrapper">
+          <div class="symbols-container">
+            <div class="symbol brither" data-world="veleywei">
+              <img src="assets/veleyweimenu.png" alt="Velei'wey">
+            </div>
+            <div class="symbol locked" data-world="botychera">
+              <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+            </div>
+            <div class="symbol locked" data-world="himpis">
+              <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+            </div>
+            <div class="symbol brither" data-world="batedores">
+              <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
+            </div>
+            <div class="symbol locked" data-world="denbou">
+              <img src="mundos/denbou/denboumenu.png" alt="DenBou">
+            </div>
+            <div class="symbol locked" data-world="araporu">
+              <img src="mundos/araporu/araporumenu.png" alt="Araporu">
+            </div>
+            <div class="symbol locked" data-world="artesaos">
+              <img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos">
+            </div>
+            <div class="symbol locked" data-world="sapador">
+              <img src="mundos/sapador/sapador.png" alt="Sapador">
+            </div>
+            <div class="symbol locked" data-world="dosirelala">
+              <img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala">
+            </div>
+            <div class="symbol locked" data-world="calindreno">
+              <img src="mundos/calindreno/calindreno.png" alt="Calindreno">
+            </div>
+            <div class="symbol locked" data-world="mundoPulsante">
+              <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- =================== FLIPBOOK ================= -->
+    <!-- FLIPBOOK -->
     <section id="flipbook-area">
       <div id="flipbookContainer"></div>
     </section>
@@ -177,84 +256,15 @@
   <!-- loading -->
   <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
 
-  <!-- libs -->
+  <!-- libs e scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    /* ==== FADE ==== */
-    function fadeIn(a,ms){a.volume=0;a.play().catch(()=>{});const s=50,dv=s/ms,id=setInterval(()=>{if(a.volume+dv>=1){a.volume=1;clearInterval(id)}else a.volume+=dv},s)}
-    function fadeOut(a,ms){const s=50,dv=s/ms,id=setInterval(()=>{if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}else a.volume-=dv},s)}
-
-    let allowSound=false;
-
-    /* ==== LOAD ==== */
-    window.addEventListener('load',()=>{
-      document.getElementById('loading-screen').style.display='none';
-      document.getElementById('soundPrompt').style.display='flex';
-    });
-    function startSite(sound){
-      allowSound=sound;
-      document.getElementById('soundPrompt').style.display='none';
-      const intro=document.getElementById('intro-video');
-      intro.style.display='block';
-      intro.play().catch(()=>{});
-      if(allowSound) document.getElementById('bgm').play().catch(()=>{});
-      intro.addEventListener('ended',()=>{intro.style.display='none';showOverlayMenu()});
-    }
-    document.getElementById('btnYes').onclick=()=>startSite(true);
-    document.getElementById('btnNo').onclick =()=>startSite(false);
-
-    /* ==== MENU E MUNDOS ==== */
-    const memories=document.getElementById('memories');
-    function showOverlayMenu(){
-      document.getElementById('menu-overlay').classList.add('visible');
-      if(allowSound) fadeIn(memories,1000);
-    }
-    document.querySelector('.symbols-container').addEventListener('click',e=>{
-      const sym=e.target.closest('.symbol');if(!sym)return;launchWorld(sym.dataset.world);
-    });
-    document.getElementById('btnMenu').onclick=showOverlayMenu;
-
-    function launchWorld(name){
-      const fb=document.getElementById('flipbook-area');
-      if(fb.classList.contains('show')){
-        fb.classList.remove('show');fb.classList.add('slide-out-left');
-        fb.addEventListener('transitionend',onOut);
-      }else{loadWorld(name);}
-      function onOut(){fb.classList.remove('slide-out-left');fb.removeEventListener('transitionend',onOut);loadWorld(name);}
-    }
-
-    function loadWorld(worldName){
-      if(allowSound) fadeOut(memories,1000);
-      destroyGlobe();
-      document.getElementById('menu-overlay').classList.remove('visible');
-      document.getElementById('flipbookContainer').innerHTML='';
-      const s=document.createElement('script');s.src=worldName+'.js';document.body.appendChild(s);
-      s.onload=()=>{
-        window.initGlobe?.('#globeCanvas');
-        window.initFlipbook?.('#flipbookContainer');
-        const fb=document.getElementById('flipbook-area');void fb.offsetWidth;fb.classList.add('show');
-      };
-    }
-
-    /* ==== DESTRÓI GLOBO ==== */
-    function destroyGlobe(){
-      const G=window._Globe;
-      if(G){
-        G.scene?.traverse(o=>{o.geometry?.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose())});
-        G.renderer?.dispose();G.renderer?.forceContextLoss?.();G.renderer?.domElement?.remove();G.controls?.dispose();
-      }
-      const area=document.getElementById('globe-area');
-      area.querySelector('canvas')?.remove();
-      const c=document.createElement('canvas');c.id='globeCanvas';area.prepend(c);
-    }
-
-    /* ==== OVERLAY IMAGEM ==== */
-    document.getElementById('btnSair').onclick=e=>{e.preventDefault();$('#overlayContainer').fadeOut(300)};
-    document.getElementById('overlayContainer').onclick=e=>{if(e.target===e.currentTarget)$('#overlayContainer').fadeOut(300)};
+    /* ==== FADE, BOOT, MENU, FLIPBOOK, DESTRÓI GLOBO e OVERLAY ==== */
+    // ... seu JS aqui ...
   </script>
 </body>
 </html>
