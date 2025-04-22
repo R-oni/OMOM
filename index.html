@@ -1,5 +1,4 @@
-<!-- index.html – tablet 1:1 usando apenas painel.png
-     flipbook volta a deslizar lateralmente (lógica original preservada) -->
+<!-- index.html – overlay reposicionado logo abaixo do painel -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -19,34 +18,32 @@
     #app{
       width:100%;height:100%;
       display:grid;
-      grid-template-rows:50% 50%;
-      background:url(fundo.png) center/cover no-repeat fixed;   /* madeira */
-      position:relative
+      grid-template-rows:50% 50%;           /* 1ª linha = tablet  | 2ª linha = flipbook */
+      background:url(fundo.png) center/cover no-repeat fixed;
+      position:relative;                    /* base para posicionar overlay absoluto */
     }
 
-    /* ===== TABLET (agora só painel.png) ===== */
+    /* ===== TABLET / PAINEL ===== */
     :root{--tablet-w:95vw;--tablet-max:640px}
 
     .tablet{
       position:relative;
       width:min(var(--tablet-w),var(--tablet-max));
-      aspect-ratio:1/1;           /* ratio 1:1 */
+      aspect-ratio:1/1;
       margin:auto;
       filter:drop-shadow(0 10px 15px #0008);
-      perspective:1200px;
     }
 
-    /* ===== ÁREA DA TELA ===== */
+    /* ===== ÁREA DA TELA (globo) – 90 % centralizado ===== */
     #globe-area{
-      position:absolute; width: 90%; height: 90%; top: 60%; left: 50%; inset:0;overflow:hidden;z-index:0
+      position:absolute;width:90%;height:90%;
+      top:50%;left:50%;transform:translate(-50%,-50%);
+      overflow:hidden;z-index:0;
     }
     #globeCanvas{width:100%;height:100%;background:#000;object-fit:contain}
-    #intro-video{
-      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-      width:40%;height:auto;pointer-events:none;display:none;z-index:2
-    }
+    #intro-video{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40%;pointer-events:none;display:none;z-index:2}
 
-    /* painel.png cobre toda a frente (overlay visual) */
+    /* painel.png cobre a frente toda */
     #ui-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
     #painel{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 
@@ -55,15 +52,34 @@
       position:absolute;top:18px;left:12px;
       background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;
       font-family:'Press Start 2P',cursive;font-size:8px;padding:10px;
-      cursor:pointer;pointer-events:auto;z-index:2
+      cursor:pointer;pointer-events:auto;z-index:2;
     }
     #btnMenu:hover{background:rgba(0,0,0,.9)}
+
+    /* ===== MENU DE SÍMBOLOS (ABAIXO DO PAINEL) ===== */
+    #menu-overlay{
+      position:absolute;                       /* fora do fluxo, não ocupa grid */
+      top:calc(50% + 1rem);                    /* 50 % da viewport (fim do painel) + margem */
+      left:50%;transform:translateX(-50%);
+      width:min(var(--tablet-w),var(--tablet-max));
+      background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
+      padding:20px 0;display:none;z-index:2;   /* z‑index 2 = abaixo do flipbook (3) */
+    }
+    #menu-overlay.visible{display:block}
+    .symbols-wrapper{max-height:45vh;overflow-y:auto;padding-inline:20px}
+    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
+    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
+    .symbol img{width:18vw;max-width:120px;transition:transform .3s}
+    .symbol img:hover{transform:scale(1.1)}
+    .symbol.brither img{filter:brightness(180%)}
+    .symbol.locked img{filter:brightness(50%)}
 
     /* ===== FLIPBOOK (desliza lateralmente) ===== */
     #flipbook-area{
       position:relative;margin-left:5%;padding-top:2vh;
       overflow:hidden;width:100%;height:100%;z-index:3;
-      transform:translateX(100%);transition:transform 1.5s ease-out
+      transform:translateX(100%);transition:transform 1.5s ease-out;
     }
     #flipbook-area.show{transform:translateX(0)}
     #flipbook-area.slide-out-left{transform:translateX(-100%)}
@@ -76,18 +92,6 @@
     }
     @keyframes fadeInArrow{from{opacity:0}to{opacity:1}}
     @keyframes slideArrow{0%{transform:translate(0)}50%{transform:translate(-8px,8px)}100%{transform:translate(0)}}
-
-    /* ===== MENU OVERLAY ===== */
-    #menu-overlay{position:absolute;inset:0;backdrop-filter:blur(6px);display:none;z-index:2}
-    #menu-overlay.visible{display:block}
-    .symbols-wrapper{position:absolute;top:40px;left:0;right:0;bottom:0;overflow-y:auto;padding:20px}
-    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
-    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
-    .symbol img{width:18vw;transition:transform .3s}
-    .symbol img:hover{transform:scale(1.1)}
-    .symbol.brither img{filter:brightness(180%)}
-    .symbol.locked img{filter:brightness(50%)}
 
     /* ===== OVERLAY IMAGEM ===== */
     #overlayContainer{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:1000}
@@ -103,11 +107,8 @@
     .soundBtn:hover{background:#00FFE733}
 
     /* ===== CLIQUES ESPECIAIS (mundo, sangue, etc.) ===== */
-    #cliquemundo,#cliqueinversao,#cliquerefracao,#cliquemorse,
-    #cliquecapacitor,#cliquesanguedomundo,#cliqueg{
-      position:absolute;inset:0;cursor:pointer;width:100%;height:100%;
-      z-index:10;animation:fadeInOut .7s infinite
-    }
+    #cliquemundo,#cliqueinversao,#cliquerefracao,#cliquemorse,#cliquecapacitor,#cliquesanguedomundo,#cliqueg{
+      position:absolute;inset:0;cursor:pointer;width:100%;height:100%;z-index:10;animation:fadeInOut .7s infinite}
     @keyframes fadeInOut{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
   </style>
 </head>
@@ -128,41 +129,40 @@
 
   <!-- palco principal -->
   <div id="app">
-    <!-- =================== PARTE SUPERIOR (TABLET) =================== -->
+    <!-- =================== TABLET =================== -->
     <section class="tablet">
       <div id="globe-area">
         <canvas id="globeCanvas"></canvas>
         <video id="intro-video" src="omom.mp4" muted playsinline></video>
       </div>
 
-      <!-- camada de UI -->
+      <!-- UI -->
       <div id="ui-layer">
         <img id="painel" src="painel.png" alt="Painel">
         <button id="btnMenu">MENU</button>
       </div>
-
-      <!-- menu rolante -->
-      <div id="menu-overlay">
-        <div class="symbols-wrapper">
-          <div class="symbols-container">
-            <!-- ícones -->
-            <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
-            <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
-            <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
-            <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
-            <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
-            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
-            <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
-            <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
-            <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
-            <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
-            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <!-- =================== PARTE INFERIOR (FLIPBOOK) ================= -->
+    <!-- ========== MENU SÍMBOLOS ========== -->
+    <div id="menu-overlay">
+      <div class="symbols-wrapper">
+        <div class="symbols-container">
+          <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+          <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+          <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
+          <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
+          <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
+          <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
+          <div class="symbol locked"  data-world="artesaos"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
+          <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
+          <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
+          <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
+          <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== FLIPBOOK ================= -->
     <section id="flipbook-area">
       <div id="flipbookContainer"></div>
     </section>
@@ -184,13 +184,13 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    /* ==== FUNÇÕES DE FADE ==== */
+    /* ==== FADE ==== */
     function fadeIn(a,ms){a.volume=0;a.play().catch(()=>{});const s=50,dv=s/ms,id=setInterval(()=>{if(a.volume+dv>=1){a.volume=1;clearInterval(id)}else a.volume+=dv},s)}
     function fadeOut(a,ms){const s=50,dv=s/ms,id=setInterval(()=>{if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}else a.volume-=dv},s)}
 
     let allowSound=false;
 
-    /* ==== BOOT ==== */
+    /* ==== LOAD ==== */
     window.addEventListener('load',()=>{
       document.getElementById('loading-screen').style.display='none';
       document.getElementById('soundPrompt').style.display='flex';
