@@ -129,7 +129,7 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina7.webp" alt="Página 9" draggable="false"></div>
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina8.webp" alt="Página 10" draggable="false"></div>
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina9.webp" alt="Página 9" draggable="false"></div>
-      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina10.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina10.webp" alt="Página 11" draggable="false"></div>
     </div>
   `);
 
