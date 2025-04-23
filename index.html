@@ -63,7 +63,9 @@
     #menu-overlay {
       position:absolute;
       border-radius: 20px;
-      top:50%; left:50%; transform:translate(-50%, -50%);
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
       width:min(var(--tablet-w), var(--tablet-max));
       background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
       padding:20px 0; display:none; z-index:8;
@@ -157,43 +159,46 @@
     }
     @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
 
-    /* DESKTOP (paisagem) */
     @media screen and (min-width:1024px) and (orientation:landscape) {
-      /* anulamos o grid mobile */
-      #app { display:block; }
-
-      /* FLIPBOOK sliding via transform */
+      /* Layout em duas colunas */
+      #app {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 100%;
+      }
+      
+      /* Flipbook à esquerda */
       #flipbook-area {
-        position:absolute; top:0; right:50%; left:auto;
-        width:50%; height:100%; margin:0; padding:0;
-        transform:translateX(100%);
-        transition:transform 1.5s ease-out;
-        z-index:5;
+        position: relative;
+        grid-column: 1;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 2vh 5% 0;
+        transform: translateX(-100%);
       }
-      #flipbook-area.show { transform:translateX(0); }
-      #flipbook-area.slide-out-left { transform:translateX(-100%); }
-
-      /* Tablet/Globo à direita ajustado */
+      #flipbook-area.show {
+        transform: translateX(0);
+      }
+      #flipbook-area.slide-out-left {
+        transform: translateX(-100%);
+      }
+      
+      /* Tablet na direita */
       .tablet {
-        position:absolute; top:0; right:0;
-        width:80%; height:100%; margin:0;
-        border-radius:20px; overflow:hidden;
-        padding:20px; box-sizing:border-box;
+        position: relative;
+        grid-column: 2;
+        width: min(var(--tablet-w), var(--tablet-max));
+        aspect-ratio: 1/1;
+        margin: auto;
       }
-
-      /* UI-layer e painel na coluna direita */
-      #ui-layer, #painel {
-        position:absolute;
-        top:0; right:0; left:auto;
-        width:100%; height:100%;
-      }
-
-      /* MENU OVERLAY cobre 100% do tablet */
+      
+      /* Garantindo que o menu apareça centralizado no tablet */
       #menu-overlay {
-        position:absolute; inset:0;
-        border-radius:20px;
-        top:0; left:0; transform:none;
-        width:100%; height:100%;
+        top: 50%;
+        left: 75%;
+        transform: translate(-50%, -50%);
+        width: min(var(--tablet-w), var(--tablet-max));
       }
     }
   </style>
@@ -215,6 +220,8 @@
 
   <!-- palco -->
   <div id="app">
+    <section id="flipbook-area"><div id="flipbookContainer"></div></section>
+    
     <section class="tablet">
       <div id="globe-area">
         <canvas id="globeCanvas"></canvas>
@@ -225,12 +232,26 @@
         <button id="btnMenu">MENU</button>
       </div>
       <div id="menu-overlay">
-        <!-- conteúdo do menu -->
+        <div class="symbols-wrapper">
+          <div class="symbols-container">
+            <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+            <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+            <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
+            <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
+            <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
+            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
+            <div class="symbol locked"  data-world="porojka"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
+            <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
+            <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
+            <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
+            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+            <div class="symbol locked"  data-world="sapador"><img src="mundos/mundo 6/mundo6.png" alt="Sapador"></div>
+            <div class="symbol locked"  data-world="dosirelala"><img src="mundos/mundo 5/mundo5.png" alt="Dosirelala"></div>
+            <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
+            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+          </div>
+        </div>
       </div>
-    </section>
-
-    <section id="flipbook-area">
-      <div id="flipbookContainer"></div>
     </section>
   </div>
 
@@ -250,17 +271,19 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    // ==== FADE ====      
+    // ==== FADE ====
     function fadeIn(a, ms) {
       a.volume = 0;
       a.play().catch(()=>{});
       const step = 50, dv = step/ms, id = setInterval(()=>{
-        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id); } else a.volume += dv;
+        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id); }
+        else a.volume += dv;
       }, step);
     }
     function fadeOut(a, ms) {
       const step = 50, dv = step/ms, id = setInterval(()=>{
-        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime = 0; } else a.volume -= dv;
+        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime = 0; }
+        else a.volume -= dv;
       }, step);
     }
     let allowSound = false;
@@ -320,7 +343,7 @@
       const s = document.createElement('script');
       s.src = worldName + '.js';
       document.body.appendChild(s);
-      s.onload = () => {
+      s.onload = ()=>{
         window.initGlobe?.('#globeCanvas');
         window.initFlipbook?.('#flipbookContainer');
         const fb = document.getElementById('flipbook-area');
@@ -333,17 +356,30 @@
     function destroyGlobe(){
       const G = window._Globe;
       if (G) {
-        G.scene?.traverse(o=>{ o.geometry?.dispose(); (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose()); });
-        G.renderer?.dispose(); G.renderer?.forceContextLoss?.(); G.renderer?.domElement?.remove(); G.controls?.dispose();
+        G.scene?.traverse(o=>{
+          o.geometry?.dispose();
+          if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());
+        });
+        G.renderer?.dispose();
+        G.renderer?.forceContextLoss?.();
+        G.renderer?.domElement?.remove();
+        G.controls?.dispose();
       }
       const area = document.getElementById('globe-area');
       area.querySelector('canvas')?.remove();
-      const c = document.createElement('canvas'); c.id = 'globeCanvas'; area.prepend(c);
+      const c = document.createElement('canvas');
+      c.id = 'globeCanvas';
+      area.prepend(c);
     }
 
     // ==== OVERLAY IMAGEM ====
-    document.getElementById('btnSair').onclick = e=>{ e.preventDefault(); $('#overlayContainer').fadeOut(300); };
-    document.getElementById('overlayContainer').onclick = e=>{ if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300); };
+    document.getElementById('btnSair').onclick = e=>{
+      e.preventDefault();
+      $('#overlayContainer').fadeOut(300);
+    };
+    document.getElementById('overlayContainer').onclick = e=>{
+      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
+    };
   </script>
 </body>
 </html>
