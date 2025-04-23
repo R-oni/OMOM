@@ -195,7 +195,7 @@ window.initFlipbook = function(selector) {
   });
 
   // Ajuste de tamanho das páginas
-  $container.find('#flipbook .page').css({ width: '80%', height: '80%' });
+  $container.find('#flipbook .page').css({ width: '95%', height: '95%' });
   $container.find('#flipbook .page img').css({ width: '100%', height: '100%', objectFit: 'contain' });
 
   // Lazy‑load
