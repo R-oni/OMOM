@@ -13,7 +13,7 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace; }
 
-    /* ===== PALCO MADEIRA (grid 50/50 mobile) ===== */
+    /* ===== MOBILE (linhas 50/50) ===== */
     #app {
       display: grid;
       grid-template-rows: 50% 50%;
@@ -64,7 +64,7 @@
     /* ===== MENU DE SÍMBOLOS ===== */
     #menu-overlay {
       position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      width:min(var(--tablet-w),var(--tablet-max));
+      width:min(var(--tablet-w), var(--tablet-max));
       background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
       padding:20px 0; border-radius:20px; display:none; z-index:13;
     }
@@ -165,10 +165,13 @@
       #flipbook-area {
         grid-column: 1 / 2;
         margin-left: 0; padding-top: 0;
+        /* inicial fora da tela à esquerda */
         transform: translateX(-100%);
+        transition: transform 1.5s ease-out;
       }
       #flipbook-area.show { transform: translateX(0); }
-      #flipbook-area.slide-out-left { transform: translateX(-100%); }
+      /* sai mais para a esquerda agora */
+      #flipbook-area.slide-out-left { transform: translateX(-200%); }
     }
   </style>
 </head>
@@ -186,7 +189,7 @@
     </div>
   </div>
 
-  <!-- palco -->
+  <!-- app -->
   <div id="app">
     <!-- CANVAS / TABLET -->
     <section class="tablet">
@@ -199,6 +202,7 @@
         <img id="modulo" src="modulo.png" alt="Módulo">
         <button id="btnMenu">MENU</button>
       </div>
+      <!-- MENU -->
       <div id="menu-overlay">
         <div class="symbols-wrapper">
           <div class="symbols-container">
@@ -221,7 +225,7 @@
     <!-- FLIPBOOK -->
     <section id="flipbook-area">
       <div id="flipbookContainer"></div>
-      <img id="setaBtn" src="seta.png" alt="Próxima página">
+      <img id="setaBtn" src="seta.png" alt="Próxima página" draggable="false">
     </section>
   </div>
 
@@ -243,22 +247,16 @@
   <script>
     // ==== FADE ====
     function fadeIn(a, ms) {
-      a.volume = 0;
-      a.play().catch(()=>{});
-      const step = 50, dv = step/ms;
-      const id = setInterval(()=>{
-        if (a.volume + dv >= 1) {
-          a.volume = 1; clearInterval(id);
-        } else a.volume += dv;
+      a.volume = 0; a.play().catch(()=>{});
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id); }
+        else a.volume += dv;
       }, step);
     }
     function fadeOut(a, ms) {
-      const step = 50, dv = step/ms;
-      const id = setInterval(()=>{
-        if (a.volume - dv <= 0) {
-          a.volume = 0; clearInterval(id);
-          a.pause(); a.currentTime = 0;
-        } else a.volume -= dv;
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime = 0; }
+        else a.volume -= dv;
       }, step);
     }
     let allowSound = false;
@@ -287,7 +285,7 @@
     const memories = document.getElementById('memories');
     function showOverlayMenu(){
       document.getElementById('menu-overlay').classList.add('visible');
-      if (allowSound) fadeIn(memories, 1000);
+      if (allowSound) fadeIn(memories,1000);
     }
     document.querySelector('.symbols-container').addEventListener('click', e=>{
       const sym = e.target.closest('.symbol');
@@ -298,7 +296,7 @@
 
     function launchWorld(name){
       const fb = document.getElementById('flipbook-area');
-      if (fb.classList.contains('show')) {
+      if (fb.classList.contains('show')){
         fb.classList.remove('show');
         fb.classList.add('slide-out-left');
         fb.addEventListener('transitionend', onOut);
@@ -311,11 +309,11 @@
     }
 
     function loadWorld(worldName){
-      if (allowSound) fadeOut(memories, 1000);
+      if (allowSound) fadeOut(memories,1000);
       destroyGlobe();
       document.getElementById('menu-overlay').classList.remove('visible');
       document.getElementById('flipbookContainer').innerHTML = '';
-      document.getElementById('setaBtn').style.opacity = '0';  // reseta seta
+      document.getElementById('setaBtn').style.opacity = '0';
       const s = document.createElement('script');
       s.src = worldName + '.js';
       document.body.appendChild(s);
@@ -325,17 +323,14 @@
         const fb = document.getElementById('flipbook-area');
         void fb.offsetWidth; // força reflow
         fb.classList.add('show');
-        // mostrar seta após flipbook carregado
-        setTimeout(()=>{
-          document.getElementById('setaBtn').style.opacity = '1';
-        }, 600);
+        setTimeout(()=>{ document.getElementById('setaBtn').style.opacity = '1'; }, 600);
       };
     }
 
     // ==== DESTRÓI GLOBO ====
     function destroyGlobe(){
       const G = window._Globe;
-      if (G) {
+      if(G){
         G.scene?.traverse(o=>{
           o.geometry?.dispose();
           if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());
@@ -353,13 +348,8 @@
     }
 
     // ==== OVERLAY IMAGEM ====
-    document.getElementById('btnSair').onclick = e=>{
-      e.preventDefault();
-      $('#overlayContainer').fadeOut(300);
-    };
-    document.getElementById('overlayContainer').onclick = e=>{
-      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
-    };
+    $('#btnSair').on('click',e=>{ e.preventDefault(); $('#overlayContainer').fadeOut(300); });
+    $('#overlayContainer').on('click',e=>{ if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300); });
   </script>
 </body>
 </html>
