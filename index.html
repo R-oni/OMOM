@@ -405,8 +405,8 @@
             // === LED visualizer ===
         const led      = document.getElementById('led');
         const audioCtx = new AudioContext();
-        const bgm      = document.getElementById('memories');
-        const src      = audioCtx.createMediaElementSource(bgm);
+        const memories      = document.getElementById('memories');
+        const src      = audioCtx.createMediaElementSource(memories);
         const analyser = audioCtx.createAnalyser();
         
         src.connect(analyser);
