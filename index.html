@@ -33,6 +33,21 @@
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
 
+          /* LED indicador */
+      #led {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #000;
+        box-shadow: 0 0 5px transparent;
+        transition: background 0.1s, box-shadow 0.1s;
+        z-index: 11000;
+      }
+
+
     /* Globo */
     #globe-area {
       position: absolute; width:100%; height:100%;
@@ -267,6 +282,7 @@
 
   <!-- loading -->
   <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
+  <div id="led"></div>
 
   <!-- libs -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -384,6 +400,43 @@
     document.getElementById('overlayContainer').onclick = e=>{
       if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
     };
+
+
+            // === LED visualizer ===
+        const led      = document.getElementById('led');
+        const audioCtx = new AudioContext();
+        const bgm      = document.getElementById('bgm');
+        const src      = audioCtx.createMediaElementSource(bgm);
+        const analyser = audioCtx.createAnalyser();
+        
+        src.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        
+        const dataArr = new Uint8Array(analyser.frequencyBinCount);
+        
+        function updateLed() {
+          analyser.getByteFrequencyData(dataArr);
+          const avg = dataArr.reduce((s, v) => s + v, 0) / dataArr.length;
+          if (avg > 60) {
+            led.style.background  = '#0f0';
+            led.style.boxShadow   = '0 0 15px #0f0';
+          } else {
+            led.style.background  = '#000';
+            led.style.boxShadow   = '0 0 5px transparent';
+          }
+          requestAnimationFrame(updateLed);
+        }
+        
+        // injeta o start do LED dentro da tua função de boot
+        const _origStart = startSite;
+        startSite = function(sound) {
+          _origStart(sound);
+          if (sound) {
+            audioCtx.resume();
+            updateLed();
+          }
+        };
+
   </script>
 </body>
 </html>
