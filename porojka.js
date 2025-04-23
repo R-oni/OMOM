@@ -133,48 +133,23 @@ window.initFlipbook = function(selector) {
       </div>
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina7.webp" alt="Página 9" draggable="false"></div>
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina8.webp" alt="Página 10" draggable="false"></div>
-      <div class="page">
-        <img src="mundos/os artesaos/imagens/cap1/pagina9.webp" alt="Página 11" draggable="false">
-        <img id="cliqueinversao" src="mundos/os artesaos/imagens/cap1/cliqueinversao.webp" alt="Clique Inversão" draggable="false">
-      </div>
-      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina10.webp" alt="Página 12" draggable="false"></div>
-      <div class="page">
-        <img src="mundos/os artesaos/imagens/cap1/pagina11.webp" alt="Página 13" draggable="false">
-        <img id="cliqueg" src="mundos/os artesaos/imagens/cap1/cliqueg.webp" alt="Clique G" draggable="false">
-      </div>
-      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina12.webp" alt="Página 14" draggable="false"></div>
-      <div class="page">
-        <img src="mundos/os artesaos/imagens/cap1/pagina13.webp" alt="Página 15" draggable="false">
-        <img id="cliquerefracao" src="mundos/ttok/imagens/cap1/cliquerefracao.webp" alt="Clique Refracão" draggable="false">
-      </div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina14.webp" alt="Página 16" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina15.webp" alt="Página 17" draggable="false"></div>
-      <div class="page">
-        <img src="mundos/ttok/imagens/cap1/pagina16.webp" alt="Página 18" draggable="false">
-        <img id="cliquemorse" src="mundos/ttok/imagens/cap1/cliquemorse.webp" alt="Clique Morse" draggable="false">
-      </div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina17.webp" alt="Página 19" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina18.webp" alt="Página 20" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina19.webp" alt="Página 21" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina20.webp" alt="Página 22" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina21.webp" alt="Página 23" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina22.webp" alt="Página 24" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina23.webp" alt="Página 25" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina24.webp" alt="Página 26" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina25.webp" alt="Página 27" draggable="false"></div>
-      <div class="page">
-        <img src="mundos/ttok/imagens/cap1/pagina26.webp" alt="Página 28" draggable="false">
-        <img id="cliquecapacitor" src="mundos/ttok/imagens/cap1/cliquecapacitor.webp" alt="Clique Capacitor" draggable="false">
-      </div>
-      <div class="page">
-        <img src="mundos/ttok/imagens/cap1/pagina27.webp" alt="Página 29" draggable="false">
-        <img id="cliquesanguedomundo" src="mundos/ttok/imagens/cap1/cliquesanguedomundo.webp" alt="Clique Sangue do Mundo" draggable="false">
-      </div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina28.webp" alt="Página 30" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina29.webp" alt="Página 31" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina30.webp" alt="Página 32" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina31.webp" alt="Página 33" draggable="false"></div>
-      <div class="page"><img src="mundos/ttok/imagens/cap1/pagina32.webp" alt="Página 34" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina9.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina10.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina11.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina12.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina13.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina14.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina15.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina16.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina17.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina18.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina19.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina20.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina21.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina22.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina23.webp" alt="Página 10" draggable="false"></div>
+  
+      
     </div>
   `);
 
