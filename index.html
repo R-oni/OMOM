@@ -43,6 +43,31 @@
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
 
+    /* painel lateral com luz piscante */
+    .side-panel {
+      position: absolute;
+      top: 0; left: 0;
+      width: 6%; height: 100%;
+      background: #333;
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 12;
+    }
+    .side-panel .indicator {
+      width: 12px; height: 12px;
+      margin-top: 10px;
+      background: #0f0;
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.2; }
+    }
+
     /* Globo */
     #globe-area {
       position: absolute; width:90%; height:90%;
@@ -100,11 +125,15 @@
       position:relative; margin-left:5%; padding-top:2vh;
       overflow:hidden; width:100%; height:100%; z-index:3;
       transform:translateX(100%); transition:transform 1.5s ease-out;
-      box-shadow: 0 10px 15px rgba(0,0,0,0.5);  /* sombra no flipbook */
+      /* removida sombra daqui para não cobrir toda a linha */
     }
     #flipbook-area.show { transform:translateX(0); }
     #flipbook-area.slide-out-left { transform:translateX(-100%); }
-    #flipbookContainer { width:100%; height:calc(100% - 7vh); }
+
+    #flipbookContainer {
+      width:100%; height:calc(100% - 7vh);
+      box-shadow: 0 10px 15px rgba(0,0,0,0.5);  /* sombra apenas na área interna */
+    }
 
     /* seta flipbook */
     #setaBtn {
@@ -186,6 +215,9 @@
   <!-- palco -->
   <div id="app">
     <section class="tablet">
+      <div class="side-panel">
+        <div class="indicator"></div>
+      </div>
       <div id="globe-area">
         <canvas id="globeCanvas"></canvas>
         <video id="intro-video" src="omom.mp4" muted playsinline></video>
@@ -213,7 +245,9 @@
       </div>
     </section>
 
-    <section id="flipbook-area"><div id="flipbookContainer"></div></section>
+    <section id="flipbook-area">
+      <div id="flipbookContainer"></div>
+    </section>
   </div>
 
   <!-- overlay imagem -->
