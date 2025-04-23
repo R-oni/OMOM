@@ -84,7 +84,7 @@
     .symbol.brither img { filter:brightness(180%); }
     .symbol.locked img  { filter:brightness(50%); }
 
-    /* ===== FLIPBOOK ===== */
+    /* ===== FLIPBOOK MOBILE ===== */
     #flipbook-area {
       position:relative; margin-left:5%; padding-top:2vh;
       overflow:hidden; width:100%; height:100%; z-index:5;
@@ -164,14 +164,16 @@
       .tablet { grid-column: 2 / 3; }
       #flipbook-area {
         grid-column: 1 / 2;
-        margin-left: 0; padding-top: 0;
-        /* inicial fora da tela à esquerda */
+        margin-left: 0;
+        padding-top: 0;
+        /* começa escondido à esquerda */
         transform: translateX(-100%);
         transition: transform 1.5s ease-out;
       }
+      /* entra para o centro da coluna */
       #flipbook-area.show { transform: translateX(0); }
-      /* sai mais para a esquerda agora */
-      #flipbook-area.slide-out-left { transform: translateX(-200%); }
+      /* sai de volta pela esquerda */
+      #flipbook-area.slide-out-left { transform: translateX(-100%); }
     }
   </style>
 </head>
