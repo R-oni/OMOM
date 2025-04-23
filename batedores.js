@@ -216,14 +216,14 @@ window.initFlipbook = function(selector) {
       });
     }
   }
-  preloadPages(1,3);
+  preloadPages(1,6);
 
   // Áudio de página
   const flipAudio = new Audio('mundos/ttok/sompagina.mp3');
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
 
   // Turn.js init
-  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turned: (_, page)=> preloadPages(page+1,3) } });
+  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turned: (_, page)=> preloadPages(page+1,6) } });
 
   // Responsivo
   function resizeFB(){
