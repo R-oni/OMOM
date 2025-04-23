@@ -402,40 +402,41 @@
     };
 
 
-            // === LED visualizer ===
-        const led      = document.getElementById('led');
-        const audioCtx = new AudioContext();
-        const memories      = document.getElementById('memories');
-        const src      = audioCtx.createMediaElementSource(memories);
-        const analyser = audioCtx.createAnalyser();
-        
-        src.connect(analyser);
-        analyser.connect(audioCtx.destination);
-        
-        const dataArr = new Uint8Array(analyser.frequencyBinCount);
-        
-        function updateLed() {
-          analyser.getByteFrequencyData(dataArr);
-          const avg = dataArr.reduce((s, v) => s + v, 0) / dataArr.length;
-          if (avg > 60) {
-            led.style.background  = '#0f0';
-            led.style.boxShadow   = '0 0 15px #0f0';
-          } else {
-            led.style.background  = '#000';
-            led.style.boxShadow   = '0 0 5px transparent';
+          // === LED visualizer (com memories.mp3) ===
+          const led      = document.getElementById('led');
+          const audioCtx = new AudioContext();
+          const memories = document.getElementById('memories');           // pega o memories.mp3
+          const src      = audioCtx.createMediaElementSource(memories);   // cria a fonte do memories
+          const analyser = audioCtx.createAnalyser();
+          
+          src.connect(analyser);
+          analyser.connect(audioCtx.destination);
+          
+          const dataArr = new Uint8Array(analyser.frequencyBinCount);
+          
+          function updateLed() {
+            analyser.getByteFrequencyData(dataArr);
+            const avg = dataArr.reduce((s,v) => s+v, 0) / dataArr.length;
+            if (avg > 60) {
+              led.style.background = '#0f0';
+              led.style.boxShadow  = '0 0 15px #0f0';
+            } else {
+              led.style.background = '#000';
+              led.style.boxShadow  = '0 0 5px transparent';
+            }
+            requestAnimationFrame(updateLed);
           }
-          requestAnimationFrame(updateLed);
-        }
-        
-        // injeta o start do LED dentro da tua função de boot
-        const _origStart = startSite;
-        startSite = function(sound) {
-          _origStart(sound);
-          if (sound) {
-            audioCtx.resume();
-            updateLed();
-          }
-        };
+          
+          // injeta o start do LED dentro da sua função de boot
+          const _origStart = startSite;
+          startSite = function(sound) {
+            _origStart(sound);
+            if (sound) {
+              audioCtx.resume();
+              updateLed();
+            }
+          };
+
 
   </script>
 </body>
