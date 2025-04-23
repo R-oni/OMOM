@@ -158,6 +158,23 @@
       animation:fadeInOut .7s infinite;
     }
     @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
+
+    /* ===== DESKTOP LANDSCAPE ===== */
+    @media screen and (min-width:1024px) and (orientation:landscape) {
+      #app {
+        grid-template-columns: 50% 50%;
+        grid-template-rows: 100%;
+      }
+      .tablet { grid-column: 2 / 3; }
+      #flipbook-area {
+        grid-column: 1 / 2;
+        margin-left:0;
+        padding-top:0;
+        transform:translateX(-100%);
+      }
+      #flipbook-area.show { transform:translateX(0); }
+      #flipbook-area.slide-out-left { transform:translateX(-100%); }
+    }
   </style>
 </head>
 
