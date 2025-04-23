@@ -10,34 +10,34 @@
 
   <style>
     /* ===== RESET ===== */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace; }
+    * { margin:0; padding:0; box-sizing:border-box }
+    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace }
 
     /* ===== MOBILE (grid 50/50 linhas) ===== */
     #app {
-      display: grid;
-      grid-template-rows: 50% 50%;
+      display:grid;
+      grid-template-rows:50% 50%;
       width:100%; height:100%;
-      background: url(fundo.png) center/cover no-repeat fixed;
-      position: relative;
+      background:url(fundo.png) center/cover no-repeat fixed;
+      position:relative;
     }
 
-    :root { --tablet-w:95vw; --tablet-max:640px; }
+    :root { --tablet-w:95vw; --tablet-max:640px }
 
     /* ===== TABLET / GLOBO ===== */
     .tablet {
-      position: relative;
-      width: min(var(--tablet-w), var(--tablet-max));
-      aspect-ratio: 1/1;
-      margin: auto;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+      position:relative;
+      width:min(var(--tablet-w),var(--tablet-max));
+      aspect-ratio:1/1;
+      margin:auto;
+      filter:drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
     #globe-area {
-      position: absolute; width:100%; height:100%;
+      position:absolute; width:100%; height:100%;
       top:50%; left:50%; transform:translate(-50%,-50%);
-      border-radius: 20px; overflow:hidden; z-index:0;
+      border-radius:20px; overflow:hidden; z-index:0;
     }
-    #globeCanvas { width:100%; height:100%; background:#000; border-radius:20px; object-fit:contain; }
+    #globeCanvas { width:100%; height:100%; background:#000; border-radius:20px; object-fit:contain }
     #intro-video {
       position:absolute; top:50%; left:50%;
       transform:translate(-50%,-50%); width:40%;
@@ -45,15 +45,15 @@
     }
 
     /* ===== UI LAYER ===== */
-    #ui-layer { position:absolute; inset:0; z-index:10; pointer-events:none; }
-    #painel    { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:10; }
+    #ui-layer { position:absolute; inset:0; z-index:10; pointer-events:none }
+    #painel    { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; z-index:10 }
     #btnMenu {
       position:absolute; top:18px; left:12px;
       background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
       font-family:'Press Start 2P',cursive; font-size:6px; padding:10px;
       cursor:pointer; pointer-events:auto; z-index:11;
     }
-    #btnMenu:hover { background:rgba(0,0,0,0.9); }
+    #btnMenu:hover { background:rgba(0,0,0,0.9) }
 
     /* ===== MENU SÍMBOLOS ===== */
     #menu-overlay {
@@ -62,15 +62,15 @@
       background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
       padding:20px 0; border-radius:20px; display:none; z-index:12;
     }
-    #menu-overlay.visible { display:block; }
-    .symbols-wrapper { max-height:40vh; overflow-y:auto; padding-inline:20px; }
-    .symbols-container { display:flex; flex-wrap:wrap; gap:25px; justify-content:center; }
-    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)} }
-    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite; }
-    .symbol img { width:18vw; max-width:120px; transition:transform .3s; }
-    .symbol img:hover { transform:scale(1.1); }
-    .symbol.brither img { filter:brightness(180%); }
-    .symbol.locked img  { filter:brightness(50%); }
+    #menu-overlay.visible { display:block }
+    .symbols-wrapper { max-height:40vh; overflow-y:auto; padding-inline:20px }
+    .symbols-container { display:flex; flex-wrap:wrap; gap:25px; justify-content:center }
+    @keyframes floatWave {0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite }
+    .symbol img { width:18vw; max-width:120px; transition:transform .3s }
+    .symbol img:hover { transform:scale(1.1) }
+    .symbol.brither img { filter:brightness(180%) }
+    .symbol.locked img  { filter:brightness(50%) }
 
     /* ===== FLIPBOOK MOBILE ===== */
     #flipbook-area {
@@ -78,9 +78,9 @@
       overflow:hidden; width:100%; height:100%; z-index:5;
       transform:translateX(100%); transition:transform 1.5s ease-out;
     }
-    #flipbook-area.show { transform:translateX(0); }
-    #flipbook-area.slide-out-left { transform:translateX(-100%); }
-    #flipbookContainer { width:100%; height:calc(100% - 7vh); }
+    #flipbook-area.show { transform:translateX(0) }
+    #flipbook-area.slide-out-left { transform:translateX(-100%) }
+    #flipbookContainer { width:100%; height:calc(100% - 7vh) }
 
     /* seta flipbook */
     #setaBtn {
@@ -97,7 +97,7 @@
       position:fixed; inset:0; background:rgba(0,0,0,0.8);
       display:none; justify-content:center; align-items:center; z-index:1000;
     }
-    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s; }
+    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s }
     #btnSair {
       position:absolute; top:20px; right:20px;
       background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
@@ -109,7 +109,7 @@
       position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
       background:#000; z-index:9999;
     }
-    #loading-text { font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px; }
+    #loading-text { font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px }
     #soundPrompt {
       position:fixed; inset:0; display:none; flex-direction:column;
       align-items:center; justify-content:center; background:#000; z-index:10000;
@@ -122,36 +122,38 @@
       font-family:'Press Start 2P',cursive; font-size:14px; padding:12px 22px;
       cursor:pointer; transition:background .25s;
     }
-    .soundBtn:hover { background:rgba(0,255,231,0.2); }
+    .soundBtn:hover { background:rgba(0,255,231,0.2) }
 
     /* ===== CLIQUES ESPECIAIS ===== */
-    #cliquemundo, #cliqueinversao, #cliquerefracao,
-    #cliquemorse, #cliquecapacitor, #cliquesanguedomundo, #cliqueg {
+    #cliquemundo,#cliqueinversao,#cliquerefracao,
+    #cliquemorse,#cliquecapacitor,#cliquesanguedomundo,#cliqueg {
       position:absolute; inset:0; cursor:pointer; width:100%; height:100%;
       animation:fadeInOut .7s infinite; z-index:10;
     }
-    @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
+    @keyframes fadeInOut {0%{opacity:1}50%{opacity:0}100%{opacity:1}}
 
     /* ===== DESKTOP (posicionamento absoluto) ===== */
     @media screen and (min-width:1024px) and (orientation:landscape) {
-      #app { display: block; } /* anula grid */
-      /* flipbook absoluto na metade esquerda */
+      /* anulamos o grid mobile */
+      #app { display:block }
+
+      /* Flipbook à esquerda, controlado por left */
       #flipbook-area {
         position:absolute; top:0; left:-50%;
         width:50%; height:100%; margin:0; padding:0;
-        transform:none; /* será controlado via left */
+        transform:none; /* usamos left para animar */
         transition:left 1.5s ease-out;
         z-index:5;
       }
-      #flipbook-area.show { left:0; }
-      #flipbook-area.slide-out-left { left:-50%; }
+      #flipbook-area.show { left:0 }
+      #flipbook-area.slide-out-left { left:-50% }
 
-      /* tablet absoluto na metade direita */
+      /* Tablet/Globo à direita */
       .tablet {
         position:absolute; top:0; right:0;
         width:50%; height:100%; margin:0;
       }
-      /* ajuste UI-layer e painel para tablet */
+      /* UI-layer e painel ajustados para a metade direita */
       #ui-layer, #painel {
         position:absolute; inset:auto; top:0; right:0;
         width:50%; height:100%;
@@ -259,33 +261,43 @@
       intro.style.display = 'block';
       intro.play().catch(()=>{});
       if (allowSound) document.getElementById('bgm').play().catch(()=>{});
-      intro.addEventListener('ended', ()=>{ intro.style.display = 'none'; showOverlayMenu(); });
+      intro.addEventListener('ended', ()=>{
+        intro.style.display = 'none';
+        showOverlayMenu();
+      });
     }
     document.getElementById('btnYes').onclick = ()=>startSite(true);
     document.getElementById('btnNo').onclick  = ()=>startSite(false);
 
-    // ==== MENU & WORLDS ====
+    // ==== MENU & MUNDOS ====
+    const memories = document.getElementById('memories');
     function showOverlayMenu(){
       document.getElementById('menu-overlay').classList.add('visible');
-      if (allowSound) fadeIn(document.getElementById('memories'),1000);
+      if (allowSound) fadeIn(memories, 1000);
     }
-    document.getElementById('btnMenu').onclick = showOverlayMenu;
-    document.querySelector('.symbols-container').addEventListener('click',e=>{
+    document.querySelector('.symbols-container').addEventListener('click', e=>{
       const sym = e.target.closest('.symbol');
       if (!sym) return;
+      launchWorld(sym.dataset.world);
+    });
+    document.getElementById('btnMenu').onclick = showOverlayMenu;
+
+    function launchWorld(name){
       const fb = document.getElementById('flipbook-area');
-      if (fb.classList.contains('show')){
+      if (fb.classList.contains('show')) {
         fb.classList.remove('show');
         fb.classList.add('slide-out-left');
-        fb.addEventListener('transitionend', ()=>{
-          fb.classList.remove('slide-out-left');
-          loadWorld(sym.dataset.world);
-        }, { once:true });
-      } else loadWorld(sym.dataset.world);
-    });
+        fb.addEventListener('transitionend', onOut);
+      } else loadWorld(name);
+      function onOut(){
+        fb.classList.remove('slide-out-left');
+        fb.removeEventListener('transitionend', onOut);
+        loadWorld(name);
+      }
+    }
 
     function loadWorld(worldName){
-      if (allowSound) fadeOut(document.getElementById('memories'),1000);
+      if (allowSound) fadeOut(memories, 1000);
       destroyGlobe();
       document.getElementById('menu-overlay').classList.remove('visible');
       document.getElementById('flipbookContainer').innerHTML = '';
@@ -303,19 +315,34 @@
       };
     }
 
+    // ==== DESTRÓI GLOBO ====
     function destroyGlobe(){
       const G = window._Globe;
-      if (G){
-        G.scene?.traverse(o=>{ o.geometry?.dispose(); (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose()); });
-        G.renderer?.dispose(); G.renderer?.forceContextLoss?.(); G.renderer?.domElement?.remove(); G.controls?.dispose();
+      if (G) {
+        G.scene?.traverse(o=>{
+          o.geometry?.dispose();
+          if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());
+        });
+        G.renderer?.dispose();
+        G.renderer?.forceContextLoss?.();
+        G.renderer?.domElement?.remove();
+        G.controls?.dispose();
       }
       const area = document.getElementById('globe-area');
       area.querySelector('canvas')?.remove();
-      const c = document.createElement('canvas'); c.id = 'globeCanvas'; area.prepend(c);
+      const c = document.createElement('canvas');
+      c.id = 'globeCanvas';
+      area.prepend(c);
     }
 
-    document.getElementById('btnSair').onclick = e=>{ e.preventDefault(); $('#overlayContainer').fadeOut(300); };
-    document.getElementById('overlayContainer').onclick = e=>{ if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300); };
+    // ==== OVERLAY IMAGEM ====
+    document.getElementById('btnSair').onclick = e=>{
+      e.preventDefault();
+      $('#overlayContainer').fadeOut(300);
+    };
+    document.getElementById('overlayContainer').onclick = e=>{
+      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
+    };
   </script>
 </body>
 </html>
