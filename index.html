@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OMOM SPA</title>
+  <title>OMOM SPA</title>
 
-  <!-- fonte pixel‑art -->
+  <!-- fonte pixel-art -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
   <style>
     /* ===== RESET ===== */
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace; }
+    html, body {
+      width:100%; height:100%;
+      overflow:hidden;
+      background: #fff;       /* fundo branco */
+      color: #000;            /* texto preto */
+      font-family:'Courier New',monospace;
+    }
 
-    /* ===== PALCO MADEIRA (grid 50/50) ===== */
+    /* ===== PALCO (grid 50/50) ===== */
     #app {
       display: grid;
       grid-template-rows: 50% 50%;
       width:100%; height:100%;
-      background: url(fundo.png) center/cover no-repeat fixed;
+      background: #fff;       /* fundo branco */
       position: relative;
     }
 
@@ -30,6 +36,10 @@
       width: min(var(--tablet-w), var(--tablet-max));
       aspect-ratio: 1/1;
       margin: auto;
+      border-radius: 16px;                             /* bordas arredondadas */
+      background: rgba(255,255,255,0.15);              /* leve efeito de vidro */
+      backdrop-filter: blur(4px);                      /* leve desfoque */
+      overflow: hidden;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
 
@@ -196,7 +206,7 @@
             <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
             <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
             <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
-            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
           </div>
         </div>
       </div>
