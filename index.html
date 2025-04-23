@@ -10,10 +10,10 @@
 
   <style>
     /* ===== RESET ===== */
-    * { margin:0; padding:0; box-sizing:border-box }
-    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace; }
 
-    /* ===== MOBILE (grid 50/50 linhas) ===== */
+    /* ===== PALCO MADEIRA (grid 50/50) ===== */
     #app {
       display: grid;
       grid-template-rows: 50% 50%;
@@ -21,122 +21,145 @@
       background: url(fundo.png) center/cover no-repeat fixed;
       position: relative;
     }
-    /* força ordem: tablet em cima, flipbook em baixo */
-    .tablet        { grid-row: 1 }
-    #flipbook-area { grid-row: 2 }
 
-    :root { --tablet-w:95vw; --tablet-max:640px }
+    /* ===== TABLET + PAINEL ===== */
+    :root { --tablet-w:95vw; --tablet-max:640px; }
 
-    /* ===== TABLET / GLOBO ===== */
     .tablet {
       position: relative;
-      width: min(var(--tablet-w),var(--tablet-max));
-      aspect-ratio:1/1;
-      margin:auto;
-      filter:drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+      width: min(var(--tablet-w), var(--tablet-max));
+      aspect-ratio: 1/1;
+      margin: auto;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
+
+    /* Globo */
     #globe-area {
-      position:absolute; width:100%; height:100%;
-      top:50%; left:50%; transform:translate(-50%,-50%);
-      border-radius:20px; overflow:hidden; z-index:0;
+      position: absolute; width:100%; height:100%;
+      top:50%; left:50%; border-radius: 20px; transform:translate(-50%,-50%);
+      overflow:hidden; z-index:0; 
     }
-    #globeCanvas { width:100%; height:100%; background:#000; border-radius:20px; object-fit:contain }
+    #globeCanvas { width:100%; height:100%; background:#000; border-radius: 20px; object-fit:contain; }
     #intro-video {
       position:absolute; top:50%; left:50%;
       transform:translate(-50%,-50%); width:40%;
       pointer-events:none; display:none; z-index:2;
     }
 
-    /* ===== UI LAYER ===== */
-    #ui-layer { position:absolute; inset:0; z-index:10; pointer-events:none }
-    #painel    { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; z-index:10 }
+    /* Painel cobre tudo */
+    #ui-layer { position:absolute; inset:0; z-index:10; pointer-events:none; }
+    #painel    { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; z-index:10; }
+
+    /* botão MENU */
     #btnMenu {
       position:absolute; top:18px; left:12px;
       background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
       font-family:'Press Start 2P',cursive; font-size:6px; padding:10px;
       cursor:pointer; pointer-events:auto; z-index:11;
     }
-    #btnMenu:hover { background:rgba(0,0,0,0.9) }
+    #btnMenu:hover { background:rgba(0,0,0,0.9); }
 
-    /* ===== MENU SÍMBOLOS ===== */
+    /* MENU DE SÍMBOLOS sempre centralizado */
     #menu-overlay {
-      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-      width:min(var(--tablet-w),var(--tablet-max));
+      position:absolute;
+      border-radius: 20px;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      width:min(var(--tablet-w), var(--tablet-max));
       background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
-      padding:20px 0; border-radius:20px; display:none; z-index:12;
+      padding:20px 0; display:none; z-index:8;
     }
-    #menu-overlay.visible { display:block }
-    .symbols-wrapper { max-height:40vh; overflow-y:auto; padding-inline:20px }
-    .symbols-container { display:flex; flex-wrap:wrap; gap:25px; justify-content:center }
-    @keyframes floatWave {0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite }
-    .symbol img { width:18vw; max-width:120px; transition:transform .3s }
-    .symbol img:hover { transform:scale(1.1) }
-    .symbol.brither img { filter:brightness(180%) }
-    .symbol.locked img  { filter:brightness(50%) }
+    #menu-overlay.visible { display:block; }
+    .symbols-wrapper { max-height:40vh; overflow-y:auto; padding-inline:20px; }
+    .symbols-container {
+      display:flex; flex-wrap:wrap;
+      justify-content:center; gap:25px;
+    }
+    @keyframes floatWave {
+      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
+    }
+    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite; }
+    .symbol img {
+      width:18vw; max-width:120px;
+      transition:transform .3s;
+    }
+    .symbol img:hover { transform:scale(1.1); }
+    .symbol.brither img { filter:brightness(180%); }
+    .symbol.locked img  { filter:brightness(50%); }
 
-    /* ===== FLIPBOOK MOBILE ===== */
+    /* FLIPBOOK */
     #flipbook-area {
       position:relative; margin-left:5%; padding-top:2vh;
-      overflow:hidden; width:100%; height:100%; z-index:5;
+      overflow:hidden; width:100%; height:100%; z-index:3;
       transform:translateX(100%); transition:transform 1.5s ease-out;
     }
-    #flipbook-area.show { transform:translateX(0) }
-    #flipbook-area.slide-out-left { transform:translateX(-100%) }
-    #flipbookContainer { width:100%; height:calc(100% - 7vh) }
+    #flipbook-area.show { transform:translateX(0); }
+    #flipbook-area.slide-out-left { transform:translateX(-100%); }
+    #flipbookContainer { width:100%; height:calc(100% - 7vh); }
 
-    /* seta flipbook: apenas a imagem, sem texto */
+    /* seta flipbook */
     #setaBtn {
-      position:absolute; top:5px; right:5px;
-      width:35px; height:auto; cursor:pointer; opacity:0;
+      position:absolute; top:5px!important; right:5px!important;
+      width:35px!important; height:auto!important;
+      cursor:pointer; opacity:0;
       animation:fadeInArrow .6s forwards .4s, slideArrow 1s ease-in-out infinite .6s;
-      z-index:6;
+      z-index:5;
     }
-    @keyframes fadeInArrow { from{opacity:0} to{opacity:1} }
+    @keyframes fadeInArrow { from{opacity:0}to{opacity:1} }
     @keyframes slideArrow { 0%{transform:translate(0)}50%{transform:translate(-8px,8px)}100%{transform:translate(0)} }
 
-    /* ===== OVERLAY IMAGEM ===== */
+    /* OVERLAY IMAGEM */
     #overlayContainer {
-      position:fixed; inset:0; background:rgba(0,0,0,0.8);
-      display:none; justify-content:center; align-items:center; z-index:1000;
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.8);
+      display:none; justify-content:center; align-items:center;
+      z-index:1000;
     }
-    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s }
+    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s; }
     #btnSair {
       position:absolute; top:20px; right:20px;
       background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
-      font-family:'Press Start 2P',cursive; font-size:12px; padding:10px; cursor:pointer;
+      font-family:'Press Start 2P',cursive; font-size:12px; padding:10px;
+      cursor:pointer;
     }
 
-    /* ===== LOADING & SOM ===== */
+    /* LOADING & SOM */
     #loading-screen {
-      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
       background:#000; z-index:9999;
     }
-    #loading-text { font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px }
+    #loading-text {
+      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px;
+    }
     #soundPrompt {
-      position:fixed; inset:0; display:none; flex-direction:column;
-      align-items:center; justify-content:center; background:#000; z-index:10000;
+      position:fixed; inset:0;
+      display:none; flex-direction:column;
+      align-items:center; justify-content:center;
+      background:#000; z-index:10000;
     }
     #soundPrompt p {
-      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:24px; margin-bottom:30px; text-align:center;
+      font-family:'Press Start 2P',cursive; color:#00FFE7;
+      font-size:24px; margin-bottom:30px; text-align:center;
     }
     .soundBtn {
       background:none; border:2px solid #00FFE7; color:#00FFE7;
       font-family:'Press Start 2P',cursive; font-size:14px; padding:12px 22px;
       cursor:pointer; transition:background .25s;
     }
-    .soundBtn:hover { background:rgba(0,255,231,0.2) }
+    .soundBtn:hover { background:rgba(0,255,231,0.2); }
 
-    /* ===== CLIQUES ESPECIAIS ===== */
-    #cliquemundo,#cliqueinversao,#cliquerefracao,
-    #cliquemorse,#cliquecapacitor,#cliquesanguedomundo,#cliqueg {
-      position:absolute; inset:0; cursor:pointer; width:100%; height:100%;
-      animation:fadeInOut .7s infinite; z-index:10;
+    /* CLIQUES ESPECIAIS */
+    #cliquemundo, #cliqueinversao, #cliquerefracao,
+    #cliquemorse, #cliquecapacitor, #cliquesanguedomundo, #cliqueg {
+      position:absolute; inset:0; cursor:pointer;
+      width:100%; height:100%; z-index:10;
+      animation:fadeInOut .7s infinite;
     }
-    @keyframes fadeInOut {0%{opacity:1}50%{opacity:0}100%{opacity:1}}
+    @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
 
-    /* ===== DESKTOP (posicionamento absoluto) ===== */
-    @media screen and (min-width:1024px) and (orientation:landscape) {
+     @media screen and (min-width:1024px) and (orientation:landscape) {
       /* anulamos o grid mobile */
       #app { display:block }
 
@@ -162,8 +185,10 @@
         width:50%; height:100%;
       }
     }
+    
   </style>
 </head>
+
 <body>
   <!-- áudio -->
   <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
@@ -178,15 +203,8 @@
     </div>
   </div>
 
-  <!-- app -->
+  <!-- palco -->
   <div id="app">
-    <!-- FLIPBOOK -->
-    <section id="flipbook-area">
-      <div id="flipbookContainer"></div>
-      <img id="setaBtn" src="seta.png" alt="" draggable="false">
-    </section>
-
-    <!-- TABLET / GLOBO -->
     <section class="tablet">
       <div id="globe-area">
         <canvas id="globeCanvas"></canvas>
@@ -218,6 +236,8 @@
         </div>
       </div>
     </section>
+
+    <section id="flipbook-area"><div id="flipbookContainer"></div></section>
   </div>
 
   <!-- overlay imagem -->
@@ -238,7 +258,8 @@
   <script>
     // ==== FADE ====
     function fadeIn(a, ms) {
-      a.volume = 0; a.play().catch(()=>{});
+      a.volume = 0;
+      a.play().catch(()=>{});
       const step = 50, dv = step/ms, id = setInterval(()=>{
         if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id); }
         else a.volume += dv;
@@ -276,7 +297,7 @@
     const memories = document.getElementById('memories');
     function showOverlayMenu(){
       document.getElementById('menu-overlay').classList.add('visible');
-      if (allowSound) fadeIn(memories,1000);
+      if (allowSound) fadeIn(memories, 1000);
     }
     document.querySelector('.symbols-container').addEventListener('click', e=>{
       const sym = e.target.closest('.symbol');
@@ -287,7 +308,7 @@
 
     function launchWorld(name){
       const fb = document.getElementById('flipbook-area');
-      if (fb.classList.contains('show')){
+      if (fb.classList.contains('show')) {
         fb.classList.remove('show');
         fb.classList.add('slide-out-left');
         fb.addEventListener('transitionend', onOut);
@@ -300,11 +321,10 @@
     }
 
     function loadWorld(worldName){
-      if (allowSound) fadeOut(memories,1000);
+      if (allowSound) fadeOut(memories, 1000);
       destroyGlobe();
       document.getElementById('menu-overlay').classList.remove('visible');
       document.getElementById('flipbookContainer').innerHTML = '';
-      document.getElementById('setaBtn').style.opacity = '0';
       const s = document.createElement('script');
       s.src = worldName + '.js';
       document.body.appendChild(s);
@@ -314,7 +334,6 @@
         const fb = document.getElementById('flipbook-area');
         void fb.offsetWidth;
         fb.classList.add('show');
-        setTimeout(()=>{ document.getElementById('setaBtn').style.opacity = '1'; }, 600);
       };
     }
 
@@ -322,17 +341,30 @@
     function destroyGlobe(){
       const G = window._Globe;
       if (G) {
-        G.scene?.traverse(o=>{ o.geometry?.dispose(); if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose()); });
-        G.renderer?.dispose(); G.renderer?.forceContextLoss?.(); G.renderer?.domElement?.remove(); G.controls?.dispose();
+        G.scene?.traverse(o=>{
+          o.geometry?.dispose();
+          if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());
+        });
+        G.renderer?.dispose();
+        G.renderer?.forceContextLoss?.();
+        G.renderer?.domElement?.remove();
+        G.controls?.dispose();
       }
       const area = document.getElementById('globe-area');
       area.querySelector('canvas')?.remove();
-      const c = document.createElement('canvas'); c.id = 'globeCanvas'; area.prepend(c);
+      const c = document.createElement('canvas');
+      c.id = 'globeCanvas';
+      area.prepend(c);
     }
 
     // ==== OVERLAY IMAGEM ====
-    document.getElementById('btnSair').onclick = e=>{ e.preventDefault(); $('#overlayContainer').fadeOut(300); };
-    document.getElementById('overlayContainer').onclick = e=>{ if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300); };
+    document.getElementById('btnSair').onclick = e=>{
+      e.preventDefault();
+      $('#overlayContainer').fadeOut(300);
+    };
+    document.getElementById('overlayContainer').onclick = e=>{
+      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
+    };
   </script>
 </body>
 </html>
