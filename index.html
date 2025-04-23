@@ -31,7 +31,6 @@
       aspect-ratio: 1/1;
       margin: auto;
       filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-      grid-row: 1; /* Tablet na primeira linha (topo) para mobile */
     }
 
     /* Globo */
@@ -67,8 +66,7 @@
       top:50%;
       left:50%;
       transform:translate(-50%, -50%);
-      width:100%;
-      height:100%;
+      width:min(var(--tablet-w), var(--tablet-max));
       background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
       padding:20px 0; display:none; z-index:8;
     }
@@ -95,7 +93,6 @@
       position:relative; margin-left:5%; padding-top:2vh;
       overflow:hidden; width:100%; height:100%; z-index:3;
       transform:translateX(100%); transition:transform 1.5s ease-out;
-      grid-row: 2; /* Flipbook na segunda linha (abaixo) para mobile */
     }
     #flipbook-area.show { transform:translateX(0); }
     #flipbook-area.slide-out-left { transform:translateX(-100%); }
@@ -162,56 +159,32 @@
     }
     @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
 
-    @media screen and (min-width:1024px) and (orientation:landscape) {
-      /* Layout em duas colunas */
-      #app {
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-rows: 100%;
-      }
-      
-      /* Flipbook à esquerda */
-      #flipbook-area {
-        position: relative;
-        grid-column: 1;
-        grid-row: auto; /* Reset a configuração mobile */
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 2vh 5% 0;
-        transform: translateX(-100%);
-      }
-      #flipbook-area.show {
-        transform: translateX(0);
-      }
-      #flipbook-area.slide-out-left {
-        transform: translateX(-100%);
-      }
-      
-      /* Tablet na direita */
-      .tablet {
-        position: relative;
-        grid-column: 2;
-        grid-row: auto; /* Reset a configuração mobile */
-        width: min(var(--tablet-w), var(--tablet-max));
-        aspect-ratio: 1/1;
-        margin: auto;
-      }
-      
-      /* Menu overlay cobrindo 100% do tablet */
-      #menu-overlay {
-        top: 50%;
-        left: 75%;
-        transform: translate(-50%, -50%);
-      }
+     @media screen and (min-width:1024px) and (orientation:landscape) {
 
-      /* Garantir que a seta esteja no canto superior direito também no desktop */
-      #setaBtn {
-        position: absolute;
-        top: 5px!important;
-        right: 5px!important;
+
+      /* Flipbook à esquerda, controlado por left */
+      #flipbook-area {
+        position:absolute; top:0; left:-50%;
+        width:50%; height:100%; margin:0; padding:0;
+        transform:none;
+        transition:left 1.5s ease-out;
+        z-index:5;
+      }
+      #flipbook-area.show { left:0 }
+      #flipbook-area.slide-out-left { left:-50% }
+
+      /* Tablet/Globo à direita */
+      .tablet {
+        position:absolute; top:0; right:0;
+        width:50%; height:100%; margin:0;
+      }
+      /* UI-layer e painel ajustados para a metade direita */
+      #ui-layer, #painel {
+        position:absolute; inset:auto; top:0; right:0;
+        width:50%; height:100%;
       }
     }
+    
   </style>
 </head>
 
@@ -262,7 +235,7 @@
         </div>
       </div>
     </section>
-    
+
     <section id="flipbook-area"><div id="flipbookContainer"></div></section>
   </div>
 
