@@ -14,8 +14,8 @@
     html, body {
       width:100%; height:100%;
       overflow:hidden;
-      background: #fff;       /* fundo branco */
-      color: #000;            /* texto preto */
+      background: linear-gradient(135deg, #1b1b1b, #0d0d0d);  /* dark gradient */
+      color: #fff;            /* texto branco */
       font-family:'Courier New',monospace;
     }
 
@@ -24,7 +24,7 @@
       display: grid;
       grid-template-rows: 50% 50%;
       width:100%; height:100%;
-      background: #fff;       /* fundo branco */
+      background: inherit;    /* herda o gradient do body */
       position: relative;
     }
 
@@ -36,11 +36,12 @@
       width: min(var(--tablet-w), var(--tablet-max));
       aspect-ratio: 1/1;
       margin: auto;
-      border-radius: 16px;                             /* bordas arredondadas */
-      background: rgba(255,255,255,0.15);              /* leve efeito de vidro */
-      backdrop-filter: blur(4px);                      /* leve desfoque */
+      border-radius: 16px;      
+      background: rgba(255,255,255,0.05);     /* vidro escuro sutil */
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);              /* glassmorphism mais forte */
       overflow: hidden;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7));
     }
 
     /* Globo */
@@ -103,7 +104,12 @@
     }
     #flipbook-area.show { transform:translateX(0); }
     #flipbook-area.slide-out-left { transform:translateX(-100%); }
-    #flipbookContainer { width:100%; height:calc(100% - 7vh); }
+    #flipbookContainer {
+      width:100%; height:calc(100% - 7vh);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.7);  /* sombra apenas na área interna */
+      background: rgba(20,20,20,0.4);
+      backdrop-filter: blur(4px);
+    }
 
     /* seta flipbook */
     #setaBtn {
