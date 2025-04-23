@@ -3,28 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OMOM SPA</title>
+  <title>OMOM SPA</title>
 
-  <!-- fonte pixel-art -->
+  <!-- fonte pixel‑art -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
   <style>
     /* ===== RESET ===== */
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      width:100%; height:100%;
-      overflow:hidden;
-      background: linear-gradient(135deg, #1b1b1b, #0d0d0d);
-      color: #fff;
-      font-family:'Courier New',monospace;
-    }
+    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace; }
 
-    /* ===== PALCO (grid 50/50) ===== */
+    /* ===== PALCO MADEIRA (grid 50/50) ===== */
     #app {
       display: grid;
       grid-template-rows: 50% 50%;
       width:100%; height:100%;
-      background: inherit;
+      background: url(fundo.png) center/cover no-repeat fixed;
       position: relative;
     }
 
@@ -36,39 +30,8 @@
       width: min(var(--tablet-w), var(--tablet-max));
       aspect-ratio: 1/1;
       margin: auto;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(8px);
-      overflow: hidden;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7));
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
     }
-
-    /* painel CSS overlay */
-    #ui-layer {
-      position:absolute;
-      inset:0;
-      z-index:10;
-      pointer-events:none;
-    }
-    #panel-layer {
-      position:absolute;
-      inset:0;
-      background: rgba(0,0,0,0.4);
-      border: 2px solid #00FFE7;
-      border-radius: 16px;
-      pointer-events:none;
-      z-index:10;
-    }
-
-    /* botão MENU */
-    #btnMenu {
-      position:absolute; top:18px; left:12px;
-      background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
-      font-family:'Press Start 2P',cursive; font-size:8px; padding:10px;
-      cursor:pointer; pointer-events:auto; z-index:11;
-    }
-    #btnMenu:hover { background:rgba(0,0,0,0.9); }
 
     /* Globo */
     #globe-area {
@@ -83,7 +46,20 @@
       pointer-events:none; display:none; z-index:2;
     }
 
-    /* MENU DE SÍMBOLOS */
+    /* Painel cobre tudo */
+    #ui-layer { position:absolute; inset:0; z-index:10; pointer-events:none; }
+    #painel    { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; z-index:10; }
+
+    /* botão MENU */
+    #btnMenu {
+      position:absolute; top:18px; left:12px;
+      background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
+      font-family:'Press Start 2P',cursive; font-size:8px; padding:10px;
+      cursor:pointer; pointer-events:auto; z-index:11;
+    }
+    #btnMenu:hover { background:rgba(0,0,0,0.9); }
+
+    /* MENU DE SÍMBOLOS (abaixo do painel) */
     #menu-overlay {
       position:absolute;
       bottom:1rem; left:50%; transform:translateX(-50%);
@@ -101,7 +77,10 @@
       0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
     }
     .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite; }
-    .symbol img { width:18vw; max-width:120px; transition:transform .3s; }
+    .symbol img {
+      width:18vw; max-width:120px;
+      transition:transform .3s;
+    }
     .symbol img:hover { transform:scale(1.1); }
     .symbol.brither img { filter:brightness(180%); }
     .symbol.locked img  { filter:brightness(50%); }
@@ -114,12 +93,7 @@
     }
     #flipbook-area.show { transform:translateX(0); }
     #flipbook-area.slide-out-left { transform:translateX(-100%); }
-    #flipbookContainer {
-      width:100%; height:calc(100% - 7vh);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.7);
-      background: rgba(20,20,20,0.4);
-      backdrop-filter: blur(4px);
-    }
+    #flipbookContainer { width:100%; height:calc(100% - 7vh); }
 
     /* seta flipbook */
     #setaBtn {
@@ -206,7 +180,7 @@
         <video id="intro-video" src="omom.mp4" muted playsinline></video>
       </div>
       <div id="ui-layer">
-        <div id="panel-layer"></div>
+        <img id="painel" src="painel.png" alt="Painel">
         <button id="btnMenu">MENU</button>
       </div>
       <div id="menu-overlay">
@@ -222,7 +196,7 @@
             <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
             <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
             <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
-            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
           </div>
         </div>
       </div>
