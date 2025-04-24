@@ -148,6 +148,19 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina21.webp" alt="Página 10" draggable="false"></div>
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina22.webp" alt="Página 9" draggable="false"></div>
       <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina23.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina24.webp" alt="Página 9" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina25.webp" alt="Página 10" draggable="false"></div>
+      <div class="page">
+        <img src="mundos/os artesaos/imagens/cap1/pagina26.webp" alt="Página 8" draggable="false">
+        <img id="cliqueporojka" src="mundos/os artesaos/imagens/cap1/cliquesrejktet.webp" alt="Clique Mundo" draggable="false">
+      </div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina27.webp" alt="Página 10" draggable="false"></div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina28.webp" alt="Página 10" draggable="false"></div>
+      <div class="page">
+        <img src="mundos/os artesaos/imagens/cap1/pagina29.webp" alt="Página 8" draggable="false">
+        <img id="cliqueporojka" src="mundos/os artesaos/imagens/cap1/cliquefuneral.webp" alt="Clique Mundo" draggable="false">
+      </div>
+      <div class="page"><img src="mundos/os artesaos/imagens/cap1/pagina30.webp" alt="Página 10" draggable="false"></div>
   
       
     </div>
