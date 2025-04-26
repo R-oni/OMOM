@@ -1,12 +1,10 @@
 // veleywei.js
 
-
 // --- Injeção de CSS para ícones clicáveis no flipbook ---
 ;(function(){
   const style = document.createElement('style');
   style.textContent = `
   /* ---------- ICONES CLICÁVEIS NO FLIPBOOK ---------- */
-
     #veleyweiBtn,
     #veleyweiBtn2,
     #veleyweiBtn3,
@@ -34,7 +32,6 @@
   `;
   document.head.appendChild(style);
 })();
-
 
 // 1) Inicialização do Globo
 window.initGlobe = function(selector) {
@@ -158,7 +155,6 @@ window.initGlobe = function(selector) {
   });
 };
 
-
 // 2) Inicialização do Flipbook com cliques customizados
 window.initFlipbook = function(selector) {
   const $container = $(selector);
@@ -223,6 +219,7 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
+  
   // CSS do overlay centralizado
   $('#overlayContainer').css({
     position: 'fixed',
@@ -264,7 +261,7 @@ window.initFlipbook = function(selector) {
   preloadPages(1,3);
 
   // Áudio de página
-  const flipAudio = new Audio('mundos/veleywei/sompagina.mp3');
+  const flipAudio = new Audio('mundos/ttok/sompagina.mp3');
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
 
   // Turn.js init
@@ -297,7 +294,7 @@ window.initFlipbook = function(selector) {
   });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
- 
+
 
   // Clique Sapetyr: substitui o globo pela imagem
   const trocaSapetyr = function(){
@@ -312,17 +309,17 @@ window.initFlipbook = function(selector) {
   };
 
   // Mapeia handlers
-  const map = { cliqueyeroben: focoYeroben, cliquesapetyr: trocaSapetyr };
+  const map = { cliquemundo: focoMundo, cliquesanguedomundo: trocaSangue };
   Object.keys(map).forEach(id=>{
     $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
   });
 
+ 
 
-
-  /*// Ao virar página, reseta globo, canvas e overlays
+  /*/ Ao virar página, reseta globo, canvas e overlays
   $('#flipbook').bind('turning', ()=>{
     $('#globeCanvas').show();
-    $('#sapetyrGloboImage').remove();
+    $('#sangueGloboImage').remove();
     window.trackOrbit = false;
     if(window.globeControls){
       window.globeControls.target.set(0,0,0);
