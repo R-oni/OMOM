@@ -317,36 +317,16 @@ window.initFlipbook = function(selector) {
     $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
   });
 
-  // Overlays centrais
-  $container.on('click','#cliquevoreyabaron', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/voreyabaron.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquesazonalidade', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/sazonalidade.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquepartenogenese', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/partenogenese.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquevitruviana', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/vitruviana.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
 
-  // Ao virar página, reseta globo, canvas e overlays
+
+  /*// Ao virar página, reseta globo, canvas e overlays
   $('#flipbook').bind('turning', ()=>{
     $('#globeCanvas').show();
     $('#sapetyrGloboImage').remove();
     window.trackOrbit = false;
     if(window.globeControls){
       window.globeControls.target.set(0,0,0);
-      window.globeControls.update();
+      window.globeControls.update();*/
     }
   });
 };
