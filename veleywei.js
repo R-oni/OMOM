@@ -1,5 +1,30 @@
 // veleywei.js
 
+// --- Injeção de CSS para ícones clicáveis no flipbook ---
+;(function(){
+  const style = document.createElement('style');
+  style.textContent = `
+ 
+    #botaosapetyr {
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: pulseAndFade 1.5s infinite;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+
+
+
+
+
 // 1) Inicialização do Globo
 window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
@@ -123,6 +148,12 @@ window.initGlobe = function(selector) {
 };
 
 
+
+
+
+
+
+
 // 2) Inicialização do Flipbook com cliques customizados
 window.initFlipbook = function(selector) {
   const $container = $(selector);
@@ -187,6 +218,7 @@ window.initFlipbook = function(selector) {
     </div>
   `);
 
+  
   // CSS do overlay centralizado
   $('#overlayContainer').css({
     position: 'fixed',
@@ -228,7 +260,7 @@ window.initFlipbook = function(selector) {
   preloadPages(1,3);
 
   // Áudio de página
-  const flipAudio = new Audio('mundos/veleywei/sompagina.mp3');
+  const flipAudio = new Audio('mundos/ttok/sompagina.mp3');
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
 
   // Turn.js init
@@ -261,14 +293,7 @@ window.initFlipbook = function(selector) {
   });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Clique Yeroben: tracking do satélite
-  const focoYeroben = function(){
-    window.trackOrbit = true;
-    if(window.globeControls && window.globeOrbit){
-      window.globeControls.target.copy(window.globeOrbit.position);
-      window.globeControls.update();
-    }
-  };
+
 
   // Clique Sapetyr: substitui o globo pela imagem
   const trocaSapetyr = function(){
@@ -288,36 +313,16 @@ window.initFlipbook = function(selector) {
     $container.on('click','#'+id, function(e){ e.stopPropagation(); map[id].call(this); });
   });
 
-  // Overlays centrais
-  $container.on('click','#cliquevoreyabaron', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/voreyabaron.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquesazonalidade', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/sazonalidade.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquepartenogenese', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/partenogenese.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquevitruviana', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/vitruviana.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
+ 
 
-  // Ao virar página, reseta globo, canvas e overlays
+  /*/ Ao virar página, reseta globo, canvas e overlays
   $('#flipbook').bind('turning', ()=>{
     $('#globeCanvas').show();
-    $('#sapetyrGloboImage').remove();
+    $('#sangueGloboImage').remove();
     window.trackOrbit = false;
     if(window.globeControls){
       window.globeControls.target.set(0,0,0);
-      window.globeControls.update();
+      window.globeControls.update();*/
     }
   });
 };
