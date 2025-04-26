@@ -277,7 +277,7 @@ window.initFlipbook = function(selector) {
   $('#flipbook').bind('turning', (e,page)=>{ if(page>1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove()); });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Clique Sangue do Mundo (sapetyr)
+  // Clique (sapetyr)
   const trocaSapetyr = function(){
     if(!$('#sapetyrGloboImage').length){
       $('<img>',{ id:'sapetyrGloboImage', src:'mundos/veleywei/imagens/cap1/sapetyr.webp', css:{ width:'100%', height:'100%', objectFit:'contain' } }).appendTo('#globe-area');
@@ -285,32 +285,27 @@ window.initFlipbook = function(selector) {
     $('#globeCanvas').hide();
   };
 
+    // Clique Sangue do Mundo (sapetyr)
+  const trocaYeroben = function(){
+    if(!$('#sapetyrGloboImage').length){
+      $('<img>',{ id:'sapetyrGloboImage', src:'mundos/veleywei/imagens/corpoyeroben.png', css:{ width:'100%', height:'100%', objectFit:'contain' } }).appendTo('#globe-area');
+    }
+    $('#globeCanvas').hide();
+  };
+
   // Mapeia handlers
-  const map = { cliquesapetyr: trocaSapetyr };
+  const map = { cliquesapetyr: trocaSapetyr, cliquevitruviana: trocaYeroben};
   Object.keys(map).forEach(id=>{
     $container.on('click', `#${id}`, e=>{ e.stopPropagation(); map[id](); });
   });
 
     // Overlays centrais
-  $container.on('click','#cliquevoreyabaron', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/voreyabaron.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
-  $container.on('click','#cliquesazonalidade', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/sazonalidade.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
+  
   $container.on('click','#cliquepartenogenese', e=>{
     e.stopPropagation();
     $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/partenogenese.webp');
     $('#overlayContainer').fadeIn(500);
   });
-  $container.on('click','#cliquevitruviana', e=>{
-    e.stopPropagation();
-    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/vitruviana.webp');
-    $('#overlayContainer').fadeIn(500);
-  });
+
 
 };
