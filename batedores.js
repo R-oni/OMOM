@@ -1,5 +1,36 @@
 // batedores.js
 
+
+// --- Injeção de CSS para ícones clicáveis no flipbook ---
+;(function(){
+  const style = document.createElement('style');
+  style.textContent = `
+  /* ---------- ICONES CLICÁVEIS NO FLIPBOOK ---------- */
+  #cliquemundo,
+  #cliqueinversao,
+  #cliqueg,
+  #cliquerefracao,
+  #cliquemorse,
+  #cliquecapacitor,
+  #cliquesanguedomundo {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    animation: fadeInOut .7s infinite;
+  }
+  @keyframes fadeInOut {
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  `;
+  document.head.appendChild(style);
+})();
+
+
 // 1) Inicialização do Globo
 window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
