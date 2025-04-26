@@ -160,15 +160,6 @@
     }
     .soundBtn:hover { background:rgba(0,255,231,0.2); }
 
-    /* CLIQUES ESPECIAIS */
-    #cliquemundo, #cliqueinversao, #cliquerefracao,
-    #cliquemorse, #cliquecapacitor, #cliquesanguedomundo, #cliqueg {
-      position:absolute; inset:0; cursor:pointer;
-      width:100%; height:100%; z-index:10;
-      animation:fadeInOut .7s infinite;
-    }
-    @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
-
 
 
 
@@ -190,7 +181,16 @@
         grid-template-rows:100%;
         grid-template-columns:50% 50%;
       }
+            /* botão MENU */
+      #btnMenu {
+        position:absolute; top:22px; left:16px;
+        background:rgba(0,0,0,0.7); border:2px solid #00FFE7; border-radius: 30px; color:#00FFE7;
+        font-family:'Press Start 2P',cursive; font-size:6px; padding:10px;
+        cursor:pointer; pointer-events:auto; z-index:11;
+      }
+      #btnMenu:hover { background:rgba(0,0,0,0.9); }
 
+      
       /* flipbook ocupa a metade ESQUERDA            */
       #flipbook-area{
         grid-column:1; grid-row:1;
