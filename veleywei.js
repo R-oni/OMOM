@@ -289,7 +289,7 @@ window.initFlipbook = function(selector) {
   // Clique Sangue do Mundo (sapetyr)
   const trocaSapetyr = function(){
     if(!$('#sapetyrGloboImage').length){
-      $('<img>',{ id:'sapetyrGloboImage', src:'mundos/veleywei/imagens/cap1/sapetyr.png', css:{ width:'100%', height:'100%', objectFit:'contain' } }).appendTo('#globe-area');
+      $('<img>',{ id:'sapetyrGloboImage', src:'mundos/veleywei/imagens/cap1/sapetyr.webp', css:{ width:'100%', height:'100%', objectFit:'contain' } }).appendTo('#globe-area');
     }
     $('#globeCanvas').hide();
   };
