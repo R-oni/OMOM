@@ -169,6 +169,19 @@
     }
     @keyframes fadeInOut { 0%{opacity:1}50%{opacity:0}100%{opacity:1} }
 
+
+
+
+
+
+
+
+
+
+
+
+    
+
     /* ===== DESKTOP: 2 COLUNAS ===== */
     @media screen and (min-width:1024px){
       /* grid vira 2 colunas 50 / 50 */
@@ -191,6 +204,23 @@
       .tablet{
         grid-column:2; grid-row:1;
         place-self:center;              /* centraliza na célula            */
+      }
+            /* 1) torna o container do globo relativo (sem mexer no mobile) */
+      #globe-area {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+      }
+    
+      /* 2) faz o warp “inset” dentro desse container */
+      #warp-video {
+        position: absolute;
+        inset: 0;       /* top:0; right:0; bottom:0; left:0 */
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 30;
       }
       #menu-overlay{
         /* ocupa 100% da área do tablet */
