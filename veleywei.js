@@ -6,7 +6,6 @@
   style.textContent = `
   /* ---------- ÍCONES CLICÁVEIS NO FLIPBOOK (Velei'wey) ---------- */
   #cliqueyeroben,
-  #cliquevoreyabaron,
   #cliquesazonalidade,
   #cliquepartenogenese,
   #cliquevitruviana,
@@ -181,15 +180,12 @@ window.initFlipbook = function(selector) {
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina3.webp" alt="Página 5" draggable=false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina4.webp" alt="Página 6" draggable=false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina5.webp" alt="Página 7" draggable=false"></div>
-      <div class="page">
-        <img src="mundos/veleywei/imagens/cap1/pagina6.webp" alt="Página 8" draggable=false">
-        <img id="cliqueyeroben" src="mundos/veleywei/imagens/cap1/cliqueyeroben.webp" alt="Clique Yeroben" draggable=false">
-      </div>
+      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina6.webp" alt="Página 7" draggable=false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina7.webp" alt="Página 9" draggable=false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina8.webp" alt="Página 10" draggable=false"></div>
       <div class="page">
         <img src="mundos/veleywei/imagens/cap1/pagina9.webp" alt="Página 11" draggable=false">
-        <img id="cliquevoreyabaron" src="mundos/veleywei/imagens/cap1/cliquevoreyabaron.webp" alt="Clique Voreyabaron" draggable=false">
+         <img id="cliqueyeroben" src="mundos/veleywei/imagens/cap1/cliqueyeroben.webp" alt="Clique Yeroben" draggable=false">
       </div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina10.webp" alt="Página 12" draggable=false"></div>
       <div class="page">
