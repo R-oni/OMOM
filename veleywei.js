@@ -4,21 +4,7 @@
 ;(function(){
   const style = document.createElement('style');
   style.textContent = `
-  /* ---------- ICONES CLICÁVEIS NO FLIPBOOK ---------- */
-    #veleyweiBtn,
-    #veleyweiBtn2,
-    #veleyweiBtn3,
-    #veleyweiBtn4,
-    #veleyweiBtn5 {
-      position: absolute;
-      cursor: pointer;
-      width: 100%; 
-      height: 97%;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      animation: fadeInOut 2s infinite;
-    }
+ 
     #botaosapetyr {
       position: absolute;
       cursor: pointer;
