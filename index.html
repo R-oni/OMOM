@@ -52,7 +52,7 @@
       width:100%; height:100%;
       object-fit:cover;
       display:none;
-      z-index:20;            /* acima de tudo */
+      z-index:30;            /* acima de tudo */
       pointer-events:none;
     }
 
@@ -339,26 +339,13 @@
     document.getElementById('btnMenu').onclick = showOverlayMenu;
 
     function launchWorld(name){
-      /* toca warp, depois continua fluxo normal */
-      playWarpVideo(()=>{
-        if (allowSound) fadeOut(memories, 1000);
-        destroyGlobe();
-        document.getElementById('menu-overlay').classList.remove('visible');
-        document.getElementById('flipbookContainer').innerHTML = '';
-        const s = document.createElement('script');
-        s.src = name + '.js';
-        document.body.appendChild(s);
-        s.onload = ()=>{
-          window.initGlobe?.('#globeCanvas');
-          window.initFlipbook?.('#flipbookContainer');
-          const fb = document.getElementById('flipbook-area');
-          void fb.offsetWidth;
-          fb.classList.add('show');
-        };
-      });
-      
-      /* caso o usuário já esteja em um mundo e clique em outro
-         mantém a animação de saída do flipbook como antes */
+      /* esconde o menu imediatamente */
+      document.getElementById('menu-overlay').classList.remove('visible');
+
+      /* fade-out da música de menu */
+      if (allowSound) fadeOut(memories, 1000);
+
+      /* animação de saída do flipbook se já estiver visível */
       const fb = document.getElementById('flipbook-area');
       if (fb.classList.contains('show')) {
         fb.classList.remove('show');
@@ -368,6 +355,24 @@
           fb.removeEventListener('transitionend', onOut);
         });
       }
+
+      /* toca warp por cima de tudo */
+      playWarpVideo();
+
+      /* destrói e recria canvas do globo */
+      destroyGlobe();
+      document.getElementById('flipbookContainer').innerHTML = '';
+
+      /* carrega JS do mundo e inicia globo/flipbook */
+      const s = document.createElement('script');
+      s.src = name + '.js';
+      document.body.appendChild(s);
+      s.onload = ()=>{
+        window.initGlobe?.('#globeCanvas');
+        window.initFlipbook?.('#flipbookContainer');
+        void fb.offsetWidth;
+        fb.classList.add('show');
+      };
     }
 
     // ==== DESTRÓI GLOBO ====
