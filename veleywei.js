@@ -187,7 +187,8 @@ window.initFlipbook = function(selector) {
       </div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina9.webp" alt="Página 9" draggable=false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina10.webp" alt="Página 9" draggable=false"></div>
-      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina12.webp" alt="Página 14" draggable=false"></div>
+      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina11.webp" alt="Página 14" draggable=false"></div>
+      <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina12.webp" alt="Página 15" draggable=false"></div>
       <div class="page"><img src="mundos/veleywei/imagens/cap1/pagina13.webp" alt="Página 15" draggable=false"></div>
       <div class="page">
         <img src="mundos/veleywei/imagens/cap1/pagina14.webp" alt="Página 16" draggable=false">
