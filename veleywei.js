@@ -1,5 +1,41 @@
 // veleywei.js
 
+
+// --- Injeção de CSS para ícones clicáveis no flipbook ---
+;(function(){
+  const style = document.createElement('style');
+  style.textContent = `
+  /* ---------- ICONES CLICÁVEIS NO FLIPBOOK ---------- */
+
+    #veleyweiBtn,
+    #veleyweiBtn2,
+    #veleyweiBtn3,
+    #veleyweiBtn4,
+    #veleyweiBtn5 {
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: fadeInOut 2s infinite;
+    }
+    #botaosapetyr {
+      position: absolute;
+      cursor: pointer;
+      width: 100%; 
+      height: 97%;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      animation: pulseAndFade 1.5s infinite;
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
 // 1) Inicialização do Globo
 window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
@@ -261,14 +297,7 @@ window.initFlipbook = function(selector) {
   });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Clique Yeroben: tracking do satélite
-  const focoYeroben = function(){
-    window.trackOrbit = true;
-    if(window.globeControls && window.globeOrbit){
-      window.globeControls.target.copy(window.globeOrbit.position);
-      window.globeControls.update();
-    }
-  };
+ 
 
   // Clique Sapetyr: substitui o globo pela imagem
   const trocaSapetyr = function(){
