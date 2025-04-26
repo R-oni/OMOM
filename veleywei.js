@@ -299,4 +299,27 @@ window.initFlipbook = function(selector) {
   Object.keys(map).forEach(id=>{
     $container.on('click', `#${id}`, e=>{ e.stopPropagation(); map[id](); });
   });
+
+    // Overlays centrais
+  $container.on('click','#cliquevoreyabaron', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/voreyabaron.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquesazonalidade', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/sazonalidade.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquepartenogenese', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/partenogenese.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+  $container.on('click','#cliquevitruviana', e=>{
+    e.stopPropagation();
+    $('#overlayImage').attr('src','mundos/veleywei/imagens/cap1/vitruviana.webp');
+    $('#overlayContainer').fadeIn(500);
+  });
+
 };
