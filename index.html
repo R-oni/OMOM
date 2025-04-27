@@ -443,16 +443,6 @@
       if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
     };
 
-          // ==== ABRIR OVERLAY AO CLICAR NA IMAGEM (por exemplo, qualquer <img> dentro de .symbol) ====
-    $('.symbol img').on('click', function(){
-      // 1) passa a src clicada para o overlay
-      $('#overlayImage').attr('src', $(this).attr('src'));
-      // 2) exibe como flex + fade na opacidade
-      $('#overlayContainer')
-        .css({ display: 'flex', opacity: 0 })
-        .animate({ opacity: 1 }, 300);
-    });
-
 
   </script>
 </body>
