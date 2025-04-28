@@ -278,27 +278,7 @@ window.initFlipbook = function(selector) {
   $('#flipbook').bind('turning', (e,page)=>{ if(page>1) $('#setaBtn').fadeOut(300, ()=>$('#setaBtn').remove()); });
   $container.on('click','#setaBtn', ()=>$('#flipbook').turn('next'));
 
-  // Clique (sapetyr)
-  const trocaSapetyr = function(){
-    if(!$('#sapetyrGloboImage').length){
-      $('<img>',{ id:'sapetyrGloboImage', src:'mundos/veleywei/imagens/cap1/sapetyr.webp', css:{ width:'100%', height:'100%', objectFit:'contain' } }).appendTo('#globe-area');
-    }
-    $('#globeCanvas').hide();
-  };
-
-    // Clique Sangue do Mundo (sapetyr)
-  const trocaYeroben = function(){
-    if(!$('#sapetyrGloboImage').length){
-      $('<img>',{ id:'sapetyrGloboImage', src:'mundos/veleywei/imagens/corpoyeroben.png', css:{ width:'100%', height:'100%', objectFit:'contain' } }).appendTo('#globe-area');
-    }
-    $('#globeCanvas').hide();
-  };
-
-  // Mapeia handlers
-  const map = { cliquesapetyr: trocaSapetyr, cliquevitruviana: trocaYeroben};
-  Object.keys(map).forEach(id=>{
-    $container.on('click', `#${id}`, e=>{ e.stopPropagation(); map[id](); });
-  });
+  
 
     // Overlays centrais
   
@@ -308,15 +288,37 @@ window.initFlipbook = function(selector) {
     $('#overlayContainer').fadeIn(500);
   });
 
-  // Ao virar página, reseta globo, canvas e overlays
+  
+
+  // função única para qualquer overlay no globo
+  function showGlobeOverlay(src) {
+    $('#globeCanvas').hide();           // esconde o canvas
+    $('.globoOverlay').remove();        // limpa qualquer overlay anterior
+    $('<img>', {
+      class: 'globoOverlay',
+      src,
+      css: { width:'100%', height:'100%', objectFit:'contain' }
+    }).appendTo('#globe-area');
+  }
+
+  // mapeia cada clique para usar showGlobeOverlay
+  $container
+    .on('click', '#cliquesapetyr',    e => { e.stopPropagation(); showGlobeOverlay('mundos/veleywei/imagens/cap1/sapetyr.webp'); })
+    .on('click', '#cliquevitruviana', e => { e.stopPropagation(); showGlobeOverlay('mundos/veleywei/imagens/corpoyeroben.png'); });
+
+  // (se tiver outros ícones, só encadeie mais .on('click', '#seuId', ...))
+
+  // única vez: ao virar página, volta 100% pro globo
   $('#flipbook').bind('turning', ()=>{
-    $('#globeCanvas').show();
-    $('#sangueGloboImage').remove();
-    window.trackOrbit = false;
-    if(window.globeControls){
+    $('#globeCanvas').show();           // reexibe o canvas
+    $('.globoOverlay').remove();        // limpa qualquer overlay pendente
+    window.trackOrbit = false;          // desliga tracking
+    if (window.globeControls) {         // centraliza câmera
       window.globeControls.target.set(0,0,0);
       window.globeControls.update();
     }
   });
+
+
 
 };
