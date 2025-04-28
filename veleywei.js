@@ -308,5 +308,15 @@ window.initFlipbook = function(selector) {
     $('#overlayContainer').fadeIn(500);
   });
 
+  // Ao virar página, reseta globo, canvas e overlays
+  $('#flipbook').bind('turning', ()=>{
+    $('#globeCanvas').show();
+    $('#sangueGloboImage').remove();
+    window.trackOrbit = false;
+    if(window.globeControls){
+      window.globeControls.target.set(0,0,0);
+      window.globeControls.update();
+    }
+  });
 
 };
