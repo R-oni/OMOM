@@ -149,7 +149,7 @@ window.initFlipbook = function(selector) {
     <div id="flipbook">
       <div class="page hard">
         <img src="mundos/ttok/imagens/cap1/capa.webp" alt="Capa" draggable="false">
-        <img id="setaBtn" src="mundos/ttok/imagens/cap1/seta.webp" alt="Seta" draggable="false">
+        <img id="setaBtn" src="mundos/ttok/imagens/seta.webp" alt="Seta" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
@@ -241,14 +241,15 @@ window.initFlipbook = function(selector) {
     });
   });
   function preloadPages(start, count) {
-    for (let i = start; i < start + count; i++){
-      const pg = $container.find(`#flipbook .page[data-page="${i}"]`);
-      pg.find('img[data-src]').each(function(){
-        const $img = $(this);
-        if (!$img.attr('src')) $img.attr('src', $img.data('src'));
-      });
-    }
+  for (let i = start; i <= start + count - 1; i++) {
+    $('#flipbook .page[data-page="'+i+'"] img[data-src]').each(function(){
+      const $img = $(this);
+      if (!$img.attr('src')) {
+        $img.attr('src', $img.attr('data-src'));
+      }
+    });
   }
+ }
   preloadPages(1,6);
 
   // Áudio de página
@@ -256,7 +257,7 @@ window.initFlipbook = function(selector) {
   flipAudio.preload = 'auto'; flipAudio.volume = 0.9;
 
   // Turn.js init
-  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turned: (_, page)=> preloadPages(page+1,6) } });
+  $('#flipbook').turn({ autoCenter: false, display: 'double', when: { turning: (e, page)=> preloadPages(page,6) } });
 
   // Responsivo
   function resizeFB(){
