@@ -149,7 +149,7 @@ window.initFlipbook = function(selector) {
     <div id="flipbook">
       <div class="page hard">
         <img src="mundos/ttok/imagens/cap1/capa.webp" alt="Capa" draggable="false">
-        <img id="setaBtn" src="mundos/ttok/imagens/cap1/seta.webp" alt="Seta" draggable="false">
+        <img id="setaBtn" src="mundos/ttok/imagens/seta.webp" alt="Seta" draggable="false">
       </div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/capa2.webp" alt="Página 1" draggable="false"></div>
       <div class="page"><img src="mundos/ttok/imagens/cap1/contracapa.webp" alt="Página 2" draggable="false"></div>
