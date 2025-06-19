@@ -395,23 +395,46 @@
         });
       }
 
-      /* toca warp por cima de tudo */
-      playWarpVideo();
+ /* INICIA o warp video IMEDIATAMENTE como overlay */
+  const warpVideo = document.getElementById('warp-video');
+  warpVideo.style.display = 'block';
+  warpVideo.currentTime = 0;
+  warpVideo.play().catch(()=>{});
 
-      /* destrói e recria canvas do globo */
-      destroyGlobe();
-      document.getElementById('flipbookContainer').innerHTML = '';
+  /* destrói e recria canvas do globo */
+  destroyGlobe();
+  document.getElementById('flipbookContainer').innerHTML = '';
 
-      /* carrega JS do mundo e inicia globo/flipbook */
-      const s = document.createElement('script');
-      s.src = name + '.js';
-      document.body.appendChild(s);
-      s.onload = ()=>{
-        window.initGlobe?.('#globeCanvas');
-        window.initFlipbook?.('#flipbookContainer');
+  /* carrega JS do mundo e inicia globo/flipbook IMEDIATAMENTE (em paralelo) */
+  const s = document.createElement('script');
+  s.src = name + '.js';
+  document.body.appendChild(s);
+  
+  s.onload = () => {
+    // Inicia o globo (vai carregar as texturas ao fundo)
+    window.initGlobe?.('#globeCanvas');
+    window.initFlipbook?.('#flipbookContainer');
+    
+    // Espera o globo terminar de carregar
+    document.addEventListener('globoCarregado', function onGloboReady() {
+      document.removeEventListener('globoCarregado', onGloboReady);
+      
+      // Globo carregado! Agora esconde o warp quando ele terminar naturalmente
+      warpVideo.onended = () => {
+        warpVideo.style.display = 'none';
+        // Mostra o flipbook
         void fb.offsetWidth;
         fb.classList.add('show');
       };
+      
+      // Se o warp já terminou antes do globo carregar, esconde imediatamente
+      if (warpVideo.ended || warpVideo.currentTime >= warpVideo.duration) {
+        warpVideo.style.display = 'none';
+        void fb.offsetWidth;
+        fb.classList.add('show');
+      }
+    });
+  };
     }
 
     // ==== DESTRÓI GLOBO ====
