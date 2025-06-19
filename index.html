@@ -39,7 +39,7 @@
       top:50%; left:50%; border-radius: 35px; transform:translate(-50%,-50%);
       overflow:hidden; z-index:0; 
     }
-    #globeCanvas { width:98%; height:98%; background:#000; border-radius: 29px; object-fit:contain; }
+    #globeCanvas { width:100%; height:100%; background:#000; border-radius: 31px; object-fit:contain; }
     #intro-video {
       position:absolute; top:50%; left:50%;
       transform:translate(-50%,-50%); width:40%;
@@ -121,15 +121,10 @@
 
     /* OVERLAY IMAGEM */
     #overlayContainer {
-      position: fixed;
-      inset: 0;               /* já cobre toda a viewport */
-      width: 100vw;           /* reforça 100% da largura */
-      height: 100vh;          /* reforça 100% da altura */
-      background: rgba(0,0,0,0.8);
-      display: none;          /* trocar display:none por flex */
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.8);
+      display:none; justify-content:center; align-items:center;
+      z-index:1000;
     }
     #overlayImage { max-width:80%; max-height:80%; transition:transform .3s; }
     #btnSair {
@@ -282,7 +277,7 @@
             <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
             <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
             <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
-            <div class="symbol brither"  data-world="porojka"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
+            <div class="symbol locked"  data-world="porojka"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
             <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
             <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
             <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
@@ -442,8 +437,6 @@
     document.getElementById('overlayContainer').onclick = e=>{
       if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
     };
-
-
   </script>
 </body>
 </html>
