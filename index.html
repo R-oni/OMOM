@@ -45,15 +45,16 @@
       transform:translate(-50%,-50%); width:40%;
       pointer-events:none; display:none; z-index:2;
     }
-    /* === NOVO: vídeo de transição warp === */
+    /* === WARP VIDEO - MOBILE === */
     #warp-video{
       position:absolute; top:50%; left:50%;
       transform:translate(-50%,-50%);
       width:100%; height:100%;
       object-fit:cover;
       display:none;
-      z-index:30;            /* acima de tudo */
+      z-index:30;
       pointer-events:none;
+      border-radius: 35px;
     }
 
     /* Painel cobre tudo */
@@ -165,19 +166,6 @@
     }
     .soundBtn:hover { background:rgba(0,255,231,0.2); }
 
-
-
-
-
-
-
-
-
-
-
-
-    
-
     /* ===== DESKTOP: 2 COLUNAS ===== */
     @media screen and (min-width:1024px){
       /* grid vira 2 colunas 50 / 50 */
@@ -211,27 +199,35 @@
         grid-column:2; grid-row:1;
         place-self:center;              /* centraliza na célula            */
       }
-            /* 1) torna o container do globo relativo (sem mexer no mobile) */
+      
+      /* CORREÇÃO: Globe area no desktop */
       #globe-area {
-        position: relative;
-        top: auto;
-        left: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         transform: none;
+        border-radius: 35px;
+        overflow: hidden;
+        z-index: 0;
       }
     
-      /* 2) faz o warp “inset” dentro desse container */
+      /* CORREÇÃO: Warp video no desktop */
       #warp-video {
-        display: block !important;
         position: absolute;
-        inset: 0;
-        top: auto;
-        left: auto;
-        transform: none;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transform: none;
         z-index: 30;
+        pointer-events: none;
+        border-radius: 35px;
+        display: none; /* será controlado via JS */
       }
+      
       #menu-overlay{
         /* ocupa 100% da área do tablet */
         top:0;
@@ -395,23 +391,46 @@
         });
       }
 
-      /* toca warp por cima de tudo */
-      playWarpVideo();
+ /* INICIA o warp video IMEDIATAMENTE como overlay */
+  const warpVideo = document.getElementById('warp-video');
+  warpVideo.style.display = 'block';
+  warpVideo.currentTime = 0;
+  warpVideo.play().catch(()=>{});
 
-      /* destrói e recria canvas do globo */
-      destroyGlobe();
-      document.getElementById('flipbookContainer').innerHTML = '';
+  /* destrói e recria canvas do globo */
+  destroyGlobe();
+  document.getElementById('flipbookContainer').innerHTML = '';
 
-      /* carrega JS do mundo e inicia globo/flipbook */
-      const s = document.createElement('script');
-      s.src = name + '.js';
-      document.body.appendChild(s);
-      s.onload = ()=>{
-        window.initGlobe?.('#globeCanvas');
-        window.initFlipbook?.('#flipbookContainer');
+  /* carrega JS do mundo e inicia globo/flipbook IMEDIATAMENTE (em paralelo) */
+  const s = document.createElement('script');
+  s.src = name + '.js';
+  document.body.appendChild(s);
+  
+  s.onload = () => {
+    // Inicia o globo (vai carregar as texturas ao fundo)
+    window.initGlobe?.('#globeCanvas');
+    window.initFlipbook?.('#flipbookContainer');
+    
+    // Espera o globo terminar de carregar
+    document.addEventListener('globoCarregado', function onGloboReady() {
+      document.removeEventListener('globoCarregado', onGloboReady);
+      
+      // Globo carregado! Agora esconde o warp quando ele terminar naturalmente
+      warpVideo.onended = () => {
+        warpVideo.style.display = 'none';
+        // Mostra o flipbook
         void fb.offsetWidth;
         fb.classList.add('show');
       };
+      
+      // Se o warp já terminou antes do globo carregar, esconde imediatamente
+      if (warpVideo.ended || warpVideo.currentTime >= warpVideo.duration) {
+        warpVideo.style.display = 'none';
+        void fb.offsetWidth;
+        fb.classList.add('show');
+      }
+    });
+  };
     }
 
     // ==== DESTRÓI GLOBO ====
