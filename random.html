@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio de Imagens Aleatórias</title>
+  <style>
+    body { font-family: sans-serif; margin:0; padding:20px; background:#f8f8f8; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+      grid-gap: 10px;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Portfolio de Imagens Aleatórias</h1>
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    async function loadRandomImages() {
+      const apiUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=random&grnnamespace=6&prop=imageinfo&iiprop=url&grnlimit=30';
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const pages = data.query.pages;
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = ''; // limpa antes de adicionar
+        for (const pageId in pages) {
+          const page = pages[pageId];
+          if (page.imageinfo && page.imageinfo[0].url) {
+            const img = document.createElement('img');
+            img.src = page.imageinfo[0].url;
+            img.alt = page.title;
+            gallery.appendChild(img);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar imagens:', error);
+      }
+    }
+
+    // Carrega as imagens quando a página for carregada
+    window.addEventListener('DOMContentLoaded', loadRandomImages);
+  </script>
+</body>
+</html>
