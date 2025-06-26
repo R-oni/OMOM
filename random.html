@@ -25,7 +25,7 @@
 
   <script>
     async function loadRandomImages() {
-      const apiUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=random&grnnamespace=6&prop=imageinfo&iiprop=url&grnlimit=30';
+      const apiUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=random&grnnamespace=6&prop=imageinfo&iiprop=url&grnlimit=100';
       try {
         const response = await fetch(apiUrl);
         const data = await response.json();
