@@ -10,10 +10,10 @@ window.initFlipbook = function(wrapperSelector) {
     'mundos/ttok/imagens/cap1/pagina5.webp'  // slide 7
   ];
 
-  slides.forEach(src=>{
+  slides.forEach(src => {
     const slideEl = document.createElement('div');
     slideEl.className = 'swiper-slide';
-    if(src==='GLOBO'){
+    if (src === 'GLOBO') {
       // canvas para o globo
       slideEl.innerHTML = `<canvas id="globeCanvas" style="width:100%;height:100%"></canvas>`;
     } else {
@@ -23,33 +23,62 @@ window.initFlipbook = function(wrapperSelector) {
   });
 };
 
-// Three.js globe init (simplificado)
+// Three.js globe init (sem sombra, fundo bege claro)
 window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
-  if(!canvas)return;
+  if (!canvas) return;
+  
+  // Cena com fundo bege claro
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60,canvas.clientWidth/canvas.clientHeight,0.1,1000);
-  camera.position.z=4;
-  const renderer = new THREE.WebGLRenderer({canvas,antialias:true});
-  renderer.setSize(canvas.clientWidth,canvas.clientHeight);
-  const controls = new THREE.OrbitControls(camera,canvas);
-  controls.enableDamping=true;
+  scene.background = new THREE.Color('#f5f1e9'); // cor de papel
+
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    canvas.clientWidth / canvas.clientHeight,
+    0.1,
+    1000
+  );
+  camera.position.z = 4;
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true
+  });
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true;
 
   const loader = new THREE.TextureLoader();
   const earth = new THREE.Mesh(
-    new THREE.SphereGeometry(1,32,32),
-    new THREE.MeshStandardMaterial({map:loader.load('mundos/ttok/mapatoktok.png')})
+    new THREE.SphereGeometry(1, 32, 32),
+    new THREE.MeshStandardMaterial({
+      map: loader.load('mundos/ttok/mapatoktok.png')
+    })
   );
+  // Sem sombras: não habilitamos shadowMap nem caster/receiver
   scene.add(earth);
-  scene.add(new THREE.AmbientLight(0xffffff,0.5));
-  const dir = new THREE.DirectionalLight(0xffffff,1);
-  dir.position.set(5,5,5);
+
+  // Iluminação sem gerar sombras
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const dir = new THREE.DirectionalLight(0xffffff, 1);
+  dir.position.set(5, 5, 5);
   scene.add(dir);
 
-  (function animate(){
+  // Animação
+  (function animate() {
     requestAnimationFrame(animate);
     earth.rotation.y += 0.002;
     controls.update();
-    renderer.render(scene,camera);
+    renderer.render(scene, camera);
   })();
+
+  // Redimensionamento responsivo
+  window.addEventListener('resize', () => {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  });
 };
