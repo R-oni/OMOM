@@ -1,124 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>OMOM SPA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Courier New',monospace}
-    #loading-screen, #omom-screen, #menu-overlay, #flipbook-area, #btnVoltar { position:fixed }
-    /* Loading */
-    #loading-screen{inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9999}
-    #loading-text{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:20px}
-    /* Splash OMOM */
-    #omom-screen{inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9998}
-    #omom-title{font-family:'Press Start 2P',cursive;font-size:48px;opacity:0;animation:fadeInTitle 2s forwards}
-    @keyframes fadeInTitle{from{opacity:0}to{opacity:1}}
-    /* Menu */
-    #menu-overlay{inset:0;background:url(fundo.webp) center/cover no-repeat;display:none;align-items:center;justify-content:center;z-index:9997}
-    #menu-overlay::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px)}
-    #menu-overlay.visible{display:flex}
-    .symbols-wrapper{position:relative;max-width:90vw;max-height:80vh;padding:20px;overflow-y:auto;z-index:1}
-    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
-    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
-    .symbol img{width:18vw;max-width:120px;transition:transform .3s}
-    .symbol img:hover{transform:scale(1.1)}
-    .symbol.brither img{filter:brightness(180%)}
-    .symbol.locked img{filter:brightness(50%)}
-    /* Flipbook */
-    #flipbook-area{inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9996;transform:translateY(100%);transition:transform 1.5s ease-out}
-    #flipbook-area.show{transform:translateY(0)}
-    #flipbookContainer{width:95vw;height:90vh;max-width:800px;max-height:600px}
-    .swiper-container{width:100%;height:100%}
-    .swiper-slide{display:flex;align-items:center;justify-content:center;font-family:'Press Start 2P',cursive;font-size:24px;color:#fff;background:#111}
-    /* Back button */
-    #btnVoltar{top:20px;left:20px;background:rgba(0,0,0,0.7);border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:10px;padding:10px;cursor:pointer;z-index:9997;display:none}
-    #btnVoltar:hover{background:rgba(0,0,0,0.9)}
-    #btnVoltar.show{display:block}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMOM Swiper Batedores</title>
+    
+    <!-- Swiper CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            color: #fff;
+            font-family: monospace;
+        }
+        .swiper {
+            width: 100%;
+            height: 100vh;
+        }
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+        img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
-  <!-- loading -->
-  <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
-  <!-- splash -->
-  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
-  <!-- menu -->
-  <div id="menu-overlay">
-    <div class="symbols-wrapper">
-      <div class="symbols-container">
-        <div class="symbol brither" data-world="veleywei">
-          <img src="assets/veleyweimenu.png" alt="Velei'wey">
+
+    <!-- Swiper Container -->
+    <div class="swiper">
+        <div class="swiper-wrapper" id="slides-container">
+            <!-- Slides serão inseridos dinamicamente -->
         </div>
-        <div class="symbol brither" data-world="batedores">
-          <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
-        </div>
-        <div class="symbol locked" data-world="botychera">
-          <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-        </div>
-      </div>
+        <!-- Controles -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
     </div>
-  </div>
-  <!-- flipbook -->
-  <div id="flipbook-area">
-    <button id="btnVoltar">VOLTAR</button>
-    <div id="flipbookContainer" class="swiper-container">
-      <div class="swiper-wrapper">
-        <!-- slides inseridos por batedores.js -->
-      </div>
-    </div>
-  </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-  <script>
-    // ao carregar
-    window.addEventListener('load', ()=>{
-      $('#loading-screen').hide();
-      // após 2s de splash, esconder OMOM e mostrar menu
-      setTimeout(()=>{
-        $('#omom-screen').hide();
-        $('#menu-overlay').addClass('visible');
-      }, 2000);
-    });
+    <!-- Swiper CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 
-    // mostrar menu
-    function showMenu(){
-      $('#flipbook-area').removeClass('show');
-      $('#btnVoltar').removeClass('show');
-      $('#flipbookContainer .swiper-wrapper').empty();
-      $('#menu-overlay').addClass('visible');
-    }
+    <!-- Importa suas imagens de batedores.js -->
+    <script src="batedores.js"></script>
 
-    // clicar em mundo
-    $('.symbol.brither').click(function(){
-      const world = $(this).data('world');
-      $('#menu-overlay').removeClass('visible');
-      $('#flipbook-area').addClass('show');
-      $('#btnVoltar').addClass('show');
+    <script>
+        // Supondo que batedores.js exporte um array global chamado 'batedoresImgs'
+        // Exemplo de batedores.js: var batedoresImgs = ['img1.webp', 'img2.webp', ...];
 
-      // carregar script do mundo
-      const s = document.createElement('script');
-      s.src = world + '.js';
-      document.body.appendChild(s);
-      s.onload = ()=>{
-        // popula slides
-        window.initFlipbook?.('#flipbookContainer .swiper-wrapper');
-        // inicializa Swiper
-        new Swiper('#flipbookContainer', {
-          direction: 'horizontal',
-          loop: false,
-          slidesPerView: 1,
-          spaceBetween: 10
+        const slidesContainer = document.getElementById('slides-container');
+
+        batedoresImgs.forEach(imgSrc => {
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            slide.appendChild(img);
+            slidesContainer.appendChild(slide);
         });
-      };
-    });
 
-    // voltar ao menu
-    $('#btnVoltar').click(showMenu);
-  </script>
+        // Inicializa Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: false,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            keyboard: {
+                enabled: true,
+            },
+        });
+    </script>
 </body>
 </html>
