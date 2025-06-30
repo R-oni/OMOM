@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=yes"/>
 <title>OMOM SPA</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
@@ -95,6 +95,7 @@ html, body {
   width:80vw; height:60vh;
   max-width:600px; max-height:450px;
   margin:auto;
+  touch-action: none;
 }
 .swiper-slide {
   display:flex; align-items:center; justify-content:center;
@@ -102,6 +103,7 @@ html, body {
 .swiper-slide img, .swiper-slide canvas {
   width:100%; height:100%; object-fit:contain;
   border-radius:8px;
+  touch-action: none;
 }
 
 /* Fade Top/Bottom apenas no flipbook */
@@ -164,6 +166,7 @@ html, body {
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+<script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
 <script>
 let allowSound = false;
 const memories = document.getElementById('memories');
@@ -192,12 +195,11 @@ $('.symbol.brither').click(function() {
   $('#menu').fadeOut(500, () => {
     $('#flipbook').css('display','flex').fadeIn(500);
     $('#btnVoltar').fadeIn(300);
-    $('#btnVoltar').fadeIn(300);
     $('#fadeTop, #fadeBottom').show();
     if (allowSound) memories.pause();
     $.getScript(world + '.js').done(() => {
       initFlipbook('#swiper .swiper-wrapper');
-      new Swiper('#swiper', {
+      const swiper = new Swiper('#swiper', {
         direction: 'vertical',
         loop: false,
         centeredSlides: true,
@@ -209,6 +211,19 @@ $('.symbol.brither').click(function() {
               initGlobe('#globeCanvas');
             }
           }
+        }
+      });
+
+      const hammer = new Hammer(document.querySelector('.swiper-container'));
+      hammer.get('pinch').set({ enable: true });
+      let scale = 1;
+      hammer.on('pinchmove', (ev) => {
+        scale = Math.max(1, Math.min(ev.scale, 3));
+        document.querySelector('.swiper-slide-active').style.transform = `scale(${scale})`;
+      });
+      hammer.on('pinchend', () => {
+        if (scale < 1.05) {
+          document.querySelector('.swiper-slide-active').style.transform = 'scale(1)';
         }
       });
     });
