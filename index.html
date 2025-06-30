@@ -6,135 +6,126 @@
   <title>OMOM SPA</title>
 
   <!-- fonte pixel-art -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
 
   <style>
-    /* ===== RESET ===== */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { width:100%; height:100%; overflow:hidden; background:#000; color:#fff; font-family:'Courier New',monospace; }
+    /* ========== RESET ========== */
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:100%;height:100%;overflow:hidden;
+      background:#000;color:#fff;font-family:'Courier New',monospace}
 
-    /* ===== ORIENTATION LOCK ===== */
-    #orientation-overlay { position:fixed; inset:0; background:#000; color:#fff; display:none; align-items:center; justify-content:center; z-index:100000; text-align:center; padding:20px; font-size:18px; font-family:'Courier New',monospace; }
-    @media screen and (orientation: landscape) {
-      #orientation-overlay { display:flex; }
-      #app, #omom-screen, #loading-screen, #soundPrompt { display:none!important; }
+    /* ========== ORIENTATION LOCK ========== */
+    #orientation-overlay{position:fixed;inset:0;background:#000;color:#fff;display:none;
+      align-items:center;justify-content:center;z-index:100000;text-align:center;padding:20px;font-size:18px}
+    @media screen and (orientation:landscape){
+      #orientation-overlay{display:flex}
+      #app,#omom-screen,#loading-screen,#soundPrompt{display:none!important}
     }
 
-    /* ===== CONTAINER PRINCIPAL ===== */
-    #app { width:100%; height:100%; position:relative; background:#000; }
+    /* ========== CONTAINER PRINCIPAL ========== */
+    #app{width:100%;height:100%;position:relative;background:#000}
 
-    /* ===== TELA INICIAL OMOM ===== */
-    #omom-screen { position:fixed; inset:0; background:#000; display:flex; align-items:center; justify-content:center; z-index:9998; }
-    #omom-title { font-family:'Press Start 2P',cursive; font-size:48px; color:white; opacity:0; animation:fadeInTitle 2s ease-in-out forwards; }
-    @keyframes fadeInTitle { from{opacity:0} to{opacity:1} }
+    /* ========== TELA INICIAL ========== */
+    #omom-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9998}
+    #omom-title{font-family:'Press Start 2P',cursive;font-size:48px;opacity:0;color:#fff;
+      animation:fadeInTitle 2s ease-in-out forwards}
+    @keyframes fadeInTitle{from{opacity:0}to{opacity:1}}
 
-    /* ===== MENU DE SÍMBOLOS ===== */
-    #menu-overlay { position:fixed; inset:0; background:url(fundo.webp) center/cover no-repeat; display:none; align-items:center; justify-content:center; z-index:9999; }
-    #menu-overlay::before { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); }
-    #menu-overlay.visible { display:flex; }
-    .symbols-wrapper { position:relative; max-width:90vw; max-height:80vh; padding:20px; overflow-y:auto; z-index:1; }
-    .symbols-container { display:flex; flex-wrap:wrap; justify-content:center; gap:25px; }
-    @keyframes floatWave { 0%{transform:translateY(0)} 50%{transform:translateY(-4px)} 100%{transform:translateY(0)} }
-    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite; }
-    .symbol img { width:18vw; max-width:120px; transition:transform .3s; }
-    .symbol img:hover { transform:scale(1.1); }
-    .symbol.brither img { filter:brightness(180%); }
-    .symbol.locked img { filter:brightness(50%); }
+    /* ========== MENU DE SÍMBOLOS ========== */
+    #menu-overlay{position:fixed;inset:0;background:url(fundo.webp) center/cover no-repeat;
+      display:none;align-items:center;justify-content:center;z-index:9999}
+    #menu-overlay::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+    #menu-overlay.visible{display:flex}
+    .symbols-wrapper{position:relative;max-width:90vw;max-height:80vh;padding:20px;overflow-y:auto;z-index:1}
+    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
+    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
+    .symbol img{width:18vw;max-width:120px;transition:transform .3s}
+    .symbol img:hover{transform:scale(1.1)}
+    .symbol.brighter img{filter:brightness(180%)}
+    .symbol.locked img{filter:brightness(50%)}
 
-    /* ===== FLIPBOOK AREA (Portrait) ===== */
-    @media screen and (orientation: portrait) {
-      #flipbook-area {
-        position:fixed;
-        top:50%;
-        left:50%;
-        width:90vh;           /* largura ~ altura do viewport */
-        height:95vw;          /* altura ~ largura do viewport */
-        background:#000;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        z-index:1000;
-        transform:translate(-50%,100%) rotate(90deg); /* começa fora da tela */
-        transform-origin:center center;
-        transition:transform 1.5s ease-out;
-      }
-      #flipbook-area.show {
-        transform:translate(-50%,-50%) rotate(90deg); /* centrado após animar */
-      }
-      #flipbook-area.slide-out-down {
-        transform:translate(-50%,100%) rotate(90deg);
-      }
-      #flipbookContainer { width:95vh; height:85vw; }
+    /* ========== FLIPBOOK AREA – PORTRAIT ========== */
+    @media screen and (orientation:portrait){
+      #flipbook-area{position:fixed;top:50%;left:50%;width:90vh;height:95vw;
+        display:flex;align-items:center;justify-content:center;background:#000;z-index:1000;
+        transform:translate(-50%,100%) rotate(90deg);transform-origin:center center;
+        transition:transform 1.5s ease-out}
+      #flipbook-area.show{transform:translate(-50%,-50%) rotate(90deg)}
+      #flipbook-area.slide-out-down{transform:translate(-50%,100%) rotate(90deg)}
+      #flipbookContainer{width:95vh;height:85vw}
     }
 
-    /* ===== FLIPBOOK AREA (Desktop / paisagem) ===== */
-    @media screen and (min-width:1024px), screen and (orientation: landscape) {
-      #flipbook-area {
-        position:fixed;
-        inset:0;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        background:#000;
-        z-index:1000;
-        transform:translateY(100%);
-        transition:transform 1.5s ease-out;
-      }
-      #flipbook-area.show { transform:translateY(0); }
-      #flipbook-area.slide-out-down { transform:translateY(100%); }
-      #flipbookContainer { width:80vw; height:80vh; max-width:1000px; max-height:700px; }
+    /* ========== FLIPBOOK AREA – DESKTOP / LANDSCAPE ========== */
+    @media screen and (min-width:1024px),screen and (orientation:landscape){
+      #flipbook-area{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+        background:#000;z-index:1000;transform:translateY(100%);transition:transform 1.5s ease-out}
+      #flipbook-area.show{transform:translateY(0)}
+      #flipbook-area.slide-out-down{transform:translateY(100%)}
+      #flipbookContainer{width:80vw;height:80vh;max-width:1000px;max-height:700px}
     }
 
-    /* ===== TURN.JS PAGES ===== */
-    #flipbookContainer .turn-page { transform-style:preserve-3d; backface-visibility:hidden; }
+    /* páginas do turn.js */
+    #flipbookContainer .turn-page{transform-style:preserve-3d;backface-visibility:hidden}
 
-    /* ===== OVERLAY IMAGEM ===== */
-    #overlayContainer { position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:10000; }
-    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s; }
-    #btnSair { position:absolute; top:20px; right:20px; background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7; font-family:'Press Start 2P',cursive; font-size:12px; padding:10px; cursor:pointer; }
+    /* ========== OVERLAY IMG ========== */
+    #overlayContainer{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;
+      align-items:center;justify-content:center;z-index:10000}
+    #overlayImage{max-width:80%;max-height:80%;transition:transform .3s}
+    #btnSair{position:absolute;top:20px;right:20px;background:rgba(0,0,0,.7);border:2px solid #00FFE7;
+      color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:12px;padding:10px;cursor:pointer}
 
-    /* ===== LOADING & SOM ===== */
-    #loading-screen { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; z-index:99999; }
-    #loading-text { font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px; }
-    #soundPrompt { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; background:#000; z-index:99998; }
-    #soundPrompt p { font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:24px; margin-bottom:30px; text-align:center; }
-    .soundBtn { background:none; border:2px solid #00FFE7; color:#00FFE7; font-family:'Press Start 2P',cursive; font-size:14px; padding:12px 22px; cursor:pointer; transition:background .25s; margin:0 10px; }
-    .soundBtn:hover { background:rgba(0,255,231,0.2); }
+    /* ========== LOADING & SOM ========== */
+    #loading-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:99999}
+    #loading-text{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:20px}
+    #soundPrompt{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:99998}
+    #soundPrompt p{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:24px;margin-bottom:30px;text-align:center}
+    .soundBtn{background:none;border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;
+      font-size:14px;padding:12px 22px;margin:0 10px;cursor:pointer;transition:background .25s}
+    .soundBtn:hover{background:rgba(0,255,231,.2)}
 
-    /* ===== VOLTAR ===== */
-    #btnVoltar { position:fixed; top:20px; left:20px; background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7; font-family:'Press Start 2P',cursive; font-size:10px; padding:10px; cursor:pointer; z-index:1001; display:none; }
-    #btnVoltar.show { display:block; }
+    /* ========== VOLTAR ========== */
+    #btnVoltar{position:fixed;top:20px;left:20px;background:rgba(0,0,0,.7);border:2px solid #00FFE7;
+      color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:10px;padding:10px;cursor:pointer;z-index:1001;display:none}
+    #btnVoltar.show{display:block}
 
-    /* ===== DESKTOP ===== */
-    @media screen and (min-width:1024px) {
-      #app { background:url(fundodesktop.webp) center/cover no-repeat fixed; }
-      #omom-title { font-size:64px; }
-      #menu-overlay { background:url(fundodesktop.webp) center/cover no-repeat; }
-      .symbol img { width:120px; max-width:120px; }
+    /* ========== DESKTOP BG EXTRA ========== */
+    @media screen and (min-width:1024px){
+      #app{background:url(fundodesktop.webp) center/cover no-repeat fixed}
+      #omom-title{font-size:64px}
+      #menu-overlay{background:url(fundodesktop.webp) center/cover no-repeat}
+      .symbol img{width:120px;max-width:120px}
     }
   </style>
 </head>
+
 <body>
   <div id="orientation-overlay">Por favor, gire o dispositivo para o modo retrato.</div>
 
-  <!-- Áudios -->
+  <!-- Áudio -->
   <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
   <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
   <!-- Loading e prompt de som -->
   <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
-  <div id="soundPrompt"><p>SOM?</p><div><button class="soundBtn" id="btnYes">SIM</button><button class="soundBtn" id="btnNo">NÃO</button></div></div>
+  <div id="soundPrompt">
+    <p>SOM?</p>
+    <div><button class="soundBtn" id="btnYes">SIM</button><button class="soundBtn" id="btnNo">NÃO</button></div>
+  </div>
 
   <!-- Título inicial -->
   <div id="omom-screen"><div id="omom-title">OMOM</div></div>
 
   <!-- App -->
   <div id="app">
+
+    <!-- Menu de mundos -->
     <div id="menu-overlay">
       <div class="symbols-wrapper">
         <div class="symbols-container">
-          <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
-          <!-- ... (demais mundos) ... -->
+          <div class="symbol brighter" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+          <div class="symbol locked"   data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+          <!-- ...demais símbolos... -->
         </div>
       </div>
     </div>
@@ -147,21 +138,34 @@
   </div>
 
   <!-- Overlay de imagem -->
-  <div id="overlayContainer"><button id="btnSair">FECHAR</button><img id="overlayImage" src="" alt="Zoom"></div>
+  <div id="overlayContainer">
+    <button id="btnSair">FECHAR</button>
+    <img id="overlayImage" src="" alt="Zoom">
+  </div>
 
   <!-- Dependências -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+  <script src="turn.js"></script>
 
   <script>
-    /* ===== UTILITÁRIOS DE VOLUME ===== */
-    function fadeIn(a,ms){a.volume=0;a.play().catch(()=>{});const step=50,dv=step/ms,id=setInterval(()=>{if(a.volume+dv>=1){a.volume=1;clearInterval(id)}else a.volume+=dv},step)}
-    function fadeOut(a,ms){const step=50,dv=step/ms,id=setInterval(()=>{if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}else a.volume-=dv},step)}
+    /* === fades de volume === */
+    function fadeIn(a,ms){
+      a.volume=0;a.play().catch(()=>{});
+      const step=50,dv=step/ms,id=setInterval(()=>{
+        if(a.volume+dv>=1){a.volume=1;clearInterval(id)}
+        else a.volume+=dv;
+      },step)
+    }
+    function fadeOut(a,ms){
+      const step=50,dv=step/ms,id=setInterval(()=>{
+        if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}
+        else a.volume-=dv;
+      },step)
+    }
 
-    /* ===== VARS ===== */
     let allowSound=false;
 
-    /* ===== INIT FLIPBOOK (agora responsivo) ===== */
+    /* === init Flipbook === */
     window.initFlipbook = window.initFlipbook || function(sel){
       setTimeout(()=>{
         const $el=$(sel);
@@ -175,7 +179,6 @@
           gradients:true,
           duration:600
         });
-        // ajusta em resize/orientationchange
         window.addEventListener('resize',()=>{
           if($el.data('turn')){
             $el.turn('size',$el.parent().width(),$el.parent().height());
@@ -184,7 +187,7 @@
       },100);
     };
 
-    /* ===== SEQUÊNCIA DE BOOT ===== */
+    /* === boot === */
     window.addEventListener('load',()=>{
       document.getElementById('loading-screen').style.display='none';
       setTimeout(()=>{document.getElementById('soundPrompt').style.display='flex'},1200);
@@ -193,14 +196,14 @@
     function startSite(sound){
       allowSound=sound;
       document.getElementById('soundPrompt').style.display='none';
-      document.getElementById('omom-screen').style.display='none'; // não mostra mais após o prompt!
+      document.getElementById('omom-screen').style.display='none'; // título não volta
       if(allowSound) document.getElementById('bgm').play().catch(()=>{});
       showMenu();
     }
     document.getElementById('btnYes').onclick=()=>startSite(true);
     document.getElementById('btnNo').onclick=()=>startSite(false);
 
-    /* ===== MENU ===== */
+    /* === menu === */
     function showMenu(){
       document.getElementById('menu-overlay').classList.add('visible');
       if(allowSound){
@@ -214,18 +217,21 @@
     }
     document.querySelector('.symbols-container').addEventListener('click',e=>{
       const sym=e.target.closest('.symbol');
-      if(!sym||sym.classList.contains('locked')) return;
+      if(!sym || sym.classList.contains('locked')) return;
       launchWorld(sym.dataset.world);
     });
 
-    /* ===== CARREGANDO MUNDO ===== */
+    /* === carregar mundo === */
     function launchWorld(name){
       hideMenu();
       const fb=document.getElementById('flipbook-area');
       if(fb.classList.contains('show')){
         fb.classList.remove('show');
         fb.classList.add('slide-out-down');
-        setTimeout(()=>{fb.classList.remove('slide-out-down');loadWorld(name);},1500);
+        setTimeout(()=>{
+          fb.classList.remove('slide-out-down');
+          loadWorld(name);
+        },1500);
       } else {
         loadWorld(name);
       }
@@ -240,12 +246,12 @@
       s.onload=()=>{
         window.initFlipbook('#flipbookContainer');
         const fb=document.getElementById('flipbook-area');
-        void fb.offsetWidth; // força reflow para animar
+        void fb.offsetWidth; // reflow
         fb.classList.add('show');
-      }
+      };
     }
 
-    /* ===== VOLTAR AO MENU ===== */
+    /* === voltar === */
     document.getElementById('btnVoltar').onclick=()=>{
       const fb=document.getElementById('flipbook-area');
       fb.classList.remove('show');
@@ -258,10 +264,18 @@
       },1500);
     };
 
-    /* ===== OVERLAY DE IMAGEM ===== */
-    document.getElementById('btnSair').onclick=e=>{e.preventDefault();$('#overlayContainer').fadeOut(300)};
-    document.getElementById('overlayContainer').onclick=e=>{if(e.target===e.currentTarget)$('#overlayContainer').fadeOut(300)};
-    window.showImageOverlay=src=>{document.getElementById('overlayImage').src=src;$('#overlayContainer').fadeIn(300)};
+    /* === overlay img === */
+    document.getElementById('btnSair').onclick=e=>{
+      e.preventDefault();
+      $('#overlayContainer').fadeOut(300);
+    };
+    document.getElementById('overlayContainer').onclick=e=>{
+      if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300);
+    };
+    window.showImageOverlay=src=>{
+      document.getElementById('overlayImage').src=src;
+      $('#overlayContainer').fadeIn(300);
+    };
   </script>
 </body>
 </html>
