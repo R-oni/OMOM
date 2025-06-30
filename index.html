@@ -11,130 +11,164 @@
   <style>
     /* ===== RESET ===== */
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body {
-      width:100%; height:100%; overflow:hidden;
-      background:none; color:#fff;
+    html, body { 
+      width:100%; height:100%; overflow:hidden; 
+      background:#000; color:#fff; 
+      font-family:'Courier New',monospace; 
+    }
+
+    /* ===== ORIENTATION LOCK ===== */
+    #orientation-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+      text-align: center;
+      padding: 20px;
+      font-size: 18px;
       font-family:'Courier New',monospace;
     }
+    @media screen and (orientation: landscape) {
+      #orientation-overlay {
+        display: flex;
+      }
+      #app, #omom-screen, #loading-screen, #soundPrompt {
+        display: none !important;
+      }
+    }
 
-    /* ===== PALCO MADEIRA (grid 50/50) ===== */
+    /* ===== CONTAINER PRINCIPAL ===== */
     #app {
-      display: grid;
-      grid-template-rows: 50% 50%;
       width:100%; height:100%;
-      background: url(fundo.webp) center/cover no-repeat fixed;
       position: relative;
+      background: #000;
     }
 
-    /* ===== TABLET (menu de mundos) ===== */
-    :root { --tablet-w:95vw; --tablet-max:640px; }
+    /* ===== TELA INICIAL OMOM ===== */
+    #omom-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+    }
+    #omom-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 48px;
+      color: white;
+      opacity: 0;
+      animation: fadeInTitle 2s ease-in-out forwards;
+    }
+    @keyframes fadeInTitle {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ===== MENU DE SÍMBOLOS ===== */
     #menu-overlay {
-      position:absolute; border-radius:35px;
-      top:50%; left:50%; transform:translate(-50%, -50%);
-      width:min(var(--tablet-w), var(--tablet-max));
-      background:rgba(0,0,0,0.6);
-      backdrop-filter:blur(6px);
-      padding:20px 0; display:none; z-index:8;
+      position: fixed;
+      inset: 0;
+      background: url(fundo.webp) center/cover no-repeat;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
     }
-    #menu-overlay.visible { display:block; }
-    .symbols-wrapper {
-      max-height:40vh; padding:32px 20px 20px;
-      overflow-y:auto;
+    #menu-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
     }
-    .symbols-container {
-      display:flex; flex-wrap:wrap;
-      justify-content:center; gap:25px;
-    }
-    @keyframes floatWave {
-      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
-    }
-    .symbol {
-      cursor:pointer;
-      animation:floatWave 4s ease-in-out infinite;
-    }
-    .symbol img {
-      width:18vw; max-width:120px;
-      transition:transform .3s;
-    }
-    .symbol img:hover { transform:scale(1.1); }
-    .symbol.brither img { filter:brightness(180%); }
-    .symbol.locked img  { filter:brightness(50%); }
+    #menu-overlay.visible { display: flex; }
+    .symbols-wrapper { position: relative; max-width: 90vw; max-height: 80vh; padding: 20px; overflow-y: auto; z-index: 1; }
+    .symbols-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; }
+    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)} }
+    .symbol { cursor: pointer; animation: floatWave 4s ease-in-out infinite; }
+    .symbol img { width: 18vw; max-width: 120px; transition: transform .3s; }
+    .symbol img:hover { transform: scale(1.1); }
+    .symbol.brither img { filter: brightness(180%); }
+    .symbol.locked img  { filter: brightness(50%); }
 
-    /* ===== FLIPBOOK (rotacionado 90°) ===== */
+    /* ===== FLIPBOOK AREA ===== */
     #flipbook-area {
-      position:relative;
-      overflow:hidden; width:100%; height:100%; z-index:3;
-      transform: translateX(100%) rotate(90deg);
-      transform-origin: center center;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
       transition: transform 1.5s ease-out;
+      transform: translateY(100%);
     }
-    #flipbook-area.show {
-      transform: translateX(0) rotate(90deg);
+    @media screen and (orientation: portrait) {
+      #flipbook-area {
+        width: 90vh;
+        height: 95vw;
+        transform: translateY(100%) rotate(90deg);
+        transform-origin: bottom left;
+      }
+      #flipbook-area.show { transform: translateY(0) rotate(90deg); }
+      #flipbook-area.slide-out-down { transform: translateY(100%) rotate(90deg); }
+      #flipbookContainer { width: 95vh; height: 85vw; }
     }
-    #flipbook-area.slide-out-left {
-      transform: translateX(-100%) rotate(90deg);
+    @media screen and (min-width: 1024px) {
+      #flipbook-area { transform: translateY(100%); }
+      #flipbook-area.show { transform: translateY(0); }
+      #flipbook-area.slide-out-down { transform: translateY(100%); }
+      #flipbookContainer { width: 80vw; height: 80vh; max-width: 1000px; max-height: 700px; }
     }
-    #flipbookContainer {
-      width:100%; height:100%;
-    }
+
+    /* ===== OVERLAY IMAGEM ===== */
+    #overlayContainer { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; }
+    #overlayImage { max-width: 80%; max-height: 80%; transition: transform .3s; }
+    #btnSair { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border: 2px solid #00FFE7; color: #00FFE7; font-family: 'Press Start 2P', cursive; font-size: 12px; padding: 10px; cursor: pointer; }
 
     /* ===== LOADING & SOM ===== */
-    #loading-screen {
-      position:fixed; inset:0;
-      display:flex; align-items:center; justify-content:center;
-      background:#000; z-index:9999;
-    }
-    #loading-text {
-      font-family:'Press Start 2P',cursive;
-      color:#00FFE7; font-size:20px;
-    }
-    #soundPrompt {
-      position:fixed; inset:0;
-      display:none; flex-direction:column;
-      align-items:center; justify-content:center;
-      background:#000; z-index:10000;
-    }
-    #soundPrompt p {
-      font-family:'Press Start 2P',cursive;
-      color:#00FFE7; font-size:24px;
-      margin-bottom:30px; text-align:center;
-    }
-    .soundBtn {
-      background:none; border:2px solid #00FFE7;
-      color:#00FFE7;
-      font-family:'Press Start 2P',cursive;
-      font-size:14px; padding:12px 22px;
-      cursor:pointer; transition:background .25s;
-    }
-    .soundBtn:hover { background:rgba(0,255,231,0.2); }
+    #loading-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; z-index: 99999; }
+    #loading-text { font-family: 'Press Start 2P', cursive; color: #00FFE7; font-size: 20px; }
+    #soundPrompt { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 99998; }
+    #soundPrompt p { font-family: 'Press Start 2P', cursive; color: #00FFE7; font-size: 24px; margin-bottom: 30px; text-align: center; }
+    .soundBtn { background: none; border: 2px solid #00FFE7; color: #00FFE7; font-family: 'Press Start 2P', cursive; font-size: 14px; padding: 12px 22px; cursor: pointer; transition: background .25s; margin: 0 10px; }
+    .soundBtn:hover { background: rgba(0,255,231,0.2); }
 
-    /* ===== DESKTOP: 2 COLUNAS ===== */
-    @media screen and (min-width:1024px){
-      #app {
-        background: url(fundodesktop.webp) center/cover no-repeat fixed;
-        grid-template-rows:100%;
-        grid-template-columns:50% 50%;
-      }
-      #menu-overlay {
-        top:0; left:0;
-        width:100%; height:100%;
-        transform:none; border-radius:35px;
-      }
-      /* flipbook à esquerda */
-      #flipbook-area {
-        grid-column:1; grid-row:1;
-        margin:0; padding:0;
-        height:100%;
-        transform: translateX(-100%) rotate(90deg);
-      }
+    /* ===== SETA DE VOLTAR ===== */
+    #btnVoltar { position: fixed; top: 20px; left: 20px; background: rgba(0,0,0,0.7); border: 2px solid #00FFE7; color: #00FFE7; font-family: 'Press Start 2P', cursive; font-size: 10px; padding: 10px; cursor: pointer; z-index: 1001; display: none; }
+    #btnVoltar:hover { background: rgba(0,0,0,0.9); }
+    #btnVoltar.show { display: block; }
+
+    /* ===== DESKTOP ===== */
+    @media screen and (min-width: 1024px) {
+      #app { background: url(fundodesktop.webp) center/cover no-repeat fixed; }
+      #omom-title { font-size: 64px; }
+      #menu-overlay { background: url(fundodesktop.webp) center/cover no-repeat; }
+      .symbol img { width: 120px; max-width: 120px; }
     }
   </style>
 </head>
 
 <body>
+  <!-- orientation lock -->
+  <div id="orientation-overlay">
+    Por favor, gire o dispositivo para o modo retrato.
+  </div>
+
   <!-- áudio -->
   <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
   <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
+
+  <!-- loading -->
+  <div id="loading-screen">
+    <div id="loading-text">CARREGANDO…</div>
+  </div>
 
   <!-- prompt som -->
   <div id="soundPrompt">
@@ -145,92 +179,161 @@
     </div>
   </div>
 
-  <!-- app -->
+  <!-- tela inicial OMOM -->
+  <div id="omom-screen">
+    <div id="omom-title">OMOM</div>
+  </div>
+
+  <!-- palco principal -->
   <div id="app">
-    <!-- menu de mundos -->
-    <section>
-      <div id="menu-overlay">
-        <div class="symbols-wrapper">
-          <div class="symbols-container">
-            <div class="symbol brither" data-world="veleywei">
-              <img src="assets/veleyweimenu.png" alt="Velei'wey">
-            </div>
-            <div class="symbol locked" data-world="botychera">
-              <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-            </div>
-            <div class="symbol locked" data-world="himpis">
-              <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-            </div>
-            <div class="symbol brither" data-world="batedores">
-              <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
-            </div>
-            <div class="symbol locked" data-world="denbou">
-              <img src="mundos/denbou/denboumenu.png" alt="DenBou">
-            </div>
-            <div class="symbol locked" data-world="araporu">
-              <img src="mundos/araporu/araporumenu.png" alt="Araporu">
-            </div>
-            <div class="symbol locked" data-world="porojka">
-              <img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos">
-            </div>
-            <div class="symbol locked" data-world="sapador">
-              <img src="mundos/sapador/sapador.png" alt="Sapador">
-            </div>
-            <div class="symbol locked" data-world="dosirelala">
-              <img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala">
-            </div>
-            <div class="symbol locked" data-world="calindreno">
-              <img src="mundos/calindreno/calindreno.png" alt="Calindreno">
-            </div>
-            <div class="symbol locked" data-world="mundoPulsante">
-              <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
-            </div>
-            <!-- adicione mais símbolos conforme necessário -->
+    <!-- menu de símbolos -->
+    <div id="menu-overlay">
+      <div class="symbols-wrapper">
+        <div class="symbols-container">
+          <div class="symbol brither" data-world="veleywei">
+            <img src="assets/veleyweimenu.png" alt="Velei'wey">
+          </div>
+          <div class="symbol locked" data-world="botychera">
+            <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+          </div>
+          <div class="symbol locked" data-world="himpis">
+            <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+          </div>
+          <div class="symbol brither" data-world="batedores">
+            <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
+          </div>
+          <div class="symbol locked" data-world="denbou">
+            <img src="mundos/denbou/denboumenu.png" alt="DenBou">
+          </div>
+          <div class="symbol locked" data-world="araporu">
+            <img src="mundos/araporu/araporumenu.png" alt="Araporu">
+          </div>
+          <div class="symbol locked" data-world="porojka">
+            <img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos">
+          </div>
+          <div class="symbol locked" data-world="sapador">
+            <img src="mundos/sapador/sapador.png" alt="Sapador">
+          </div>
+          <div class="symbol locked" data-world="dosirelala">
+            <img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala">
+          </div>
+          <div class="symbol locked" data-world="calindreno">
+            <img src="mundos/calindreno/calindreno.png" alt="Calindreno">
+          </div>
+          <div class="symbol locked" data-world="mundoPulsante">
+            <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
+          </div>
+          <div class="symbol locked" data-world="sapador2">
+            <img src="mundos/mundo 6/criaturamenu.webp" alt="Sapador 2">
+          </div>
+          <div class="symbol locked" data-world="dosirelala2">
+            <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Dosirelala 2">
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- flipbook -->
-    <section id="flipbook-area">
+    <!-- área do flipbook -->
+    <div id="flipbook-area">
+      <button id="btnVoltar">VOLTAR</button>
       <div id="flipbookContainer"></div>
-    </section>
+    </div>
+  </div>
+
+  <!-- overlay imagem -->
+  <div id="overlayContainer">
+    <button id="btnSair">FECHAR</button>
+    <img id="overlayImage" src="" alt="Zoom">
   </div>
 
   <!-- libs -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+
   <script>
-    // fade in/out simples
-    function fadeIn(a, ms){ a.volume=0; a.play().catch(()=>{}); const step=50, dv=step/ms; const id=setInterval(()=>{ if(a.volume+dv>=1){a.volume=1;clearInterval(id)}else a.volume+=dv},step) }
-    function fadeOut(a, ms){ const step=50, dv=step/ms; const id=setInterval(()=>{ if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}else a.volume-=dv },step) }
-    let allowSound=false;
-    function playWarpVideo(cb){ const w=document.getElementById('warp-video'); if(!w){cb?.();return;} w.style.display='block'; w.currentTime=0; w.play().catch(()=>{}); w.onended=()=>{w.style.display='none';cb?.()}; }
+    // ==== FADE AUDIO ====  
+    function fadeIn(a, ms) {
+      a.volume = 0;
+      a.play().catch(()=>{});
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id); }
+        else a.volume += dv;
+      }, step);
+    }
+    function fadeOut(a, ms) {
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime = 0; }
+        else a.volume -= dv;
+      }, step);
+    }
+    let allowSound = false;
 
-    window.addEventListener('load',()=>{
-      document.getElementById('loading-screen')?.remove();
-      document.getElementById('soundPrompt').style.display='flex';
+    // ==== BOOT SEQUENCE ====  
+    window.addEventListener('load', ()=>{
+      document.getElementById('loading-screen').style.display = 'none';
+      // após fade do título (2s), mostrar prompt de som
+      setTimeout(() => {
+        document.getElementById('soundPrompt').style.display = 'flex';
+      }, 2000);
     });
-    document.getElementById('btnYes').onclick=()=>{ allowSound=true; document.getElementById('soundPrompt').style.display='none'; document.getElementById('bgm').play().catch(()=>{}); document.getElementById('menu-overlay').classList.add('visible'); }
-    document.getElementById('btnNo').onclick=()=>{ allowSound=false; document.getElementById('soundPrompt').style.display='none'; document.getElementById('menu-overlay').classList.add('visible'); }
 
-    document.querySelector('.symbols-container').addEventListener('click', e=>{
-      const sym=e.target.closest('.symbol');
-      if(!sym) return;
-      const fb=document.getElementById('flipbook-area');
-      fb.innerHTML='<div id="flipbookContainer"></div>'; // limpa e reinicia
-      // carrega script do mundo selecionado
-      const s=document.createElement('script');
-      s.src=sym.dataset.world+'.js';
-      document.body.appendChild(s);
-      s.onload=()=>{
-        window.initFlipbook?.('#flipbookContainer');
-        fb.classList.add('show');
-      };
-      if(allowSound) fadeOut(document.getElementById('memories'),1000);
-      playWarpVideo();
+    function startSite(sound) {
+      allowSound = sound;
+      document.getElementById('soundPrompt').style.display = 'none';
+      if (allowSound) {
+        document.getElementById('bgm').play().catch(()=>{});
+      }
+      // mostrar tela OMOM por 3 segundos, depois menu
+      setTimeout(() => {
+        document.getElementById('omom-screen').style.display = 'none';
+        showMenu();
+      }, 3000);
+    }
+    document.getElementById('btnYes').onclick = ()=>startSite(true);
+    document.getElementById('btnNo').onclick = ()=>startSite(false);
+
+    // restante dos scripts inalterados...
+    // ==== MENU ====  
+    const memories = document.getElementById('memories');
+    function showMenu() {
+      document.getElementById('menu-overlay').classList.add('visible');
+      if (allowSound) {
+        fadeOut(document.getElementById('bgm'), 500);
+        setTimeout(() => fadeIn(memories, 1000), 500);
+      }
+    }
+    function hideMenu() {
       document.getElementById('menu-overlay').classList.remove('visible');
+      if (allowSound) fadeOut(memories, 1000);
+    }
+    document.querySelector('.symbols-container').addEventListener('click', e=>{
+      const sym = e.target.closest('.symbol'); if (!sym || sym.classList.contains('locked')) return;
+      launchWorld(sym.dataset.world);
     });
+    function launchWorld(name) {
+      hideMenu();
+      const fb = document.getElementById('flipbook-area');
+      if (fb.classList.contains('show')) {
+        fb.classList.remove('show'); fb.classList.add('slide-out-down');
+        setTimeout(() => { fb.classList.remove('slide-out-down'); loadWorld(name); }, 1500);
+      } else loadWorld(name);
+    }
+    function loadWorld(name) {
+      document.getElementById('flipbookContainer').innerHTML = '';
+      document.getElementById('btnVoltar').classList.add('show');
+      const s = document.createElement('script'); s.src = name + '.js'; document.body.appendChild(s);
+      s.onload = () => { window.initFlipbook?.('#flipbookContainer'); const fb = document.getElementById('flipbook-area'); void fb.offsetWidth; fb.classList.add('show'); };
+    }
+    document.getElementById('btnVoltar').onclick = () => {
+      const fb = document.getElementById('flipbook-area'); fb.classList.remove('show'); fb.classList.add('slide-out-down');
+      document.getElementById('btnVoltar').classList.remove('show');
+      setTimeout(() => { fb.classList.remove('slide-out-down'); document.getElementById('flipbookContainer').innerHTML = ''; showMenu(); }, 1500);
+    };
+    document.getElementById('btnSair').onclick = e => { e.preventDefault(); $('#overlayContainer').fadeOut(300); };
+    document.getElementById('overlayContainer').onclick = e => { if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300); };
+    window.showImageOverlay = src => { document.getElementById('overlayImage').src = src; $('#overlayContainer').fadeIn(300); };
   </script>
 </body>
 </html>
