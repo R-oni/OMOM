@@ -1,134 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>OMOM SPA</title>
-
-  <!-- fonte pixel-art -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"
+  />
   <style>
-    /* ===== RESET ===== */
-    * { margin:0; padding:0; box-sizing:border-box }
-    html, body {
-      width:100%; height:100%; overflow:hidden;
-      background:#000; color:#fff;
-      font-family:'Courier New',monospace;
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Courier New',monospace}
+    #app{width:100%;height:100%;position:relative;background:#000}
 
-    /* ===== CONTAINER PRINCIPAL ===== */
-    #app { width:100%; height:100%; position:relative; background:#000 }
+    /* splash OMOM */
+    #omom-screen{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:9998}
+    #omom-title{font-family:'Press Start 2P',cursive;font-size:48px;color:#fff;opacity:0;animation:fadeInTitle 2s forwards}
+    @keyframes fadeInTitle{from{opacity:0}to{opacity:1}}
 
-    /* ===== TELA INICIAL OMOM ===== */
-    #omom-screen {
-      position:fixed; inset:0; background:#000;
-      display:flex; align-items:center; justify-content:center; z-index:9998;
-    }
-    #omom-title {
-      font-family:'Press Start 2P',cursive; font-size:48px; color:#fff;
-      opacity:0; animation:fadeInTitle 2s forwards;
-    }
-    @keyframes fadeInTitle { from{opacity:0} to{opacity:1} }
+    /* prompt som */
+    #soundPrompt{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:9997}
+    #soundPrompt p{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:24px;margin-bottom:30px;text-align:center}
+    .soundBtn{background:none;border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:14px;padding:12px 22px;cursor:pointer;transition:background .25s;margin:0 10px}
+    .soundBtn:hover{background:rgba(0,255,231,0.2)}
 
-    /* ===== MENU DE SÍMBOLOS ===== */
-    #menu-overlay {
-      position:fixed; inset:0; background:url(fundo.webp) center/cover no-repeat;
-      display:none; align-items:center; justify-content:center; z-index:9999;
-    }
-    #menu-overlay.visible { display:flex }
-    #menu-overlay::before {
-      content:''; position:absolute; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
-    }
-    .symbols-wrapper { position:relative; max-width:90vw; max-height:80vh; padding:20px; overflow-y:auto; z-index:1 }
-    .symbols-container { display:flex; flex-wrap:wrap; justify-content:center; gap:25px }
-    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)} }
-    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite }
-    .symbol img { width:18vw; max-width:120px; transition:transform .3s }
-    .symbol img:hover { transform:scale(1.1) }
-    .symbol.brither img { filter:brightness(180%) }
-    .symbol.locked img { filter:brightness(50%) }
+    /* menu */
+    #menu-overlay{position:fixed;inset:0;background:url(fundo.webp) center/cover no-repeat;display:none;align-items:center;justify-content:center;z-index:9996}
+    #menu-overlay::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px)}
+    #menu-overlay.visible{display:flex}
+    .symbols-wrapper{position:relative;max-width:90vw;max-height:80vh;padding:20px;overflow-y:auto;z-index:1}
+    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
+    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
+    .symbol img{width:18vw;max-width:120px;transition:transform .3s}
+    .symbol img:hover{transform:scale(1.1)}
+    .symbol.brither img{filter:brightness(180%)}
+    .symbol.locked img{filter:brightness(50%)}
 
-    /* ===== FLIPBOOK AREA ===== */
-    #flipbook-area {
-      position:fixed; inset:0; background:#000;
-      display:flex; align-items:center; justify-content:center;
-      z-index:1000; transform:translateY(100%); transition:transform 1.5s ease-out;
-    }
-    #flipbook-area.show { transform:translateY(0) }
-    #flipbook-area.slide-out-down { transform:translateY(100%) }
-    #flipbookContainer {
-      width:95vw; height:90vh; max-width:800px; max-height:600px;
-    }
+    /* flipbook/swiper */
+    #flipbook-area{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:1000;transform:translateY(100%);transition:transform 1.5s ease-out}
+    #flipbook-area.show{transform:translateY(0)}
+    #flipbook-area.slide-out-down{transform:translateY(100%)}
+    .swiper-container{width:95vw;height:90vh;max-width:800px;max-height:600px}
+    .swiper-slide{display:flex;align-items:center;justify-content:center;font-family:'Press Start 2P',cursive;font-size:24px;color:#fff;background:#111}
 
-    /* ===== SETA DE VOLTAR ===== */
-    #btnVoltar {
-      position:fixed; top:20px; left:20px;
-      background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
-      color:#00FFE7; font-family:'Press Start 2P',cursive;
-      font-size:10px; padding:10px; cursor:pointer;
-      z-index:1001; display:none;
-    }
-    #btnVoltar.show { display:block }
-    #btnVoltar:hover { background:rgba(0,0,0,0.9) }
-
-    /* ===== LOADING & SOM ===== */
-    #loading-screen {
-      position:fixed; inset:0; display:flex;
-      align-items:center; justify-content:center; background:#000; z-index:99999;
-    }
-    #loading-text {
-      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px;
-    }
-    #soundPrompt {
-      position:fixed; inset:0; display:none;
-      flex-direction:column; align-items:center; justify-content:center;
-      background:#000; z-index:99998;
-    }
-    #soundPrompt p {
-      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:24px;
-      margin-bottom:30px; text-align:center;
-    }
-    .soundBtn {
-      background:none; border:2px solid #00FFE7; color:#00FFE7;
-      font-family:'Press Start 2P',cursive; font-size:14px;
-      padding:12px 22px; cursor:pointer; transition:background .25s; margin:0 10px;
-    }
-    .soundBtn:hover { background:rgba(0,255,231,0.2) }
-
-    /* ===== DESKTOP ===== */
-    @media screen and (min-width:1024px) {
-      #app { background:url(fundodesktop.webp) center/cover no-repeat fixed }
-      #omom-title { font-size:64px }
-      #menu-overlay { background:url(fundodesktop.webp) center/cover no-repeat }
-      #flipbookContainer { width:80vw; height:80vh; max-width:1000px; max-height:700px }
-      .symbol img { width:120px; max-width:120px }
-    }
+    /* back button */
+    #btnVoltar{position:fixed;top:20px;left:20px;background:rgba(0,0,0,0.7);border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:10px;padding:10px;cursor:pointer;z-index:1001;display:none}
+    #btnVoltar.show{display:block}
+    #btnVoltar:hover{background:rgba(0,0,0,0.9)}
   </style>
 </head>
-
 <body>
-  <!-- áudio -->
-  <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
-  <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
-
-  <!-- loading -->
-  <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
-
-  <!-- prompt som -->
+  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
   <div id="soundPrompt">
     <p>SOM?</p>
-    <div class="btnWrap">
+    <div>
       <button class="soundBtn" id="btnYes">SIM</button>
       <button class="soundBtn" id="btnNo">NÃO</button>
     </div>
   </div>
 
-  <!-- splash OMOM -->
-  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
-
   <div id="app">
-    <!-- menu -->
     <div id="menu-overlay">
       <div class="symbols-wrapper">
         <div class="symbols-container">
@@ -145,89 +78,63 @@
       </div>
     </div>
 
-    <!-- flipbook -->
     <div id="flipbook-area">
       <button id="btnVoltar">VOLTAR</button>
-      <div id="flipbookContainer"></div>
+      <div class="swiper-container" id="flipbookContainer">
+        <div class="swiper-wrapper">
+          <!-- slides serão inseridos por batedores.js -->
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- libs -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="turn.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script>
-    function fadeIn(a, ms) {
-      a.volume = 0; a.play().catch(()=>{});
-      const step = 50, dv = step/ms, id = setInterval(()=>{
-        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id) }
-        else a.volume += dv;
-      }, step);
-    }
-    function fadeOut(a, ms) {
-      const step = 50, dv = step/ms, id = setInterval(()=>{
-        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime=0 }
-        else a.volume -= dv;
-      }, step);
-    }
-
     let allowSound = false;
 
+    // splash + prompt
     window.addEventListener('load', ()=>{
-      $('#loading-screen').hide();
-      $('#soundPrompt').show();
+      setTimeout(()=>$('#soundPrompt').fadeIn(0), 2000);
     });
-
-    function startSite(sound) {
+    function startSite(sound){
       allowSound = sound;
       $('#soundPrompt').hide();
-      if (allowSound) $('#bgm')[0].play().catch(()=>{});
-      setTimeout(()=>{
-        $('#omom-screen').hide();
-        showMenu();
-      },3000);
+      setTimeout(()=>{ $('#omom-screen').hide(); $('#menu-overlay').addClass('visible'); }, 500);
     }
     $('#btnYes').click(()=>startSite(true));
     $('#btnNo').click(()=>startSite(false));
 
-    function showMenu() { $('#menu-overlay').addClass('visible') }
-    function hideMenu() { $('#menu-overlay').removeClass('visible') }
+    function hideMenu(){ $('#menu-overlay').removeClass('visible') }
+    function showMenu(){ $('#menu-overlay').addClass('visible') }
 
     $('.symbol.brither').click(function(){
-      const name = $(this).data('world');
+      const world = $(this).data('world');
       hideMenu();
       $('#flipbook-area').addClass('show');
       $('#btnVoltar').addClass('show');
-      // Destroy previous if exists
-      if ($('#flipbookContainer').data('turn')) {
-        $('#flipbookContainer').turn('destroy');
-        $('#flipbookContainer').empty();
-      }
-      // Load world script
+
+      // carregar script do mundo
       const s = document.createElement('script');
-      s.src = name + '.js';
+      s.src = world + '.js';
       document.body.appendChild(s);
       s.onload = ()=>{
-        // initFlipbook should populate flipbookContainer with pages
-        window.initFlipbook?.('#flipbookContainer');
-        // initialize turn.js single-page
-        $('#flipbookContainer').turn({
-          width: $('#flipbookContainer').width(),
-          height: $('#flipbookContainer').height(),
-          display: 'single',
-          autoCenter: true,
-          gradients: true,
-          acceleration: true
+        // initFlipbook deve popular .swiper-wrapper com <div class="swiper-slide">…</div>
+        window.initFlipbook?.('#flipbookContainer .swiper-wrapper');
+
+        // inicializar Swiper horizontal
+        new Swiper('#flipbookContainer', {
+          direction: 'horizontal',
+          loop: false,
+          pagination: { el: null },
         });
       };
     });
 
     $('#btnVoltar').click(()=>{
-      if ($('#flipbookContainer').data('turn')) {
-        $('#flipbookContainer').turn('destroy').empty();
-      }
       $('#flipbook-area').removeClass('show');
       $('#btnVoltar').removeClass('show');
+      $('#flipbookContainer .swiper-wrapper').empty();
       showMenu();
     });
   </script>
