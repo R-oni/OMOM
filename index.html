@@ -7,35 +7,81 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Courier New',monospace}
-    #omom-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:10}
-    #omom-title{font-family:'Press Start 2P',cursive;font-size:48px;color:#00FFE7;opacity:0;animation:fadeIn 2s forwards}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    * { margin:0; padding:0; box-sizing:border-box }
+    html,body { width:100%; height:100%; overflow:hidden; background:#000; color:#fff; font-family:'Courier New',monospace }
+    #omom-screen {
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background:#000; z-index:10;
+    }
+    #omom-title {
+      font-family:'Press Start 2P',cursive; font-size:48px; color:#00FFE7;
+      opacity:0; animation:fadeInTitle 1s forwards, fadeOutTitle 0.5s 1.5s forwards;
+    }
+    @keyframes fadeInTitle { from{opacity:0} to{opacity:1} }
+    @keyframes fadeOutTitle { from{opacity:1} to{opacity:0} }
 
-    #menu{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:9}
-    .symbol{cursor:pointer;text-align:center}
-    .symbol img{width:120px}
+    #menu {
+      position:fixed; inset:0; background:#000;
+      display:none; align-items:center; justify-content:center; z-index:9;
+    }
+    .symbols-container {
+      display:flex; gap:30px;
+    }
+    .symbol {
+      cursor:pointer; text-align:center;
+      animation:floatWave 4s ease-in-out infinite;
+    }
+    .symbol img {
+      width:120px; border:2px solid #00FFE7; border-radius:12px;
+    }
+    @keyframes floatWave {
+      0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}
+    }
 
-    #flipbook{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:8}
-    .swiper-container{width:90vw;height:80vh}
-    .swiper-slide{display:flex;align-items:center;justify-content:center;background:#111}
+    #flipbook {
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:8;
+    }
+    .swiper-container {
+      width:90vw; height:80vh;
+      border:2px solid #00FFE7; border-radius:12px;
+      overflow:hidden;
+    }
+    .swiper-slide {
+      display:flex; align-items:center; justify-content:center;
+      background:#111; border-radius:12px;
+    }
 
-    #btnVoltar{position:fixed;top:20px;left:20px;padding:10px;border:2px solid #00FFE7;color:#00FFE7;background:rgba(0,0,0,0.7);cursor:pointer;display:none;z-index:11}
+    #btnVoltar {
+      position:fixed; top:20px; left:20px;
+      padding:10px; border:2px solid #00FFE7; color:#00FFE7;
+      background:rgba(0,0,0,0.7); cursor:pointer; display:none; z-index:11;
+      font-family:'Press Start 2P',cursive; font-size:12px;
+    }
   </style>
 </head>
 <body>
   <div id="omom-screen"><div id="omom-title">OMOM</div></div>
+
   <div id="menu">
-    <div class="symbol" id="batedores">
-      <img src="mundos/ttok/ttokmenu.png" alt="Batedores"><br>
-      Batedores
+    <div class="symbols-container">
+      <div class="symbol" data-world="batedores">
+        <img src="mundos/ttok/ttokmenu.png" alt="Batedores"><br>Batedores
+      </div>
+      <div class="symbol" data-world="veleywei">
+        <img src="assets/veleyweimenu.png" alt="Veleywei"><br>Veleywei
+      </div>
+      <div class="symbol" data-world="botychera">
+        <img src="mundos/botychera/botycheramenu.png" alt="Botychera"><br>Botychera
+      </div>
     </div>
   </div>
+
   <div id="flipbook">
     <button id="btnVoltar">VOLTAR</button>
     <div class="swiper-container" id="swiper">
       <div class="swiper-wrapper"></div>
+      <div class="swiper-pagination" style="bottom:10px;"></div>
     </div>
   </div>
 
@@ -44,34 +90,27 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // splash e menu
     window.addEventListener('load',()=>{
       setTimeout(()=>{
-        $('#omom-screen').fadeOut(300);
-        $('#menu').fadeIn(300);
-      },2000);
+        $('#omom-screen').fadeOut(300, ()=>$('#menu').fadeIn(300));
+      },1000);
     });
 
-    // ao escolher Batedores
-    $('#batedores').click(()=>{
+    $('.symbol').click(function(){
+      const world = $(this).data('world');
       $('#menu').hide();
       $('#flipbook').show();
       $('#btnVoltar').show();
-      // carrega script e init
-      $.getScript('batedores.js').done(()=>{
+      $.getScript(world + '.js').done(()=>{
         initFlipbook('#swiper .swiper-wrapper');
-        window.mySwiper = new Swiper('#swiper', {
-          direction:'horizontal', loop:false, slidesPerView:1,
-          on: {
-            slideChange: function(){
-              if(this.activeIndex===3) initGlobe('#globeCanvas');
-            }
-          }
+        new Swiper('#swiper', {
+          direction:'horizontal',
+          loop:false,
+          pagination:{el:'.swiper-pagination',clickable:true}
         });
       });
     });
 
-    // voltar ao menu
     $('#btnVoltar').click(()=>{
       $('#flipbook').hide();
       $('#btnVoltar').hide();
