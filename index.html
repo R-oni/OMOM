@@ -103,23 +103,19 @@
     #flipbook-area.show     { transform:translateY(0); }
     #flipbook-area.slide-out-down { transform:translateY(100%); }
 
-    /* sem rotação do container, vamos girar só o flipbook */
+    /* o flipbookContainer gira visualmente, mas o plugin roda sem rotação */
     #flipbookContainer {
       width:80vw; height:80vh;
-      /* para desktop, sem rotação */
+      overflow:hidden;
     }
     @media screen and (orientation: portrait) {
       #flipbookContainer {
-        width:95vh; height:85vw;
         transform:rotate(90deg);
         transform-origin:center center;
       }
     }
     @media screen and (min-width:1024px) {
-      #flipbookContainer {
-        width:80vw; height:80vh;
-        transform:none;
-      }
+      #flipbookContainer { transform:none; }
     }
 
     /* ===== SETA DE VOLTAR ===== */
@@ -152,17 +148,12 @@
   </style>
 </head>
 <body>
-  <div id="orientation-overlay">
-    Por favor, gire o dispositivo para o modo retrato.
-  </div>
+  <div id="orientation-overlay">Por favor, gire o dispositivo para o modo retrato.</div>
 
   <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
   <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
-  <div id="loading-screen">
-    <div id="loading-text">CARREGANDO…</div>
-  </div>
-
+  <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
   <div id="soundPrompt">
     <p>SOM?</p>
     <div class="btnWrap">
@@ -201,12 +192,15 @@
     <img id="overlayImage" src="" alt="Zoom">
   </div>
 
+  <!-- libs -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+
   <script>
-    // ===== fade in/out áudio =====
+    // fade in/out áudio
     function fadeIn(a, ms) {
       a.volume = 0; a.play().catch(()=>{});
       const step=50, dv=step/ms, id=setInterval(()=>{
@@ -232,7 +226,7 @@
     function startSite(sound){
       allowSound = sound;
       document.getElementById('soundPrompt').style.display = 'none';
-      // removido splash "OMOM" — vai direto pro menu
+      // sem splash OMOM, vai direto para o menu
       if(allowSound) fadeIn(document.getElementById('bgm'), 500);
       showMenu();
     }
@@ -254,7 +248,7 @@
 
     document.querySelector('.symbols-container').addEventListener('click', e=>{
       const sym = e.target.closest('.symbol');
-      if(!sym || sym.classList.contains('locked')) return;
+      if(!sym||sym.classList.contains('locked')) return;
       launchWorld(sym.dataset.world);
     });
 
@@ -267,7 +261,7 @@
         setTimeout(()=>{
           fb.classList.remove('slide-out-down');
           loadWorld(name);
-        }, 1500);
+        },1500);
       } else loadWorld(name);
     }
 
@@ -278,32 +272,17 @@
       s.src = name + '.js';
       document.body.appendChild(s);
 
-      s.onload = () => {
+      s.onload = ()=>{
         // inicializa o flipbook
         window.initFlipbook?.('#flipbookContainer');
 
-        // intercepta swipe vertical/horizontal pra virar página
-        const fbArea = document.getElementById('flipbook-area');
-        let startX=0, startY=0;
-        fbArea.addEventListener('touchstart', e=>{
-          startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-        }, {passive:true});
-        fbArea.addEventListener('touchend', e=>{
-          const dx = e.changedTouches[0].clientX - startX;
-          const dy = e.changedTouches[0].clientY - startY;
-          const absX = Math.abs(dx), absY = Math.abs(dy);
+        // usar Hammer.js para detectar swipes verticais mesmo com rotação
+        const hm = new Hammer(document.getElementById('flipbookContainer'));
+        hm.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+        hm.on('swipeup',   ()=>$('#flipbookContainer').turn('next'));
+        hm.on('swipedown', ()=>$('#flipbookContainer').turn('previous'));
 
-          if(absX>absY && absX>40){
-            if(dx<0) $('#flipbookContainer').turn('next');
-            else      $('#flipbookContainer').turn('previous');
-          } else if(absY>40){
-            if(dy<0) $('#flipbookContainer').turn('next');
-            else      $('#flipbookContainer').turn('previous');
-          }
-        }, {passive:true});
-
-        // mostra flipbook
+        // exibe o flipbook
         const fb = document.getElementById('flipbook-area');
         void fb.offsetWidth;
         fb.classList.add('show');
@@ -319,7 +298,7 @@
         fb.classList.remove('slide-out-down');
         document.getElementById('flipbookContainer').innerHTML = '';
         showMenu();
-      }, 1500);
+      },1500);
     };
 
     document.getElementById('btnSair').onclick = e=>{
