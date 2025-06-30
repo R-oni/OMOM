@@ -22,7 +22,7 @@
     }
     #omom-title {
       font-family:'Press Start 2P',cursive;
-      font-size:48px; color:#00FFE7;
+      font-size:6vw; max-font-size:48px; color:#fff;
       opacity:0; animation:fadeIn 1s forwards, fadeOut 0.5s 1.5s forwards;
     }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
@@ -31,18 +31,16 @@
     /* Prompt Som */
     #soundPrompt {
       position:fixed; inset:0;
-      display:none; flex-direction:column; align-items:center; justify-content:center;
+      display:none; flex-direction:row; align-items:center; justify-content:center;
       background:#000; z-index:9;
-      padding: 0 10vw;
-      text-align: center;
     }
     #soundPrompt p {
       font-family:'Press Start 2P',cursive;
-      font-size:6vw; max-font-size:24px;
-      margin-bottom:4vh;
+      font-size:5vw; max-font-size:24px;
+      margin:0 2vw;
     }
     .soundBtn {
-      margin:5px; padding:2vh 4vw;
+      margin:0 2vw; padding:2vh 4vw;
       font-family:'Press Start 2P',cursive;
       font-size:4vw; max-font-size:16px;
       background:none; border:2px solid #00FFE7; color:#00FFE7;
@@ -53,25 +51,32 @@
     #menu {
       position:fixed; inset:0;
       background:#000; display:none;
-      align-items:center; justify-content:center; z-index:8;
-      padding:0 5vw;
+      align-items:center; justify-content:flex-start; /* start to push down */
+      z-index:8;
+      padding:15vh 5vw 5vh;
+    }
+    #menu h1 {
+      font-family:'Press Start 2P',cursive;
+      font-size:6vw; max-font-size:48px; color:#fff;
+      text-align:center;
+      margin-bottom:4vh;
+      width:100%;
     }
     .symbols-container {
       display:flex; flex-wrap:wrap;
       justify-content:center; gap:5vw;
-      max-width:90vw; margin:auto;
+      width:100%;
     }
     .symbol {
       cursor:pointer;
       animation:floatWave 4s ease-in-out infinite;
-      flex:0 0 auto;
     }
     .symbol img {
-      width:20vw; max-width:150px;
+      width:25vw; max-width:180px;
       display:block;
     }
     @keyframes floatWave {
-      0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}
+      0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}
     }
     .symbol.locked { opacity:0.3; pointer-events:none; }
 
@@ -80,15 +85,15 @@
       position:fixed; inset:0;
       display:none; align-items:center; justify-content:center;
       background:#000; z-index:7;
-      padding:0 5vw;
+      padding:5vh 5vw;
     }
     .swiper-container {
-      width:80vw; height:70vh;
-      max-width:600px; max-height:525px;
+      width:80vw; height:80vw; /* square responsive */
+      max-width:600px; max-height:600px;
     }
     .swiper-slide {
       display:flex; align-items:center; justify-content:center;
-      padding:0;
+      padding:0 2vw;
     }
     .swiper-slide img {
       width:100%; height:100%; object-fit:cover;
@@ -111,52 +116,27 @@
   <div id="omom-screen"><div id="omom-title">OMOM</div></div>
 
   <div id="soundPrompt">
-    <p>Som?</p>
     <button class="soundBtn" id="btnYes">SIM</button>
+    <p>Som?</p>
     <button class="soundBtn" id="btnNo">NÃO</button>
   </div>
 
   <div id="menu">
+    <h1>OMOM</h1>
     <div class="symbols-container">
-      <div class="symbol brither" data-world="veleywei">
-        <img src="assets/veleyweimenu.png" alt="Veleywei">
-      </div>
-      <div class="symbol locked" data-world="botychera">
-        <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-      </div>
-      <div class="symbol locked" data-world="himpis">
-        <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-      </div>
-      <div class="symbol brither" data-world="batedores">
-        <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
-      </div>
-      <div class="symbol locked" data-world="denbou">
-        <img src="mundos/denbou/denboumenu.png" alt="DenBou">
-      </div>
-      <div class="symbol locked" data-world="araporu">
-        <img src="mundos/araporu/araporumenu.png" alt="Araporu">
-      </div>
-      <div class="symbol locked" data-world="porojka">
-        <img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos">
-      </div>
-      <div class="symbol locked" data-world="sapador">
-        <img src="mundos/sapador/sapador.png" alt="Sapador">
-      </div>
-      <div class="symbol locked" data-world="dosirelala">
-        <img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala">
-      </div>
-      <div class="symbol locked" data-world="calindreno">
-        <img src="mundos/calindreno/calindreno.png" alt="Calindreno">
-      </div>
-      <div class="symbol locked" data-world="mundoPulsante">
-        <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
-      </div>
-      <div class="symbol locked" data-world="sapador2">
-        <img src="mundos/mundo 6/criaturamenu.webp" alt="Sapador 2">
-      </div>
-      <div class="symbol locked" data-world="dosirelala2">
-        <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Dosirelala 2">
-      </div>
+      <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Veleywei"></div>
+      <div class="symbol locked" data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+      <div class="symbol locked" data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
+      <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
+      <div class="symbol locked" data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
+      <div class="symbol locked" data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
+      <div class="symbol locked" data-world="porojka"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
+      <div class="symbol locked" data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
+      <div class="symbol locked" data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
+      <div class="symbol locked" data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
+      <div class="symbol locked" data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
+      <div class="symbol locked" data-world="sapador2"><img src="mundos/mundo 6/criaturamenu.webp" alt="Sapador 2"></div>
+      <div class="symbol locked" data-world="dosirelala2"><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Dosirelala 2"></div>
     </div>
   </div>
 
@@ -176,44 +156,34 @@
     let allowSound = false;
     const memories = document.getElementById('memories');
 
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        $('#omom-screen').fadeOut(300, () => $('#soundPrompt').fadeIn(300));
-      }, 1000);
+    window.addEventListener('load',()=>{
+      setTimeout(()=>{
+        $('#omom-screen').fadeOut(300,()=>$('#soundPrompt').fadeIn(300));
+      },1000);
     });
 
-    $('#btnYes').click(() => startSite(true));
-    $('#btnNo').click(() => startSite(false));
-    function startSite(sound) {
-      allowSound = sound;
+    $('#btnYes').click(()=>startSite(true));
+    $('#btnNo').click(()=>startSite(false));
+    function startSite(sound){
+      allowSound=sound;
       $('#soundPrompt').hide();
-      if (allowSound) memories.play().catch(()=>{});
+      if(allowSound) memories.play().catch(()=>{});
       $('#menu').fadeIn(300);
     }
 
     $('.symbol.brither').click(function(){
-      const world = $(this).data('world');
-      $('#menu').hide();
-      $('#flipbook').show();
-      $('#btnVoltar').show();
-      if (allowSound) memories.pause();
-      $.getScript(world + '.js').done(() => {
+      const world=$(this).data('world');
+      $('#menu').hide(); $('#flipbook').show(); $('#btnVoltar').show();
+      if(allowSound) memories.pause();
+      $.getScript(world+'.js').done(()=>{
         initFlipbook('#swiper .swiper-wrapper');
-        new Swiper('#swiper', {
-          direction:'horizontal',
-          loop:false,
-          slidesPerView:1,
-          spaceBetween:20,
-          pagination:{el:'.swiper-pagination',clickable:true}
-        });
+        new Swiper('#swiper',{direction:'horizontal',loop:false,slidesPerView:1,spaceBetween:20,pagination:{el:'.swiper-pagination',clickable:true}});
       });
     });
 
-    $('#btnVoltar').click(() => {
-      $('#flipbook').hide();
-      $('#btnVoltar').hide();
-      $('.swiper-wrapper').empty();
-      if (allowSound) memories.play().catch(()=>{});
+    $('#btnVoltar').click(()=>{
+      $('#flipbook').hide(); $('#btnVoltar').hide(); $('.swiper-wrapper').empty();
+      if(allowSound) memories.play().catch(()=>{});
       $('#menu').fadeIn(300);
     });
   </script>
