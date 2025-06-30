@@ -30,7 +30,7 @@ window.initGlobe = function(selector) {
   
   // Cena com fundo bege claro
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#f5f1e9'); // cor de papel
+  scene.background = new THREE.Color('#FFFFFF'); // cor de papel
 
   const camera = new THREE.PerspectiveCamera(
     60,
