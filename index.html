@@ -108,7 +108,7 @@ html, body {
 
 /* Fade Top/Bottom apenas no branco */
 #fadeTop, #fadeBottom {
-  position:fixed; left:0; width:100%; height:15%; z-index:6;
+  position:fixed; left:0; width:100%; height:15%; z-index:8;
   pointer-events:none;
   display:none; /* aparece somente no flipbook */
 }
@@ -189,7 +189,7 @@ function startSite(sound) {
 $('.symbol.brither').click(function() {
   const world = $(this).data('world');
 
-  // transição de fundo preto para branco em fade
+  // fundo preto → branco
   $('html, body').css('background', '#fff');
   $('#menu').css('background', '#fff');
 
