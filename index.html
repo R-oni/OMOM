@@ -106,11 +106,11 @@ html, body {
 
 /* Fade Top/Bottom apenas no flipbook */
 #fadeTop, #fadeBottom {
-  position:fixed; left:0; width:100%; height:20%; z-index:8;
+  position:fixed; left:0; width:100%; height:25%; z-index:8;
   pointer-events:none; display:none;
 }
-#fadeTop { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
-#fadeBottom { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
+#fadeTop { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 95%); }
+#fadeBottom { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 95%); }
 
 /* Voltar */
 #btnVoltar {
@@ -190,7 +190,8 @@ $('.symbol.brither').click(function() {
   $('#menu').css('background', '#fff');
 
   $('#menu').fadeOut(500, () => {
-    $('#flipbook').fadeIn(500);
+    $('#flipbook').css('display','flex').fadeIn(500);
+    $('#btnVoltar').fadeIn(300);
     $('#btnVoltar').fadeIn(300);
     $('#fadeTop, #fadeBottom').show();
     if (allowSound) memories.pause();
