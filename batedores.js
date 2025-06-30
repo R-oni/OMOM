@@ -1,11 +1,13 @@
 window.initFlipbook = function(wrapperSelector) {
   const wrap = document.querySelector(wrapperSelector);
   const slides = [
-    'mundos/ttok/imagens/cap1/veleywei.png',     // slide 1
-    'mundos/ttok/imagens/cap1/veleywei1.webp', // slide 2
-    'mundos/ttok/imagens/cap1/veleywei2.webp', // slide 3
+    'mundos/ttok/imagens/cap1/pagina2.webp',     // slide 1
+    'mundos/ttok/imagens/cap1/pagina3.webp', // slide 2
+    'mundos/ttok/imagens/cap1/pagina4.webp', // slide 3
+    'mundos/ttok/imagens/cap1/pagina5.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina6.webp', // slide 5
     'GLOBO',                                  // slide 4: globo
-    'mundos/ttok/imagens/cap1/veleywei3.webp', // slide 5
+   
   
 
   ];
