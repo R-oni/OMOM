@@ -10,279 +10,129 @@
 
   <style>
     /* ===== RESET ===== */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { 
-      width:100%; height:100%; overflow:hidden; 
-      background:#000; color:#fff; 
-      font-family:'Courier New',monospace; 
+    * { margin:0; padding:0; box-sizing:border-box }
+    html, body {
+      width:100%; height:100%; overflow:hidden;
+      background:#000; color:#fff;
+      font-family:'Courier New',monospace;
     }
 
     /* ===== CONTAINER PRINCIPAL ===== */
-    #app {
-      width:100%; height:100%;
-      position: relative;
-      background: #000;
-    }
+    #app { width:100%; height:100%; position:relative; background:#000 }
 
     /* ===== TELA INICIAL OMOM ===== */
     #omom-screen {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9998;
+      position:fixed; inset:0; background:#000;
+      display:flex; align-items:center; justify-content:center; z-index:9998;
     }
-
     #omom-title {
-      font-family: 'Press Start 2P', cursive;
-      font-size: 48px;
-      color: white;
-      opacity: 0;
-      animation: fadeInTitle 2s ease-in-out forwards;
+      font-family:'Press Start 2P',cursive; font-size:48px; color:#fff;
+      opacity:0; animation:fadeInTitle 2s forwards;
     }
-
-    @keyframes fadeInTitle {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    @keyframes fadeInTitle { from{opacity:0} to{opacity:1} }
 
     /* ===== MENU DE SÍMBOLOS ===== */
     #menu-overlay {
-      position: fixed;
-      inset: 0;
-      background: url(fundo.webp) center/cover no-repeat;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
+      position:fixed; inset:0; background:url(fundo.webp) center/cover no-repeat;
+      display:none; align-items:center; justify-content:center; z-index:9999;
     }
-
+    #menu-overlay.visible { display:flex }
     #menu-overlay::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(6px);
+      content:''; position:absolute; inset:0;
+      background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
     }
-
-    #menu-overlay.visible { 
-      display: flex; 
+    .symbols-wrapper {
+      position:relative; max-width:90vw; max-height:80vh;
+      padding:20px; overflow-y:auto; z-index:1;
     }
-
-    .symbols-wrapper { 
-      position: relative;
-      max-width: 90vw;
-      max-height: 80vh;
-      padding: 20px;
-      overflow-y: auto;
-      z-index: 1;
-    }
-
     .symbols-container {
-      display: flex; 
-      flex-wrap: wrap;
-      justify-content: center; 
-      gap: 25px;
+      display:flex; flex-wrap:wrap; justify-content:center; gap:25px;
     }
-
     @keyframes floatWave {
-      0%{transform:translateY(0)}
-      50%{transform:translateY(-4px)}
-      100%{transform:translateY(0)}
+      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
     }
-
-    .symbol { 
-      cursor: pointer; 
-      animation: floatWave 4s ease-in-out infinite; 
-    }
-
-    .symbol img {
-      width: 18vw; 
-      max-width: 120px;
-      transition: transform .3s;
-    }
-
-    .symbol img:hover { 
-      transform: scale(1.1); 
-    }
-
-    .symbol.brither img { 
-      filter: brightness(180%); 
-    }
-
-    .symbol.locked img  { 
-      filter: brightness(50%); 
-    }
+    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite }
+    .symbol img { width:18vw; max-width:120px; transition:transform .3s }
+    .symbol img:hover { transform:scale(1.1) }
+    .symbol.brither img { filter:brightness(180%) }
+    .symbol.locked img { filter:brightness(50%) }
 
     /* ===== FLIPBOOK AREA ===== */
     #flipbook-area {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      transform: translateY(100%);
-      transition: transform 1.5s ease-out;
+      position:fixed; inset:0; background:#000;
+      display:flex; align-items:center; justify-content:center;
+      z-index:1000; transform:translateY(100%);
+      transition:transform 1.5s ease-out;
     }
-
-    #flipbook-area.show { 
-      transform: translateY(0); 
-    }
-
-    #flipbook-area.slide-out-down { 
-      transform: translateY(100%); 
-    }
-
-    #flipbookContainer { 
-      width: 95vw;
-      height: 90vh;
-      max-width: 800px;
-      max-height: 600px;
+    #flipbook-area.show { transform:translateY(0) }
+    #flipbook-area.slide-out-down { transform:translateY(100%) }
+    #flipbookContainer {
+      width:95vw; height:90vh;
+      max-width:800px; max-height:600px;
     }
 
     /* ===== OVERLAY IMAGEM ===== */
     #overlayContainer {
-      position: fixed; 
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: none; 
-      justify-content: center; 
-      align-items: center;
-      z-index: 10000;
+      position:fixed; inset:0; background:rgba(0,0,0,0.8);
+      display:none; justify-content:center; align-items:center; z-index:10000;
     }
-
-    #overlayImage { 
-      max-width: 80%; 
-      max-height: 80%; 
-      transition: transform .3s; 
-    }
-
+    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s }
     #btnSair {
-      position: absolute; 
-      top: 20px; 
-      right: 20px;
-      background: rgba(0,0,0,0.7); 
-      border: 2px solid #00FFE7; 
-      color: #00FFE7;
-      font-family: 'Press Start 2P', cursive; 
-      font-size: 12px; 
-      padding: 10px;
-      cursor: pointer;
+      position:absolute; top:20px; right:20px;
+      background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
+      color:#00FFE7; font-family:'Press Start 2P',cursive;
+      font-size:12px; padding:10px; cursor:pointer;
     }
 
     /* ===== LOADING & SOM ===== */
     #loading-screen {
-      position: fixed; 
-      inset: 0;
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      background: #000; 
-      z-index: 99999;
+      position:fixed; inset:0; display:flex;
+      align-items:center; justify-content:center; background:#000; z-index:99999;
     }
-
     #loading-text {
-      font-family: 'Press Start 2P', cursive; 
-      color: #00FFE7; 
-      font-size: 20px;
+      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px;
     }
-
     #soundPrompt {
-      position: fixed; 
-      inset: 0;
-      display: none; 
-      flex-direction: column;
-      align-items: center; 
-      justify-content: center;
-      background: #000; 
-      z-index: 99998;
+      position:fixed; inset:0; display:none;
+      flex-direction:column; align-items:center; justify-content:center;
+      background:#000; z-index:99998;
     }
-
     #soundPrompt p {
-      font-family: 'Press Start 2P', cursive; 
-      color: #00FFE7;
-      font-size: 24px; 
-      margin-bottom: 30px; 
-      text-align: center;
+      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:24px;
+      margin-bottom:30px; text-align:center;
     }
-
     .soundBtn {
-      background: none; 
-      border: 2px solid #00FFE7; 
-      color: #00FFE7;
-      font-family: 'Press Start 2P', cursive; 
-      font-size: 14px; 
-      padding: 12px 22px;
-      cursor: pointer; 
-      transition: background .25s;
-      margin: 0 10px;
+      background:none; border:2px solid #00FFE7; color:#00FFE7;
+      font-family:'Press Start 2P',cursive; font-size:14px;
+      padding:12px 22px; cursor:pointer; transition:background .25s; margin:0 10px;
     }
-
-    .soundBtn:hover { 
-      background: rgba(0,255,231,0.2); 
-    }
+    .soundBtn:hover { background:rgba(0,255,231,0.2) }
 
     /* ===== SETA DE VOLTAR ===== */
     #btnVoltar {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: rgba(0,0,0,0.7);
-      border: 2px solid #00FFE7;
-      color: #00FFE7;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 10px;
-      padding: 10px;
-      cursor: pointer;
-      z-index: 1001;
-      display: none;
+      position:fixed; top:20px; left:20px;
+      background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
+      color:#00FFE7; font-family:'Press Start 2P',cursive;
+      font-size:10px; padding:10px; cursor:pointer;
+      z-index:1001; display:none;
     }
-
-    #btnVoltar:hover {
-      background: rgba(0,0,0,0.9);
-    }
-
-    #btnVoltar.show {
-      display: block;
-    }
+    #btnVoltar.show { display:block }
+    #btnVoltar:hover { background:rgba(0,0,0,0.9) }
 
     /* ===== DESKTOP ===== */
-    @media screen and (min-width: 1024px) {
-      #app {
-        background: url(fundodesktop.webp) center/cover no-repeat fixed;
-      }
-
-      #omom-title {
-        font-size: 64px;
-      }
-
-      #menu-overlay {
-        background: url(fundodesktop.webp) center/cover no-repeat;
-      }
-
+    @media screen and (min-width:1024px) {
+      #app { background:url(fundodesktop.webp) center/cover no-repeat fixed }
+      #omom-title { font-size:64px }
+      #menu-overlay { background:url(fundodesktop.webp) center/cover no-repeat }
       #flipbookContainer {
-        width: 80vw;
-        height: 80vh;
-        max-width: 1000px;
-        max-height: 700px;
+        width:80vw; height:80vh; max-width:1000px; max-height:700px;
       }
-
-      .symbol img {
-        width: 120px;
-        max-width: 120px;
-      }
+      .symbol img { width:120px; max-width:120px }
     }
 
     /* ===== MOBILE LANDSCAPE ===== */
-    @media screen and (max-width: 1023px) and (orientation: landscape) {
-      #flipbookContainer {
-        width: 95vw;
-        height: 85vh;
-      }
+    @media screen and (max-width:1023px) and (orientation:landscape) {
+      #flipbookContainer { width:95vw; height:85vh }
     }
   </style>
 </head>
@@ -326,7 +176,6 @@
           <div class="symbol locked" data-world="botychera">
             <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
           </div>
-          <!-- demais símbolos... -->
         </div>
       </div>
     </div>
@@ -334,7 +183,12 @@
     <!-- área do flipbook -->
     <div id="flipbook-area">
       <button id="btnVoltar">VOLTAR</button>
-      <div id="flipbookContainer"></div>
+      <div id="flipbookContainer">
+        <!-- exemplo de conteúdo: 3 páginas -->
+        <div><img src="https://via.placeholder.com/600x800/111/fff?text=Página+1" style="width:100%;height:100%;object-fit:cover"></div>
+        <div><img src="https://via.placeholder.com/600x800/222/fff?text=Página+2" style="width:100%;height:100%;object-fit:cover"></div>
+        <div><img src="https://via.placeholder.com/600x800/333/fff?text=Página+3" style="width:100%;height:100%;object-fit:cover"></div>
+      </div>
     </div>
   </div>
 
@@ -348,121 +202,70 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    // ==== FADE AUDIO ====  
+    // ==== FADE AUDIO ====
     function fadeIn(a, ms) {
-      a.volume = 0;
-      a.play().catch(()=>{});
-      const step = 50, dv = step/ms, id = setInterval(()=> {
-        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id); }
-        else a.volume += dv;
-      }, step);
+      a.volume = 0; a.play().catch(()=>{});
+      const step=50, dv=step/ms, id=setInterval(()=>{
+        if(a.volume+dv>=1){a.volume=1;clearInterval(id)}
+        else a.volume+=dv;
+      },step);
     }
     function fadeOut(a, ms) {
-      const step = 50, dv = step/ms, id = setInterval(()=>{
-        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime = 0; }
-        else a.volume -= dv;
-      }, step);
+      const step=50, dv=step/ms, id=setInterval(()=>{
+        if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}
+        else a.volume-=dv;
+      },step);
     }
 
-    let allowSound = false;
-
-    // ==== BOOT SEQUENCE ====  
-    window.addEventListener('load', ()=> {
-      document.getElementById('loading-screen').style.display = 'none';
-      document.getElementById('soundPrompt').style.display = 'flex';
+    let allowSound=false;
+    window.addEventListener('load',()=>{
+      $('#loading-screen').hide();
+      $('#soundPrompt').show();
     });
 
-    function startSite(sound) {
-      allowSound = sound;
-      document.getElementById('soundPrompt').style.display = 'none';
-      if (allowSound) {
-        document.getElementById('bgm').play().catch(()=>{});
-      }
-      setTimeout(()=> {
-        document.getElementById('omom-screen').style.display = 'none';
-        showMenu();
-      }, 3000);
-    }
-    document.getElementById('btnYes').onclick = ()=>startSite(true);
-    document.getElementById('btnNo').onclick  = ()=>startSite(false);
-
-    function showMenu() {
-      document.getElementById('menu-overlay').classList.add('visible');
-      if (allowSound) {
-        fadeOut(document.getElementById('bgm'), 500);
-        setTimeout(()=>fadeIn(memories, 1000), 500);
-      }
-    }
-    function hideMenu() {
-      document.getElementById('menu-overlay').classList.remove('visible');
-      if (allowSound) fadeOut(memories, 1000);
-    }
-
-    document.querySelector('.symbols-container').addEventListener('click', e => {
-      const sym = e.target.closest('.symbol');
-      if (!sym) return;
-      if (sym.classList.contains('locked')) return;
-      launchWorld(sym.dataset.world);
-    });
-
-    function launchWorld(name) {
-      hideMenu();
-      const fb = document.getElementById('flipbook-area');
-      if (fb.classList.contains('show')) {
-        fb.classList.remove('show');
-        fb.classList.add('slide-out-down');
-        setTimeout(()=>{ fb.classList.remove('slide-out-down'); loadWorld(name); }, 1500);
-      } else loadWorld(name);
-    }
-
-    function loadWorld(name) {
-      document.getElementById('flipbookContainer').innerHTML = '';
-      document.getElementById('btnVoltar').classList.add('show');
-      const s = document.createElement('script');
-      s.src = name + '.js';
-      document.body.appendChild(s);
-      s.onload = () => {
-        // inicializa turn.js em single page view
-        $('#flipbookContainer').turn({
-          width: $('#flipbookContainer').width(),
-          height: $('#flipbookContainer').height(),
-          display: 'single',
-          autoCenter: true,
-          gradients: true,
-          acceleration: true
-        });
-        const fb = document.getElementById('flipbook-area');
-        void fb.offsetWidth;
-        fb.classList.add('show');
-      };
-    }
-
-    document.getElementById('btnVoltar').onclick = ()=> {
-      const fb = document.getElementById('flipbook-area');
-      fb.classList.remove('show');
-      fb.classList.add('slide-out-down');
-      document.getElementById('btnVoltar').classList.remove('show');
+    function startSite(sound){
+      allowSound=sound;
+      $('#soundPrompt').hide();
+      if(allowSound) $('#bgm')[0].play().catch(()=>{});
       setTimeout(()=>{
-        fb.classList.remove('slide-out-down');
-        document.getElementById('flipbookContainer').innerHTML = '';
+        $('#omom-screen').hide();
         showMenu();
-      }, 1500);
-    };
+      },3000);
+    }
+    $('#btnYes').click(()=>startSite(true));
+    $('#btnNo').click(()=>startSite(false));
 
-    document.getElementById('btnSair').onclick = e => {
-      e.preventDefault();
-      $('#overlayContainer').fadeOut(300);
-    };
-    document.getElementById('overlayContainer').onclick = e => {
-      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
-    };
-    window.showImageOverlay = src => {
-      document.getElementById('overlayImage').src = src;
-      $('#overlayContainer').fadeIn(300);
-    };
+    function showMenu(){ $('#menu-overlay').addClass('visible') }
+    function hideMenu(){ $('#menu-overlay').removeClass('visible') }
+
+    $('.symbol.brither').click(function(){
+      hideMenu();
+      $('#flipbook-area').addClass('show');
+      $('#btnVoltar').addClass('show');
+
+      // inicializa turn.js em single page
+      $('#flipbookContainer').turn({
+        width: $('#flipbookContainer').width(),
+        height: $('#flipbookContainer').height(),
+        display: 'single',
+        autoCenter: true,
+        gradients: true,
+        acceleration: true
+      });
+    });
+
+    $('#btnVoltar').click(()=>{
+      $('#flipbookContainer').turn('destroy');
+      $('#flipbook-area').removeClass('show');
+      $('#btnVoltar').removeClass('show');
+      showMenu();
+    });
+
+    $('#btnSair').click(e=>{e.preventDefault();$('#overlayContainer').fadeOut(300)});
+    $('#overlayContainer').click(e=>{ if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300) });
+    window.showImageOverlay=src=>{$('#overlayImage').attr('src',src);$('#overlayContainer').fadeIn(300)};
   </script>
 </body>
 </html>
