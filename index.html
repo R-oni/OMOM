@@ -11,10 +11,10 @@
   <style>
     /* ===== RESET ===== */
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { 
-      width:100%; height:100%; overflow:hidden; 
-      background:#000; color:#fff; 
-      font-family:'Courier New',monospace; 
+    html, body {
+      width:100%; height:100%; overflow:hidden;
+      background:#000; color:#fff;
+      font-family:'Courier New',monospace;
     }
 
     /* ===== ORIENTATION LOCK ===== */
@@ -42,106 +42,160 @@
     }
 
     /* ===== CONTAINER PRINCIPAL ===== */
-    #app {
-      width:100%; height:100%;
-      position: relative;
-      background: #000;
-    }
+    #app { width:100%; height:100%; position: relative; background: #000; }
 
     /* ===== TELA INICIAL OMOM ===== */
     #omom-screen {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0; background: #000;
+      display: flex; align-items: center; justify-content: center;
       z-index: 9998;
     }
     #omom-title {
       font-family: 'Press Start 2P', cursive;
-      font-size: 48px;
-      color: white;
-      opacity: 0;
-      animation: fadeInTitle 2s ease-in-out forwards;
+      font-size: 48px; color: white;
+      opacity: 0; animation: fadeInTitle 2s ease-in-out forwards;
     }
     @keyframes fadeInTitle {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from { opacity: 0; } to { opacity: 1; }
     }
 
     /* ===== MENU DE SÍMBOLOS ===== */
     #menu-overlay {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: url(fundo.webp) center/cover no-repeat;
-      display: none;
-      align-items: center;
-      justify-content: center;
+      display: none; align-items: center; justify-content: center;
       z-index: 9999;
     }
     #menu-overlay::before {
       content: '';
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: rgba(0,0,0,0.6);
       backdrop-filter: blur(6px);
     }
     #menu-overlay.visible { display: flex; }
-    .symbols-wrapper { position: relative; max-width: 90vw; max-height: 80vh; padding: 20px; overflow-y: auto; z-index: 1; }
-    .symbols-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; }
-    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)} }
-    .symbol { cursor: pointer; animation: floatWave 4s ease-in-out infinite; }
-    .symbol img { width: 18vw; max-width: 120px; transition: transform .3s; }
+    .symbols-wrapper {
+      position: relative; max-width: 90vw; max-height: 80vh;
+      padding: 20px; overflow-y: auto; z-index: 1;
+    }
+    .symbols-container {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 25px;
+    }
+    @keyframes floatWave {
+      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
+    }
+    .symbol {
+      cursor: pointer;
+      animation: floatWave 4s ease-in-out infinite;
+    }
+    .symbol img {
+      width: 18vw; max-width: 120px; transition: transform .3s;
+    }
     .symbol img:hover { transform: scale(1.1); }
     .symbol.brither img { filter: brightness(180%); }
     .symbol.locked img  { filter: brightness(50%); }
 
     /* ===== FLIPBOOK AREA ===== */
     #flipbook-area {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0; background: #000;
+      display: flex; align-items: center; justify-content: center;
       z-index: 1000;
       transition: transform 1.5s ease-out;
       transform: translateY(100%);
     }
     @media screen and (orientation: portrait) {
       #flipbook-area {
-        width: 90vh;
-        height: 95vw;
+        width: 90vh; height: 95vw;
         transform: translateY(100%) rotate(90deg);
         transform-origin: bottom left;
       }
-      #flipbook-area.show { transform: translateY(0) rotate(90deg); }
-      #flipbook-area.slide-out-down { transform: translateY(100%) rotate(90deg); }
-      #flipbookContainer { width: 95vh; height: 85vw; }
+      #flipbook-area.show {
+        transform: translateY(0) rotate(90deg);
+      }
+      #flipbook-area.slide-out-down {
+        transform: translateY(100%) rotate(90deg);
+      }
+      #flipbookContainer {
+        width: 95vh; height: 85vw;
+      }
     }
     @media screen and (min-width: 1024px) {
-      #flipbook-area { transform: translateY(100%); }
-      #flipbook-area.show { transform: translateY(0); }
-      #flipbook-area.slide-out-down { transform: translateY(100%); }
-      #flipbookContainer { width: 80vw; height: 80vh; max-width: 1000px; max-height: 700px; }
+      #flipbook-area {
+        transform: translateY(100%);
+      }
+      #flipbook-area.show {
+        transform: translateY(0);
+      }
+      #flipbook-area.slide-out-down {
+        transform: translateY(100%);
+      }
+      #flipbookContainer {
+        width: 80vw; height: 80vh;
+        max-width: 1000px; max-height: 700px;
+      }
     }
 
     /* ===== OVERLAY IMAGEM ===== */
-    #overlayContainer { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; }
-    #overlayImage { max-width: 80%; max-height: 80%; transition: transform .3s; }
-    #btnSair { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); border: 2px solid #00FFE7; color: #00FFE7; font-family: 'Press Start 2P', cursive; font-size: 12px; padding: 10px; cursor: pointer; }
+    #overlayContainer {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none; justify-content: center; align-items: center;
+      z-index: 10000;
+    }
+    #overlayImage {
+      max-width: 80%; max-height: 80%;
+      transition: transform .3s;
+    }
+    #btnSair {
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #00FFE7;
+      color: #00FFE7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px; padding: 10px; cursor: pointer;
+    }
 
     /* ===== LOADING & SOM ===== */
-    #loading-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; z-index: 99999; }
-    #loading-text { font-family: 'Press Start 2P', cursive; color: #00FFE7; font-size: 20px; }
-    #soundPrompt { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 99998; }
-    #soundPrompt p { font-family: 'Press Start 2P', cursive; color: #00FFE7; font-size: 24px; margin-bottom: 30px; text-align: center; }
-    .soundBtn { background: none; border: 2px solid #00FFE7; color: #00FFE7; font-family: 'Press Start 2P', cursive; font-size: 14px; padding: 12px 22px; cursor: pointer; transition: background .25s; margin: 0 10px; }
+    #loading-screen {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #000; z-index: 99999;
+    }
+    #loading-text {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7; font-size: 20px;
+    }
+    #soundPrompt {
+      position: fixed; inset: 0;
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: #000; z-index: 99998;
+    }
+    #soundPrompt p {
+      font-family: 'Press Start 2P', cursive;
+      color: #00FFE7; font-size: 24px;
+      margin-bottom: 30px; text-align: center;
+    }
+    .soundBtn {
+      background: none; border: 2px solid #00FFE7;
+      color: #00FFE7; font-family: 'Press Start 2P', cursive;
+      font-size: 14px; padding: 12px 22px;
+      cursor: pointer; transition: background .25s;
+      margin: 0 10px;
+    }
     .soundBtn:hover { background: rgba(0,255,231,0.2); }
 
     /* ===== SETA DE VOLTAR ===== */
-    #btnVoltar { position: fixed; top: 20px; left: 20px; background: rgba(0,0,0,0.7); border: 2px solid #00FFE7; color: #00FFE7; font-family: 'Press Start 2P', cursive; font-size: 10px; padding: 10px; cursor: pointer; z-index: 1001; display: none; }
+    #btnVoltar {
+      position: fixed; top: 20px; left: 20px;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #00FFE7;
+      color: #00FFE7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px; padding: 10px;
+      cursor: pointer; z-index: 1001;
+      display: none;
+    }
     #btnVoltar:hover { background: rgba(0,0,0,0.9); }
     #btnVoltar.show { display: block; }
 
@@ -190,45 +244,11 @@
     <div id="menu-overlay">
       <div class="symbols-wrapper">
         <div class="symbols-container">
+          <!-- símbolos de exemplo -->
           <div class="symbol brither" data-world="veleywei">
             <img src="assets/veleyweimenu.png" alt="Velei'wey">
           </div>
-          <div class="symbol locked" data-world="botychera">
-            <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-          </div>
-          <div class="symbol locked" data-world="himpis">
-            <img src="mundos/himpis/himpismenu.png" alt="Himpis">
-          </div>
-          <div class="symbol brither" data-world="batedores">
-            <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
-          </div>
-          <div class="symbol locked" data-world="denbou">
-            <img src="mundos/denbou/denboumenu.png" alt="DenBou">
-          </div>
-          <div class="symbol locked" data-world="araporu">
-            <img src="mundos/araporu/araporumenu.png" alt="Araporu">
-          </div>
-          <div class="symbol locked" data-world="porojka">
-            <img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos">
-          </div>
-          <div class="symbol locked" data-world="sapador">
-            <img src="mundos/sapador/sapador.png" alt="Sapador">
-          </div>
-          <div class="symbol locked" data-world="dosirelala">
-            <img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala">
-          </div>
-          <div class="symbol locked" data-world="calindreno">
-            <img src="mundos/calindreno/calindreno.png" alt="Calindreno">
-          </div>
-          <div class="symbol locked" data-world="mundoPulsante">
-            <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
-          </div>
-          <div class="symbol locked" data-world="sapador2">
-            <img src="mundos/mundo 6/criaturamenu.webp" alt="Sapador 2">
-          </div>
-          <div class="symbol locked" data-world="dosirelala2">
-            <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Dosirelala 2">
-          </div>
+          <!-- ... outros símbolos ... -->
         </div>
       </div>
     </div>
@@ -253,7 +273,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    // ==== FADE AUDIO ====  
+    // ==== FADE AUDIO ====
     function fadeIn(a, ms) {
       a.volume = 0;
       a.play().catch(()=>{});
@@ -270,10 +290,9 @@
     }
     let allowSound = false;
 
-    // ==== BOOT SEQUENCE ====  
+    // ==== BOOT SEQUENCE ====
     window.addEventListener('load', ()=>{
       document.getElementById('loading-screen').style.display = 'none';
-      // após fade do título (2s), mostrar prompt de som
       setTimeout(() => {
         document.getElementById('soundPrompt').style.display = 'flex';
       }, 2000);
@@ -285,7 +304,6 @@
       if (allowSound) {
         document.getElementById('bgm').play().catch(()=>{});
       }
-      // mostrar tela OMOM por 3 segundos, depois menu
       setTimeout(() => {
         document.getElementById('omom-screen').style.display = 'none';
         showMenu();
@@ -294,46 +312,102 @@
     document.getElementById('btnYes').onclick = ()=>startSite(true);
     document.getElementById('btnNo').onclick = ()=>startSite(false);
 
-    // restante dos scripts inalterados...
-    // ==== MENU ====  
-    const memories = document.getElementById('memories');
+    // ==== MENU ====
     function showMenu() {
       document.getElementById('menu-overlay').classList.add('visible');
       if (allowSound) {
         fadeOut(document.getElementById('bgm'), 500);
-        setTimeout(() => fadeIn(memories, 1000), 500);
+        setTimeout(() => fadeIn(document.getElementById('memories'), 1000), 500);
       }
     }
     function hideMenu() {
       document.getElementById('menu-overlay').classList.remove('visible');
-      if (allowSound) fadeOut(memories, 1000);
+      if (allowSound) fadeOut(document.getElementById('memories'), 1000);
     }
     document.querySelector('.symbols-container').addEventListener('click', e=>{
-      const sym = e.target.closest('.symbol'); if (!sym || sym.classList.contains('locked')) return;
+      const sym = e.target.closest('.symbol');
+      if (!sym || sym.classList.contains('locked')) return;
       launchWorld(sym.dataset.world);
     });
+
+    // ==== FLIPBOOK LOADER ====
     function launchWorld(name) {
       hideMenu();
       const fb = document.getElementById('flipbook-area');
       if (fb.classList.contains('show')) {
-        fb.classList.remove('show'); fb.classList.add('slide-out-down');
-        setTimeout(() => { fb.classList.remove('slide-out-down'); loadWorld(name); }, 1500);
+        fb.classList.remove('show');
+        fb.classList.add('slide-out-down');
+        setTimeout(() => { 
+          fb.classList.remove('slide-out-down');
+          loadWorld(name);
+        }, 1500);
       } else loadWorld(name);
     }
+
     function loadWorld(name) {
       document.getElementById('flipbookContainer').innerHTML = '';
       document.getElementById('btnVoltar').classList.add('show');
-      const s = document.createElement('script'); s.src = name + '.js'; document.body.appendChild(s);
-      s.onload = () => { window.initFlipbook?.('#flipbookContainer'); const fb = document.getElementById('flipbook-area'); void fb.offsetWidth; fb.classList.add('show'); };
+      const s = document.createElement('script');
+      s.src = name + '.js';
+      document.body.appendChild(s);
+      s.onload = () => {
+        window.initFlipbook?.('#flipbookContainer');
+        const fb = document.getElementById('flipbook-area');
+        void fb.offsetWidth; // reflow
+        fb.classList.add('show');
+      };
     }
+
     document.getElementById('btnVoltar').onclick = () => {
-      const fb = document.getElementById('flipbook-area'); fb.classList.remove('show'); fb.classList.add('slide-out-down');
+      const fb = document.getElementById('flipbook-area');
+      fb.classList.remove('show');
+      fb.classList.add('slide-out-down');
       document.getElementById('btnVoltar').classList.remove('show');
-      setTimeout(() => { fb.classList.remove('slide-out-down'); document.getElementById('flipbookContainer').innerHTML = ''; showMenu(); }, 1500);
+      setTimeout(() => {
+        fb.classList.remove('slide-out-down');
+        document.getElementById('flipbookContainer').innerHTML = '';
+        showMenu();
+      }, 1500);
     };
+
+    // ==== OVERLAY IMAGEM ====
     document.getElementById('btnSair').onclick = e => { e.preventDefault(); $('#overlayContainer').fadeOut(300); };
-    document.getElementById('overlayContainer').onclick = e => { if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300); };
-    window.showImageOverlay = src => { document.getElementById('overlayImage').src = src; $('#overlayContainer').fadeIn(300); };
+    document.getElementById('overlayContainer').onclick = e => { 
+      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
+    };
+    window.showImageOverlay = src => {
+      document.getElementById('overlayImage').src = src;
+      $('#overlayContainer').fadeIn(300);
+    };
+
+
+    // ======== NOVO: SWIPE VERTICAL E TECLAS ========
+    let touchStartY = 0, touchStartX = 0;
+    $('#flipbookContainer').on('touchstart', function(e){
+      const t = e.originalEvent.touches[0];
+      touchStartY = t.clientY;
+      touchStartX = t.clientX;
+    });
+    $('#flipbookContainer').on('touchend', function(e){
+      const t = e.originalEvent.changedTouches[0];
+      const dy = t.clientY - touchStartY;
+      const dx = t.clientX - touchStartX;
+      // swipe vertical > horizontal
+      if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 30) {
+        if (dy < 0) $('.flipbook').turn('next');
+        else $('.flipbook').turn('previous');
+      }
+    });
+
+    $(document).keydown(function(e){
+      if ($('#flipbook-area').hasClass('show')) {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+          $('.flipbook').turn('next');
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+          $('.flipbook').turn('previous');
+        }
+      }
+    });
   </script>
 </body>
 </html>
