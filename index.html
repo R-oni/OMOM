@@ -106,14 +106,20 @@ html, body {
   border-radius:8px;
 }
 
-/* Fade Top/Bottom apenas no branco */
+/* Fade Top/Bottom apenas no flipbook */
 #fadeTop, #fadeBottom {
   position:fixed; left:0; width:100%; height:15%; z-index:8;
   pointer-events:none;
-  display:none; /* aparece somente no flipbook */
+  display:none;
 }
-#fadeTop { top:0; background: linear-gradient(to bottom, #fff, transparent); }
-#fadeBottom { bottom:0; background: linear-gradient(to top, #fff, transparent); }
+#fadeTop {
+  top:0;
+  background: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+#fadeBottom {
+  bottom:0;
+  background: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+}
 
 /* Voltar */
 #btnVoltar {
@@ -155,7 +161,6 @@ html, body {
   <button id="btnVoltar">VOLTAR</button>
   <div class="swiper-container" id="swiper">
     <div class="swiper-wrapper"></div>
-    <!-- pagination removida -->
   </div>
 </div>
 
