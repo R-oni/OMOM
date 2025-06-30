@@ -1,6 +1,7 @@
 window.initFlipbook = function(wrapperSelector) {
   const wrap = document.querySelector(wrapperSelector);
   const slides = [
+    'mundos/ttok/imagens/cap1/pagina1.webp',     // slide 1
     'mundos/ttok/imagens/cap1/pagina2.webp',     // slide 1
     'mundos/ttok/imagens/cap1/pagina3.webp', // slide 2
     'mundos/ttok/imagens/cap1/pagina4.webp', // slide 3
