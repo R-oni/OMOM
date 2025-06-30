@@ -1,245 +1,255 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=yes"/>
-<title>OMOM SPA</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-<style>
-* { margin:0; padding:0; box-sizing:border-box }
-html, body {
-  width:100%; height:100%; overflow:hidden;
-  background:#000; color:#fff;
-  font-family:'Courier New',monospace;
-  transition: background 1s ease;
-}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=yes"/>
+  <title>OMOM SPA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box }
+    html, body {
+      width:100%; height:100%; overflow:hidden;
+      background:#000; color:#fff;
+      font-family:'Courier New',monospace;
+      transition: background 1s ease;
+    }
+    /* Splash OMOM */
+    #omom-screen {
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background:#000; z-index:10;
+    }
+    #omom-title {
+      font-family:'Press Start 2P',cursive;
+      font-size:6vw; max-font-size:48px; color:#00FFE7;
+      opacity:0;
+      animation:fadeIn 1s forwards, fadeOut 0.5s 1.5s forwards;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes fadeOut { from{opacity:1} to{opacity:0} }
 
-/* Splash OMOM */
-#omom-screen {
-  position:fixed; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  background:#000; z-index:10;
-}
-#omom-title {
-  font-family:'Press Start 2P',cursive;
-  font-size:6vw; max-font-size:48px; color:#00FFE7;
-  opacity:0;
-  animation:fadeIn 1s forwards, fadeOut 0.5s 1.5s forwards;
-}
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-@keyframes fadeOut { from{opacity:1} to{opacity:0} }
+    /* Prompt Som */
+    #soundPrompt {
+      position:fixed; inset:0;
+      display:none;
+      flex-direction:column; align-items:center; justify-content:center;
+      background:#000; z-index:9;
+    }
+    #soundPrompt p {
+      font-family:'Press Start 2P',cursive;
+      font-size:5vw; max-font-size:24px;
+      margin-bottom:2vh;
+      color:#00FFE7;
+    }
+    .soundBtns { display:flex; gap:4vw; }
+    .soundBtn {
+      padding:2vh 4vw;
+      font-family:'Press Start 2P',cursive;
+      font-size:4vw; max-font-size:16px;
+      background:none; border:2px solid #00FFE7; color:#00FFE7;
+      cursor:pointer;
+    }
 
-/* Prompt Som */
-#soundPrompt {
-  position:fixed; inset:0;
-  display:none;
-  flex-direction:column; align-items:center; justify-content:center;
-  background:#000; z-index:9;
-}
-#soundPrompt p {
-  font-family:'Press Start 2P',cursive;
-  font-size:5vw; max-font-size:24px;
-  margin-bottom:2vh;
-  color:#00FFE7;
-}
-.soundBtns {
-  display:flex; gap:4vw;
-}
-.soundBtn {
-  padding:2vh 4vw;
-  font-family:'Press Start 2P',cursive;
-  font-size:4vw; max-font-size:16px;
-  background:none; border:2px solid #00FFE7; color:#00FFE7;
-  cursor:pointer;
-}
+    /* Menu de Símbolos */
+    #menu {
+      position:fixed; inset:0;
+      display:none;
+      flex-direction:column; align-items:center; justify-content:flex-start;
+      z-index:8; padding:15vh 5vw 5vh;
+      background:#000;
+      transition: background 1s ease;
+    }
+    #menu h1 {
+      font-family:'Press Start 2P',cursive;
+      font-size:6vw; max-font-size:48px; color:#fff;
+      margin-bottom:4vh;
+    }
+    .symbols-container {
+      display:flex; flex-wrap:wrap;
+      justify-content:center; gap:5vw;
+      width:100%;
+    }
+    .symbol {
+      cursor:pointer;
+      animation:floatWave 4s ease-in-out infinite;
+    }
+    .symbol img {
+      width:20vw; max-width:180px; display:block;
+    }
+    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)} }
+    .symbol.locked { opacity:0.3; pointer-events:none; }
 
-/* Menu de Símbolos */
-#menu {
-  position:fixed; inset:0;
-  display:none;
-  flex-direction:column; align-items:center; justify-content:flex-start;
-  z-index:8; padding:15vh 5vw 5vh;
-  background:#000;
-  transition: background 1s ease;
-}
-#menu h1 {
-  font-family:'Press Start 2P',cursive;
-  font-size:6vw; max-font-size:48px; color:#fff;
-  margin-bottom:4vh;
-}
-.symbols-container {
-  display:flex; flex-wrap:wrap;
-  justify-content:center; gap:5vw;
-  width:100%;
-}
-.symbol {
-  cursor:pointer;
-  animation:floatWave 4s ease-in-out infinite;
-}
-.symbol img {
-  width:20vw; max-width:180px; display:block;
-}
-@keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)} }
-.symbol.locked { opacity:0.3; pointer-events:none; }
+    /* Flipbook / Swiper */
+    #flipbook {
+      position:fixed; inset:0;
+      display:none;
+      flex-direction:column; align-items:center; justify-content:center;
+      background:#fff; z-index:7;
+      transition: background 1s ease;
+    }
+    .swiper-container {
+      width:80vw; height:60vh;
+      max-width:600px; max-height:450px;
+      margin:auto;
+      touch-action: none;
+    }
+    .swiper-slide {
+      display:flex; align-items:center; justify-content:center;
+      touch-action: none;
+    }
+    .swiper-slide img,
+    .swiper-slide canvas {
+      width:100%; height:100%; object-fit:contain;
+      border-radius:8px;
+    }
 
-/* Flipbook / Swiper */
-#flipbook {
-  position:fixed; inset:0;
-  display:none;
-  flex-direction:column; align-items:center; justify-content:center;
-  background:#fff; z-index:7;
-  transition: background 1s ease;
-}
-.swiper-container {
-  width:80vw; height:60vh;
-  max-width:600px; max-height:450px;
-  margin:auto;
-  touch-action: none;
-}
-.swiper-slide {
-  display:flex; align-items:center; justify-content:center;
-}
-.swiper-slide img, .swiper-slide canvas {
-  width:100%; height:100%; object-fit:contain;
-  border-radius:8px;
-  touch-action: none;
-}
+    /* Fade Top/Bottom apenas no flipbook */
+    #fadeTop, #fadeBottom {
+      position:fixed; left:0; width:100%; height:20%; z-index:8;
+      pointer-events:none; display:none;
+    }
+    #fadeTop { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
+    #fadeBottom { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
 
-/* Fade Top/Bottom apenas no flipbook */
-#fadeTop, #fadeBottom {
-  position:fixed; left:0; width:100%; height:20%; z-index:8;
-  pointer-events:none; display:none;
-}
-#fadeTop { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
-#fadeBottom { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
-
-/* Voltar */
-#btnVoltar {
-  position:fixed; top:5vh; left:5vw;
-  padding:1vh 2vw;
-  font-family:'Press Start 2P',cursive;
-  font-size:3vw; max-font-size:14px;
-  background:rgba(0,0,0,0.7);
-  border:2px solid #00FFE7;
-  color:#00FFE7;
-  cursor:pointer; display:none; z-index:9;
-}
-</style>
+    /* Voltar */
+    #btnVoltar {
+      position:fixed; top:5vh; left:5vw;
+      padding:1vh 2vw;
+      font-family:'Press Start 2P',cursive;
+      font-size:3vw; max-font-size:14px;
+      background:rgba(0,0,0,0.7);
+      border:2px solid #00FFE7;
+      color:#00FFE7;
+      cursor:pointer; display:none; z-index:9;
+    }
+  </style>
 </head>
 <body>
-<audio id="memories" src="memories.mp3" preload="auto" loop></audio>
+  <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
-<div id="omom-screen"><div id="omom-title">OMOM</div></div>
+  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
 
-<div id="soundPrompt">
-  <p>Som?</p>
-  <div class="soundBtns">
-    <button class="soundBtn" id="btnYes">SIM</button>
-    <button class="soundBtn" id="btnNo">NÃO</button>
-  </div>
-</div>
-
-<div id="menu">
-  <h1>OMOM</h1>
-  <div class="symbols-container">
-    <div class="symbol brither" data-world="veleywei">
-      <img src="assets/veleyweimenu.png" alt="Veleywei">
-    </div>
-    <div class="symbol brither" data-world="batedores">
-      <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
+  <div id="soundPrompt">
+    <p>Som?</p>
+    <div class="soundBtns">
+      <button class="soundBtn" id="btnYes">SIM</button>
+      <button class="soundBtn" id="btnNo">NÃO</button>
     </div>
   </div>
-</div>
 
-<div id="flipbook">
-  <button id="btnVoltar">VOLTAR</button>
-  <div class="swiper-container" id="swiper">
-    <div class="swiper-wrapper"></div>
+  <div id="menu">
+    <h1>OMOM</h1>
+    <div class="symbols-container">
+      <div class="symbol brither" data-world="veleywei">
+        <img src="assets/veleyweimenu.png" alt="Veleywei">
+      </div>
+      <div class="symbol brither" data-world="batedores">
+        <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
+      </div>
+    </div>
   </div>
-</div>
 
-<div id="fadeTop"></div>
-<div id="fadeBottom"></div>
+  <div id="flipbook">
+    <button id="btnVoltar">VOLTAR</button>
+    <div class="swiper-container" id="swiper">
+      <div class="swiper-wrapper"></div>
+    </div>
+  </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-<script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
-<script>
-let allowSound = false;
-const memories = document.getElementById('memories');
+  <div id="fadeTop"></div>
+  <div id="fadeBottom"></div>
 
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    $('#omom-screen').fadeOut(300, () => $('#soundPrompt').fadeIn(300));
-  }, 1000);
-});
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <script>
+    let allowSound = false;
+    const memories = document.getElementById('memories');
+    let hammerManager = null;
 
-$('#btnYes').click(() => startSite(true));
-$('#btnNo').click(() => startSite(false));
-
-function startSite(sound) {
-  allowSound = sound;
-  $('#soundPrompt').hide();
-  if (allowSound) memories.play().catch(() => {});
-  $('#menu').fadeIn(300);
-}
-
-$('.symbol.brither').click(function() {
-  const world = $(this).data('world');
-  $('html, body').css('background', '#fff');
-  $('#menu').css('background', '#fff');
-
-  $('#menu').fadeOut(500, () => {
-    $('#flipbook').css('display','flex').fadeIn(500);
-    $('#btnVoltar').fadeIn(300);
-    $('#fadeTop, #fadeBottom').show();
-    if (allowSound) memories.pause();
-    $.getScript(world + '.js').done(() => {
-      initFlipbook('#swiper .swiper-wrapper');
-      const swiper = new Swiper('#swiper', {
-        direction: 'vertical',
-        loop: false,
-        centeredSlides: true,
-        slidesPerView: 1,
-        spaceBetween: 20,
-        on: {
-          slideChange: function() {
-            if (this.activeIndex === 3) {
-              initGlobe('#globeCanvas');
-            }
-          }
-        }
-      });
-
-      const hammer = new Hammer(document.querySelector('.swiper-container'));
-      hammer.get('pinch').set({ enable: true });
+    function setupPinch(slideEl) {
+      if (hammerManager) {
+        hammerManager.destroy();
+        hammerManager = null;
+        // Reset all slides
+        document.querySelectorAll('.swiper-slide').forEach(s => s.style.transform = 'scale(1)');
+      }
+      // Initialize Hammer on the active slide only
+      hammerManager = new Hammer(slideEl);
+      hammerManager.get('pinch').set({ enable: true });
       let scale = 1;
-      hammer.on('pinchmove', (ev) => {
+      hammerManager.on('pinchmove', ev => {
         scale = Math.max(1, Math.min(ev.scale, 3));
-        document.querySelector('.swiper-slide-active').style.transform = `scale(${scale})`;
+        slideEl.style.transform = `scale(${scale})`;
       });
-      hammer.on('pinchend', () => {
-        if (scale < 1.05) {
-          document.querySelector('.swiper-slide-active').style.transform = 'scale(1)';
-        }
+      hammerManager.on('pinchend', () => {
+        if (scale < 1.05) slideEl.style.transform = 'scale(1)';
+      });
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        $('#omom-screen').fadeOut(300, () => $('#soundPrompt').fadeIn(300));
+      }, 1000);
+    });
+
+    $('#btnYes').click(() => startSite(true));
+    $('#btnNo').click(() => startSite(false));
+
+    function startSite(sound) {
+      allowSound = sound;
+      $('#soundPrompt').hide();
+      if (allowSound) memories.play().catch(() => {});
+      $('#menu').fadeIn(300);
+    }
+
+    $('.symbol.brither').click(function() {
+      const world = $(this).data('world');
+      $('html, body').css('background', '#fff');
+      $('#menu').css('background', '#fff');
+
+      $('#menu').fadeOut(500, () => {
+        $('#flipbook').css('display','flex').fadeIn(500);
+        $('#btnVoltar').fadeIn(300);
+        $('#fadeTop, #fadeBottom').show();
+        if (allowSound) memories.pause();
+        $.getScript(world + '.js').done(() => {
+          initFlipbook('#swiper .swiper-wrapper');
+          const swiper = new Swiper('#swiper', {
+            direction: 'vertical',
+            loop: false,
+            centeredSlides: true,
+            slidesPerView: 1,
+            spaceBetween: 20,
+            on: {
+              init: function() {
+                setupPinch(this.slides[this.activeIndex]);
+              },
+              slideChange: function() {
+                setupPinch(this.slides[this.activeIndex]);
+                if (this.activeIndex === 3) {
+                  initGlobe('#globeCanvas');
+                }
+              }
+            }
+          });
+        });
       });
     });
-  });
-});
 
-$('#btnVoltar').click(() => {
-  $('#flipbook').fadeOut(300);
-  $('#btnVoltar').fadeOut(300);
-  $('.swiper-wrapper').empty();
-  $('html, body').css('background', '#000');
-  $('#menu').css('background', '#000');
-  $('#fadeTop, #fadeBottom').hide();
-  if (allowSound) memories.play().catch(() => {});
-  $('#menu').fadeIn(500);
-});
-</script>
+    $('#btnVoltar').click(() => {
+      $('#flipbook').fadeOut(300);
+      $('#btnVoltar').fadeOut(300);
+      $('.swiper-wrapper').empty();
+      $('html, body').css('background', '#000');
+      $('#menu').css('background', '#000');
+      $('#fadeTop, #fadeBottom').hide();
+      if (allowSound) memories.play().catch(() => {});
+      $('#menu').fadeIn(500);
+    });
+  </script>
 </body>
 </html>
