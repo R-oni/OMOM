@@ -1,281 +1,256 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OMOM SPA</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OMOM SPA</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
 
-  <!-- fonte pixel-art -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+<style>
+/*--- RESET ---*/
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Courier New',monospace}
 
-  <style>
-    /* ========== RESET ========== */
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{width:100%;height:100%;overflow:hidden;
-      background:#000;color:#fff;font-family:'Courier New',monospace}
+/*--- ORIENTATION LOCK ---*/
+#orientation-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  background:#000;color:#fff;z-index:100000;text-align:center;padding:20px;font-size:18px}
+@media(orientation:landscape){
+  #orientation-overlay{display:flex}
+  #app,#omom-screen,#loading-screen,#soundPrompt{display:none!important}
+}
 
-    /* ========== ORIENTATION LOCK ========== */
-    #orientation-overlay{position:fixed;inset:0;background:#000;color:#fff;display:none;
-      align-items:center;justify-content:center;z-index:100000;text-align:center;padding:20px;font-size:18px}
-    @media screen and (orientation:landscape){
-      #orientation-overlay{display:flex}
-      #app,#omom-screen,#loading-screen,#soundPrompt{display:none!important}
-    }
+/*--- CONTAINER PRINCIPAL ---*/
+#app{width:100%;height:100%;position:relative;background:#000}
 
-    /* ========== CONTAINER PRINCIPAL ========== */
-    #app{width:100%;height:100%;position:relative;background:#000}
+/*--- SPLASH “OMOM” ---*/
+#omom-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:#000;z-index:9998}
+#omom-title{font-family:'Press Start 2P',cursive;font-size:48px;color:#fff;opacity:0;
+  animation:fadeInTitle 2s forwards}@keyframes fadeInTitle{from{opacity:0}to{opacity:1}}
 
-    /* ========== TELA INICIAL ========== */
-    #omom-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9998}
-    #omom-title{font-family:'Press Start 2P',cursive;font-size:48px;opacity:0;color:#fff;
-      animation:fadeInTitle 2s ease-in-out forwards}
-    @keyframes fadeInTitle{from{opacity:0}to{opacity:1}}
+/*--- MENU DE MUNDOS ---*/
+#menu-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  background:url(fundo.webp) center/cover no-repeat;z-index:9999}
+#menu-overlay::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+#menu-overlay.visible{display:flex}
+.symbols-wrapper{position:relative;max-width:90vw;max-height:80vh;padding:20px;overflow-y:auto;z-index:1}
+.symbols-container{display:flex;flex-wrap:wrap;gap:25px;justify-content:center}
+@keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+.symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
+.symbol img{width:18vw;max-width:120px;transition:transform .3s}
+.symbol img:hover{transform:scale(1.1)}
+.symbol.brighter img{filter:brightness(180%)}
+.symbol.locked   img{filter:brightness(50%)}
 
-    /* ========== MENU DE SÍMBOLOS ========== */
-    #menu-overlay{position:fixed;inset:0;background:url(fundo.webp) center/cover no-repeat;
-      display:none;align-items:center;justify-content:center;z-index:9999}
-    #menu-overlay::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
-    #menu-overlay.visible{display:flex}
-    .symbols-wrapper{position:relative;max-width:90vw;max-height:80vh;padding:20px;overflow-y:auto;z-index:1}
-    .symbols-container{display:flex;flex-wrap:wrap;justify-content:center;gap:25px}
-    @keyframes floatWave{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-    .symbol{cursor:pointer;animation:floatWave 4s ease-in-out infinite}
-    .symbol img{width:18vw;max-width:120px;transition:transform .3s}
-    .symbol img:hover{transform:scale(1.1)}
-    .symbol.brighter img{filter:brightness(180%)}
-    .symbol.locked img{filter:brightness(50%)}
+/*--- FLIPBOOK — PORTRAIT ---*/
+@media(orientation:portrait){
+  #flipbook-area{position:fixed;top:50%;left:50%;width:95vh;height:105vw;background:#000;z-index:1000;
+    display:flex;align-items:center;justify-content:center;
+    transform:translate(-50%,100%) rotate(90deg);transform-origin:center center;
+    transition:transform 1.5s ease-out}
+  #flipbook-area.show{transform:translate(-50%,-50%) rotate(90deg)}
+  #flipbook-area.slide-out-down{transform:translate(-50%,100%) rotate(90deg)}
+  #flipbookContainer{width:100vh;height:90vw}
+}
 
-    /* ========== FLIPBOOK AREA – PORTRAIT ========== */
-    @media screen and (orientation:portrait){
-      #flipbook-area{position:fixed;top:50%;left:50%;width:90vh;height:95vw;
-        display:flex;align-items:center;justify-content:center;background:#000;z-index:1000;
-        transform:translate(-50%,100%) rotate(90deg);transform-origin:center center;
-        transition:transform 1.5s ease-out}
-      #flipbook-area.show{transform:translate(-50%,-50%) rotate(90deg)}
-      #flipbook-area.slide-out-down{transform:translate(-50%,100%) rotate(90deg)}
-      #flipbookContainer{width:95vh;height:85vw}
-    }
+/*--- FLIPBOOK — LANDSCAPE / DESKTOP ---*/
+@media(min-width:1024px), (orientation:landscape){
+  #flipbook-area{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;
+    z-index:1000;transform:translateY(100%);transition:transform 1.5s ease-out}
+  #flipbook-area.show{transform:translateY(0)}
+  #flipbook-area.slide-out-down{transform:translateY(100%)}
+  #flipbookContainer{width:90vw;height:88vh;max-width:1100px;max-height:800px}
+}
 
-    /* ========== FLIPBOOK AREA – DESKTOP / LANDSCAPE ========== */
-    @media screen and (min-width:1024px),screen and (orientation:landscape){
-      #flipbook-area{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-        background:#000;z-index:1000;transform:translateY(100%);transition:transform 1.5s ease-out}
-      #flipbook-area.show{transform:translateY(0)}
-      #flipbook-area.slide-out-down{transform:translateY(100%)}
-      #flipbookContainer{width:80vw;height:80vh;max-width:1000px;max-height:700px}
-    }
+/*--- TURN.JS PAGES ---*/
+#flipbookContainer .turn-page{pointer-events:auto;touch-action:none;transform-style:preserve-3d;backface-visibility:hidden}
 
-    /* páginas do turn.js */
-    #flipbookContainer .turn-page{transform-style:preserve-3d;backface-visibility:hidden}
+/*--- OVERLAY IMG ---*/
+#overlayContainer{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.8);z-index:10000}
+#overlayImage{max-width:80%;max-height:80%;transition:transform .3s}
+#btnSair{position:absolute;top:20px;right:20px;padding:10px;font-size:12px;cursor:pointer;
+  background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive}
 
-    /* ========== OVERLAY IMG ========== */
-    #overlayContainer{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;
-      align-items:center;justify-content:center;z-index:10000}
-    #overlayImage{max-width:80%;max-height:80%;transition:transform .3s}
-    #btnSair{position:absolute;top:20px;right:20px;background:rgba(0,0,0,.7);border:2px solid #00FFE7;
-      color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:12px;padding:10px;cursor:pointer}
+/*--- LOADING & SOM ---*/
+#loading-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:99999}
+#loading-text{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:20px}
+#soundPrompt{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:99998}
+#soundPrompt p{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:24px;margin-bottom:30px;text-align:center}
+.soundBtn{background:none;border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;
+  font-size:14px;padding:12px 22px;margin:0 10px;cursor:pointer;transition:background .25s}
+.soundBtn:hover{background:rgba(0,255,231,.25)}
 
-    /* ========== LOADING & SOM ========== */
-    #loading-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:99999}
-    #loading-text{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:20px}
-    #soundPrompt{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:99998}
-    #soundPrompt p{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:24px;margin-bottom:30px;text-align:center}
-    .soundBtn{background:none;border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;
-      font-size:14px;padding:12px 22px;margin:0 10px;cursor:pointer;transition:background .25s}
-    .soundBtn:hover{background:rgba(0,255,231,.2)}
+/*--- VOLTAR ---*/
+#btnVoltar{position:fixed;top:20px;left:20px;padding:10px;font-size:10px;cursor:pointer;z-index:1001;
+  background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;display:none}
+#btnVoltar.show{display:block}
 
-    /* ========== VOLTAR ========== */
-    #btnVoltar{position:fixed;top:20px;left:20px;background:rgba(0,0,0,.7);border:2px solid #00FFE7;
-      color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:10px;padding:10px;cursor:pointer;z-index:1001;display:none}
-    #btnVoltar.show{display:block}
-
-    /* ========== DESKTOP BG EXTRA ========== */
-    @media screen and (min-width:1024px){
-      #app{background:url(fundodesktop.webp) center/cover no-repeat fixed}
-      #omom-title{font-size:64px}
-      #menu-overlay{background:url(fundodesktop.webp) center/cover no-repeat}
-      .symbol img{width:120px;max-width:120px}
-    }
-  </style>
+/*--- DESKTOP BG EXTRA ---*/
+@media(min-width:1024px){
+  #app{background:url(fundodesktop.webp) center/cover no-repeat fixed}
+  #omom-title{font-size:64px}
+  #menu-overlay{background:url(fundodesktop.webp) center/cover no-repeat}
+  .symbol img{width:120px;max-width:120px}
+}
+</style>
 </head>
 
 <body>
-  <div id="orientation-overlay">Por favor, gire o dispositivo para o modo retrato.</div>
+<div id="orientation-overlay">Por favor, gire o dispositivo para o modo retrato.</div>
 
-  <!-- Áudio -->
-  <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
-  <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
+<!-- Áudio -->
+<audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
+<audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
-  <!-- Loading e prompt de som -->
-  <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
-  <div id="soundPrompt">
-    <p>SOM?</p>
-    <div><button class="soundBtn" id="btnYes">SIM</button><button class="soundBtn" id="btnNo">NÃO</button></div>
-  </div>
+<!-- Loading e prompt de som -->
+<div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
+<div id="soundPrompt">
+  <p>SOM?</p>
+  <div><button class="soundBtn" id="btnYes">SIM</button><button class="soundBtn" id="btnNo">NÃO</button></div>
+</div>
 
-  <!-- Título inicial -->
-  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
+<!-- Splash -->
+<div id="omom-screen"><div id="omom-title">OMOM</div></div>
 
-  <!-- App -->
-  <div id="app">
-
-    <!-- Menu de mundos -->
-    <div id="menu-overlay">
-      <div class="symbols-wrapper">
-        <div class="symbols-container">
-          <div class="symbol brighter" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
-          <div class="symbol locked"   data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
-          <!-- ...demais símbolos... -->
-        </div>
+<!-- App -->
+<div id="app">
+  <!-- Menu -->
+  <div id="menu-overlay">
+    <div class="symbols-wrapper">
+      <div class="symbols-container">
+        <div class="symbol brighter" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+        <div class="symbol locked" data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+        <!-- ...outros mundos... -->
       </div>
     </div>
-
-    <!-- Flipbook -->
-    <div id="flipbook-area">
-      <button id="btnVoltar">VOLTAR</button>
-      <div id="flipbookContainer"></div>
-    </div>
   </div>
 
-  <!-- Overlay de imagem -->
-  <div id="overlayContainer">
-    <button id="btnSair">FECHAR</button>
-    <img id="overlayImage" src="" alt="Zoom">
+  <!-- Flipbook -->
+  <div id="flipbook-area">
+    <button id="btnVoltar">VOLTAR</button>
+    <div id="flipbookContainer"></div>
   </div>
+</div>
 
-  <!-- Dependências -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="turn.js"></script>
+<!-- Overlay imagem -->
+<div id="overlayContainer"><button id="btnSair">FECHAR</button><img id="overlayImage" alt="Zoom"></div>
 
-  <script>
-    /* === fades de volume === */
-    function fadeIn(a,ms){
-      a.volume=0;a.play().catch(()=>{});
-      const step=50,dv=step/ms,id=setInterval(()=>{
-        if(a.volume+dv>=1){a.volume=1;clearInterval(id)}
-        else a.volume+=dv;
-      },step)
-    }
-    function fadeOut(a,ms){
-      const step=50,dv=step/ms,id=setInterval(()=>{
-        if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}
-        else a.volume-=dv;
-      },step)
-    }
+<!-- Dependências -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="turn.js"></script>
 
-    let allowSound=false;
+<script>
+/* ==== volume utils ==== */
+function fadeIn(a,ms){a.volume=0;a.play().catch(()=>{});const step=50,dv=step/ms;
+  const id=setInterval(()=>{if(a.volume+dv>=1){a.volume=1;clearInterval(id)}else a.volume+=dv},step)}
+function fadeOut(a,ms){const step=50,dv=step/ms;
+  const id=setInterval(()=>{if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}else a.volume-=dv},step)}
 
-    /* === init Flipbook === */
-    window.initFlipbook = window.initFlipbook || function(sel){
-      setTimeout(()=>{
-        const $el=$(sel);
-        if(!$el.length) return;
-        $el.turn({
-          width:$el.parent().width(),
-          height:$el.parent().height(),
-          autoCenter:true,
-          display:'double',
-          acceleration:true,
-          gradients:true,
-          duration:600
-        });
-        window.addEventListener('resize',()=>{
-          if($el.data('turn')){
-            $el.turn('size',$el.parent().width(),$el.parent().height());
-          }
-        });
-      },100);
-    };
+let allowSound=false;
 
-    /* === boot === */
-    window.addEventListener('load',()=>{
-      document.getElementById('loading-screen').style.display='none';
-      setTimeout(()=>{document.getElementById('soundPrompt').style.display='flex'},1200);
-    });
+/* ==== init flipbook ==== */
+window.initFlipbook=sel=>{
+  const $el=$(sel);
+  if(!$el.length) return;
+  $el.turn({
+    width:$el.parent().width(),
+    height:$el.parent().height(),
+    autoCenter:true,
+    display:'double',
+    acceleration:true,
+    gradients:true,
+    duration:600
+  });
+  window.addEventListener('resize',()=>{
+    if($el.data('turn')) $el.turn('size',$el.parent().width(),$el.parent().height());
+  });
+};
 
-    function startSite(sound){
-      allowSound=sound;
-      document.getElementById('soundPrompt').style.display='none';
-      document.getElementById('omom-screen').style.display='none'; // título não volta
-      if(allowSound) document.getElementById('bgm').play().catch(()=>{});
-      showMenu();
-    }
-    document.getElementById('btnYes').onclick=()=>startSite(true);
-    document.getElementById('btnNo').onclick=()=>startSite(false);
+/* ==== boot ==== */
+window.addEventListener('load',()=>{
+  $('#loading-screen').hide();
+  setTimeout(()=>$('#soundPrompt').css('display','flex'),1200);
+});
 
-    /* === menu === */
-    function showMenu(){
-      document.getElementById('menu-overlay').classList.add('visible');
-      if(allowSound){
-        fadeOut(document.getElementById('bgm'),500);
-        setTimeout(()=>fadeIn(document.getElementById('memories'),1000),500);
-      }
-    }
-    function hideMenu(){
-      document.getElementById('menu-overlay').classList.remove('visible');
-      if(allowSound) fadeOut(document.getElementById('memories'),1000);
-    }
-    document.querySelector('.symbols-container').addEventListener('click',e=>{
-      const sym=e.target.closest('.symbol');
-      if(!sym || sym.classList.contains('locked')) return;
-      launchWorld(sym.dataset.world);
-    });
+function startSite(sound){
+  allowSound=sound;
+  $('#soundPrompt').hide();
+  $('#omom-screen').hide();            // título some de vez
+  if(allowSound) $('#bgm')[0].play().catch(()=>{});
+  showMenu();
+}
+$('#btnYes').on('click',()=>startSite(true));
+$('#btnNo' ).on('click',()=>startSite(false));
 
-    /* === carregar mundo === */
-    function launchWorld(name){
-      hideMenu();
-      const fb=document.getElementById('flipbook-area');
-      if(fb.classList.contains('show')){
-        fb.classList.remove('show');
-        fb.classList.add('slide-out-down');
-        setTimeout(()=>{
-          fb.classList.remove('slide-out-down');
-          loadWorld(name);
-        },1500);
-      } else {
-        loadWorld(name);
-      }
-    }
+/* ==== menu ==== */
+function showMenu(){
+  $('#menu-overlay').addClass('visible');
+  if(allowSound){
+    fadeOut($('#bgm')[0],500);
+    setTimeout(()=>fadeIn($('#memories')[0],1000),500);
+  }
+}
+function hideMenu(){
+  $('#menu-overlay').removeClass('visible');
+  if(allowSound) fadeOut($('#memories')[0],1000);
+}
+$('.symbols-container').on('click','.symbol:not(.locked)',e=>{
+  const world=$(e.currentTarget).data('world');
+  launchWorld(world);
+});
 
-    function loadWorld(name){
-      document.getElementById('flipbookContainer').innerHTML='';
-      document.getElementById('btnVoltar').classList.add('show');
-      const s=document.createElement('script');
-      s.src=name+'.js';
-      document.body.appendChild(s);
-      s.onload=()=>{
-        window.initFlipbook('#flipbookContainer');
-        const fb=document.getElementById('flipbook-area');
-        void fb.offsetWidth; // reflow
-        fb.classList.add('show');
-      };
-    }
+/* ==== carregar mundo ==== */
+function launchWorld(name){
+  hideMenu();
+  const fb=document.getElementById('flipbook-area');
+  if(fb.classList.contains('show')){
+    fb.classList.remove('show');
+    fb.classList.add('slide-out-down');
+    setTimeout(()=>{fb.classList.remove('slide-out-down');loadWorld(name);},1500);
+  }else loadWorld(name);
+}
 
-    /* === voltar === */
-    document.getElementById('btnVoltar').onclick=()=>{
-      const fb=document.getElementById('flipbook-area');
-      fb.classList.remove('show');
-      fb.classList.add('slide-out-down');
-      document.getElementById('btnVoltar').classList.remove('show');
-      setTimeout(()=>{
-        fb.classList.remove('slide-out-down');
-        document.getElementById('flipbookContainer').innerHTML='';
-        showMenu();
-      },1500);
-    };
+function loadWorld(name){
+  $('#flipbookContainer').empty();
+  $('#btnVoltar').addClass('show');
+  const s=document.createElement('script');
+  s.src=`${name}.js`;
+  s.onload=()=>{
+    const fb=document.getElementById('flipbook-area');
+    void fb.offsetWidth;
+    fb.classList.add('show');
+    /* inicia depois que o contêiner já está visível */
+    setTimeout(()=>window.initFlipbook('#flipbookContainer'),300);
+  };
+  document.body.appendChild(s);
+}
 
-    /* === overlay img === */
-    document.getElementById('btnSair').onclick=e=>{
-      e.preventDefault();
-      $('#overlayContainer').fadeOut(300);
-    };
-    document.getElementById('overlayContainer').onclick=e=>{
-      if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300);
-    };
-    window.showImageOverlay=src=>{
-      document.getElementById('overlayImage').src=src;
-      $('#overlayContainer').fadeIn(300);
-    };
-  </script>
+/* ==== voltar ==== */
+$('#btnVoltar').on('click',()=>{
+  const fb=document.getElementById('flipbook-area');
+  fb.classList.remove('show');
+  fb.classList.add('slide-out-down');
+  $('#btnVoltar').removeClass('show');
+  setTimeout(()=>{
+    fb.classList.remove('slide-out-down');
+    $('#flipbookContainer').empty();
+    showMenu();
+  },1500);
+});
+
+/* ==== overlay img ==== */
+$('#btnSair').on('click',e=>{
+  e.preventDefault();
+  $('#overlayContainer').fadeOut(300);
+});
+$('#overlayContainer').on('click',e=>{
+  if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300);
+});
+window.showImageOverlay=src=>{
+  $('#overlayImage').attr('src',src);
+  $('#overlayContainer').fadeIn(300);
+};
+</script>
 </body>
 </html>
