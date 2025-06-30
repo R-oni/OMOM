@@ -2,283 +2,155 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>OMOM SPA</title>
+  <!-- Press Start 2P + Swiper CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
   <style>
-    /* ===== RESET ===== */
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body {
-      width:100%; height:100%; overflow:hidden;
-      background:#000; color:#fff;
-      font-family:'Courier New',monospace;
-    }
+    html, body { width:100%; height:100%; overflow:hidden; background:#000; color:#fff; font-family:'Courier New',monospace }
 
-    /* ===== ORIENTATION LOCK ===== */
-    #orientation-overlay {
-      position:fixed; inset:0;
-      background:#000; color:#fff;
-      display:none; align-items:center; justify-content:center;
-      text-align:center; padding:20px;
-      font-size:18px; font-family:'Courier New',monospace;
-      z-index:100000;
-    }
-    @media screen and (orientation: landscape) {
-      #orientation-overlay { display:flex }
-      #app, #loading-screen, #soundPrompt { display:none !important }
-    }
-
-    /* ===== LOADING & SOM ===== */
-    #loading-screen {
+    /* LOADING + SOM */
+    #loading-screen, #soundPrompt, #omom-screen {
       position:fixed; inset:0; display:flex;
-      background:#000; align-items:center; justify-content:center;
-      z-index:99999;
+      align-items:center; justify-content:center; background:#000; z-index:9999;
     }
-    #loading-text {
-      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px;
-    }
-    #soundPrompt {
-      position:fixed; inset:0; display:none;
-      flex-direction:column; align-items:center; justify-content:center;
-      background:#000; z-index:99998;
-    }
-    #soundPrompt p {
-      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:24px;
-      margin-bottom:30px; text-align:center;
-    }
-    .soundBtn {
-      background:none; border:2px solid #00FFE7;
-      color:#00FFE7; font-family:'Press Start 2P',cursive;
-      font-size:14px; padding:12px 22px; cursor:pointer;
-      transition:background .25s; margin:0 10px;
-    }
-    .soundBtn:hover { background:rgba(0,255,231,0.2) }
-
-    /* ===== SPLASH OMOM ===== */
-    #omom-screen {
-      position:fixed; inset:0; background:#000;
-      display:flex; align-items:center; justify-content:center;
-      z-index:99997;
-    }
-    #omom-title {
-      font-family:'Press Start 2P',cursive; font-size:48px; color:#fff;
-      opacity:0; animation:fadeInTitle 2s ease-in-out forwards;
-    }
+    #loading-screen    { z-index:10000 }
+    #soundPrompt       { display:none; flex-direction:column; z-index:10001 }
+    #soundPrompt p     { font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:24px; margin-bottom:30px; text-align:center }
+    .soundBtn          { background:none; border:2px solid #00FFE7; color:#00FFE7; font-family:'Press Start 2P',cursive; font-size:14px; padding:12px 22px; cursor:pointer; margin:0 10px; transition:background .25s }
+    .soundBtn:hover    { background:rgba(0,255,231,0.2) }
+    #omom-screen       { z-index:10002 }
+    #omom-title        { font-family:'Press Start 2P',cursive; font-size:48px; animation:fadeInTitle 2s forwards; }
     @keyframes fadeInTitle { from{opacity:0} to{opacity:1} }
 
-    /* ===== MENU DE SÍMBOLOS ===== */
+    /* MENU */
     #menu-overlay {
-      position:fixed; inset:0;
+      position:fixed; inset:0; display:none;
       background:url(fundo.webp) center/cover no-repeat;
-      display:none; align-items:center; justify-content:center;
-      z-index:99996;
-    }
-    #menu-overlay::before {
-      content:''; position:absolute; inset:0;
-      background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
+      align-items:center; justify-content:center; z-index:10003;
     }
     #menu-overlay.visible { display:flex }
-    .symbols-wrapper {
-      position:relative; max-width:90vw; max-height:80vh;
-      padding:20px; overflow-y:auto; z-index:1;
+    #menu-overlay::before {
+      content:''; position:absolute; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
     }
-    .symbols-container {
-      display:flex; flex-wrap:wrap; justify-content:center; gap:25px;
-    }
-    @keyframes floatWave {
-      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
-    }
-    .symbol {
-      cursor:pointer; animation:floatWave 4s ease-in-out infinite;
-    }
-    .symbol img {
-      width:18vw; max-width:120px; transition:transform .3s;
-    }
+    .symbols-wrapper { position:relative; max-width:90vw; max-height:80vh; padding:20px; overflow-y:auto; z-index:1 }
+    .symbols-container { display:flex; flex-wrap:wrap; justify-content:center; gap:25px }
+    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)} }
+    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite }
+    .symbol img { width:18vw; max-width:120px; transition:transform .3s }
     .symbol img:hover { transform:scale(1.1) }
     .symbol.brither img { filter:brightness(180%) }
-    .symbol.locked img { filter:brightness(50%) }
+    .symbol.locked img  { filter:brightness(50%) }
 
-    /* ===== FLIPBOOK AREA ===== */
+    /* FLIPBOOK (Swiper) */
     #flipbook-area {
-      position:fixed; inset:0; background:#000;
+      position:fixed; inset:0; display:none;
+      align-items:center; justify-content:center; z-index:10004;
+    }
+    #flipbook-area.show { display:flex }
+    .swiper { width:90vw; height:90vh; }
+    @media (min-width:1024px) {
+      .swiper { width:80vw; height:80vh }
+    }
+    .swiper-slide {
       display:flex; align-items:center; justify-content:center;
-      z-index:1000; transition:transform 1.5s ease-out;
-      transform:translateY(100%);
-    }
-    #flipbook-area.show           { transform:translateY(0) }
-    #flipbook-area.slide-out-down { transform:translateY(100%) }
-
-    /* gira só as páginas, aumenta um pouco */
-    #flipbookContainer {
-      width:90vw; height:90vh; overflow:hidden; touch-action:none;
-    }
-    @media screen and (orientation: portrait) {
-      #flipbookContainer {
-        width:95vh; height:90vw;
-        transform:rotate(90deg);
-        transform-origin:center center;
-      }
-    }
-    @media screen and (min-width:1024px) {
-      #flipbookContainer { width:90vw; height:90vh; transform:none }
+      font-family:'Press Start 2P',cursive; font-size:32px; color:#fff;
+      background:#111;
     }
 
-    /* ===== SETA DE VOLTAR ===== */
+    /* BACK BUTTON */
     #btnVoltar {
       position:fixed; top:20px; left:20px;
       background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
       color:#00FFE7; font-family:'Press Start 2P',cursive;
-      font-size:10px; padding:10px; cursor:pointer;
-      z-index:1001; display:none;
+      font-size:10px; padding:10px; cursor:pointer; z-index:10005; display:none;
     }
-    #btnVoltar:hover { background:rgba(0,0,0,0.9) }
     #btnVoltar.show { display:block }
-
-    /* ===== OVERLAY IMAGEM ===== */
-    #overlayContainer {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.8);
-      display:none; justify-content:center; align-items:center;
-      z-index:10000;
-    }
-    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s }
-    #btnSair {
-      position:absolute; top:20px; right:20px;
-      background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
-      color:#00FFE7; font-family:'Press Start 2P',cursive;
-      font-size:12px; padding:10px; cursor:pointer;
-    }
+    #btnVoltar:hover { background:rgba(0,0,0,0.9) }
   </style>
 </head>
 <body>
-  <div id="orientation-overlay">Por favor, gire o dispositivo para o modo retrato.</div>
+  <!-- LOADING -->
   <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
-
+  <!-- SOM? -->
   <div id="soundPrompt">
     <p>SOM?</p>
-    <div class="btnWrap">
+    <div>
       <button class="soundBtn" id="btnYes">SIM</button>
       <button class="soundBtn" id="btnNo">NÃO</button>
     </div>
   </div>
-
-  <div id="omom-screen">
-    <div id="omom-title">OMOM</div>
-  </div>
-
-  <div id="app">
-    <div id="menu-overlay">
-      <div class="symbols-wrapper">
-        <div class="symbols-container">
-          <!-- dois mundos desbloqueados -->
-          <div class="symbol brither" data-world="veleywei">
-            <img src="assets/veleyweimenu.png" alt="Velei'wey">
-          </div>
-          <div class="symbol brither" data-world="batedores">
-            <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
-          </div>
-          <!-- exemplo de trancado -->
-          <div class="symbol locked" data-world="botychera">
-            <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
-          </div>
-        </div>
+  <!-- SPLASH OMOM -->
+  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
+  <!-- MENU -->
+  <div id="menu-overlay">
+    <div class="symbols-wrapper">
+      <div class="symbols-container">
+        <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
+        <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
+        <div class="symbol locked"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
       </div>
     </div>
-
-    <div id="flipbook-area">
-      <button id="btnVoltar">VOLTAR</button>
-      <div id="flipbookContainer"></div>
+  </div>
+  <!-- FLIPBOOK AREA -->
+  <div id="flipbook-area">
+    <button id="btnVoltar">VOLTAR</button>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <!-- exemplo de 5 páginas -->
+        <div class="swiper-slide">Página 1</div>
+        <div class="swiper-slide">Página 2</div>
+        <div class="swiper-slide">Página 3</div>
+        <div class="swiper-slide">Página 4</div>
+        <div class="swiper-slide">Página 5</div>
+      </div>
     </div>
   </div>
 
-  <div id="overlayContainer">
-    <button id="btnSair">FECHAR</button>
-    <img id="overlayImage" src="" alt="Zoom">
-  </div>
-
-  <!-- libs -->
+  <!-- JS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="turn.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
   <script>
-    // fade helpers
-    function fadeIn(a,ms){a.volume=0;a.play().catch(()=>{});const step=50,dv=step/ms,id=setInterval(()=>{if(a.volume+dv>=1){a.volume=1;clearInterval(id)}else a.volume+=dv},step)}
-    function fadeOut(a,ms){const step=50,dv=step/ms,id=setInterval(()=>{if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}else a.volume-=dv},step)}
-
     let allowSound=false;
-    window.addEventListener('load',()=>{
-      document.getElementById('loading-screen').style.display='none';
-      setTimeout(()=>document.getElementById('soundPrompt').style.display='flex',2000);
+    window.addEventListener('load', ()=> {
+      $('#loading-screen').hide();
+      setTimeout(()=> $('#soundPrompt').show(), 2000);
     });
 
     function startSite(sound){
       allowSound=sound;
-      document.getElementById('soundPrompt').style.display='none';
-      // depois do prompt, oculta o splash OMOM
-      document.getElementById('omom-screen').style.display='none';
+      $('#soundPrompt').hide();
+      // após prompt, esconde splash
+      $('#omom-screen').hide();
       showMenu();
     }
-    document.getElementById('btnYes').onclick=()=>startSite(true);
-    document.getElementById('btnNo').onclick=()=>startSite(false);
+    $('#btnYes').click(()=>startSite(true));
+    $('#btnNo').click(()=>startSite(false));
 
-    function showMenu(){ document.getElementById('menu-overlay').classList.add('visible') }
-    function hideMenu(){ document.getElementById('menu-overlay').classList.remove('visible') }
+    function showMenu(){ $('#menu-overlay').addClass('visible') }
+    function hideMenu(){ $('#menu-overlay').removeClass('visible') }
 
-    document.querySelector('.symbols-container').addEventListener('click',e=>{
-      const sym=e.target.closest('.symbol');
-      if(!sym||sym.classList.contains('locked'))return;
-      launchWorld(sym.dataset.world);
+    $('.symbol.brither').click(function(){
+      hideMenu();
+      $('#flipbook-area').addClass('show');
+      initFlipbook();
     });
 
-    function launchWorld(name){
-      hideMenu();
-      const fb=document.getElementById('flipbook-area');
-      if(fb.classList.contains('show')){
-        fb.classList.remove('show');
-        fb.classList.add('slide-out-down');
-        setTimeout(()=>{ fb.classList.remove('slide-out-down'); loadWorld(name) },1500);
-      } else loadWorld(name);
-    }
-
-    function loadWorld(name){
-      document.getElementById('flipbookContainer').innerHTML='';
-      document.getElementById('btnVoltar').classList.add('show');
-      const s=document.createElement('script');
-      s.src=name+'.js';
-      document.body.appendChild(s);
-
-      s.onload=()=>{
-        window.initFlipbook?.('#flipbookContainer');
-
-        // captura swipe vertical em todo o flipbook-area
-        const hm=new Hammer(document.getElementById('flipbook-area'));
-        hm.get('swipe').set({direction:Hammer.DIRECTION_VERTICAL});
-        hm.on('swipeup',  ()=>$('#flipbookContainer').turn('next'));
-        hm.on('swipedown',()=>$('#flipbookContainer').turn('previous'));
-
-        // mostra flipbook
-        const fb=document.getElementById('flipbook-area');
-        void fb.offsetWidth;
-        fb.classList.add('show');
-      };
-    }
-
-    document.getElementById('btnVoltar').onclick=()=>{
-      const fb=document.getElementById('flipbook-area');
-      fb.classList.remove('show'); fb.classList.add('slide-out-down');
-      document.getElementById('btnVoltar').classList.remove('show');
-      setTimeout(()=>{
-        fb.classList.remove('slide-out-down');
-        document.getElementById('flipbookContainer').innerHTML='';
+    function initFlipbook(){
+      const swiper = new Swiper('.swiper', {
+        direction: 'vertical',
+        effect: 'flip',
+        flipEffect: { slideShadows: false },
+        grabCursor: true,
+      });
+      $('#btnVoltar').addClass('show').click(()=>{
+        $('#flipbook-area').removeClass('show');
+        $('#btnVoltar').removeClass('show');
         showMenu();
-      },1500);
-    };
-
-    document.getElementById('btnSair').onclick=e=>{e.preventDefault();$('#overlayContainer').fadeOut(300)};
-    document.getElementById('overlayContainer').onclick=e=>{if(e.target===e.currentTarget)$('#overlayContainer').fadeOut(300)};
-    window.showImageOverlay=src=>{$('#overlayImage').attr('src',src);$('#overlayContainer').fadeIn(300)};
+      });
+    }
   </script>
 </body>
 </html>
