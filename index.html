@@ -38,19 +38,11 @@
     }
     #menu-overlay.visible { display:flex }
     #menu-overlay::before {
-      content:''; position:absolute; inset:0;
-      background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
+      content:''; position:absolute; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
     }
-    .symbols-wrapper {
-      position:relative; max-width:90vw; max-height:80vh;
-      padding:20px; overflow-y:auto; z-index:1;
-    }
-    .symbols-container {
-      display:flex; flex-wrap:wrap; justify-content:center; gap:25px;
-    }
-    @keyframes floatWave {
-      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
-    }
+    .symbols-wrapper { position:relative; max-width:90vw; max-height:80vh; padding:20px; overflow-y:auto; z-index:1 }
+    .symbols-container { display:flex; flex-wrap:wrap; justify-content:center; gap:25px }
+    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)} }
     .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite }
     .symbol img { width:18vw; max-width:120px; transition:transform .3s }
     .symbol img:hover { transform:scale(1.1) }
@@ -61,28 +53,24 @@
     #flipbook-area {
       position:fixed; inset:0; background:#000;
       display:flex; align-items:center; justify-content:center;
-      z-index:1000; transform:translateY(100%);
-      transition:transform 1.5s ease-out;
+      z-index:1000; transform:translateY(100%); transition:transform 1.5s ease-out;
     }
     #flipbook-area.show { transform:translateY(0) }
     #flipbook-area.slide-out-down { transform:translateY(100%) }
     #flipbookContainer {
-      width:95vw; height:90vh;
-      max-width:800px; max-height:600px;
+      width:95vw; height:90vh; max-width:800px; max-height:600px;
     }
 
-    /* ===== OVERLAY IMAGEM ===== */
-    #overlayContainer {
-      position:fixed; inset:0; background:rgba(0,0,0,0.8);
-      display:none; justify-content:center; align-items:center; z-index:10000;
-    }
-    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s }
-    #btnSair {
-      position:absolute; top:20px; right:20px;
+    /* ===== SETA DE VOLTAR ===== */
+    #btnVoltar {
+      position:fixed; top:20px; left:20px;
       background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
       color:#00FFE7; font-family:'Press Start 2P',cursive;
-      font-size:12px; padding:10px; cursor:pointer;
+      font-size:10px; padding:10px; cursor:pointer;
+      z-index:1001; display:none;
     }
+    #btnVoltar.show { display:block }
+    #btnVoltar:hover { background:rgba(0,0,0,0.9) }
 
     /* ===== LOADING & SOM ===== */
     #loading-screen {
@@ -108,31 +96,13 @@
     }
     .soundBtn:hover { background:rgba(0,255,231,0.2) }
 
-    /* ===== SETA DE VOLTAR ===== */
-    #btnVoltar {
-      position:fixed; top:20px; left:20px;
-      background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
-      color:#00FFE7; font-family:'Press Start 2P',cursive;
-      font-size:10px; padding:10px; cursor:pointer;
-      z-index:1001; display:none;
-    }
-    #btnVoltar.show { display:block }
-    #btnVoltar:hover { background:rgba(0,0,0,0.9) }
-
     /* ===== DESKTOP ===== */
     @media screen and (min-width:1024px) {
       #app { background:url(fundodesktop.webp) center/cover no-repeat fixed }
       #omom-title { font-size:64px }
       #menu-overlay { background:url(fundodesktop.webp) center/cover no-repeat }
-      #flipbookContainer {
-        width:80vw; height:80vh; max-width:1000px; max-height:700px;
-      }
+      #flipbookContainer { width:80vw; height:80vh; max-width:1000px; max-height:700px }
       .symbol img { width:120px; max-width:120px }
-    }
-
-    /* ===== MOBILE LANDSCAPE ===== */
-    @media screen and (max-width:1023px) and (orientation:landscape) {
-      #flipbookContainer { width:95vw; height:85vh }
     }
   </style>
 </head>
@@ -143,9 +113,7 @@
   <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
   <!-- loading -->
-  <div id="loading-screen">
-    <div id="loading-text">CARREGANDO…</div>
-  </div>
+  <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
 
   <!-- prompt som -->
   <div id="soundPrompt">
@@ -156,14 +124,11 @@
     </div>
   </div>
 
-  <!-- tela inicial OMOM -->
-  <div id="omom-screen">
-    <div id="omom-title">OMOM</div>
-  </div>
+  <!-- splash OMOM -->
+  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
 
-  <!-- palco principal -->
   <div id="app">
-    <!-- menu de símbolos -->
+    <!-- menu -->
     <div id="menu-overlay">
       <div class="symbols-wrapper">
         <div class="symbols-container">
@@ -180,55 +145,43 @@
       </div>
     </div>
 
-    <!-- área do flipbook -->
+    <!-- flipbook -->
     <div id="flipbook-area">
       <button id="btnVoltar">VOLTAR</button>
-      <div id="flipbookContainer">
-        <!-- exemplo de conteúdo: 3 páginas -->
-        <div><img src="https://via.placeholder.com/600x800/111/fff?text=Página+1" style="width:100%;height:100%;object-fit:cover"></div>
-        <div><img src="https://via.placeholder.com/600x800/222/fff?text=Página+2" style="width:100%;height:100%;object-fit:cover"></div>
-        <div><img src="https://via.placeholder.com/600x800/333/fff?text=Página+3" style="width:100%;height:100%;object-fit:cover"></div>
-      </div>
+      <div id="flipbookContainer"></div>
     </div>
-  </div>
-
-  <!-- overlay imagem -->
-  <div id="overlayContainer">
-    <button id="btnSair">FECHAR</button>
-    <img id="overlayImage" src="" alt="Zoom">
   </div>
 
   <!-- libs -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <script>
-    // ==== FADE AUDIO ====
     function fadeIn(a, ms) {
       a.volume = 0; a.play().catch(()=>{});
-      const step=50, dv=step/ms, id=setInterval(()=>{
-        if(a.volume+dv>=1){a.volume=1;clearInterval(id)}
-        else a.volume+=dv;
-      },step);
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id) }
+        else a.volume += dv;
+      }, step);
     }
     function fadeOut(a, ms) {
-      const step=50, dv=step/ms, id=setInterval(()=>{
-        if(a.volume-dv<=0){a.volume=0;clearInterval(id);a.pause();a.currentTime=0}
-        else a.volume-=dv;
-      },step);
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime=0 }
+        else a.volume -= dv;
+      }, step);
     }
 
-    let allowSound=false;
-    window.addEventListener('load',()=>{
+    let allowSound = false;
+
+    window.addEventListener('load', ()=>{
       $('#loading-screen').hide();
       $('#soundPrompt').show();
     });
 
-    function startSite(sound){
-      allowSound=sound;
+    function startSite(sound) {
+      allowSound = sound;
       $('#soundPrompt').hide();
-      if(allowSound) $('#bgm')[0].play().catch(()=>{});
+      if (allowSound) $('#bgm')[0].play().catch(()=>{});
       setTimeout(()=>{
         $('#omom-screen').hide();
         showMenu();
@@ -237,35 +190,46 @@
     $('#btnYes').click(()=>startSite(true));
     $('#btnNo').click(()=>startSite(false));
 
-    function showMenu(){ $('#menu-overlay').addClass('visible') }
-    function hideMenu(){ $('#menu-overlay').removeClass('visible') }
+    function showMenu() { $('#menu-overlay').addClass('visible') }
+    function hideMenu() { $('#menu-overlay').removeClass('visible') }
 
     $('.symbol.brither').click(function(){
+      const name = $(this).data('world');
       hideMenu();
       $('#flipbook-area').addClass('show');
       $('#btnVoltar').addClass('show');
-
-      // inicializa turn.js em single page
-      $('#flipbookContainer').turn({
-        width: $('#flipbookContainer').width(),
-        height: $('#flipbookContainer').height(),
-        display: 'single',
-        autoCenter: true,
-        gradients: true,
-        acceleration: true
-      });
+      // Destroy previous if exists
+      if ($('#flipbookContainer').data('turn')) {
+        $('#flipbookContainer').turn('destroy');
+        $('#flipbookContainer').empty();
+      }
+      // Load world script
+      const s = document.createElement('script');
+      s.src = name + '.js';
+      document.body.appendChild(s);
+      s.onload = ()=>{
+        // initFlipbook should populate flipbookContainer with pages
+        window.initFlipbook?.('#flipbookContainer');
+        // initialize turn.js single-page
+        $('#flipbookContainer').turn({
+          width: $('#flipbookContainer').width(),
+          height: $('#flipbookContainer').height(),
+          display: 'single',
+          autoCenter: true,
+          gradients: true,
+          acceleration: true
+        });
+      };
     });
 
     $('#btnVoltar').click(()=>{
-      $('#flipbookContainer').turn('destroy');
+      if ($('#flipbookContainer').data('turn')) {
+        $('#flipbookContainer').turn('destroy').empty();
+      }
       $('#flipbook-area').removeClass('show');
       $('#btnVoltar').removeClass('show');
       showMenu();
     });
-
-    $('#btnSair').click(e=>{e.preventDefault();$('#overlayContainer').fadeOut(300)});
-    $('#overlayContainer').click(e=>{ if(e.target===e.currentTarget) $('#overlayContainer').fadeOut(300) });
-    window.showImageOverlay=src=>{$('#overlayImage').attr('src',src);$('#overlayContainer').fadeIn(300)};
   </script>
 </body>
 </html>
