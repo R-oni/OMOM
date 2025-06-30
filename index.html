@@ -1,175 +1,350 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>OMOM SPA</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OMOM SPA</title>
 
-<style>
-/* ——— RESET ——— */
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:'Courier New',monospace}
+  <!-- fonte pixel-art -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
-/* ——— BLOQUEIO LANDSCAPE ——— */
-#orientation-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#000;color:#fff;z-index:10;padding:20px;text-align:center}
-@media(orientation:landscape){
-  #orientation-overlay{display:flex}
-  #app,#omom-screen,#loading-screen,#soundPrompt{display:none!important}
-}
+  <style>
+    /* ===== RESET ===== */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body {
+      width:100%; height:100%; overflow:hidden;
+      background:#000; color:#fff;
+      font-family:'Courier New',monospace;
+    }
 
-/* ——— SPLASH ——— */
-#omom-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:9}
-#omom-title{font-family:'Press Start 2P',cursive;font-size:48px;color:#fff;opacity:0;animation:fade 2s forwards}@keyframes fade{to{opacity:1}}
+    /* ===== ORIENTATION LOCK PARA MODO RETRATO ===== */
+    #orientation-overlay {
+      position:fixed; inset:0;
+      background:#000; color:#fff;
+      display:none; align-items:center; justify-content:center;
+      text-align:center; padding:20px;
+      font-family:'Courier New',monospace; font-size:18px;
+      z-index:100000;
+    }
+    @media screen and (orientation: portrait) {
+      #orientation-overlay { display:flex; }
+      #orientation-overlay p { font-size:24px; }
+      /* esconde tudo quando em retrato */
+      #app, #omom-screen, #loading-screen, #soundPrompt { display:none!important; }
+    }
 
-/* ——— MENU ——— */
-#menu-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:url(fundo.webp) center/cover no-repeat;z-index:8}
-#menu-overlay::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
-#menu-overlay.visible{display:flex}
-.symbols-wrapper{position:relative;max-width:90vw;max-height:80vh;padding:20px;overflow-y:auto;z-index:1}
-.symbols-container{display:flex;flex-wrap:wrap;gap:25px;justify-content:center}
-@keyframes float{50%{transform:translateY(-4px)}}
-.symbol{cursor:pointer;animation:float 4s ease-in-out infinite}
-.symbol img{width:18vw;max-width:130px;transition:.3s}
-.symbol img:hover{transform:scale(1.1)}
-.symbol.brighter img{filter:brightness(180%)}
-.symbol.locked   img{filter:brightness(50%)}
+    /* ===== CONTAINER PRINCIPAL ===== */
+    #app {
+      width:100%; height:100%; position:relative; background:#000;
+    }
 
-/* ——— FLIPBOOK (retrato - girado 90°) ——— */
-@media(orientation:portrait){
-  #flipbook-area{position:fixed;top:50%;left:50%;width:100vh;height:110vw;background:#000;z-index:7;
-    display:flex;align-items:center;justify-content:center;
-    transform:translate(-50%,100%) rotate(90deg);transform-origin:center center;
-    transition:transform 1s ease-out}
-  #flipbook-area.show{transform:translate(-50%,-50%) rotate(90deg)}
-  #flipbook-area.slide-out-down{transform:translate(-50%,100%) rotate(90deg)}
-  #flipbookContainer{width:100vh;height:104vw}
-}
+    /* ===== TELA INICIAL OMOM ===== */
+    #omom-screen {
+      position:fixed; inset:0; background:#000;
+      display:flex; align-items:center; justify-content:center;
+      z-index:9998;
+    }
+    #omom-title {
+      font-family:'Press Start 2P',cursive; font-size:48px;
+      opacity:0; animation:fadeInTitle 2s forwards;
+    }
+    @keyframes fadeInTitle { to { opacity:1; } }
 
-/* ——— FLIPBOOK (paisagem/desktop – sem rotação) ——— */
-@media(min-width:1024px),(orientation:landscape){
-  #flipbook-area{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:7;
-    transform:translateY(100%);transition:transform 1s ease-out}
-  #flipbook-area.show{transform:translateY(0)}
-  #flipbook-area.slide-out-down{transform:translateY(100%)}
-  #flipbookContainer{width:95vw;height:92vh;max-width:1200px;max-height:850px}
-}
+    /* ===== MENU DE SÍMBOLOS ===== */
+    #menu-overlay {
+      position:fixed; inset:0;
+      background:url(fundo.webp) center/cover no-repeat;
+      display:none; align-items:center; justify-content:center;
+      z-index:9999;
+    }
+    #menu-overlay::before {
+      content:''; position:absolute; inset:0;
+      background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
+    }
+    #menu-overlay.visible { display:flex; }
+    .symbols-wrapper {
+      position:relative; max-width:90vw; max-height:80vh;
+      padding:20px; overflow-y:auto; z-index:1;
+    }
+    .symbols-container {
+      display:flex; flex-wrap:wrap; gap:25px; justify-content:center;
+    }
+    .symbol {
+      cursor:pointer; animation:floatWave 4s ease-in-out infinite;
+    }
+    @keyframes floatWave {50%{transform:translateY(-4px)}}
+    .symbol img {
+      width:18vw; max-width:120px; transition:transform .3s;
+    }
+    .symbol img:hover { transform:scale(1.1); }
+    .symbol.brither img { filter:brightness(180%); }
+    .symbol.locked img  { filter:brightness(50%); }
 
-/* turn.js pages */
-#flipbookContainer .turn-page{pointer-events:auto;touch-action:none;backface-visibility:hidden;transform-style:preserve-3d}
+    /* ===== FLIPBOOK AREA (LANDSCAPE) ===== */
+    #flipbook-area {
+      position:fixed; inset:0; background:#000;
+      display:flex; align-items:center; justify-content:center;
+      transform:translateY(100%); transition:transform 1s ease-out;
+      z-index:1000;
+    }
+    #flipbook-area.show { transform:translateY(0); }
+    #flipbook-area.slide-out-down { transform:translateY(100%); }
+    #flipbookContainer {
+      width:96vw; height:94vh;
+      max-width:1100px; max-height:800px;
+    }
+    #flipbookContainer .turn-page {
+      transform-style:preserve-3d; backface-visibility:hidden;
+    }
 
-/* ——— BOTÕES / OVERLAY ——— */
-#btnVoltar{position:fixed;top:18px;left:18px;padding:10px;font-size:10px;font-family:'Press Start 2P',cursive;background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;cursor:pointer;z-index:8;display:none}
-#btnVoltar.show{display:block}
-#overlayContainer{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:11}
-#overlayImage{max-width:80%;max-height:80%}
-#btnSair{position:absolute;top:20px;right:20px;padding:10px;font-size:12px;font-family:'Press Start 2P',cursive;background:rgba(0,0,0,.7);border:2px solid #00FFE7;color:#00FFE7;cursor:pointer}
+    /* ===== OVERLAY IMAGEM ===== */
+    #overlayContainer {
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,0.8); z-index:10000;
+    }
+    #overlayImage {
+      max-width:80%; max-height:80%; transition:transform .3s;
+    }
+    #btnSair {
+      position:absolute; top:20px; right:20px;
+      background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
+      color:#00FFE7; font-family:'Press Start 2P',cursive;
+      font-size:12px; padding:10px; cursor:pointer;
+    }
 
-/* ——— LOADING / SOM ——— */
-#loading-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:12}
-#loading-text{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:20px}
-#soundPrompt{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:11}
-#soundPrompt p{font-family:'Press Start 2P',cursive;color:#00FFE7;font-size:24px;margin-bottom:30px;text-align:center}
-.soundBtn{background:none;border:2px solid #00FFE7;color:#00FFE7;font-family:'Press Start 2P',cursive;font-size:14px;padding:12px 22px;margin:0 10px;cursor:pointer;transition:.25s}
-.soundBtn:hover{background:rgba(0,255,231,.25)}
-</style>
+    /* ===== LOADING & SOM ===== */
+    #loading-screen {
+      position:fixed; inset:0; display:flex;
+      align-items:center; justify-content:center;
+      background:#000; z-index:99998;
+    }
+    #loading-text {
+      font-family:'Press Start 2P',cursive;
+      color:#00FFE7; font-size:20px;
+    }
+    #soundPrompt {
+      position:fixed; inset:0; display:none;
+      flex-direction:column; align-items:center;
+      justify-content:center; background:#000; z-index:99997;
+    }
+    #soundPrompt p {
+      font-family:'Press Start 2P',cursive;
+      color:#00FFE7; font-size:24px;
+      margin-bottom:30px; text-align:center;
+    }
+    .soundBtn {
+      background:none; border:2px solid #00FFE7;
+      color:#00FFE7; font-family:'Press Start 2P',cursive;
+      font-size:14px; padding:12px 22px;
+      margin:0 10px; cursor:pointer; transition:background .25s;
+    }
+    .soundBtn:hover { background:rgba(0,255,231,0.2); }
+
+    /* ===== BOTÃO VOLTAR ===== */
+    #btnVoltar {
+      position:fixed; top:20px; left:20px;
+      background:rgba(0,0,0,0.7); border:2px solid #00FFE7;
+      color:#00FFE7; font-family:'Press Start 2P',cursive;
+      font-size:10px; padding:10px; cursor:pointer;
+      z-index:1001; display:none;
+    }
+    #btnVoltar.show { display:block; }
+
+    /* ===== REMOVER BLOQUEIO EM LANDSCAPE ===== */
+    @media screen and (min-width:1024px), screen and (orientation: landscape) {
+      /* flipbook visível em landscape */
+      #orientation-overlay { display: none!important; }
+      #app, #omom-screen, #loading-screen, #soundPrompt { display: block!important; }
+    }
+  </style>
 </head>
 
 <body>
-<div id="orientation-overlay">Por favor, gire o dispositivo para o modo retrato.</div>
+  <!-- overlay instrui girar -->
+  <div id="orientation-overlay">
+    <p>Por favor, gire o dispositivo para o modo paisagem.</p>
+  </div>
 
-<audio id="bgm"      src="animus.mp3"   preload="auto" loop></audio>
-<audio id="memories" src="memories.mp3" preload="auto" loop></audio>
+  <!-- áudio -->
+  <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
+  <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
-<div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
-<div id="soundPrompt"><p>SOM?</p><div><button class="soundBtn" id="btnYes">SIM</button><button class="soundBtn" id="btnNo">NÃO</button></div></div>
+  <!-- loading -->
+  <div id="loading-screen">
+    <div id="loading-text">CARREGANDO…</div>
+  </div>
 
-<div id="omom-screen"><div id="omom-title">OMOM</div></div>
-
-<div id="app">
-  <!-- MENU -->
-  <div id="menu-overlay">
-    <div class="symbols-wrapper">
-      <div class="symbols-container">
-        <div class="symbol brighter" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
-        <div class="symbol locked"   data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
-        <!-- ... outros mundos ... -->
-      </div>
+  <!-- prompt som -->
+  <div id="soundPrompt">
+    <p>SOM?</p>
+    <div>
+      <button class="soundBtn" id="btnYes">SIM</button>
+      <button class="soundBtn" id="btnNo">NÃO</button>
     </div>
   </div>
 
-  <!-- FLIPBOOK -->
-  <div id="flipbook-area">
-    <button id="btnVoltar">VOLTAR</button>
-    <div id="flipbookContainer"></div>
+  <!-- splash OMOM -->
+  <div id="omom-screen">
+    <div id="omom-title">OMOM</div>
   </div>
-</div>
 
-<!-- OVERLAY -->
-<div id="overlayContainer"><button id="btnSair">FECHAR</button><img id="overlayImage"></div>
+  <!-- app -->
+  <div id="app">
+    <!-- menu de mundos -->
+    <div id="menu-overlay">
+      <div class="symbols-wrapper">
+        <div class="symbols-container">
+          <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei&#039;wey"></div>
+          <div class="symbol locked" data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
+          <!-- demais símbolos... -->
+        </div>
+      </div>
+    </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="turn.js"></script>
+    <!-- flipbook area -->
+    <div id="flipbook-area">
+      <button id="btnVoltar">VOLTAR</button>
+      <div id="flipbookContainer"></div>
+    </div>
+  </div>
 
-<script>
-/* volume helpers */
-function fadeIn(a,ms){a.volume=0;a.play().catch(()=>{});const d=50,v=d/ms,s=setInterval(()=>{a.volume+v>=1?(a.volume=1,clearInterval(s)):a.volume+=v},d)}
-function fadeOut(a,ms){const d=50,v=d/ms,s=setInterval(()=>{a.volume-v<=0?(a.volume=0,a.pause(),a.currentTime=0,clearInterval(s)):a.volume-=v},d)}
-let allowSound=false;
+  <!-- overlay imagem -->
+  <div id="overlayContainer">
+    <button id="btnSair">FECHAR</button>
+    <img id="overlayImage" src="" alt="Zoom">
+  </div>
 
-/* ——— inicializa turn.js somente quando a 1ª página existir ——— */
-function initBookWhenReady(){
-  const el=document.getElementById('flipbookContainer');
-  const obs=new MutationObserver(()=>{if(el.children.length){obs.disconnect();
-    $('#flipbookContainer').turn({width:el.parentElement.clientWidth,height:el.parentElement.clientHeight,autoCenter:true,gradients:true,duration:600});
-    enableVerticalSwipe();}});
-  obs.observe(el,{childList:true});
-}
+  <!-- libs -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="turn.js"></script>
 
-/* ——— boot ——— */
-window.addEventListener('load',()=>{$('#loading-screen').hide();setTimeout(()=>$('#soundPrompt').show(),600)});
-$('#btnYes').on('click',()=>start(true));
-$('#btnNo' ).on('click',()=>start(false));
-function start(sound){allowSound=sound;$('#soundPrompt,#omom-screen').hide();if(allowSound)$('#bgm')[0].play().catch(()=>{});showMenu();}
+  <script>
+    // --- fade helpers ---
+    function fadeIn(a, ms) {
+      a.volume = 0; a.play().catch(()=>{});
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume + dv >= 1) { a.volume = 1; clearInterval(id); }
+        else a.volume += dv;
+      }, step);
+    }
+    function fadeOut(a, ms) {
+      const step = 50, dv = step/ms, id = setInterval(()=>{
+        if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime = 0; }
+        else a.volume -= dv;
+      }, step);
+    }
 
-/* ——— menu ——— */
-function showMenu(){$('#menu-overlay').addClass('visible');if(allowSound){fadeOut($('#bgm')[0],400);setTimeout(()=>fadeIn($('#memories')[0],800),400)}}
-function hideMenu(){$('#menu-overlay').removeClass('visible');if(allowSound)fadeOut($('#memories')[0],600)}
-$('.symbols-container').on('click','.symbol:not(.locked)',e=>launch($(e.currentTarget).data('world')));
+    let allowSound = false;
 
-/* ——— carregar mundo ——— */
-function launch(name){
-  hideMenu();
-  const fb=document.getElementById('flipbook-area');
-  if(fb.classList.contains('show')){fb.classList.remove('show');fb.classList.add('slide-out-down');
-    setTimeout(()=>{fb.classList.remove('slide-out-down');loadWorld(name)},900);}
-  else loadWorld(name);
-}
-function loadWorld(name){
-  $('#flipbookContainer').empty();$('#btnVoltar').addClass('show');
-  const s=document.createElement('script');s.src=name+'.js';document.body.appendChild(s);
-  s.onload=()=>{document.getElementById('flipbook-area').classList.add('show');initBookWhenReady();}
-}
+    // boot
+    window.addEventListener('load', ()=>{
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('soundPrompt').style.display = 'flex';
+    });
+    document.getElementById('btnYes').onclick = ()=> startSite(true);
+    document.getElementById('btnNo').onclick  = ()=> startSite(false);
 
-/* ——— voltar ——— */
-$('#btnVoltar').on('click',()=>{const fb=document.getElementById('flipbook-area');fb.classList.remove('show');fb.classList.add('slide-out-down');
-  $('#btnVoltar').removeClass('show');setTimeout(()=>{fb.classList.remove('slide-out-down');$('#flipbookContainer').empty();showMenu()},900)});
+    function startSite(sound) {
+      allowSound = sound;
+      document.getElementById('soundPrompt').style.display = 'none';
+      if (allowSound) fadeIn(document.getElementById('bgm'), 500);
+      setTimeout(()=>{
+        document.getElementById('omom-screen').style.display = 'none';
+        showMenu();
+      }, 3000);
+    }
 
-/* ——— overlay ——— */
-$('#btnSair').on('click',e=>{e.preventDefault();$('#overlayContainer').fadeOut(300)});
-$('#overlayContainer').on('click',e=>{if(e.target===e.currentTarget)$('#overlayContainer').fadeOut(300)});
-window.showImageOverlay=src=>{$('#overlayImage').attr('src',src);$('#overlayContainer').fadeIn(300)};
+    // menu
+    function showMenu() {
+      document.getElementById('menu-overlay').classList.add('visible');
+      if (allowSound) {
+        fadeOut(document.getElementById('bgm'), 500);
+        setTimeout(()=> fadeIn(document.getElementById('memories'), 1000), 500);
+      }
+    }
+    function hideMenu() {
+      document.getElementById('menu-overlay').classList.remove('visible');
+      if (allowSound) fadeOut(document.getElementById('memories'), 500);
+    }
 
-/* ——— swipe vertical (porque livro está girado) ——— */
-function enableVerticalSwipe(){
-  const c=document.getElementById('flipbookContainer');if(!c)return;
-  let y0=0;
-  c.addEventListener('touchstart',e=>{y0=e.touches[0].clientY});
-  c.addEventListener('touchend',e=>{const dy=e.changedTouches[0].clientY-y0;if(Math.abs(dy)<30)return;
-    dy<0?$('#flipbookContainer').turn('next'):$('#flipbookContainer').turn('previous');});
-  /* clique desktop */
-  c.addEventListener('click',e=>{const r=c.getBoundingClientRect();e.clientX>r.left+r.width/2?$('#flipbookContainer').turn('next'):$('#flipbookContainer').turn('previous');});
-}
-</script>
+    // seleção de mundo
+    document.querySelector('.symbols-container').addEventListener('click', e=>{
+      const sym = e.target.closest('.symbol');
+      if (!sym || sym.classList.contains('locked')) return;
+      launchWorld(sym.dataset.world);
+    });
+
+    function launchWorld(name) {
+      hideMenu();
+      const fb = document.getElementById('flipbook-area');
+      if (fb.classList.contains('show')) {
+        fb.classList.remove('show');
+        fb.classList.add('slide-out-down');
+        setTimeout(() => {
+          fb.classList.remove('slide-out-down');
+          loadWorld(name);
+        }, 1500);
+      } else loadWorld(name);
+    }
+
+    function loadWorld(name) {
+      document.getElementById('flipbookContainer').innerHTML = '';
+      document.getElementById('btnVoltar').classList.add('show');
+      const s = document.createElement('script');
+      s.src = name + '.js';
+      s.onload = initFlipbookAndSwipe;
+      document.body.appendChild(s);
+    }
+
+    function initFlipbookAndSwipe() {
+      const $fb = $('#flipbookContainer');
+      // inicializa turn.js
+      $fb.turn({
+        width: $fb.parent().width(),
+        height: $fb.parent().height(),
+        autoCenter: true,
+        gradients: true,
+        duration: 600
+      });
+      // swipe vertical bottom→top
+      let startY = 0;
+      const el = document.getElementById('flipbookContainer');
+      el.addEventListener('touchstart', e=> startY = e.touches[0].clientY);
+      el.addEventListener('touchend', e=>{
+        const dy = e.changedTouches[0].clientY - startY;
+        if (Math.abs(dy) < 30) return;
+        if (dy < 0) $fb.turn('next');
+        else        $fb.turn('previous');
+      });
+      // mostra o flipbook
+      const fbArea = document.getElementById('flipbook-area');
+      void fbArea.offsetWidth;
+      fbArea.classList.add('show');
+    }
+
+    // voltar
+    document.getElementById('btnVoltar').onclick = ()=>{
+      const fb = document.getElementById('flipbook-area');
+      fb.classList.remove('show');
+      fb.classList.add('slide-out-down');
+      document.getElementById('btnVoltar').classList.remove('show');
+      setTimeout(()=>{
+        fb.classList.remove('slide-out-down');
+        document.getElementById('flipbookContainer').innerHTML = '';
+        showMenu();
+      }, 1500);
+    };
+
+    // overlay imagem
+    document.getElementById('btnSair').onclick = e=>{ e.preventDefault(); $('#overlayContainer').fadeOut(300); };
+    document.getElementById('overlayContainer').onclick = e=>{
+      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
+    };
+    window.showImageOverlay = src=>{
+      document.getElementById('overlayImage').src = src;
+      $('#overlayContainer').fadeIn(300);
+    };
+  </script>
 </body>
 </html>
