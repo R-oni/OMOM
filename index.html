@@ -11,232 +11,278 @@
   <style>
     /* ===== RESET ===== */
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { width:100%; height:100%; overflow:hidden; background:none; color:#fff; font-family:'Courier New',monospace; }
+    html, body { 
+      width:100%; height:100%; overflow:hidden; 
+      background:#000; color:#fff; 
+      font-family:'Courier New',monospace; 
+    }
 
-    /* ===== PALCO MADEIRA (grid 50/50) ===== */
+    /* ===== CONTAINER PRINCIPAL ===== */
     #app {
-      display: grid;
-      grid-template-rows: 50% 50%;
       width:100%; height:100%;
-      background: url(fundo.webp) center/cover no-repeat fixed;
       position: relative;
+      background: #000;
     }
 
-    /* ===== TABLET + PAINEL ===== */
-    :root { --tablet-w:95vw; --tablet-max:640px; }
-
-    .tablet {
-      position: relative;
-      width: min(var(--tablet-w), var(--tablet-max));
-      aspect-ratio: 1/1;
-      margin: auto;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+    /* ===== TELA INICIAL OMOM ===== */
+    #omom-screen {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
     }
 
-    /* Globo */
-    #globe-area {
-      position: absolute; width:100%; height:100%;
-      top:50%; left:50%; border-radius: 35px; transform:translate(-50%,-50%);
-      overflow:hidden; z-index:0; 
-    }
-    #globeCanvas { width:100%; height:100%; background:#000; border-radius: 31px; object-fit:contain; }
-    #intro-video {
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%); width:40%;
-      pointer-events:none; display:none; z-index:2;
-    }
-    /* === NOVO: vídeo de transição warp === */
-    #warp-video{
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      width:100%; height:100%;
-      object-fit:cover;
-      display:none;
-      z-index:30;            /* acima de tudo */
-      pointer-events:none;
+    #omom-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 48px;
+      color: white;
+      opacity: 0;
+      animation: fadeInTitle 2s ease-in-out forwards;
     }
 
-    /* Painel cobre tudo */
-    #ui-layer { position:absolute; inset:0; z-index:10; pointer-events:none; }
-    #painel    { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; z-index:10; }
-
-    /* botão MENU */
-    #btnMenu {
-      position:absolute; top:18px; left:12px;
-      background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
-      font-family:'Press Start 2P',cursive; font-size:6px; padding:10px;
-      cursor:pointer; pointer-events:auto; z-index:11;
+    @keyframes fadeInTitle {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
-    #btnMenu:hover { background:rgba(0,0,0,0.9); }
 
-    /* MENU DE SÍMBOLOS sempre centralizado */
+    /* ===== MENU DE SÍMBOLOS ===== */
     #menu-overlay {
-      position:absolute;
-      border-radius: 35px;
-      top:50%;
-      left:50%;
-      transform:translate(-50%, -50%);
-      width:min(var(--tablet-w), var(--tablet-max));
-      background:rgba(0,0,0,0.6); backdrop-filter:blur(6px);
-      padding:20px 0; display:none; z-index:8;
+      position: fixed;
+      inset: 0;
+      background: url(fundo.webp) center/cover no-repeat;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
     }
-    #menu-overlay.visible { display:block; }
-    .symbols-wrapper { max-height:40vh; padding-top:32px; padding-bottom: 20px; overflow-y:auto; padding-inline:20px; }
+
+    #menu-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+    }
+
+    #menu-overlay.visible { 
+      display: flex; 
+    }
+
+    .symbols-wrapper { 
+      position: relative;
+      max-width: 90vw;
+      max-height: 80vh;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 1;
+    }
+
     .symbols-container {
-      display:flex; flex-wrap:wrap;
-      justify-content:center; gap:25px;
+      display: flex; 
+      flex-wrap: wrap;
+      justify-content: center; 
+      gap: 25px;
     }
+
     @keyframes floatWave {
-      0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}
+      0%{transform:translateY(0)}
+      50%{transform:translateY(-4px)}
+      100%{transform:translateY(0)}
     }
-    .symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite; }
+
+    .symbol { 
+      cursor: pointer; 
+      animation: floatWave 4s ease-in-out infinite; 
+    }
+
     .symbol img {
-      width:18vw; max-width:120px;
-      transition:transform .3s;
+      width: 18vw; 
+      max-width: 120px;
+      transition: transform .3s;
     }
-    .symbol img:hover { transform:scale(1.1); }
-    .symbol.brither img { filter:brightness(180%); }
-    .symbol.locked img  { filter:brightness(50%); }
 
-    /* FLIPBOOK */
+    .symbol img:hover { 
+      transform: scale(1.1); 
+    }
+
+    .symbol.brither img { 
+      filter: brightness(180%); 
+    }
+
+    .symbol.locked img  { 
+      filter: brightness(50%); 
+    }
+
+    /* ===== FLIPBOOK AREA ===== */
     #flipbook-area {
-      position:relative; margin-left:5%; padding-top:2vh;
-      overflow:hidden; width:100%; height:100%; z-index:3;
-      transform:translateX(100%); transition:transform 1.5s ease-out;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transform: translateY(100%);
+      transition: transform 1.5s ease-out;
     }
-    #flipbook-area.show { transform:translateX(0); }
-    #flipbook-area.slide-out-left { transform:translateX(-100%); }
-    #flipbookContainer { width:100%; height:calc(100% - 7vh); }
 
-    /* seta flipbook */
-    #setaBtn {
-      position:absolute; top:5px!important; right:5px!important;
-      width:35px!important; height:auto!important;
-      cursor:pointer; opacity:0;
-      animation:fadeInArrow .6s forwards .4s, slideArrow 1s ease-in-out infinite .6s;
-      z-index:5;
+    #flipbook-area.show { 
+      transform: translateY(0); 
     }
-    @keyframes fadeInArrow { from{opacity:0}to{opacity:1} }
-    @keyframes slideArrow { 0%{transform:translate(0)}50%{transform:translate(-8px,8px)}100%{transform:translate(0)} }
 
-    /* OVERLAY IMAGEM */
+    #flipbook-area.slide-out-down { 
+      transform: translateY(100%); 
+    }
+
+    #flipbookContainer { 
+      width: 95vw;
+      height: 90vh;
+      max-width: 800px;
+      max-height: 600px;
+    }
+
+    /* ===== OVERLAY IMAGEM ===== */
     #overlayContainer {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,0.8);
-      display:none; justify-content:center; align-items:center;
-      z-index:1000;
+      position: fixed; 
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none; 
+      justify-content: center; 
+      align-items: center;
+      z-index: 10000;
     }
-    #overlayImage { max-width:80%; max-height:80%; transition:transform .3s; }
+
+    #overlayImage { 
+      max-width: 80%; 
+      max-height: 80%; 
+      transition: transform .3s; 
+    }
+
     #btnSair {
-      position:absolute; top:20px; right:20px;
-      background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7;
-      font-family:'Press Start 2P',cursive; font-size:12px; padding:10px;
-      cursor:pointer;
+      position: absolute; 
+      top: 20px; 
+      right: 20px;
+      background: rgba(0,0,0,0.7); 
+      border: 2px solid #00FFE7; 
+      color: #00FFE7;
+      font-family: 'Press Start 2P', cursive; 
+      font-size: 12px; 
+      padding: 10px;
+      cursor: pointer;
     }
 
-    /* LOADING & SOM */
+    /* ===== LOADING & SOM ===== */
     #loading-screen {
-      position:fixed; inset:0;
-      display:flex; align-items:center; justify-content:center;
-      background:#000; z-index:9999;
+      position: fixed; 
+      inset: 0;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      background: #000; 
+      z-index: 99999;
     }
+
     #loading-text {
-      font-family:'Press Start 2P',cursive; color:#00FFE7; font-size:20px;
+      font-family: 'Press Start 2P', cursive; 
+      color: #00FFE7; 
+      font-size: 20px;
     }
+
     #soundPrompt {
-      position:fixed; inset:0;
-      display:none; flex-direction:column;
-      align-items:center; justify-content:center;
-      background:#000; z-index:10000;
+      position: fixed; 
+      inset: 0;
+      display: none; 
+      flex-direction: column;
+      align-items: center; 
+      justify-content: center;
+      background: #000; 
+      z-index: 99998;
     }
+
     #soundPrompt p {
-      font-family:'Press Start 2P',cursive; color:#00FFE7;
-      font-size:24px; margin-bottom:30px; text-align:center;
+      font-family: 'Press Start 2P', cursive; 
+      color: #00FFE7;
+      font-size: 24px; 
+      margin-bottom: 30px; 
+      text-align: center;
     }
+
     .soundBtn {
-      background:none; border:2px solid #00FFE7; color:#00FFE7;
-      font-family:'Press Start 2P',cursive; font-size:14px; padding:12px 22px;
-      cursor:pointer; transition:background .25s;
+      background: none; 
+      border: 2px solid #00FFE7; 
+      color: #00FFE7;
+      font-family: 'Press Start 2P', cursive; 
+      font-size: 14px; 
+      padding: 12px 22px;
+      cursor: pointer; 
+      transition: background .25s;
+      margin: 0 10px;
     }
-    .soundBtn:hover { background:rgba(0,255,231,0.2); }
 
+    .soundBtn:hover { 
+      background: rgba(0,255,231,0.2); 
+    }
 
+    /* ===== SETA DE VOLTAR ===== */
+    #btnVoltar {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #00FFE7;
+      color: #00FFE7;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 1001;
+      display: none;
+    }
 
+    #btnVoltar:hover {
+      background: rgba(0,0,0,0.9);
+    }
 
+    #btnVoltar.show {
+      display: block;
+    }
 
-
-
-
-
-
-
-
-    
-
-    /* ===== DESKTOP: 2 COLUNAS ===== */
-    @media screen and (min-width:1024px){
-      /* grid vira 2 colunas 50 / 50 */
-      #app{
+    /* ===== DESKTOP ===== */
+    @media screen and (min-width: 1024px) {
+      #app {
         background: url(fundodesktop.webp) center/cover no-repeat fixed;
-        grid-template-rows:100%;
-        grid-template-columns:50% 50%;
-      }
-            /* botão MENU */
-      #btnMenu {
-        position:absolute; top:26px; left:25px;
-        background:rgba(0,0,0,0.7); border:2px solid #00FFE7; border-radius: 30px; color:#00FFE7;
-        font-family:'Press Start 2P',cursive; font-size:6px; padding:10px;
-        cursor:pointer; pointer-events:auto; z-index:11;
-      }
-      #btnMenu:hover { background:rgba(0,0,0,0.9); }
-
-      
-      /* flipbook ocupa a metade ESQUERDA            */
-      #flipbook-area{
-        grid-column:1; grid-row:1;
-        margin:0; padding:0;
-        height:100%;
-        margin-left: 5px;
-        /* começa fora da tela pela ESQUERDA          */
-        transform:translateX(-100%);
       }
 
-      /* tablet vai para a metade DIREITA, centralizado */
-      .tablet{
-        grid-column:2; grid-row:1;
-        place-self:center;              /* centraliza na célula            */
+      #omom-title {
+        font-size: 64px;
       }
-            /* 1) torna o container do globo relativo (sem mexer no mobile) */
-      #globe-area {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
+
+      #menu-overlay {
+        background: url(fundodesktop.webp) center/cover no-repeat;
       }
-    
-      /* 2) faz o warp “inset” dentro desse container */
-      #warp-video {
-        display: block !important;
-        position: absolute;
-        inset: 0;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: 30;
+
+      #flipbookContainer {
+        width: 80vw;
+        height: 80vh;
+        max-width: 1000px;
+        max-height: 700px;
       }
-      #menu-overlay{
-        /* ocupa 100% da área do tablet */
-        top:0;
-        left:0;
-        width:100%;
-        height:100%;
-        transform:none;      /* tira o translate -50% */
-        border-radius:35px;  /* mantém os cantos */
+
+      .symbol img {
+        width: 120px;
+        max-width: 120px;
       }
-      .symbols-wrapper { max-height:40vh; padding-top:32px; max-height: calc(100% - 52px); padding-bottom: 10px; overflow-y:auto; padding-inline:20px; }
+    }
+
+    /* ===== MOBILE LANDSCAPE (para o flipbook) ===== */
+    @media screen and (max-width: 1023px) and (orientation: landscape) {
+      #flipbookContainer {
+        width: 95vw;
+        height: 85vh;
+      }
     }
   </style>
 </head>
@@ -245,6 +291,11 @@
   <!-- áudio -->
   <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
   <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
+
+  <!-- loading -->
+  <div id="loading-screen">
+    <div id="loading-text">CARREGANDO…</div>
+  </div>
 
   <!-- prompt som -->
   <div id="soundPrompt">
@@ -255,42 +306,65 @@
     </div>
   </div>
 
-  <!-- palco -->
+  <!-- tela inicial OMOM -->
+  <div id="omom-screen">
+    <div id="omom-title">OMOM</div>
+  </div>
+
+  <!-- palco principal -->
   <div id="app">
-    <section class="tablet">
-      <div id="globe-area">
-        <canvas id="globeCanvas"></canvas>
-        <video id="intro-video" src="omom.mp4" muted playsinline></video>
-        <!-- NOVO vídeo warp -->
-        <video id="warp-video" src="warp.mp4" muted playsinline preload="auto"></video>
-      </div>
-      <div id="ui-layer">
-        <img id="painel" src="painel.png" alt="Painel">
-        <button id="btnMenu">MENU</button>
-      </div>
-      <div id="menu-overlay">
-        <div class="symbols-wrapper">
-          <div class="symbols-container">
-            <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Velei'wey"></div>
-            <div class="symbol locked"  data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"></div>
-            <div class="symbol locked"  data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"></div>
-            <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"></div>
-            <div class="symbol locked"  data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"></div>
-            <div class="symbol locked"  data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"></div>
-            <div class="symbol locked"  data-world="porojka"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"></div>
-            <div class="symbol locked"  data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"></div>
-            <div class="symbol locked"  data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"></div>
-            <div class="symbol locked"  data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"></div>
-            <div class="symbol locked"  data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"></div>
-            <div class="symbol locked"  data-world="sapador"><img src="mundos/mundo 6/criaturamenu.webp" alt="Sapador"></div>
-            <div class="symbol locked"  data-world="dosirelala"><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Dosirelala"></div>
-            
+    <!-- menu de símbolos -->
+    <div id="menu-overlay">
+      <div class="symbols-wrapper">
+        <div class="symbols-container">
+          <div class="symbol brither" data-world="veleywei">
+            <img src="assets/veleyweimenu.png" alt="Velei'wey">
+          </div>
+          <div class="symbol locked" data-world="botychera">
+            <img src="mundos/botychera/botycheramenu.png" alt="Botychera">
+          </div>
+          <div class="symbol locked" data-world="himpis">
+            <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+          </div>
+          <div class="symbol brither" data-world="batedores">
+            <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
+          </div>
+          <div class="symbol locked" data-world="denbou">
+            <img src="mundos/denbou/denboumenu.png" alt="DenBou">
+          </div>
+          <div class="symbol locked" data-world="araporu">
+            <img src="mundos/araporu/araporumenu.png" alt="Araporu">
+          </div>
+          <div class="symbol locked" data-world="porojka">
+            <img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos">
+          </div>
+          <div class="symbol locked" data-world="sapador">
+            <img src="mundos/sapador/sapador.png" alt="Sapador">
+          </div>
+          <div class="symbol locked" data-world="dosirelala">
+            <img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala">
+          </div>
+          <div class="symbol locked" data-world="calindreno">
+            <img src="mundos/calindreno/calindreno.png" alt="Calindreno">
+          </div>
+          <div class="symbol locked" data-world="mundoPulsante">
+            <img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante">
+          </div>
+          <div class="symbol locked" data-world="sapador2">
+            <img src="mundos/mundo 6/criaturamenu.webp" alt="Sapador 2">
+          </div>
+          <div class="symbol locked" data-world="dosirelala2">
+            <img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Dosirelala 2">
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section id="flipbook-area"><div id="flipbookContainer"></div></section>
+    <!-- área do flipbook -->
+    <div id="flipbook-area">
+      <button id="btnVoltar">VOLTAR</button>
+      <div id="flipbookContainer"></div>
+    </div>
   </div>
 
   <!-- overlay imagem -->
@@ -299,9 +373,6 @@
     <img id="overlayImage" src="" alt="Zoom">
   </div>
 
-  <!-- loading -->
-  <div id="loading-screen"><div id="loading-text">CARREGANDO…</div></div>
-
   <!-- libs -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="turn.js"></script>
@@ -309,7 +380,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <script>
-    // ==== FADE ====
+    // ==== FADE AUDIO ====
     function fadeIn(a, ms) {
       a.volume = 0;
       a.play().catch(()=>{});
@@ -318,124 +389,143 @@
         else a.volume += dv;
       }, step);
     }
+
     function fadeOut(a, ms) {
       const step = 50, dv = step/ms, id = setInterval(()=>{
         if (a.volume - dv <= 0) { a.volume = 0; clearInterval(id); a.pause(); a.currentTime = 0; }
         else a.volume -= dv;
       }, step);
     }
+
     let allowSound = false;
 
-    /* ==== NOVO: toca vídeo warp e volta ==== */
-    function playWarpVideo(cb){
-      const w = document.getElementById('warp-video');
-      if(!w) { cb?.(); return; }
-      w.style.display = 'block';
-      w.currentTime = 0;
-      w.play().catch(()=>{});
-      w.onended = ()=>{
-        w.style.display = 'none';
-        cb?.();
-      };
-    }
-
-    // ==== BOOT ====
+    // ==== BOOT SEQUENCE ====
     window.addEventListener('load', ()=>{
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('soundPrompt').style.display = 'flex';
     });
+
     function startSite(sound) {
       allowSound = sound;
       document.getElementById('soundPrompt').style.display = 'none';
-      const intro = document.getElementById('intro-video');
-      intro.style.display = 'block';
-      intro.play().catch(()=>{});
-      if (allowSound) document.getElementById('bgm').play().catch(()=>{});
-      intro.addEventListener('ended', ()=>{
-        intro.style.display = 'none';
-        showOverlayMenu();
-      });
-    }
-    document.getElementById('btnYes').onclick = ()=>startSite(true);
-    document.getElementById('btnNo').onclick  = ()=>startSite(false);
+      
+      if (allowSound) {
+        document.getElementById('bgm').play().catch(()=>{});
+      }
 
-    // ==== MENU & MUNDOS ====
-    const memories = document.getElementById('memories');
-    function showOverlayMenu(){
-      document.getElementById('menu-overlay').classList.add('visible');
-      if (allowSound) fadeIn(memories, 1000);
+      // Mostrar tela OMOM por 3 segundos, depois mostrar menu
+      setTimeout(() => {
+        document.getElementById('omom-screen').style.display = 'none';
+        showMenu();
+      }, 3000);
     }
+
+    document.getElementById('btnYes').onclick = ()=>startSite(true);
+    document.getElementById('btnNo').onclick = ()=>startSite(false);
+
+    // ==== MENU ====
+    const memories = document.getElementById('memories');
+
+    function showMenu() {
+      document.getElementById('menu-overlay').classList.add('visible');
+      if (allowSound) {
+        fadeOut(document.getElementById('bgm'), 500);
+        setTimeout(() => fadeIn(memories, 1000), 500);
+      }
+    }
+
+    function hideMenu() {
+      document.getElementById('menu-overlay').classList.remove('visible');
+      if (allowSound) {
+        fadeOut(memories, 1000);
+      }
+    }
+
+    // ==== SELEÇÃO DE MUNDO ====
     document.querySelector('.symbols-container').addEventListener('click', e=>{
       const sym = e.target.closest('.symbol');
       if (!sym) return;
+      
+      // Verificar se está desbloqueado
+      if (sym.classList.contains('locked')) {
+        return; // Não fazer nada se estiver bloqueado
+      }
+      
       launchWorld(sym.dataset.world);
     });
-    document.getElementById('btnMenu').onclick = showOverlayMenu;
 
-    function launchWorld(name){
-      /* esconde o menu imediatamente */
-      document.getElementById('menu-overlay').classList.remove('visible');
+    function launchWorld(name) {
+      // Esconder menu
+      hideMenu();
 
-      /* fade-out da música de menu */
-      if (allowSound) fadeOut(memories, 1000);
-
-      /* animação de saída do flipbook se já estiver visível */
+      // Esconder flipbook se estiver visível
       const fb = document.getElementById('flipbook-area');
       if (fb.classList.contains('show')) {
         fb.classList.remove('show');
-        fb.classList.add('slide-out-left');
-        fb.addEventListener('transitionend', function onOut(){
-          fb.classList.remove('slide-out-left');
-          fb.removeEventListener('transitionend', onOut);
-        });
+        fb.classList.add('slide-out-down');
+        setTimeout(() => {
+          fb.classList.remove('slide-out-down');
+          loadWorld(name);
+        }, 1500);
+      } else {
+        loadWorld(name);
       }
+    }
 
-      /* toca warp por cima de tudo */
-      playWarpVideo();
-
-      /* destrói e recria canvas do globo */
-      destroyGlobe();
+    function loadWorld(name) {
+      // Limpar container do flipbook
       document.getElementById('flipbookContainer').innerHTML = '';
 
-      /* carrega JS do mundo e inicia globo/flipbook */
+      // Mostrar botão voltar
+      document.getElementById('btnVoltar').classList.add('show');
+
+      // Carregar script do mundo
       const s = document.createElement('script');
       s.src = name + '.js';
       document.body.appendChild(s);
-      s.onload = ()=>{
-        window.initGlobe?.('#globeCanvas');
+      
+      s.onload = () => {
+        // Não inicializar globo (removido)
         window.initFlipbook?.('#flipbookContainer');
-        void fb.offsetWidth;
+        
+        // Mostrar flipbook
+        const fb = document.getElementById('flipbook-area');
+        void fb.offsetWidth; // Force reflow
         fb.classList.add('show');
       };
     }
 
-    // ==== DESTRÓI GLOBO ====
-    function destroyGlobe(){
-      const G = window._Globe;
-      if (G) {
-        G.scene?.traverse(o=>{
-          o.geometry?.dispose();
-          if(o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.dispose());
-        });
-        G.renderer?.dispose();
-        G.renderer?.forceContextLoss?.();
-        G.renderer?.domElement?.remove();
-        G.controls?.dispose();
-      }
-      const area = document.getElementById('globe-area');
-      area.querySelector('canvas')?.remove();
-      const c = document.createElement('canvas');
-      c.id = 'globeCanvas';
-      area.prepend(c);
-    }
+    // ==== BOTÃO VOLTAR ====
+    document.getElementById('btnVoltar').onclick = () => {
+      const fb = document.getElementById('flipbook-area');
+      fb.classList.remove('show');
+      fb.classList.add('slide-out-down');
+      
+      document.getElementById('btnVoltar').classList.remove('show');
+      
+      setTimeout(() => {
+        fb.classList.remove('slide-out-down');
+        document.getElementById('flipbookContainer').innerHTML = '';
+        showMenu();
+      }, 1500);
+    };
 
     // ==== OVERLAY IMAGEM ====
-    document.getElementById('btnSair').onclick = e=>{
+    document.getElementById('btnSair').onclick = e => {
       e.preventDefault();
       $('#overlayContainer').fadeOut(300);
     };
-    document.getElementById('overlayContainer').onclick = e=>{
-      if (e.target === e.currentTarget) $('#overlayContainer').fadeOut(300);
+
+    document.getElementById('overlayContainer').onclick = e => {
+      if (e.target === e.currentTarget) {
+        $('#overlayContainer').fadeOut(300);
+      }
+    };
+
+    // ==== FUNÇÃO GLOBAL PARA MOSTRAR IMAGEM ====
+    window.showImageOverlay = function(src) {
+      document.getElementById('overlayImage').src = src;
+      $('#overlayContainer').fadeIn(300);
     };
   </script>
 </body>
