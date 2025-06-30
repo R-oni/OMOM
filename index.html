@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
   <style>
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body {
+    html,body {
       width:100%; height:100%; overflow:hidden;
       background:#000; color:#fff;
       font-family:'Courier New',monospace;
@@ -45,14 +45,13 @@
     #menu {
       position:fixed; inset:0;
       background:#000; display:none;
-      align-items:center; justify-content:center;
-      z-index:8;
+      align-items:center; justify-content:center; z-index:8;
     }
     .symbols-container {
       display:flex;
       flex-wrap:wrap;
       justify-content:center;
-      gap:25px;
+      gap:30px;
       max-width:90vw;
     }
     .symbol {
@@ -68,8 +67,7 @@
       0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}
     }
     .symbol.locked {
-      opacity:0.4;
-      pointer-events:none;
+      opacity:0.4; pointer-events:none;
     }
 
     /* Flipbook / Swiper */
@@ -79,11 +77,13 @@
       background:#000; z-index:7;
     }
     .swiper-container {
-      width:90vw; height:80vh;
+      width:90vw;
+      height:80vh;
+      margin:5vh 5vw 0;
     }
     .swiper-slide {
       display:flex; align-items:center; justify-content:center;
-      padding:0 10px;
+      padding:0 20px;
     }
     .swiper-slide img {
       width:100%; height:100%; object-fit:cover;
@@ -101,8 +101,7 @@
   </style>
 </head>
 <body>
-  <!-- Audio -->
-  <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
+  <!-- Áudio de menu -->
   <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
   <!-- Splash -->
@@ -139,7 +138,7 @@
     <button id="btnVoltar">VOLTAR</button>
     <div class="swiper-container" id="swiper">
       <div class="swiper-wrapper"></div>
-      <div class="swiper-pagination" style="bottom:10px;"></div>
+      <div class="swiper-pagination"></div>
     </div>
   </div>
 
@@ -150,21 +149,23 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script>
     let allowSound = false;
-    const bgm = document.getElementById('bgm'), memories = document.getElementById('memories');
+    const memories = document.getElementById('memories');
 
     window.addEventListener('load', () => {
       setTimeout(() => {
-        $('#omom-screen').fadeOut(300);
-        $('#soundPrompt').fadeIn(300);
+        $('#omom-screen').fadeOut(300, () => {
+          $('#soundPrompt').fadeIn(300);
+        });
       }, 1000);
     });
 
     $('#btnYes').click(() => startSite(true));
     $('#btnNo').click(() => startSite(false));
+
     function startSite(sound) {
       allowSound = sound;
       $('#soundPrompt').hide();
-      if (allowSound) bgm.play().catch(()=>{});
+      if (allowSound) memories.play().catch(()=>{});
       $('#menu').fadeIn(300);
     }
 
@@ -173,15 +174,14 @@
       $('#menu').hide();
       $('#flipbook').show();
       $('#btnVoltar').show();
-      if (allowSound) {
-        bgm.pause();
-        memories.play().catch(()=>{});
-      }
+      if (allowSound) memories.pause();
       $.getScript(world + '.js').done(() => {
         initFlipbook('#swiper .swiper-wrapper');
         new Swiper('#swiper', {
           direction: 'horizontal',
           loop: false,
+          slidesPerView: 1,
+          spaceBetween: 20,
           pagination: { el: '.swiper-pagination', clickable: true }
         });
       });
@@ -191,10 +191,7 @@
       $('#flipbook').hide();
       $('#btnVoltar').hide();
       $('.swiper-wrapper').empty();
-      if (allowSound) {
-        memories.pause();
-        bgm.play().catch(()=>{});
-      }
+      if (allowSound) memories.play().catch(()=>{});
       $('#menu').fadeIn(300);
     });
   </script>
