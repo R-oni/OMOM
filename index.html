@@ -8,75 +8,133 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
   <style>
     * { margin:0; padding:0; box-sizing:border-box }
-    html,body { width:100%; height:100%; overflow:hidden; background:#000; color:#fff; font-family:'Courier New',monospace }
+    html, body {
+      width:100%; height:100%; overflow:hidden;
+      background:#000; color:#fff;
+      font-family:'Courier New',monospace;
+    }
+
+    /* Splash OMOM */
     #omom-screen {
       position:fixed; inset:0;
       display:flex; align-items:center; justify-content:center;
       background:#000; z-index:10;
     }
     #omom-title {
-      font-family:'Press Start 2P',cursive; font-size:48px; color:#00FFE7;
-      opacity:0; animation:fadeInTitle 1s forwards, fadeOutTitle 0.5s 1.5s forwards;
+      font-family:'Press Start 2P',cursive;
+      font-size:48px; color:#00FFE7;
+      opacity:0; animation:fadeIn 1s forwards, fadeOut 0.5s 1.5s forwards;
     }
-    @keyframes fadeInTitle { from{opacity:0} to{opacity:1} }
-    @keyframes fadeOutTitle { from{opacity:1} to{opacity:0} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes fadeOut { from{opacity:1} to{opacity:0} }
 
+    /* Prompt Som */
+    #soundPrompt {
+      position:fixed; inset:0;
+      display:none; flex-direction:column; align-items:center; justify-content:center;
+      background:#000; z-index:9;
+    }
+    .soundBtn {
+      margin:10px; padding:10px 20px;
+      font-family:'Press Start 2P',cursive;
+      background:none; border:2px solid #00FFE7; color:#00FFE7;
+      cursor:pointer;
+    }
+
+    /* Menu de Símbolos */
     #menu {
-      position:fixed; inset:0; background:#000;
-      display:none; align-items:center; justify-content:center; z-index:9;
+      position:fixed; inset:0;
+      background:#000; display:none;
+      align-items:center; justify-content:center;
+      z-index:8;
     }
     .symbols-container {
-      display:flex; gap:30px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:25px;
+      max-width:90vw;
     }
     .symbol {
-      cursor:pointer; text-align:center;
+      cursor:pointer;
       animation:floatWave 4s ease-in-out infinite;
+      text-align:center;
     }
     .symbol img {
-      width:120px; border:2px solid #00FFE7; border-radius:12px;
+      width:18vw; max-width:120px;
+      display:block;
     }
     @keyframes floatWave {
       0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}
     }
+    .symbol.locked {
+      opacity:0.4;
+      pointer-events:none;
+    }
 
+    /* Flipbook / Swiper */
     #flipbook {
-      position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:8;
+      position:fixed; inset:0;
+      display:none; align-items:center; justify-content:center;
+      background:#000; z-index:7;
     }
     .swiper-container {
       width:90vw; height:80vh;
-      border:2px solid #00FFE7; border-radius:12px;
-      overflow:hidden;
     }
     .swiper-slide {
       display:flex; align-items:center; justify-content:center;
-      background:#111; border-radius:12px;
+      padding:0 10px;
+    }
+    .swiper-slide img {
+      width:100%; height:100%; object-fit:cover;
+      border-radius:8px;
     }
 
+    /* Voltar */
     #btnVoltar {
       position:fixed; top:20px; left:20px;
-      padding:10px; border:2px solid #00FFE7; color:#00FFE7;
-      background:rgba(0,0,0,0.7); cursor:pointer; display:none; z-index:11;
-      font-family:'Press Start 2P',cursive; font-size:12px;
+      padding:10px; font-family:'Press Start 2P',cursive;
+      font-size:12px; background:rgba(0,0,0,0.7);
+      border:2px solid #00FFE7; color:#00FFE7;
+      cursor:pointer; display:none; z-index:9;
     }
   </style>
 </head>
 <body>
+  <!-- Audio -->
+  <audio id="bgm" src="animus.mp3" preload="auto" loop></audio>
+  <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
+
+  <!-- Splash -->
   <div id="omom-screen"><div id="omom-title">OMOM</div></div>
 
+  <!-- Prompt Som -->
+  <div id="soundPrompt">
+    <p>Ativar SOM?</p>
+    <button class="soundBtn" id="btnYes">SIM</button>
+    <button class="soundBtn" id="btnNo">NÃO</button>
+  </div>
+
+  <!-- Menu de Símbolos -->
   <div id="menu">
     <div class="symbols-container">
-      <div class="symbol" data-world="batedores">
-        <img src="mundos/ttok/ttokmenu.png" alt="Batedores"><br>Batedores
-      </div>
-      <div class="symbol" data-world="veleywei">
-        <img src="assets/veleyweimenu.png" alt="Veleywei"><br>Veleywei
-      </div>
-      <div class="symbol" data-world="botychera">
-        <img src="mundos/botychera/botycheramenu.png" alt="Botychera"><br>Botychera
-      </div>
+      <div class="symbol brither" data-world="veleywei"><img src="assets/veleyweimenu.png" alt="Veleywei"><br>Veleywei</div>
+      <div class="symbol locked" data-world="botychera"><img src="mundos/botychera/botycheramenu.png" alt="Botychera"><br>Botychera</div>
+      <div class="symbol locked" data-world="himpis"><img src="mundos/himpis/himpismenu.png" alt="Himpis"><br>Himpis</div>
+      <div class="symbol brither" data-world="batedores"><img src="mundos/ttok/ttokmenu.png" alt="Batedores"><br>Batedores</div>
+      <div class="symbol locked" data-world="denbou"><img src="mundos/denbou/denboumenu.png" alt="DenBou"><br>DenBou</div>
+      <div class="symbol locked" data-world="araporu"><img src="mundos/araporu/araporumenu.png" alt="Araporu"><br>Araporu</div>
+      <div class="symbol locked" data-world="porojka"><img src="mundos/os artesaos/artesaosmenu.png" alt="Artesãos"><br>Artesãos</div>
+      <div class="symbol locked" data-world="sapador"><img src="mundos/sapador/sapador.png" alt="Sapador"><br>Sapador</div>
+      <div class="symbol locked" data-world="dosirelala"><img src="mundos/dosirelala/dosirelalamenu.png" alt="Dosirelala"><br>Dosirelala</div>
+      <div class="symbol locked" data-world="calindreno"><img src="mundos/calindreno/calindreno.png" alt="Calindreno"><br>Calindreno</div>
+      <div class="symbol locked" data-world="mundoPulsante"><img src="mundos/mundo pulsante/jocelyn.png" alt="Mundo Pulsante"><br>Mundo Pulsante</div>
+      <div class="symbol locked" data-world="sapador2"><img src="mundos/mundo 6/criaturamenu.webp" alt="Sapador 2"><br>Sapador 2</div>
+      <div class="symbol locked" data-world="dosirelala2"><img src="mundos/mundo 5/bratentacolonmenu.webp" alt="Dosirelala 2"><br>Dosirelala 2</div>
     </div>
   </div>
 
+  <!-- Flipbook / Swiper -->
   <div id="flipbook">
     <button id="btnVoltar">VOLTAR</button>
     <div class="swiper-container" id="swiper">
@@ -85,37 +143,59 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
   <script>
-    window.addEventListener('load',()=>{
-      setTimeout(()=>{
-        $('#omom-screen').fadeOut(300, ()=>$('#menu').fadeIn(300));
-      },1000);
+    let allowSound = false;
+    const bgm = document.getElementById('bgm'), memories = document.getElementById('memories');
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        $('#omom-screen').fadeOut(300);
+        $('#soundPrompt').fadeIn(300);
+      }, 1000);
     });
 
-    $('.symbol').click(function(){
+    $('#btnYes').click(() => startSite(true));
+    $('#btnNo').click(() => startSite(false));
+    function startSite(sound) {
+      allowSound = sound;
+      $('#soundPrompt').hide();
+      if (allowSound) bgm.play().catch(()=>{});
+      $('#menu').fadeIn(300);
+    }
+
+    $('.symbol.brither').click(function(){
       const world = $(this).data('world');
       $('#menu').hide();
       $('#flipbook').show();
       $('#btnVoltar').show();
-      $.getScript(world + '.js').done(()=>{
+      if (allowSound) {
+        bgm.pause();
+        memories.play().catch(()=>{});
+      }
+      $.getScript(world + '.js').done(() => {
         initFlipbook('#swiper .swiper-wrapper');
         new Swiper('#swiper', {
-          direction:'horizontal',
-          loop:false,
-          pagination:{el:'.swiper-pagination',clickable:true}
+          direction: 'horizontal',
+          loop: false,
+          pagination: { el: '.swiper-pagination', clickable: true }
         });
       });
     });
 
-    $('#btnVoltar').click(()=>{
+    $('#btnVoltar').click(() => {
       $('#flipbook').hide();
       $('#btnVoltar').hide();
-      $('#swiper .swiper-wrapper').empty();
-      $('#menu').show();
+      $('.swiper-wrapper').empty();
+      if (allowSound) {
+        memories.pause();
+        bgm.play().catch(()=>{});
+      }
+      $('#menu').fadeIn(300);
     });
   </script>
 </body>
