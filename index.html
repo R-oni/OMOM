@@ -15,121 +15,56 @@ html, body {
   transition: background 1s ease;
 }
 
+/* Overlay inicial preta que some após o primeiro slide */
+#initialOverlay {
+  position:fixed; top:0; left:0;
+  width:100%; height:60vh;
+  background: linear-gradient(to bottom, #000 0%, rgba(0,0,0,0) 100%);
+  z-index:6; pointer-events:none;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
 /* Splash OMOM */
-#omom-screen {
-  position:fixed; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  background:#000; z-index:10;
-}
-#omom-title {
-  font-family:'Press Start 2P',cursive;
-  font-size:6vw; max-font-size:48px; color:#00FFE7;
-  opacity:0;
-  animation:fadeIn 1s forwards, fadeOut 0.5s 1.5s forwards;
-}
+#omom-screen { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:#000; z-index:10; }
+#omom-title { font-family:'Press Start 2P',cursive; font-size:6vw; max-font-size:48px; color:#00FFE7; opacity:0; animation:fadeIn 1s forwards, fadeOut 0.5s 1.5s forwards; }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 @keyframes fadeOut { from{opacity:1} to{opacity:0} }
 
 /* Prompt Som */
-#soundPrompt {
-  position:fixed; inset:0;
-  display:none;
-  flex-direction:column; align-items:center; justify-content:center;
-  background:#000; z-index:9;
-}
-#soundPrompt p {
-  font-family:'Press Start 2P',cursive;
-  font-size:5vw; max-font-size:24px;
-  margin-bottom:2vh;
-  color:#00FFE7;
-}
-.soundBtns {
-  display:flex; gap:4vw;
-}
-.soundBtn {
-  padding:2vh 4vw;
-  font-family:'Press Start 2P',cursive;
-  font-size:4vw; max-font-size:16px;
-  background:none; border:2px solid #00FFE7; color:#00FFE7;
-  cursor:pointer;
-}
+#soundPrompt { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; background:#000; z-index:9; }
+#soundPrompt p { font-family:'Press Start 2P',cursive; font-size:5vw; max-font-size:24px; margin-bottom:2vh; color:#00FFE7; }
+.soundBtns { display:flex; gap:4vw; }
+.soundBtn { padding:2vh 4vw; font-family:'Press Start 2P',cursive; font-size:4vw; max-font-size:16px; background:none; border:2px solid #00FFE7; color:#00FFE7; cursor:pointer; }
 
 /* Menu de Símbolos */
-#menu {
-  position:fixed; inset:0;
-  display:none;
-  flex-direction:column; align-items:center; justify-content:flex-start;
-  z-index:8; padding:15vh 5vw 5vh;
-  background:#000;
-  transition: background 1s ease;
-}
-#menu h1 {
-  font-family:'Press Start 2P',cursive;
-  font-size:6vw; max-font-size:48px; color:#fff;
-  margin-bottom:4vh;
-}
-.symbols-container {
-  display:flex; flex-wrap:wrap;
-  justify-content:center; gap:5vw;
-  width:100%;
-}
-.symbol {
-  cursor:pointer;
-  animation:floatWave 4s ease-in-out infinite;
-}
-.symbol img {
-  width:20vw; max-width:180px; display:block;
-}
+#menu { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:flex-start; z-index:8; padding:15vh 5vw 5vh; background:#000; transition: background 1s ease; }
+#menu h1 { font-family:'Press Start 2P',cursive; font-size:6vw; max-font-size:48px; color:#fff; margin-bottom:4vh; }
+.symbols-container { display:flex; flex-wrap:wrap; justify-content:center; gap:5vw; width:100%; }
+.symbol { cursor:pointer; animation:floatWave 4s ease-in-out infinite; }
+.symbol img { width:20vw; max-width:180px; display:block; }
 @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)} }
 .symbol.locked { opacity:0.3; pointer-events:none; }
 
 /* Flipbook / Swiper */
-#flipbook {
-  position:fixed; inset:0;
-  display:none;
-  flex-direction:column; align-items:center; justify-content:center;
-  background:#fff; z-index:7;
-  transition: background 1s ease;
-}
-.swiper-container {
-  width:80vw; height:60vh;
-  max-width:600px; max-height:450px;
-  margin:auto;
-}
-.swiper-slide {
-  display:flex; align-items:center; justify-content:center;
-}
-.swiper-slide img, .swiper-slide canvas {
-  width:100%; height:100%; object-fit:contain;
-  border-radius:8px;
-}
+#flipbook { position:fixed; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; background:#fff; z-index:7; transition: background 1s ease; }
+.swiper-container { width:80vw; height:60vh; max-width:600px; max-height:450px; margin:auto; }
+.swiper-slide { display:flex; align-items:center; justify-content:center; }
+.swiper-slide img, .swiper-slide canvas { width:100%; height:100%; object-fit:contain; border-radius:8px; }
 
 /* Fade Top/Bottom apenas no flipbook */
-#fadeTop, #fadeBottom {
-  position:fixed; left:0; width:100%; height:20%; z-index:8;
-  pointer-events:none; display:none;
-}
+#fadeTop, #fadeBottom { position:fixed; left:0; width:100%; height:20%; z-index:8; pointer-events:none; display:none; }
 #fadeTop { top:0; background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
 #fadeBottom { bottom:0; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
 
 /* Voltar */
-#btnVoltar {
-  position:fixed; top:5vh; left:5vw;
-  padding:1vh 2vw;
-  font-family:'Press Start 2P',cursive;
-  font-size:3vw; max-font-size:14px;
-  background:rgba(0,0,0,0.7);
-  border:2px solid #00FFE7;
-  color:#00FFE7;
-  cursor:pointer; display:none; z-index:9;
-}
+#btnVoltar { position:fixed; top:5vh; left:5vw; padding:1vh 2vw; font-family:'Press Start 2P',cursive; font-size:3vw; max-font-size:14px; background:rgba(0,0,0,0.7); border:2px solid #00FFE7; color:#00FFE7; cursor:pointer; display:none; z-index:9; }
 </style>
 </head>
 <body>
 <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
 
+<div id="initialOverlay"></div>
 <div id="omom-screen"><div id="omom-title">OMOM</div></div>
-
 <div id="soundPrompt">
   <p>Som?</p>
   <div class="soundBtns">
@@ -137,7 +72,6 @@ html, body {
     <button class="soundBtn" id="btnNo">NÃO</button>
   </div>
 </div>
-
 <div id="menu">
   <h1>OMOM</h1>
   <div class="symbols-container">
@@ -149,17 +83,14 @@ html, body {
     </div>
   </div>
 </div>
-
 <div id="flipbook">
   <button id="btnVoltar">VOLTAR</button>
   <div class="swiper-container" id="swiper">
     <div class="swiper-wrapper"></div>
   </div>
 </div>
-
 <div id="fadeTop"></div>
 <div id="fadeBottom"></div>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -192,8 +123,7 @@ $('.symbol.brither').click(function() {
   $('#menu').fadeOut(500, () => {
     $('#flipbook').css('display','flex').fadeIn(500);
     $('#btnVoltar').fadeIn(300);
-    $('#btnVoltar').fadeIn(300);
-    $('#fadeTop, #fadeBottom').show();
+    $('#fadeTop, #fadeBottom, #initialOverlay').fadeOut(300);
     if (allowSound) memories.pause();
     $.getScript(world + '.js').done(() => {
       initFlipbook('#swiper .swiper-wrapper');
@@ -205,9 +135,8 @@ $('.symbol.brither').click(function() {
         spaceBetween: 20,
         on: {
           slideChange: function() {
-            if (this.activeIndex === 3) {
-              initGlobe('#globeCanvas');
-            }
+            if (this.activeIndex === 3) initGlobe('#globeCanvas');
+            if (this.activeIndex > 0) $('#initialOverlay').hide();
           }
         }
       });
@@ -222,6 +151,7 @@ $('#btnVoltar').click(() => {
   $('html, body').css('background', '#000');
   $('#menu').css('background', '#000');
   $('#fadeTop, #fadeBottom').hide();
+  $('#initialOverlay').show();
   if (allowSound) memories.play().catch(() => {});
   $('#menu').fadeIn(500);
 });
