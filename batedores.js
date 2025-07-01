@@ -9,10 +9,24 @@ window.initFlipbook = function(wrapperSelector) {
     'mundos/ttok/imagens/cap1/pagina6.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina7.webp', // slide 5
     'GLOBO',                                  // slide 4: globo
-    'mundos/ttok/imagens/cap1/batedor.webp', // slide 5
-    'mundos/ttok/imagens/cap1/batedor2.webp', // slide 5
-    'mundos/ttok/imagens/cap1/sanguedomundo.webp', // slide 5
-   
+    'mundos/ttok/imagens/cap1/pagina8.webp',     // slide 1
+    'mundos/ttok/imagens/cap1/pagina9.webp', // slide 2
+    'mundos/ttok/imagens/cap1/pagina10.webp', // slide 3
+    'mundos/ttok/imagens/cap1/pagina11.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina12.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina13.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina14.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina15.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina16.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina17.webp',     // slide 1
+    'mundos/ttok/imagens/cap1/pagina18.webp', // slide 2
+    'mundos/ttok/imagens/cap1/pagina19.webp', // slide 3
+    'mundos/ttok/imagens/cap1/pagina20.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina21.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina22.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina23.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina24.webp', // slide 5
+    'mundos/ttok/imagens/cap1/pagina25.webp', // slide 5
   
   ];
   slides.forEach(src => {
