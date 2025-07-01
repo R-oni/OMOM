@@ -9,6 +9,9 @@ window.initFlipbook = function(wrapperSelector) {
     'mundos/ttok/imagens/cap1/pagina6.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina7.webp', // slide 5
     'GLOBO',                                  // slide 4: globo
+    'mundos/ttok/imagens/cap1/batedor.webp', // slide 5
+    'mundos/ttok/imagens/cap1/batedor2.webp', // slide 5
+    'mundos/ttok/imagens/cap1/sanguedomundo.webp', // slide 5
    
   
   ];
