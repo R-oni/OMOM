@@ -19,10 +19,12 @@ window.initFlipbook = function(wrapperSelector) {
     'mundos/ttok/imagens/cap1/pagina15.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina16.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina17.webp',     // slide 1
+    'mundos/ttok/imagens/cap1/mergulhador.webp',
     'mundos/ttok/imagens/cap1/pagina18.webp', // slide 2
     'mundos/ttok/imagens/cap1/pagina19.webp', // slide 3
     'mundos/ttok/imagens/cap1/pagina20.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina21.webp', // slide 5
+    'mundos/ttok/imagens/cap1/sanguedomundo.webp',
     'mundos/ttok/imagens/cap1/pagina22.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina23.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina24.webp', // slide 5
