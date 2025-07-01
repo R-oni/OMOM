@@ -126,19 +126,24 @@
       transition: background 1s ease;
     }
     .swiper-container {
-      width:80vw; height:60vh;
-      max-width:600px; max-height:450px;
+      width:84vw; height:63vh; /* Aumentado em 5% */
+      max-width:630px; max-height:472px; /* Aumentado em 5% */
       margin:auto;
       touch-action: none;
     }
     .swiper-slide {
       display:flex; align-items:center; justify-content:center;
       touch-action: none;
+      position: relative;
+      overflow: hidden;
+      transform-origin: center center;
+      transition: transform 0.3s ease;
     }
     .swiper-slide img,
     .swiper-slide canvas {
       width:100%; height:100%; object-fit:contain;
       border-radius:8px;
+      transform-origin: center center;
     }
 
     /* Fade Top/Bottom apenas no flipbook */
@@ -270,25 +275,116 @@
     let allowSound = false;
     const memories = document.getElementById('memories');
     let hammerManager = null;
+    let currentSwiper = null;
+    let currentScale = 1;
+    let isZoomedIn = false;
 
-    function setupPinch(slideEl) {
+    // Detecta se é dispositivo móvel
+    function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+             ('ontouchstart' in window) || 
+             (navigator.maxTouchPoints > 0);
+    }
+
+    // Configuração do zoom para mobile (pinch)
+    function setupMobilePinch(slideEl) {
       if (hammerManager) {
         hammerManager.destroy();
         hammerManager = null;
-        // Reset all slides
-        document.querySelectorAll('.swiper-slide').forEach(s => s.style.transform = 'scale(1)');
       }
-      // Initialize Hammer on the active slide only
+      
+      // Reset all slides to scale 1
+      document.querySelectorAll('.swiper-slide').forEach(s => {
+        s.style.transform = 'scale(1)';
+        s.style.zIndex = '1';
+      });
+      
       hammerManager = new Hammer(slideEl);
       hammerManager.get('pinch').set({ enable: true });
+      
       let scale = 1;
-      hammerManager.on('pinchmove', ev => {
-        scale = Math.max(1, Math.min(ev.scale, 3));
+      let initialScale = 1;
+      
+      hammerManager.on('pinchstart', (ev) => {
+        initialScale = currentScale;
+        // Disable swiper touch during pinch
+        if (currentSwiper) {
+          currentSwiper.allowTouchMove = false;
+        }
+        // Bring current slide to front
+        slideEl.style.zIndex = '10';
+      });
+      
+      hammerManager.on('pinchmove', (ev) => {
+        scale = Math.max(1, Math.min(initialScale * ev.scale, 3));
         slideEl.style.transform = `scale(${scale})`;
+        currentScale = scale;
+        isZoomedIn = scale > 1.05;
       });
+      
       hammerManager.on('pinchend', () => {
-        if (scale < 1.05) slideEl.style.transform = 'scale(1)';
+        if (scale < 1.05) {
+          slideEl.style.transform = 'scale(1)';
+          slideEl.style.zIndex = '1';
+          currentScale = 1;
+          isZoomedIn = false;
+        }
+        
+        // Re-enable swiper touch after pinch
+        setTimeout(() => {
+          if (currentSwiper) {
+            currentSwiper.allowTouchMove = true;
+          }
+        }, 100);
       });
+    }
+
+    // Configuração do zoom para desktop (scroll do mouse)
+    function setupDesktopScroll(slideEl) {
+      slideEl.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Reset other slides
+        document.querySelectorAll('.swiper-slide').forEach(s => {
+          if (s !== slideEl) {
+            s.style.transform = 'scale(1)';
+            s.style.zIndex = '1';
+          }
+        });
+        
+        const delta = e.deltaY;
+        const zoomFactor = 0.1;
+        
+        if (delta < 0) {
+          // Scroll up - zoom in
+          currentScale = Math.min(currentScale + zoomFactor, 3);
+        } else {
+          // Scroll down - zoom out
+          currentScale = Math.max(currentScale - zoomFactor, 1);
+        }
+        
+        slideEl.style.transform = `scale(${currentScale})`;
+        isZoomedIn = currentScale > 1.05;
+        
+        if (isZoomedIn) {
+          slideEl.style.zIndex = '10';
+        } else {
+          slideEl.style.zIndex = '1';
+        }
+      });
+    }
+
+    function setupZoomForSlide(slideEl) {
+      // Reset scale for new slide
+      currentScale = 1;
+      isZoomedIn = false;
+      
+      if (isMobileDevice()) {
+        setupMobilePinch(slideEl);
+      } else {
+        setupDesktopScroll(slideEl);
+      }
     }
 
     window.addEventListener('load', () => {
@@ -329,20 +425,38 @@
         $('#btnVoltar').fadeIn(300);
         $('#fadeTop, #fadeBottom').show();
         if (allowSound) memories.pause();
+        
         $.getScript(world + '.js').done(() => {
           initFlipbook('#swiper .swiper-wrapper');
-          const swiper = new Swiper('#swiper', {
+          
+          currentSwiper = new Swiper('#swiper', {
             direction: 'vertical',
             loop: false,
             centeredSlides: true,
             slidesPerView: 1,
             spaceBetween: 20,
+            allowTouchMove: true,
             on: {
               init: function() {
-                setupPinch(this.slides[this.activeIndex]);
+                setupZoomForSlide(this.slides[this.activeIndex]);
               },
-              slideChange: function() {
-                setupPinch(this.slides[this.activeIndex]);
+              slideChangeTransitionStart: function() {
+                // Reset zoom when changing slides
+                document.querySelectorAll('.swiper-slide').forEach(s => {
+                  s.style.transform = 'scale(1)';
+                  s.style.zIndex = '1';
+                });
+                currentScale = 1;
+                isZoomedIn = false;
+                
+                // Destroy previous hammer instance
+                if (hammerManager) {
+                  hammerManager.destroy();
+                  hammerManager = null;
+                }
+              },
+              slideChangeTransitionEnd: function() {
+                setupZoomForSlide(this.slides[this.activeIndex]);
                 if (this.activeIndex === 3) {
                   initGlobe('#globeCanvas');
                 }
@@ -360,6 +474,16 @@
       $('html, body').css('background', '#000');
       $('#menu').css('background', '#000');
       $('#fadeTop, #fadeBottom').hide();
+      
+      // Reset zoom variables
+      currentScale = 1;
+      isZoomedIn = false;
+      if (hammerManager) {
+        hammerManager.destroy();
+        hammerManager = null;
+      }
+      currentSwiper = null;
+      
       if (allowSound) memories.play().catch(() => {});
       $('#menu').fadeIn(500);
     });
