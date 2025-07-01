@@ -11,9 +11,7 @@ window.initFlipbook = function(wrapperSelector) {
     'GLOBO',                                  // slide 4: globo
    
   
-
   ];
-
   slides.forEach(src => {
     const slideEl = document.createElement('div');
     slideEl.className = 'swiper-slide';
@@ -27,15 +25,15 @@ window.initFlipbook = function(wrapperSelector) {
   });
 };
 
-// Three.js globe init (sem sombra, fundo bege claro)
+// Three.js globe init (completamente sem sombras e reflexos)
 window.initGlobe = function(selector) {
   const canvas = document.querySelector(selector);
   if (!canvas) return;
   
-  // Cena com fundo bege claro
+  // Cena com fundo branco
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#FFFFFF'); // cor de papel
-
+  scene.background = new THREE.Color('#FFFFFF');
+  
   const camera = new THREE.PerspectiveCamera(
     60,
     canvas.clientWidth / canvas.clientHeight,
@@ -43,33 +41,41 @@ window.initGlobe = function(selector) {
     1000
   );
   camera.position.z = 4;
-
+  
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true
   });
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
-
+  
+  // IMPORTANTE: Desabilitar completamente o sistema de sombras
+  renderer.shadowMap.enabled = false;
+  
   const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
-
+  
   const loader = new THREE.TextureLoader();
+  
+  // Globo com material básico (sem reflexos nem sombras)
   const earth = new THREE.Mesh(
     new THREE.SphereGeometry(1, 32, 32),
-    new THREE.MeshStandardMaterial({
-      map: loader.load('mundos/ttok/mapatoktok.png')
+    new THREE.MeshBasicMaterial({
+      map: loader.load('mundos/ttok/mapatoktok.png'),
+      // Configurações para eliminar qualquer reflexo
+      transparent: false,
+      opacity: 1,
+      // MeshBasicMaterial não reage à luz, eliminando reflexos
     })
   );
-  // Sem sombras: não habilitamos shadowMap nem caster/receiver
+  
   scene.add(earth);
-
-  // Iluminação sem gerar sombras
-  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-  const dir = new THREE.DirectionalLight(0xffffff, 1);
-  dir.position.set(5, 5, 5);
-  scene.add(dir);
-
+  
+  // Iluminação mínima (apenas para caso seja necessária)
+  // Como usamos MeshBasicMaterial, a luz não afeta o objeto
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(ambientLight);
+  
   // Animação
   (function animate() {
     requestAnimationFrame(animate);
@@ -77,7 +83,7 @@ window.initGlobe = function(selector) {
     controls.update();
     renderer.render(scene, camera);
   })();
-
+  
   // Redimensionamento responsivo
   window.addEventListener('resize', () => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
