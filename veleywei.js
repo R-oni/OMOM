@@ -11,6 +11,20 @@ window.initFlipbook = function(wrapperSelector) {
     'GLOBO',                                  // slide 4: globo
     'mundos/veleywei/imagens/cap1/pagina8.webp', // slide 5
     'mundos/veleywei/imagens/cap1/pagina9.webp', // slide 5
+    'mundos/veleywei/imagens/cap1/pagina10.webp',     // slide 1
+    'mundos/veleywei/imagens/cap1/pagina11.webp',     // slide 1
+    'mundos/veleywei/imagens/cap1/pagina12.webp', // slide 2
+    'mundos/veleywei/imagens/cap1/pagina13.webp', // slide 3
+    'mundos/veleywei/imagens/cap1/pagina14.webp', // slide 5
+    'mundos/veleywei/imagens/cap1/pagina15.webp', // slide 5
+    'mundos/veleywei/imagens/cap1/pagina16.webp', // slide 5
+    'mundos/veleywei/imagens/cap1/pagina17.webp',     // slide 1
+    'mundos/veleywei/imagens/cap1/pagina18.webp',     // slide 1
+    'mundos/veleywei/imagens/cap1/pagina19.webp', // slide 2
+    'mundos/veleywei/imagens/cap1/pagina20.webp', // slide 3
+    'mundos/veleywei/imagens/cap1/pagina21.webp', // slide 5
+    'mundos/veleywei/imagens/cap1/pagina22.webp', // slide 5
+    'mundos/veleywei/imagens/cap1/pagina23.webp', // slide 5
    
   
 
