@@ -219,6 +219,11 @@
         font-size:12px;
         padding:10px 20px;
       }
+      
+      /* Zoom automático de 20% para desktop no slide ativo */
+      .swiper-slide.swiper-slide-active {
+        transform: scale(1.2);
+      }
     }
   </style>
 </head>
@@ -360,16 +365,19 @@
         const delta = e.deltaY;
         const zoomFactor = 0.1;
         
+        // Para desktop, começamos com o zoom automático de 1.2
+        const baseScale = !isMobileDevice() ? 1.2 : 1;
+        
         if (delta < 0) {
           // Scroll up - zoom in
           currentScale = Math.min(currentScale + zoomFactor, 3);
         } else {
           // Scroll down - zoom out
-          currentScale = Math.max(currentScale - zoomFactor, 1);
+          currentScale = Math.max(currentScale - zoomFactor, baseScale);
         }
         
         slideEl.style.transform = `scale(${currentScale})`;
-        isZoomedIn = currentScale > 1.05;
+        isZoomedIn = currentScale > baseScale + 0.05;
         
         if (isZoomedIn) {
           slideEl.style.zIndex = '10';
@@ -380,8 +388,12 @@
     }
 
     function setupZoomForSlide(slideEl) {
-      // Reset scale for new slide
-      currentScale = 1;
+      // Reset scale for new slide - considera zoom automático no desktop
+      if (!isMobileDevice()) {
+        currentScale = 1.2; // Zoom automático de 20% no desktop
+      } else {
+        currentScale = 1;
+      }
       isZoomedIn = false;
       
       if (isMobileDevice()) {
@@ -450,7 +462,13 @@
                   s.style.transform = 'scale(1)';
                   s.style.zIndex = '1';
                 });
-                currentScale = 1;
+                
+                // Define o zoom base dependendo do dispositivo
+                if (!isMobileDevice()) {
+                  currentScale = 1.2;
+                } else {
+                  currentScale = 1;
+                }
                 isZoomedIn = false;
                 
                 // Destroy previous hammer instance
