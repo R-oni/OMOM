@@ -3,18 +3,18 @@ window.initFlipbook = function(wrapperSelector) {
   const slides = [
     'mundos/ttok/imagens/cap1/pagina1.webp',     // slide 1
     'mundos/ttok/imagens/cap1/pagina2.webp',     // slide 1
-    'mundos/ttok/imagens/cap1/pagina3.webp', // slide 2
-    'mundos/ttok/imagens/cap1/pagina4.webp', // slide 3
-    'mundos/ttok/imagens/cap1/pagina5.webp', // slide 5
-    'mundos/ttok/imagens/cap1/pagina6.webp', // slide 5
-    'mundos/ttok/imagens/cap1/pagina7.webp', // slide 5
+    'mundos/himpis/imagens/cap1/pagina3.webp', // slide 2
+    'mundos/himpis/imagens/cap1/pagina4.webp', // slide 3
+    'mundos/himpis/imagens/cap1/pagina5.webp', // slide 5
+    'mundos/himpis/imagens/cap1/pagina6.webp', // slide 5
+    'mundos/himpis/imagens/cap1/pagina7.webp', // slide 5
     'GLOBO',                                  // slide 4: globo
-    'mundos/ttok/imagens/cap1/pagina8.webp',     // slide 1
-    'mundos/ttok/imagens/cap1/pagina9.webp', // slide 2
-    'mundos/ttok/imagens/cap1/pagina10.webp', // slide 3
-    'mundos/ttok/imagens/cap1/pagina11.webp', // slide 5
-    'mundos/ttok/imagens/cap1/pagina12.webp', // slide 5
-    'mundos/ttok/imagens/cap1/pagina13.webp', // slide 5
+    'mundos/himpis/imagens/cap1/pagina8.webp',     // slide 1
+    'mundos/himpis/imagens/cap1/pagina9.webp', // slide 2
+    'mundos/himpis/imagens/cap1/pagina10.webp', // slide 3
+    'mundos/himpis/imagens/cap1/pagina11.webp', // slide 5
+    'mundos/himpis/imagens/cap1/pagina12.webp', // slide 5
+    'mundos/himpis/imagens/cap1/pagina13.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina14.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina15.webp', // slide 5
     'mundos/ttok/imagens/cap1/pagina16.webp', // slide 5
