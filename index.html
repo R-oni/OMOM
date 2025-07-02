@@ -147,6 +147,56 @@
       transform-origin: center center;
     }
 
+    /* ======================================= */
+    /* NOVO CSS PARA PÁGINAS LOREM IPSUM      */
+    /* ======================================= */
+    
+    /* Estilo para páginas de texto Lorem Ipsum */
+    .lorem-page {
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      background: #fff;
+      color: #333;
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+      overflow-y: auto;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .lorem-page h2 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.5rem;
+      color: #00FFE7;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .lorem-page p {
+      font-size: 16px;
+      margin-bottom: 20px;
+      text-align: justify;
+      text-indent: 30px;
+    }
+
+    .lorem-page p:first-of-type {
+      margin-top: 0;
+    }
+
+    .lorem-page p:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    /* ======================================= */
+    /* FIM DO CSS LOREM IPSUM                  */
+    /* ======================================= */
+
     /* Fade Top/Bottom apenas no flipbook */
     #fadeTop, #fadeBottom {
       position:fixed; left:0; width:100%; height:15%; z-index:8;
@@ -283,6 +333,43 @@
       /* Mostrar ícone de scroll apenas no desktop */
       #scrollIcon {
         display: block;
+      }
+      
+      /* ======================================= */
+      /* RESPONSIVIDADE LOREM IPSUM - DESKTOP   */
+      /* ======================================= */
+      .lorem-page {
+        padding: 50px;
+      }
+      
+      .lorem-page h2 {
+        font-size: 2rem;
+        margin-bottom: 40px;
+      }
+      
+      .lorem-page p {
+        font-size: 18px;
+        margin-bottom: 25px;
+      }
+    }
+
+    /* ======================================= */
+    /* RESPONSIVIDADE LOREM IPSUM - MOBILE    */
+    /* ======================================= */
+    @media screen and (max-width: 767px) {
+      .lorem-page {
+        padding: 20px;
+        font-size: 14px;
+      }
+      
+      .lorem-page h2 {
+        font-size: 1rem;
+        margin-bottom: 20px;
+      }
+      
+      .lorem-page p {
+        font-size: 14px;
+        text-indent: 20px;
       }
     }
   </style>
