@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=yes"/>
+  <title>OMOM SPA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box }
+    html, body {
+      width:100%; height:100%; overflow:hidden;
+      background:#000; color:#fff;
+      font-family:'Courier New',monospace;
+      transition: background 1s ease;
+    }
+    /* Splash OMOM */
+    #omom-screen {
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background:#000; z-index:10;
+    }
+    #omom-title {
+      font-family:'Press Start 2P',cursive;
+      font-size:8vw; max-font-size:64px; color:#fff;
+      opacity:0;
+      animation:fadeIn 1s forwards, fadeOut 0.5s 1s forwards;
+    }
+
+    /* Tela de Apoiadores */
+    #supporters-screen {
+      position:fixed; inset:0;
+      display:none;
+      flex-direction:column; align-items:center; justify-content:center;
+      background:#000; z-index:9;
+      padding:5vh;
+    }
+    #supporters-title {
+      font-family:'Press Start 2P',cursive;
+      font-size:5vw; max-font-size:32px; color:#00FFE7;
+      margin-bottom:5vh;
+      text-align:center;
+    }
+    .supporters-list {
+      text-align:center;
+      line-height:1.8;
+    }
+    .supporter-name {
+      font-family:'Press Start 2P',cursive;
+      font-size:3.5vw; max-font-size:15px; color:#fff;
+      margin-bottom:2vh;
+      display:block;
+    }
+
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes fadeOut { from{opacity:1} to{opacity:0} }
+
+    /* Prompt Som */
+    #soundPrompt {
+      position:fixed; inset:0;
+      display:none;
+      flex-direction:column; align-items:center; justify-content:center;
+      background:#000; z-index:8;
+      text-align:center;
+      margin-top:25vh;
+    }
+    #soundPrompt p {
+      font-family:'Press Start 2P',cursive;
+      font-size:5vw; max-font-size:24px;
+      margin-bottom:4vh;
+      color:#00FFE7;
+    }
+    .soundBtns { 
+      display:flex; gap:4vw; 
+      justify-content:center;
+      align-items:center;
+    }
+    .soundBtn {
+      padding:2vh 4vw;
+      font-family:'Press Start 2P',cursive;
+      font-size:4vw; max-font-size:16px;
+      background:none; border:2px solid #00FFE7; color:#00FFE7;
+      cursor:pointer;
+      transition: all 0.3s ease;
+    }
+    .soundBtn:hover {
+      background:#00FFE7;
+      color:#000;
+    }
+
+    /* Menu de Símbolos */
+    #menu {
+      position:fixed; inset:0;
+      display:none;
+      flex-direction:column; align-items:center; justify-content:flex-start;
+      z-index:7; padding:10vh 5vw 5vh;
+      background:#000;
+      transition: background 1s ease;
+    }
+    #menu h1 {
+      font-family:'Press Start 2P',cursive;
+      font-size:6vw; max-font-size:48px; color:#fff;
+      margin-bottom:8vh;
+      text-align:center;
+    }
+    .symbols-container {
+      display:flex; flex-wrap:wrap;
+      justify-content:center; gap:5vw;
+      width:100%;
+    }
+    .symbol {
+      cursor:pointer;
+      animation:floatWave 4s ease-in-out infinite;
+    }
+    .symbol img {
+      width:20vw; max-width:180px; display:block;
+    }
+    @keyframes floatWave { 0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)} }
+    .symbol.locked { opacity:0.3; pointer-events:none; }
+
+    /* Flipbook / Swiper */
+    #flipbook {
+      position:fixed; inset:0;
+      display:none;
+      flex-direction:column; align-items:center; justify-content:center;
+      background:#fff; z-index:6;
+      transition: background 1s ease;
+    }
+    .swiper-container {
+      width:100vw; height:63vh; /* Aumentado em 5% */
+      max-width:630px; max-height:472px; /* Aumentado em 5% */
+      margin:auto;
+      touch-action: none;
+    }
+    .swiper-slide {
+      display:flex; align-items:center; justify-content:center;
+      touch-action: none;
+      position: relative;
+      overflow: hidden;
+      transform-origin: center center;
+      transition: transform 0.3s ease;
+    }
+    .swiper-slide img,
+    .swiper-slide canvas {
+      width:100%; height:100%; object-fit:contain;
+      border-radius:8px;
+      transform-origin: center center;
+    }
+
+    /* ======================================= */
+    /* NOVO CSS PARA PÁGINAS LOREM IPSUM      */
+    /* ======================================= */
+    
+    /* Estilo para páginas de texto Lorem Ipsum */
+    .lorem-page {
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      background: #fff;
+      color: #000;
+      font-family: 'VT323', monospace;
+      line-height: 0.3;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* Centraliza verticalmente */
+      align-items: center; !important    /* Centraliza horizontalmente */
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .lorem-page h2 {
+      font-family: 'VT323', cursive;
+      font-size: 2.5rem;
+      color: #000000;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .lorem-page p {
+      font-size: 30px;
+      margin-bottom: 20px;
+      text-align: center;
+      text-indent: 0px;
+    }
+
+    .lorem-page p:first-of-type {
+      margin-top: 0;
+    }
+
+    .lorem-page p:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    /* ======================================= */
+    /* FIM DO CSS LOREM IPSUM                  */
+    /* ======================================= */
+
+    /* Fade Top/Bottom apenas no flipbook */
+    #fadeTop, #fadeBottom {
+      position:fixed; left:0; width:100%; height:15%; z-index:8;
+      pointer-events:none; display:none;
+    }
+    #fadeTop { 
+      top:0; 
+      background: linear-gradient(to bottom, 
+      rgba(0,0,0,1) 0%, 
+        rgba(0,0,0,0.9) 30%, 
+        rgba(0,0,0,0.6) 60%,
+        rgba(0,0,0,0.4) 80%,
+        rgba(0,0,0,0) 100%); 
+    }
+    #fadeBottom { 
+      bottom:0; 
+      background: linear-gradient(to top, 
+        rgba(0,0,0,1) 0%, 
+        rgba(0,0,0,0.9) 30%, 
+        rgba(0,0,0,0.6) 60%,
+        rgba(0,0,0,0.4) 80%,
+        rgba(0,0,0,0) 100%); 
+    }
+
+    /* Voltar */
+    #btnVoltar {
+      position:fixed; top:5vh; left:5vw;
+      padding:1vh 2vw;
+      font-family:'Press Start 2P',cursive;
+      font-size:3vw; max-font-size:14px;
+      background:rgba(0,0,0,0.8);
+      border:2px solid #00FFE7;
+      color:#00FFE7;
+      cursor:pointer; display:none; z-index:10;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Ícone de Scroll do Mouse - Desktop */
+    #scrollIcon {
+      position: fixed;
+      top: 50%;
+      right: 4vw;           /* <-- Mude para a direita */
+      left: auto;           /* <-- Remova o left */
+      transform: translateY(-50%);
+      width: 90px;
+      height: 150px;
+      border: 4px solid rgba(0, 255, 231, 0.7);
+      border-radius: 40px;
+      display: none;
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+      background: rgba(0,0,0,0.05);
+      box-shadow: 0 0 40px 10px rgba(0,255,231,0.08);
+    }
+    #scrollIcon::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 40px;
+      background: rgba(0, 255, 231, 0.8);
+      border-radius: 3px;
+      animation: scrollWheel 2s infinite;
+    }
+    /* Adiciona o texto "zoom" com fonte VT323 ao lado do ícone do mouse */
+    #scrollIconLabel {
+      position: absolute;
+      left: 110px;
+      top: 90px;
+      font-family: 'VT323', monospace;
+      font-size: 2.2rem;
+      color: #00FFE7;
+      letter-spacing: 2px;
+      opacity: 0.85;
+      pointer-events: none;
+      display: none !important;
+      user-select: none;
+      text-shadow: 1px 1px 6px #000, 0 0 10px #00FFE7;
+    }
+    #scrollIcon::after {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 120px;
+      border: 2px solid rgba(0, 255, 231, 0.3);
+      border-radius: 20px;
+    }
+    @keyframes scrollWheel {
+      0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        opacity: 0.3;
+        transform: translateX(-50%) translateY(30px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(60px);
+      }
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      }
+      50% {
+      opacity: 0.3;
+      transform: translateX(-50%) translateY(30px);
+      }
+      100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(60px);
+      }
+    }
+      animation: scrollWheel 2s infinite;
+    }
+    
+    #scrollIcon::after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 20px;
+      border: 1px solid rgba(0, 255, 231, 0.5);
+      border-radius: 6px;
+    }
+    
+    @keyframes scrollWheel {
+      0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        opacity: 0.3;
+        transform: translateX(-50%) translateY(8px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(15px);
+      }
+    }
+
+    /* ================================= */
+    /* VERSÃO DESKTOP - Media Queries   */
+    /* ================================= */
+    @media screen and (min-width: 768px) {
+      #omom-title {
+        font-size:4rem;
+      }
+      
+      #supporters-title {
+        font-size:2rem;
+      }
+      
+      .supporter-name {
+        font-size:1.2rem;
+      }
+      
+      #soundPrompt p {
+        font-size:1.5rem;
+      }
+      
+      .soundBtn {
+        font-size:1rem;
+        padding:15px 30px;
+      }
+      
+      #menu h1 {
+        font-size:3rem;
+      }
+      
+      .symbol img {
+        width:150px;
+      }
+      
+      #btnVoltar {
+        font-size:12px;
+        padding:10px 20px;
+      }
+      
+
+      /* Mostrar ícone de scroll apenas no desktop */
+      #scrollIcon {
+        display: block !important; /* Garante que aparece no desktop */
+      }
+      
+      /* ======================================= */
+      /* RESPONSIVIDADE LOREM IPSUM - DESKTOP   */
+      /* ======================================= */
+      .lorem-page {
+        padding: 50px;
+      }
+      
+      .lorem-page h2 {
+        font-size: 2rem;
+        margin-bottom: 40px;
+      }
+      
+      .lorem-page p {
+        font-size: 32px;
+        margin-bottom: 25px;
+      }
+    }
+
+    /* ======================================= */
+    /* RESPONSIVIDADE LOREM IPSUM - MOBILE    */
+    /* ======================================= */
+    @media screen and (max-width: 767px) {
+  .lorem-page {
+    padding: 10px 0;
+    font-size: 14px;
+    align-items: center;
+  }
+  .lorem-page h2,
+  .lorem-page p {
+    text-align: center;
+    width: 100%;
+  }
+  .lorem-page h2 {
+    font-size: 2rem;
+    margin-bottom: 100px;
+  }
+  .lorem-page p {
+    font-size: 19px;
+    text-indent: 0;
+  }
+  #dragUpHint .drag-text {
+    display: none;
+  }
+}
+    #dragUpHint {
+  position: fixed;
+  right: 4vw;
+  top: 50%;                /* Centraliza verticalmente */
+  bottom: auto;            /* Remove bottom para evitar conflito */
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  z-index: 21;
+  pointer-events: none;
+  display: none;
+}
+#dragUpHint .drag-ball {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 60% 40%, #00FFE7 80%, #00bfae 100%, transparent 120%);
+  box-shadow: 0 0 24px 8px #00FFE788, 0 0 60px 12px #00FFE744;
+  opacity: 0;
+  animation: dragUpBall 1.4s infinite;
+}
+@keyframes dragUpBall {
+  0%   { opacity: 0; transform: translateY(0);}
+  10%  { opacity: 1; }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-60px);}
+}
+#dragUpHint .drag-text {
+  margin-top: 10px;
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: #00FFE7;
+  text-align: center;
+  text-shadow: 1px 1px 6px #000, 0 0 10px #00FFE7;
+  opacity: 0.85;
+  letter-spacing: 1px;
+  user-select: none;
+}
+  </style>
+</head>
+<body>
+  <audio id="memories" src="memories.mp3" preload="auto" loop></audio>
+  <audio id="zumwohl" src="mundos/ttok/zumwohl.mp3" preload="auto" loop></audio>
+
+  <div id="omom-screen"><div id="omom-title">OMOM</div></div>
+
+  <div id="supporters-screen">
+    <div id="supporters-title">APOIADORES</div>
+    <div class="supporters-list">
+      <span class="supporter-name">Sebastiana Ricardo</span>
+      <span class="supporter-name">Tatiana Torres</span>
+      <span class="supporter-name">Glória Anunciação</span>
+      <span class="supporter-name">Ana Aprígio</span>
+    </div>
+  </div>
+
+  <div id="soundPrompt">
+    <p>Som?</p>
+    <div class="soundBtns">
+      <button class="soundBtn" id="btnYes">SIM</button>
+      <button class="soundBtn" id="btnNo">NÃO</button>
+    </div>
+  </div>
+
+  <div id="menu">
+    <h1>OMOM</h1>
+    <div class="symbols-container">
+      <div class="symbol brither" data-world="veleywei">
+        <img src="assets/veleyweimenu.png" alt="Veleywei">
+      </div>
+      <div class="symbol brither" data-world="batedores">
+        <img src="mundos/ttok/ttokmenu.png" alt="Batedores">
+      </div>
+      <div class="symbol brither" data-world="himpis">
+        <img src="mundos/himpis/himpismenu.png" alt="Himpis">
+      </div>
+      <div class="symbol brither" data-world="porojka">
+        <img src="mundos/os artesaos/artesaosmenu.png" alt="Porojka">
+      </div>
+    </div>
+  </div>
+
+  <div id="flipbook">
+    <button id="btnVoltar">VOLTAR</button>
+    <div id="scrollIcon">
+  <span id="scrollIconText" style="position:absolute; left:50%; bottom:-24px; transform:translateX(-50%); width:100%; text-align:center; font-family:'VT323', monospace; font-size:1.4rem; color:#00FFE7; letter-spacing:2px; opacity:0.85; user-select:none; text-shadow:1px 1px 6px #000, 0 0 10px #00FFE7;">
+    ampliar
+  </span>
+</div>
+    <div class="swiper-container" id="swiper">
+      <div class="swiper-wrapper"></div>
+    </div>
+  </div>
+
+  <div id="fadeTop"></div>
+  <div id="fadeBottom"></div>
+
+  <div id="dragUpHint">
+    <div class="drag-ball"></div>
+    <div class="drag-text">Arraste para cima</div>
+  </div>
+
+  <div id="fictionOverlay" style="display:none;">
+  <div class="fiction-card">
+    <img src="ia.webp" alt="Atenção IA" class="fiction-img"/>
+    <div class="fiction-title">ATENÇÃO!</div>
+    <div class="fiction-desc">
+      Esta é uma obra de ficção. Os elementos presentes na narrativa são inspirados em conceitos reais de Astronomia, Química, Biologia, História, Sociologia e afins.<br><br>
+      Até então, não foi detectada nenhuma vida fora da Terra.
+    </div>
+    <button id="fictionOkBtn">OK</button>
+  </div>
+</div>
+  <style>
+    #fictionOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fiction-card {
+      background: #f9f7f2;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      padding: 32px 32px 24px 32px;
+      max-width: 420px;
+      width: 90vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .fiction-img {
+      width: 90px;
+      margin-bottom: 24px;
+      margin-top: 8px;
+    }
+    .fiction-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 24px;
+      color: #ffe600;
+      -webkit-text-stroke: 2px #000;
+      text-shadow: 2px 2px 0 #000, 0 0 8px #fff;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+    .fiction-desc {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 18px;
+      color: #111;
+      margin-bottom: 32px;
+      text-shadow: none;
+      line-height: 1.6;
+    }
+    #fictionOkBtn {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 18px;
+      background: #ffe600;
+      color: #000;
+      border: 2px solid #000;
+      border-radius: 8px;
+      padding: 12px 36px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0002;
+      transition: background 0.2s;
+    }
+    #fictionOkBtn:hover {
+      background: #fff200;
+    }
+    @media (max-width: 600px) {
+      .fiction-card {
+        padding: 16px 6vw 16px 6vw;
+        max-width: 98vw;
+      }
+      .fiction-img {
+        width: 60px;
+        margin-bottom: 16px;
+      }
+      .fiction-title {
+        font-size: 16px;
+        margin-bottom: 16px;
+        -webkit-text-stroke: 1px #000;
+      }
+      .fiction-desc {
+        font-size: 12px;
+        margin-bottom: 18px;
+      }
+      #fictionOkBtn {
+        font-size: 14px;
+        padding: 10px 24px;
+      }
+    }
+  </style>
+  <script>
+    // Mostra o aviso ao abrir o flipbook pela primeira vez na sessão
+    let fictionWarnedFlipbook = false;
+    function showFictionOverlayIfNeeded() {
+      if (!sessionStorage.getItem('fictionWarnedFlipbook')) {
+        document.getElementById('fictionOverlay').style.display = 'flex';
+      }
+    }
+    document.getElementById('fictionOkBtn').onclick = function() {
+      document.getElementById('fictionOverlay').style.display = 'none';
+      sessionStorage.setItem('fictionWarnedFlipbook', '1');
+    };
+
+    // Hook no momento que o flipbook aparece
+    const origShowFlipbook = $('#flipbook').fadeIn;
+    $('#flipbook').fadeIn = function() {
+      showFictionOverlayIfNeeded();
+      return origShowFlipbook.apply(this, arguments);
+    };
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <script>
+    let allowSound = false;
+    const memories = document.getElementById('memories');
+    const zumwohl = document.getElementById('zumwohl');
+    let hammerManager = null;
+    let currentSwiper = null;
+    let currentScale = 1;
+    let isZoomedIn = false;
+
+    // Detecta se é dispositivo móvel
+    function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+             ('ontouchstart' in window) || 
+             (navigator.maxTouchPoints > 0);
+    }
+
+    // Configuração do zoom para mobile (pinch)
+    function setupMobilePinch(slideEl) {
+      if (hammerManager) {
+        hammerManager.destroy();
+        hammerManager = null;
+      }
+      
+      // Reset all slides to scale 1
+      document.querySelectorAll('.swiper-slide').forEach(s => {
+        s.style.transform = 'scale(1)';
+        s.style.zIndex = '1';
+      });
+      
+      hammerManager = new Hammer(slideEl);
+      hammerManager.get('pinch').set({ enable: true });
+      
+      let scale = 1;
+      let initialScale = 1;
+      
+      hammerManager.on('pinchstart', (ev) => {
+        initialScale = currentScale;
+        // Disable swiper touch during pinch
+        if (currentSwiper) {
+          currentSwiper.allowTouchMove = false;
+        }
+        // Bring current slide to front
+        slideEl.style.zIndex = '10';
+      });
+      
+      hammerManager.on('pinchmove', (ev) => {
+        scale = Math.max(1, Math.min(initialScale * ev.scale, 3));
+        slideEl.style.transform = `scale(${scale})`;
+        currentScale = scale;
+        isZoomedIn = scale > 1.05;
+      });
+      
+      hammerManager.on('pinchend', () => {
+        if (scale < 1.05) {
+          slideEl.style.transform = 'scale(1)';
+          slideEl.style.zIndex = '1';
+          currentScale = 1;
+          isZoomedIn = false;
+        }
+        
+        // Re-enable swiper touch after pinch
+        setTimeout(() => {
+          if (currentSwiper) {
+            currentSwiper.allowTouchMove = true;
+          }
+        }, 100);
+      });
+    }
+
+    // Configuração do zoom para desktop (scroll do mouse)
+       function setupDesktopScroll(slideEl) {
+      let scrollIconHidden = false;
+      slideEl.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Reset other slides
+        document.querySelectorAll('.swiper-slide').forEach(s => {
+          if (s !== slideEl) {
+            s.style.transform = 'scale(1)';
+            s.style.zIndex = '1';
+          }
+        });
+        
+        const delta = e.deltaY;
+        const zoomFactor = 0.1;
+        
+        // Para desktop, começamos com o zoom automático de 1.2
+        const baseScale = !isMobileDevice() ? 1.2 : 1;
+        
+        if (delta < 0) {
+          // Scroll up - zoom in
+          currentScale = Math.min(currentScale + zoomFactor, 3);
+        } else {
+          // Scroll down - zoom out
+          currentScale = Math.max(currentScale - zoomFactor, baseScale);
+        }
+        
+        slideEl.style.transform = `scale(${currentScale})`;
+        isZoomedIn = currentScale > baseScale + 0.05;
+        
+        if (isZoomedIn) {
+          slideEl.style.zIndex = '10';
+          // Hide scroll icon when zoomed in
+          const scrollIcon = document.getElementById('scrollIcon');
+          if (scrollIcon) scrollIcon.style.opacity = '0';
+        } else {
+          slideEl.style.zIndex = '1';
+        }
+        
+        // Esconde o ícone ao primeiro scroll
+    if (!scrollIconHidden) {
+      const scrollIcon = document.getElementById('scrollIcon');
+      if (scrollIcon) scrollIcon.style.opacity = '0';
+      scrollIconHidden = true;
+    }
+      });
+    }
+  function setupZoomForSlide(slideEl) {
+      // Reset scale for new slide - considera zoom automático no desktop
+      if (!isMobileDevice()) {
+        currentScale = 1.2; // Zoom automático de 20% no desktop
+      } else {
+        currentScale = 1;
+      }
+      isZoomedIn = false;
+      
+      if (isMobileDevice()) {
+        setupMobilePinch(slideEl);
+      } else {
+        setupDesktopScroll(slideEl);
+      }
+    }
+
+    window.addEventListener('load', () => {
+      // Primeiro mostra OMOM por 2.5 segundos
+      setTimeout(() => {
+        $('#omom-screen').fadeOut(500, () => {
+          // Depois mostra apoiadores
+          $('#supporters-screen').fadeIn(500);
+          
+          // Apoiadores ficam por 3 segundos
+          setTimeout(() => {
+            $('#supporters-screen').fadeOut(500, () => {
+              // Depois mostra prompt de som
+              $('#soundPrompt').fadeIn(300);
+            });
+          }, 3000);
+        });
+      }, 2500);
+    });
+
+    $('#btnYes').click(() => startSite(true));
+    $('#btnNo').click(() => startSite(false));
+
+    function startSite(sound) {
+      allowSound = sound;
+      $('#soundPrompt').hide();
+      if (allowSound) {
+        memories.volume = 0;
+        memories.play().catch(() => {});
+        let fadeInAudio = setInterval(() => {
+          if (memories.volume < 0.95) {
+            memories.volume += 0.05;
+          } else {
+            memories.volume = 1;
+            clearInterval(fadeInAudio);
+          }
+        }, 50);
+      }
+      $('#menu').fadeIn(500);
+    }
+
+    $('.symbol.brither').click(function() {
+      const world = $(this).data('world');
+      $('html, body').css('background', '#fff');
+      $('#menu').css('background', '#fff');
+
+      $('#menu').fadeOut(500, () => {
+        $('#flipbook').css('display','flex').fadeIn(500, function() {
+          showFictionOverlayIfNeeded(); // <-- CHAME AQUI!
+        });
+        $('#btnVoltar').fadeIn(300);
+        $('#fadeTop, #fadeBottom').show();
+        $('#dragUpHint').html('<div class="drag-ball"></div><div class="drag-text">Arraste para cima</div>').fadeIn(300);
+
+        // Fade out suave do memories.mp3
+        if (allowSound && !memories.paused) {
+          let fadeAudio = setInterval(() => {
+            if (memories.volume > 0.05) {
+              memories.volume -= 0.05;
+            } else {
+              memories.volume = 0;
+              memories.pause();
+              clearInterval(fadeAudio);
+              memories.currentTime = 0;
+            }
+          }, 50);
+        }
+
+        $.getScript(world + '.js').done(() => {
+          initFlipbook('#swiper .swiper-wrapper');
+          
+          currentSwiper = new Swiper('#swiper', {
+            direction: 'vertical',
+            loop: false,
+            centeredSlides: true,
+            slidesPerView: 1,
+            spaceBetween: 20,
+            allowTouchMove: true,
+            on: {
+              init: function() {
+                setupZoomForSlide(this.slides[this.activeIndex]);
+                // Mostra esfera só no primeiro slide
+                if (this.activeIndex === 0) {
+                  $('#dragUpHint').fadeIn(200);
+                } else {
+                  $('#dragUpHint').fadeOut(200);
+                }
+                if (!isMobileDevice()) {
+                  const scrollIcon = document.getElementById('scrollIcon');
+                  // Mostra sempre no slide 3
+                  if (this.activeIndex === 2) {
+                    scrollIcon.style.opacity = '1';
+                  } else {
+                    scrollIcon.style.opacity = '0';
+                  }
+                }
+              },
+              slideChangeTransitionEnd: function() {
+                setupZoomForSlide(this.slides[this.activeIndex]);
+                // Mostra esfera só no primeiro slide
+                if (this.activeIndex === 0) {
+                  $('#dragUpHint').fadeIn(200);
+                } else {
+                  $('#dragUpHint').fadeOut(200);
+                }
+                if (!isMobileDevice()) {
+                  const scrollIcon = document.getElementById('scrollIcon');
+                  // Mostra sempre no slide 3
+                  if (this.activeIndex === 2) {
+                    scrollIcon.style.opacity = '1';
+                  } else {
+                    scrollIcon.style.opacity = '0';
+                  }
+                }
+                if (this.activeIndex === 3) {
+                  initGlobe('#globeCanvas');
+                }
+
+                // Fade in da música zumwohl.mp3 ao chegar no slide do mergulhador
+                const slide = this.slides[this.activeIndex];
+                if (
+                  slide &&
+                  slide.querySelector('img') &&
+                  slide.querySelector('img').src.includes('mergulhador.webp')
+                ) {
+                  zumwohl.currentTime = 0;
+                  zumwohl.volume = 0;
+                  zumwohl.play().catch(() => {});
+                  let fadeIn = setInterval(() => {
+                    if (zumwohl.volume < 0.39) { // volume máximo ~40%
+                      zumwohl.volume += 0.05;
+                    } else {
+                      zumwohl.volume = 0.4;
+                      clearInterval(fadeIn);
+                    }
+                  }, 50);
+                }
+              }
+            }
+          });
+        });
+      });
+    });
+
+    $('#btnVoltar').click(() => {
+      $('#flipbook').fadeOut(300);
+      $('#btnVoltar').fadeOut(300);
+      $('.swiper-wrapper').empty();
+      $('html, body').css('background', '#000');
+      $('#menu').css('background', '#000');
+      $('#fadeTop, #fadeBottom').hide();
+      
+      // Reset zoom variables
+      currentScale = 1;
+      isZoomedIn = false;
+      if (hammerManager) {
+        hammerManager.destroy();
+        hammerManager = null;
+      }
+      currentSwiper = null;
+      
+      // Fade-in suave do memories.mp3 ao voltar
+      if (allowSound) {
+        memories.volume = 0;
+        memories.play().catch(() => {});
+        let fadeInAudio = setInterval(() => {
+          if (memories.volume < 0.95) {
+            memories.volume += 0.05;
+          } else {
+            memories.volume = 1;
+            clearInterval(fadeInAudio);
+          }
+        }, 50);
+      }
+      $('#menu').fadeIn(500);
+
+      // Mostra OMOM novamente ao voltar para o menu
+      setTimeout(() => {
+        $('#omom-screen').fadeIn(0).delay(2500).fadeOut(500);
+      }, 500);
+    });
+  </script>
+</body>
+</html>

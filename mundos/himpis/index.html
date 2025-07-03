@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>OMOM — Himpis & Botychera</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* RESET */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 24px 0 10px;
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+
+    .globe-wrapper {
+      width: 100%;
+      height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas.globe-canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .presentation {
+      width: 90vw;
+      max-width: 600px;
+      height: auto;
+      margin: 20px 0 60px;
+    }
+  </style>
+</head>
+<body>
+  <h1>OMOM</h1>
+
+  <!-- HIMPIS -->
+  <div class="globe-wrapper">
+    <canvas id="globeCanvas" class="globe-canvas"></canvas>
+  </div>
+  <img class="presentation" src="apresentacaohimpis.png" alt="Apresentação Himpis">
+
+  <!-- espaçamento -->
+  <div style="height:40px;"></div>
+
+  <!-- BOTYCHERA -->
+  <div class="globe-wrapper">
+    <canvas id="globeCanvasBotychera" class="globe-canvas"></canvas>
+  </div>
+  <img class="presentation" src="../botychera/apresentacaobotychera.png" alt="Apresentação Botychera">
+
+  <!-- Libs Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Script do globo Himpis (procura id = globeCanvas) -->
+  <script src="globo.js"></script>
+  <!-- Script do globo Botychera (ajustado para procurar id = globeCanvasBotychera) -->
+  <script src="../botychera/globo.js"></script>
+</body>
+</html>

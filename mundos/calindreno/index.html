@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Página com Interrog Flutuante</title>
+  <style>
+    /* Zera margens e define box-sizing */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* Corpo com fundo preto, ocupa toda a tela e centraliza o conteúdo */
+    body {
+      background-color: #000;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    /* Imagem interrog centralizada e responsiva com animação de flutuação */
+    #interrog {
+      width: 300px; /* tamanho base */
+      max-width: 90%;
+      height: auto;
+      animation: float 3s ease-in-out infinite;
+    }
+    /* Animação: sobe 20px e volta à posição */
+    @keyframes float {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+    /* Ajuste para telas horizontais/PC */
+    @media screen and (min-width: 1024px) and (orientation: landscape) {
+      #interrog {
+        width: 400px;
+      }
+    }
+    /* Ajuste para dispositivos mobile */
+    @media screen and (max-width: 768px) {
+      #interrog {
+        width: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img id="interrog" src="interrog.jpg" alt="Interrog">
+</body>
+</html>
