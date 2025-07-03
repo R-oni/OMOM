@@ -539,7 +539,6 @@
 
   <div id="fictionOverlay" style="display:none;">
   <div class="fiction-card">
-    <img src="ia.webp" alt="Atenção IA" class="fiction-img"/>
     <div class="fiction-title">ATENÇÃO!</div>
     <div class="fiction-desc">
       Esta é uma obra de ficção. Os elementos presentes na narrativa são inspirados em conceitos reais de Astronomia, Química, Biologia, História, Sociologia e afins.<br><br>
@@ -572,9 +571,7 @@
       text-align: center;
     }
     .fiction-img {
-      width: 90px;
-      margin-bottom: 24px;
-      margin-top: 8px;
+      display: none;
     }
     .fiction-title {
       font-family: 'Press Start 2P', cursive;
@@ -965,10 +962,10 @@
       }
       $('#menu').fadeIn(500);
 
-      // Mostra OMOM novamente ao voltar para o menu
-      setTimeout(() => {
-        $('#omom-screen').fadeIn(0).delay(2500).fadeOut(500);
-      }, 500);
+      // Remova este trecho para não mostrar OMOM novamente ao voltar:
+      // setTimeout(() => {
+      //   $('#omom-screen').fadeIn(0).delay(2500).fadeOut(500);
+      // }, 500);
     });
   </script>
 </body>

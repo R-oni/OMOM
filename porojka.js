@@ -15,6 +15,7 @@ window.initFlipbook = function(wrapperSelector) {
     'LOREM_7', // slide 6
     'LOREM_8', // slide 6
     'LOREM_9', // slide 6
+    'mundos/os artesaos/imagens/cap1/Jskeksebt.webp', // slide 5
     'LOREM_10', // slide 6
     'LOREM_11', // slide 6
     'LOREM_12', // slide 6
@@ -23,12 +24,19 @@ window.initFlipbook = function(wrapperSelector) {
     'LOREM_15', // slide 6
     'LOREM_16', // slide 6
     'LOREM_17', // slide 6
+    'mundos/os artesaos/imagens/cap1/pop-ksjok.webp', // slide 5
     'LOREM_18', // slide 6
     'LOREM_19', // slide 6
+    'mundos/os artesaos/imagens/cap1/coleta.webp', // slide 5
     'LOREM_20', // slide 6
     'LOREM_21', // slide 6
     'LOREM_22', // slide 6
-    'LOREM_23'
+    'mundos/os artesaos/imagens/cap1/sprejktet.webp', // slide 5
+    'mundos/os artesaos/imagens/cap1/pagina5.webp', // slide 4
+    'mundos/os artesaos/imagens/cap1/pagina6.webp', // slide 5
+    'mundos/os artesaos/imagens/cap1/pagina7.webp', // slide 4
+    'mundos/os artesaos/imagens/cap1/pagina8.webp', // slide 5
+  
 
   ];
 
@@ -193,6 +201,34 @@ window.initFlipbook = function(wrapperSelector) {
       <div class="lorem-page">
         <p>É principalmente nos Sprejktets que marcam sua língua escrita:</p>
         <p>o Korjka.</p>
+      </div>
+    `,
+    'LOREM_21': `
+      <div class="lorem-page">
+        <p>O Korjka tem uma estrutura</p>
+        <p>base de forma anelar, cujas</p>
+        <p>extremidades formam o conceito</p>
+        <p>central diretamente relacionado ao</p>
+        <p>objeto referido. O símbolo</p>
+        <p>Korjka nunca é preenchido</p>
+        <p>internamente.</p>
+      </div>
+    `,
+    'LOREM_22': `
+      <div class="lorem-page">
+        <h2 style="color:#00FFE7; margin-bottom: 32px;">SPREJKTET</h2>
+        <div style="height: 32px;"></div>
+        <p>Um sprejktet pode ser</p>
+        <p>qualquer objeto que seja</p>
+        <p>ao mesmo tempo um</p>
+        <p>recipiente e um item</p>
+        <p>esculpido. O Korjka inscrito</p>
+        <p>no recipiente dita a</p>
+        <p>função deste, então, se</p>
+        <p>um Sprejktet tem o</p>
+        <p>símbolo de uma tipo-árvore</p>
+        <p>específica, servirá de armazenagem</p>
+        <p>para seus tipo-fruto.</p>
       </div>
     `,
   };

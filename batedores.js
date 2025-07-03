@@ -13,6 +13,8 @@ window.initFlipbook = function(wrapperSelector) {
     'LOREM_5', // slide 6
     'LOREM_6', // slide 6
     'mundos/ttok/imagens/cap1/pagina12.webp', // slide 13
+    'mundos/ttok/imagens/cap1/batedor.webp',
+    'mundos/ttok/imagens/cap1/batedor2.webp',
     'mundos/ttok/imagens/cap1/pagina13.webp', // slide 14
     'mundos/ttok/imagens/cap1/pagina14.webp', // slide 15
     'mundos/ttok/imagens/cap1/pagina15.webp', // slide 16
@@ -20,21 +22,22 @@ window.initFlipbook = function(wrapperSelector) {
     'LOREM_6.5', // slide 6
     'LOREM_7', // slide 6
     'mundos/ttok/imagens/cap1/mergulhador.webp',
+    'mundos/ttok/imagens/cap1/mergulhador2.webp',
     'LOREM_8', // slide 6
-    'mundos/ttok/imagens/cap1/pagina19.webp', // slide 21
-    'mundos/ttok/imagens/cap1/pagina20.webp', // slide 22
-    'mundos/ttok/imagens/cap1/pagina21.webp', // slide 23
+    'LOREM_9', // slide 6
+    'LOREM_10', // slide 6
     'mundos/ttok/imagens/cap1/sanguedomundo.webp',
-    'mundos/ttok/imagens/cap1/pagina22.webp', // slide 25
-    'mundos/ttok/imagens/cap1/pagina23.webp', // slide 26
-    'mundos/ttok/imagens/cap1/pagina24.webp', // slide 27
-    'mundos/ttok/imagens/cap1/pagina25.webp', // slide 28
+    'LOREM_11', // slide 6
+    'LOREM_12', // slide 6
+    'LOREM_13', // slide 6
+    'LOREM_14', // slide 6
+    'LOREM_15', // slide 6
   ];
 
   // Textos Lorem Ipsum para as duas primeiras páginas
   const loremTexts = {
     'LOREM_1': `
-      <div class="lorem-page">
+      <div class="lorem-page" style="color:#4B2E19;">
         <p>pela manhã de dois sóis</p>
         <p>caminha um grupo brilhante pelas areias.</p>
         <p>ouve-se estalos entre eles,</p>
@@ -139,6 +142,78 @@ window.initFlipbook = function(wrapperSelector) {
         <p>Sua linguagem é complexa e me lembra pássaros.</p>
         <div style="height: 48px;"></div>
         <p>Preciso retornar aqui.</p>
+      </div>
+    `,
+    'LOREM_9': `
+      <div class="lorem-page">
+        <h2 style="color:#111; margin-bottom: 24px; text-shadow:none;">HORA DE SONHAR</h2>
+        <p>No equador da lua, uma vegetação curiosa se espalha.</p>
+        <p>A tipo-planta chamam de Sangue-do-Mundo e possui uma estrutura</p>
+        <p>bioeletromagnética engenhosa. Seu corpo consiste em uma haste rígida,</p>
+        <p>feita de um polímero() metálico() condutor de eletricidade.</p>
+      </div>
+    `,
+    'LOREM_10': `
+      <div class="lorem-page">
+        <p>Ao longo desta, esferas metálicas atuam como capacitores esféricos,</p>
+        <p>armazenando e liberando energia elétrica coletada do fluxo magnético</p>
+        <p>do gigante azul.</p>
+      </div>
+    `,
+    'LOREM_11': `
+      <div class="lorem-page">
+        <p>A seiva bioluminescente das esferas é essencial para os batedores</p>
+        <p>culturalmente: como tinta para escrita e pintura corporal para o evento.</p>
+      </div>
+    `,
+    'LOREM_12': `
+      <div class="lorem-page">
+        <p>Os prudentes se refugiam em cavernas até a tempestade terminar,</p>
+        <p>por dez dias. Eles parecem saber que a radiação do planeta</p>
+        <p>os afeta fisicamente.</p>
+        <p>Se alimentam de pequenas criaturas subterrâneas e pintam as paredes</p>
+        <p>com a seiva metálica.</p>
+      </div>
+    `,
+    'LOREM_13': `
+      <div class="lorem-page">
+        <p>Os imprudentes, por outro lado, rejeitam o medo.</p>
+        <p>Quando o magnetismo se eleva, saem ao ar livre e cobrem seus corpos</p>
+        <p>com a seiva da Sangue-do-Mundo e correm pelas dunas,</p>
+        <p>se entregando ao fenômeno.</p>
+      </div>
+    `,
+    'LOREM_14': `
+      <div class="lorem-page">
+        <p>A interação com o campo interfere eletromagneticamente</p>
+        <p>com seus sistemas de processamento mental, induzindo</p>
+        <p>alucinações e estados de êxtase coletivo.</p>
+        <p>Os batedores dão nome ao processo de "Hora de Sonhar" (TTTTT...)</p>
+      </div>
+    `,
+    'LOREM_15': `
+      <div class="lorem-page" style="position:relative; min-height:320px;">
+        <h2 style="color:#111; filter:blur(4px); margin-bottom:32px;">CAPÍTULO 2</h2>
+        <div style="color:#111; filter:blur(4px);">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <p>Vivamus euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc,</p>
+          <p>non cursus erat nulla non urna. Suspendisse potenti.</p>
+        </div>
+        <div style="
+          position:absolute;
+          top:0; left:0; width:100%; height:100%;
+          display:flex; align-items:center; justify-content:center;
+          pointer-events:none;
+          ">
+          <span style="
+            font-family:'Press Start 2P',monospace;
+            color:#00ffe7;
+            font-size:2rem;
+            text-shadow:0 0 12px #00ffe7, 1px 1px 8px #000;
+            letter-spacing:2px;
+            filter:none;
+            ">EM BREVE</span>
+        </div>
       </div>
     `,
   };
